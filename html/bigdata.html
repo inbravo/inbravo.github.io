@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Amit Dixit">
+	<link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+	<script src="../js/jquery-1.11.3.min.js"></script>
+	<script src="../js/csi.min.js"></script>
+	<script src="../js/inbravo.js"></script>
+    <title>Industry Bravo</title>
+</head>
+
+<body>
+	
+	<!--Header -->
+	<div align="center">
+		<div data-include="header.html"></div>
+	</div>	
+	
+	<div align="center"> 
+		
+		<table class="tg">
+		  <tr>
+			<td><a target="_blank" href="http://www.macs.hw.ac.uk/cs/techreps/docs/files/HW-MACS-TR-0096.pdf">macs.hw.ac.uk</a></td>
+			<td>Comparing Fork/Join and MapReduce</td>
+			<td>scalability</td>
+		  </tr>	
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.zetta.net/about/blog/mean-time-data-loss-mttdl-calculation-meaning-more">zetta.net</a></br>
+				<a target="_blank" href="https://www.mapr.com/why-hadoop/why-mapr/architecture-matters">mapr.com</a></br>
+				<a target="_blank" href="http://wintelguy.com/raidmttdl.pl">wintelguy.com</a>
+			</td>
+			<td>
+				Mean Time to Data Loss (<b class='acronym'>MTTDL</b>). The Inputs of the MTTDL Model: 
+				<ul>
+					<li>The number of hard drives (data set size/system performance)</li>
+					<li>The reliability of each hard drive</li>
+					<li>The probability of reading a given hard drive correctly without error</li>
+					<li>The redundancy encoding of the system</li>
+					<li>The rebuild rate</li>
+				</ul>
+				Data Loss (Drive failures) may not be very probable but, </br>
+				Data Corruption shockingly has caused most outages </br>
+				MTTDL calculator for RAID
+			</td>
+			<td>scalability</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://www.vtagion.com/scalability-scale-up-scale-out-care">vtagion.com</a></td>
+			<td>Scale Up (Vertical) and Scale Out (Horizontal) scaling</td>
+			<td>scalability</td>
+		  </tr>	
+		  <tr>
+			<td><a target="_blank" href="http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html">apache.org</a></td>
+			<td>
+				HDFS Architecture 
+				<a target="_blank" href="../images/i/hdfsa.png" data-lightbox="hdfsa" data-title="hdfsa"><img src="../images/i/hdfsa.png" alt="hdfsa" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/i/hdfsdn.png" data-lightbox="hdfsdn" data-title="hdfsdn"><img src="../images/i/hdfsdn.png" alt="hdfsdn" border="2" height="25" width="25"></img></a>
+			</td>
+			<td>hdfs</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://blog.matthewrathbone.com/cheatsheets/hdfs.html">matthewrathbone.com</a></td>
+			<td>HDFS Cheat Sheet by Matthew Rathbone</td>
+			<td>hdfs</td>
+		  </tr>	
+		  <tr>
+			<td><a target="_blank" href="http://www.kdnuggets.com/2015/09/data-lake-vs-data-warehouse-key-differences.html">kdnuggets.com</a></td>
+			<td>Data Lake vs Data Warehouse <a target="_blank" href="../images/i/dlwd.png" data-lightbox="dlwd" data-title="dlwd"><img src="../images/i/dlwd.png" alt="dlwd" border="2" height="25" width="25"></img></a></td>
+			<td>hdfs</td>
+		  </tr>	
+		  <tr>
+			<td><a target="_blank" href="https://amplab.cs.berkeley.edu/software/">berkeley.edu</a></td>
+			<td>The Berkeley Data Analytics Stack (BDAS) <a target="_blank" href="../images/bdas.png" data-lightbox="bdas" data-title="bdas"><img src="../images/bdas.png" alt="bdas" border="2" height="25" width="25"></img></a></td>	
+			<td>big-data</td>			
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://blog.matthewrathbone.com/2013/01/05/a-quick-guide-to-hadoop-map-reduce-frameworks.html">matthewrathbone.com</a></td>
+			<td>Many map-reduce examples</td>
+			<td>map-reduce</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://labs.platfora.com/handling-skew-map-reduce-data-processing-world">platfora.com</a></td>
+			<td>Handling Skew in a Map-Reduce</td>
+			<td>map-reduce</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://hadoopecosystemtable.github.io">github.com</a></td>
+			<td>The Hadoop Ecosystem</td>
+			<td>hadoop</td>
+		  </tr>	
+		  <tr>
+			<td>
+				<a target="_blank" href="https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/SingleCluster.html">apache.org</a></br>
+				<a target="_blank" href="http://www.tutorialspoint.com/hive/hive_quick_guide.htm">tutorialspoint.com</a>
+			</td>
+			<td>
+				Hadoop setup (Update Java home @ etc/hadoop/hadoop-env.sh)</br>
+				NameNode and DataNode start/stop: <b class='highlight'>sbin/start-dfs.sh</b> and <b class='highlight'>sbin/stop-dfs.sh</b></br>
+				Yarn start/stop: <b class='highlight'>sbin/start-yarn.sh</b> and <b class='highlight'>sbin/stop-yarn.sh</b></br>
+				<a target="_blank" href="http://localhost:8088">local hadoop resource manager url</a> & <a target="_blank" href="http://localhost:50070">local hadoop file manager url</a>
+			</td>
+			<td>hadoop</td>
+		  </tr>		  
+		  <tr>
+			<td>
+				<a target="_blank" href="https://acadgild.com/blog/10-big-differences-between-hadoop1-and-hadoop2">acadgild.com</a></br>
+				<a target="_blank" href="http://saphanatutorial.com/how-yarn-overcomes-mapreduce-limitations-in-hadoop-2-0/">saphanatutorial.com</a>
+			</td>
+			<td>How Yarn helped</td>
+			<td>hadoop</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/29192088/java-net-connectexception-connection-refused-in-hadoop-while-using-shell-comman">stackoverflow.com</a></br>
+				<a target="_blank" href="https://stackoverflow.com/questions/28661285/hadoop-cluster-setup-java-net-connectexception-connection-refused">stackoverflow.com</a> 
+			</td>
+			<td>Hadoop connection refused issue</td>
+			<td>hadoop</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/29011574/how-does-partitioning-work-for-data-from-files-on-hdfs/29012187#29012187">stackoverflow.com</a></td>
+			<td>How does partitioning work for data from files on HDFS</td>
+			<td>hadoop</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://hadoop.apache.org/docs/r2.7.1/hadoop-project-dist/hadoop-common/FileSystemShell.htm">apache.org</a></br>
+				<a target="_blank" href="http://datametica.com/hadoop-commands">datametica.com</a>
+			</td>
+			<td>Hadoop commands</td>
+			<td>hadoop</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/10666488/what-are-success-and-part-r-00000-files-in-hadoop">stackoverflow.com</br></td>
+			<td>Reason of _SUCCESS and part-r-00000 <a target="_blank" href="../images/ho.png" data-lightbox="hadoop-output" data-title="hadoop-output"><img src="../images/ho.png" alt="hadoop-output" border="2" height="25" width="25"></img></a></td>
+			<td>hadoop</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://parquet.apache.org">apache.org</td>
+			<td>Apache Parquet (columnar storage format)</td>
+			<td>hadoop</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://wegetsignal.wordpress.com/2015/02/25/spark-resources">wordpress.com</a></br>
+				<a target="_blank" href="https://www.cs.berkeley.edu/~matei/papers/2012/nsdi_spark.pdf">berkeley.edu</a>
+			</td>
+			<td>
+				Spark white paper and resources</br>
+				My dedicated <a target="_blank" href="http://inbravo.github.io/html/spark.html">Spark</a> page				
+			</td>
+			<td><a target="_blank" href="http://inbravo.github.io/html/spark.html">spark</a></td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://cwiki.apache.org/confluence/display/Hive/Home">hive.org</a></td>
+			<td>
+				Apache Hive resources</br>
+				My dedicated <a target="_blank" href="http://inbravo.github.io/html/hive.html">Hive</a> page				
+			</td>
+			<td><a target="_blank" href="http://inbravo.github.io/html/hive.html">hive</a></td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://alvinalexander.com/scala/simple-scala-akka-actor-examples-hello-world-actors">alvinalexander.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/29088754/apache-spark-vs-akka">stackoverflow.com</a>
+			</td>
+			<td>
+				Akka example </br>Spark is not using <a target="_blank" href="https://github.com/apache/spark/commit/bc1babd63da4ee56e6d371eb24805a5d714e8295">Akka</a> anymore</br>
+				Akka uses <a target="_blank" href="http://zeroturnaround.com/rebellabs/flavors-of-concurrency-by-oleg-shelajev">Fiber</a>; which is slightly different from Thread
+			</td>
+			<td>actor</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://docs.paralleluniverse.co/quasar/#fibers">paralleluniverse.co</a></br>
+				<a target="_blank" href="http://zeroturnaround.com/rebellabs/what-are-fibers-and-why-you-should-care">zeroturnaround.com</a>
+			</td>
+			<td>Fiber based Actor framework: Quasar <a target="_blank" href="../images/atr.png" data-lightbox="actor" data-title="actor"><img src="../images/atr.png" alt="thread" border="2" height="25" width="25"></img></a></td>
+			<td>fiber</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.tachyon-project.org/documentation/master/en/Running-Tachyon-Locally.html">tachyon-project.org</a></br>
+				<a target="_blank" href="https://groups.google.com/forum/#!topic/tachyon-users/b28Y-qvXPI4">google.com</a></br>
+				<a target="_blank" href="https://amplab.cs.berkeley.edu/projects/tachyon-reliable-file-sharing-at-memory-speed-across-cluster-frameworks/">berkeley.edu</a>
+			</td>
+			<td>Tachyon as storage</td>
+			<td>tachyon</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://github.com/inbravo/cheatsheets/blob/master/scratchpad/tachyon.txt">github.com</a></td>
+			<td>Tachyon build scratch-pad</td>
+			<td>tachyon</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.reactivemanifesto.org">reactivemanifesto.org</a></br>
+				<a target="_blank" href="http://www.reactive-streams.org">reactive-streams.org</a>
+			</td>
+			<td>Reactive menifesto and Reactive Streams</td>
+			<td>reactive</td>
+		  </tr>.
+		  <tr>
+			<td><a target="_blank" href="https://peterjamesthomas.com/data-and-analytics-dictionary">peterjames.com</a></td>
+			<td>The big data and analytics dictionary</td>
+			<td>big data</td>
+		  </tr>	
+		  <tr>
+			<td><a target="_blank" href="https://github.com/onurakpolat/awesome-bigdata">github.com</a></td>
+			<td>A curated list of awesome big data frameworks and resources</td>
+			<td>big data</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://cloud.google.com/bigtable/docs/overview">google.com</a></td>
+			<td>Overview of Cloud Bigtable</td>
+			<td>GCP</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://github.com/josephmisiti/awesome-machine-learning">github.com</a></td>
+			<td>A curated list of machine learning frameworks, libraries and software</td>
+			<td>machine-learning</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://blog.cloudera.com">cloudera.com</td>
+			<td>
+				<ul>
+					<li><a target="_blank" href="http://blog.cloudera.com/blog/2009/08/hadoop-default-ports-quick-reference">Hadoop default ports and web pages reference</a></li>
+					<li><a target="_blank" href="http://blog.cloudera.com/blog/2009/12/7-tips-for-improving-mapreduce-performance">7 Tips for Improving MapReduce Performance: Poor mans profiling</a></li>
+					<li><a target="_blank" href="http://blog.cloudera.com/blog/2017/02/performance-comparing-of-different-file-formats-and-storage-engines-in-hadoop-file-system">Performance comparison of different Hadoop file formats</a></li>
+					<li><a target="_blank" href="http://blog.cloudera.com/blog/2017/02/analyzing-us-flight-data-on-amazon-s3-with-sparklyr-and-apache-spark-2-0">Analyzing US flight data on Amazon S3 with sparklyr and Apache Spark</a></li>
+				</ul>
+			</td>
+			<td>cloudera</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://www.informit.com/articles/article.aspx?p=2473128&seqNum=11">informit.com</a></td>
+			<td>Big Data Adoption and Planning Considerations</td>
+			<td>reactive</td>
+		  </tr>
+			<td><a target="_blank" href="https://github.com">github.com</a></td>
+			<td>
+				GitHub Blockchain references
+				<ul>
+					<li><a target="_blank" href="https://github.com/Xel/Blockchain-stuff">Curated list of blockchain and general cryptocurrency resources</a></li>
+					<li><a target="_blank" href="https://github.com/Scanate/EthList">The Crowdsourced Ethereum Reading List</a></li>
+
+				</ul>
+			</td>	
+			<td>blockchain</td>			
+		  </tr>
+		</table>
+	</div>
+		
+	<!--Footer -->
+	<div align="center">
+		<div data-include="footer.html"></div>
+	</div>	
+</body>
+
+</html>

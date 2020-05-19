@@ -1,0 +1,12 @@
+.tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
+.tg td{font-family:verdana;font-size:10px;padding:5px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
+.tg th{font-family:verdana;font-size:12px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
+.header {font-family:verdana;font-size:20px;font-weight:bold;color:#black;}
+.footer {font-family:verdana;font-size:10px;font-weight:bold;color:#black;}
+.anchor{font-family:verdana;font-size:10px;font-weight:bold;color:#black;}
+.highlight{font-family:verdana;font-size:10px;font-weight:bold;color:#black;}
+.acronym{font-family:verdana;font-size:11px;font-weight:bold;color:#00008B;}
+
+iframe[seamless] {
+	border: none;
+}

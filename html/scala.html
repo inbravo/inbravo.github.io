@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- meta information -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Amit Dixit">
+	
+	<!-- JavaScript and Stylesheet -->
+	<link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+	<link rel="stylesheet" href="../css/lightbox.min.css">
+	<script src="../js/jquery-1.11.3.min.js"></script>
+	<script src="../js/lightbox.js"></script>
+	<script src="../js/csi.min.js"></script>
+	<script src="../js/inbravo.js"></script>
+	
+	<!-- Page title -->
+    <title>Industry Bravo</title>
+</head>
+
+<body>
+	
+	<!--Header -->
+	<div align="center">
+		<div data-include="header.html"></div>
+	</div>	
+	
+	<div align="center">
+
+		<table class="tg">
+		  <tr>
+			<td>
+				<a target="_blank" href="https://mbonaci.github.io/scala">github.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/progfun-wiki/blob/gh-pages/CheatSheet.md">github.com</a>
+			</td>
+			<td>Java developers Scala cheatsheet</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.scala-lang.org/files/archive/spec/2.11">scala-lang.org specs</a></br>
+				<a target="_blank" href="http://www.scala-lang.org/api/current">scala-lang.org api</a></br>
+				<a target="_blank" href="http://www.artima.com/pins1ed">artima.com</a></br>
+				<a target="_blank" href="http://twitter.github.io/effectivescala">twitter effective scala</a></br>
+				<a target="_blank" href="http://twitter.github.io/scala_school">twitter scala school</a>
+			</td>
+			<td>Scala official specs, api reference, Artima book, Twitter Scala school</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://joelabrahamsson.com/learning-scala-part-eight-scalas-type-hierarchy-and-object-equality">joelabrahamsson.com</a></td>
+			<td>
+				Scala’s type hierarchy and object equality <a target="_blank" href="../images/s/sth.png" data-lightbox="sth" data-title="sth"><img src="../images/s/sth.png" alt="sth" border="2" height="25" width="25"></img></br>
+				<ul>
+					<li> <a target="_blank" href="http://www.scala-lang.org/api/2.7.2/scala/Any.html">Any.scala</a></li>
+					<li> <a target="_blank" href="http://www.scala-lang.org/api/2.7.2/scala/AnyRef.html">AnyRef.scala</a></li>
+					<li> <a target="_blank" href="http://www.scala-lang.org/api/2.7.2/scala/AnyVal.html">AnyVal.scala</a></li>
+					<li> <a target="_blank" href="http://www.scala-lang.org/api/2.7.2/scala/Null.html">Null.scala</a></li>
+					<li> <a target="_blank" href="http://www.scala-lang.org/api/2.7.2/scala/Nothing.html">Nothing.scala</a></li>
+					<li> <a target="_blank" href="https://github.com/scala/scala/blob/v2.9.3-RC1/src/library/scala/Predef.scala#L1">Predef.scala</a></li>
+					<li> <a target="_blank" href="https://github.com/scala/scala/blob/v2.9.3-RC1/src/library/scala/Unit.scala#L1">Unit.scala</a></li>
+				</ul>
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://ktoso.github.io/scala-types-of-types">github.com</a></td>
+			<td>Very nice article on Scala types from Github user ktoso</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang">github.com</a></br>
+				<a target="_blank" href="http://techblog.realestate.com.au/java-to-scala-cheatsheet">realestate.com.au</a>
+			</td>
+			<td>
+				Scala examples from Java to Scala cheatsheet
+				<ul>
+					<li> 
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/AnnotationTest.scala">AnnotationTest</a> | 
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/MutatorTest.scala">MutatorTest</a> | 
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/EitherTest.scala">EitherTest</a> 
+					</li>
+					<li> 
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/LoopTest.scala">LoopTest</a> | 
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/MultipleTraitTest.scala">MultipleTraitTest</a> | 
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/SealedTraitTest.scala">SealedTraitTest</a>
+					</li>
+					<li> 
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/TupleTest.scala">TupleTest</a> |
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/ForEachTest.scala">ForEachTest</a> |
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/ForEachTest.scala">YieldTest</a>
+					</li>
+					<li> 
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/ObjectFactoryTest.scala">ObjectFactoryTest</a> |
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/ImportTest.scala">ImportTest</a> |
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/InstanceOfTest.scala">InstanceOfTest</a>
+					</li>
+					<li> 
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/GenericsTest.scala">GenericsTest</a> |
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/SeqOfStringsTest.scala">SeqOfStringsTest</a> |
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/SeqOfStringsTest.scala">ListTest</a>
+					</li>
+					<li> 
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/SeqOfStringsTest.scala">ArrayBufferTest</a> |
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/CompanionObjectTest.scala">CompanionObjectTest</a> |
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/MapTest.scala">MapTest</a>
+					</li>
+					<li> 
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/EnvironmentVarTest.scala">EnvironmentVarTest</a> |
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/FirstClassFuncTest.scala">FirstClassFuncTest</a> |
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/TryCatchTest.scala">TryCatchTest</a>
+					</li>
+					<li> 
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/CompanionObjectTest.scala">RequireTest</a> |
+						<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/ref/WeakHashMapTest.scala">WeakHashMapTest</a> 
+					</li>
+				</ul>
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/MutatorTest.scala">github.com</a></td>
+			<td>
+				
+				When you see a field in a Scala class, remember that it's not the same as Java 
+				<a target="_blank" href="../images/s/sma.png" data-lightbox="sma" data-title="sma"><img src="../images/s/sma.png" alt="sma" border="2" height="25" width="25"></img></a></br> 
+				It's either a private field together with a getter (for a val field)</br> 
+				Or a getter and a setter (for a var field)</br>
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://twitter.github.io/scala_school/concurrency.html">github.com</a></td>
+			<td>
+				Concurrency in Scala
+				<ul>
+					<li> <a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/concurrency/NetworkService.scala">ThreadPoolExecutorService</a></li>
+					<li> <a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/concurrency/ThreadTest.scala">ThreadTest</a></li>
+					<li> <a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/concurrency/CountDownLatchTest.scala">CountDownLatchTest</a></li>
+					<li> <a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/concurrency/CyclicBarrierTest.scala">CyclicBarrierTest</a></li>
+				</ul>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.scala-lang.org/old/node/242">scala-lang.org</a></br>
+				<a target="_blank" href="http://berb.github.io/diploma-thesis/original/054_actors.html">github.com</a></br>
+				<a target="_blank" href="https://rocketeer.be/articles/concurrency-in-erlang-scala">rocketeer.be</a>
+			</td>
+			<td>
+				<b class='highlight'>The Actor Model</b> proposed by Carl Hewitt in 1973</br>
+				<b class='highlight'>Actors</b> are objects which encapsulate state and behavior, Examples</br>
+				<ul>
+					<li> <a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/akka/basic/PingPongTest.scala">PingPongTest.scala</a></li>
+					<li> <a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/akka/basic/HelloActor.scala">HelloActor.scala</a></li>
+				</ul>
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://github.com/inbravo/eai-patterns-with-actor-model">github.com</a></td>
+			<td>Enterprise Application Interface (<b class='acronym'>EAI</b>) Patterns with Actor Model</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/4493001/good-use-case-for-akka">stackoverflow.com</a></br>
+				<a target="_blank" href="http://akka.io/docs">akka.io</a>
+			</td>
+			<td>
+				Akka <a target="_blank" href="../images/s/akka.png" data-lightbox="akka" data-title="akka"><img src="../images/s/akka.png" alt="akka" border="2" height="25" width="25"></img></a> Examples,</br>
+				<ul>
+					<li> <a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/concurrency/NetworkService.scala">NetworkService.scala</a></li>
+					<li> <a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/akka/http/CustomerRestService.scala">CustomerRestService.scala</a></li>
+				</ul>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://docs.paralleluniverse.co/quasar/#fibers">paralleluniverse.co</a></br>
+				<a target="_blank" href="http://zeroturnaround.com/rebellabs/what-are-fibers-and-why-you-should-care">zeroturnaround.com</a>
+			</td>
+			<td>Fiber based Actor framework: Quasar <a target="_blank" href="../images/atr.png" data-lightbox="actor" data-title="actor"><img src="../images/atr.png" alt="thread" border="2" height="25" width="25"></img></a></td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://www.scala-lang.org/api/rc2/scala/Predef$.html">scala-lang.org</a></td>
+			<td>Predef class gives aliases for commonly used types, such as Map, Set, and the List</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://www.artima.com/pins1ed/basic-types-and-operations.html#sec:equality">artima.com</a></td>
+			<td>
+				How Scala's == differs from Java's </br>
+				On primitive types, Java's == compares value equality, as in Scala </br>
+				On reference types, however, Java's == compares reference equality</br>
+				Scala provides a facility for comparing reference equality, using eq() and its opposite, ne()
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/29708229/what-are-accessor-and-mutator-methods-in-scala">stackoverflow.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/MutatorTest.scala">github.com</a>
+			</td>
+			<td>Accessor and mutator methods in Scala</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://www.artima.com/pins1ed/next-steps-in-scala.html">artima.com</a></td>
+			<td>Every array is an object in Scala. array(0) = "Hello" converts to:-> array.update(0, "Hello")</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://www.scala-lang.org/docu/files/collections-api/collections.html">scala-lang.org</a></td>
+			<td>
+				The Scala 2.8 Collections API
+				<a target="_blank" href="../images/s/cls.png" data-lightbox="cls" data-title="cls"><img src="../images/s/cls.png" alt="cls" border="2" height="25" width="25"></img>
+				<a target="_blank" href="../images/s/clsm.png" data-lightbox="clsm" data-title="clsm"><img src="../images/s/clsm.png" alt="clsm" border="2" height="25" width="25"></img>
+				<a target="_blank" href="../images/s/clsimm.png" data-lightbox="clsimm" data-title="clsimm"><img src="../images/s/clsimm.png" alt="clsimm" border="2" height="25" width="25"></img>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/7888944/what-do-all-of-scalas-symbolic-operators-mean">stackoverflow.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/ImportTest.scala">github.com</a>
+			</td>
+			<td>
+				All automatic imports in every Scala entity
+				<ul>
+					<li>import _root_.java.lang._</li>
+					<li>import _root_.scala._</li>
+					<li>import _root_.scala.Predef._</li>
+				</ul>
+				All symbolic operators	
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/5270752/difference-between-case-object-and-object">stackoverflow.com</a></td>
+			<td>Difference between case object (can be serialized) and object (can't be serialized)</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/9698677/privatethis-vs-private">stackoverflow.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/ObjectPrivateAccess.scala">github.com</a>
+			</td>
+			<td>Difference between <b class='highlight'>private</b> and <b class='highlight'>private[this]</b></td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/12289973/trying-to-understand-final-abstract-class-int-private-extends-anyval-in-scala">stackoverflow.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/AbstractClassTest.scala">github.com</a>
+			</td>
+			<td>
+				<b class='highlight'>final abstract class Int private extends AnyVal</b></br>
+				<code>abstract</code> forbids instantiation (<code>new Int</code>), whereas <code>final</code> forbids subclassing (<code>new Int {}</code>)
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://docs.scala-lang.org/overviews/core/string-interpolation.html">scala-lang.org</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/InterpolatorTest.scala">github.com</a>
+			</td>
+			<td>
+				String Interpolation in Scala</br>
+				Scala provides three string interpolation methods <b class='highlight'><code>[ s, f, raw ]</code></b>
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/1891775/any-reason-for-having-val-capacity-int-instead-of-val-int-capacity-in-scal">stackoverflow.com</a></td>
+			<td>Reason for having <b class='highlight'>val someVariable : Int</b> instead of <b class='highlight'>val Int someVariable</b> in Scala</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/1791408/what-is-the-difference-between-a-var-and-val-definition-in-scala">stackoverflow.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/4437373/use-of-def-val-and-var-in-scala">stackoverflow.com</a>
+			</td>
+			<td>Difference of <b class='highlight'>var</b> and <b class='highlight'>val</b>. <b class='highlight'>val</b> is a final value</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://docs.scala-lang.org/tutorials/tour/case-classes.html">scala-lang.org</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/SealedTraitTest.scala">github.com</a>
+			</td>
+			<td><b class='highlight'>Case</b> Classes</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://programmers.stackexchange.com/questions/194686/why-does-scala-use-the-operator-for-package-import-instead-of-as-in-java">stackexchange.com</a></td>
+			<td>
+				Scala use <b class='highlight'>'_'</b> operator for package import instead of <b class='highlight'>'*'</b> as in Java</br>
+				In Scala, the * is a valid identifier. <code><b class='highlight'>val * = "trollin"; println(*)</b></code>
+			</td>
+		  </tr>		
+		  <tr>
+			<td><a target="_blank" href="https://stackoverflow.com/questions/28655725/what-does-mean-in-scala">stackoverflow.com</a></td>
+			<td>
+				Scala uses <b class='highlight'>'::'</b> operator as the list cons operator</br>
+				It creates a new list whose head is first argument and whose tail is contents of the second argument
+			</td>
+		  </tr>		
+		  <tr>
+			<td><a target="_blank" href="http://www.codecommit.com/blog/scala/quick-explanation-of-scalas-syntax">codecommit.com</a></td>
+			<td>Explanation of Scala’s <b class='highlight'>(_+_)</b> Syntax</td>
+		  </tr>	
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/29708229/what-are-accessor-and-mutator-methods-in-scala">stackoverflow.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/MutatorTest.scala">github.com</a>
+			</td>
+			<td>Accessors and Mutators (getters/setter) in Scala</td>
+		  </tr>			  
+		  <tr>
+			<td>
+				<a target="_blank" href="https://stackoverflow.com/questions/4465948/what-are-scala-context-and-view-bounds">stackoverflow.com</a></br>
+				<a target="_blank" href="https://stackoverflow.com/questions/11515940/what-does-the-operator-mean-in-scala-generics">stackoverflow.com</a>
+			</td>	
+			<td>Scala context and view bounds. Purpose of operator: <b class='highlight'>< %</b></td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/14706634/private-scoping-with-square-brackets-private-in-scala">stackoverflow.com</a></td>
+			<td>Private scoping with square brackets (<b class='highlight'>private[…]</b>) </td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/1095329/scala-constructor-overload">stackoverflow.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/tree/master/src/com/inbravo/ds/stack/Stack.java">github.com</a>
+			</td>
+			<td>Scala constructor overload using <b class='highlight'>Auxiliary constructors</b></td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/17029764/scala-import-statement-at-top-and-inside-scala-class">stackoverflow.com</a></td>
+			<td>Scala <b class='highlight'>import statement</b> at top and inside scala class</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://stackoverflow.com/questions/18468786/understand-how-to-use-apply-and-unapply">stackoverflow.com</a></td>
+			<td>Understand how to use <b class='highlight'>apply() & unapply()</b></td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://docs.scala-lang.org/tutorials/tour/traits.html">scala-lang.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/11203268/what-is-a-sealed-trait">stackoverflow.com</a></br>			
+				<a target="_blank" href="http://stackoverflow.com/questions/3032771/scalas-sealed-abstract-vs-abstract-class">stackoverflow.com</a>
+			</td>
+			<td>
+				Scala <b class='highlight'>trait</b> is equivalent to a Java <b class='highlight'>interface</b></br>
+				Scala <b class='highlight'>sealed trait</b> is equivalent to a Java enum <b class='highlight'>interface</b></br>
+				Scala allows traits to be partially implemented</br>
+				Purpose of <b class='highlight'>sealed abstract class</b> 
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://alvinalexander.com/scala/scala-tuple-examples-syntax">alvinalexander.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/TupleTest.scala">github.com</a>
+			</td>
+			<td>Scala Tuple on <b class="acronym">REPL</b> (Read-Evaluate-Print Loop)</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://alvinalexander.com/scala/scala-either-left-right-example-option-some-none-null">alvinalexander.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/EitherTest.scala">github.com</a>
+			</td>
+			<td>Scala <b class='highlight'>Either</b>: Either works just like <b class='highlight'>Option</b></td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/30564028/the-java-object-class-equivalent-in-scala">stackoverflow.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/VarArgsTest.scala">github.com</a>
+			</td>
+			<td>Equivalent of Java <b class='highlight'>Object</b> Class in Scala is <b class='highlight'>AnyRef</b></td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/7302206/why-doesnt-scala-have-static-members-inside-a-class">stackoverflow.com</a></td>
+			<td>Why Scala lacks static members and primitives <a target="_blank" href="../images/s/nps.png" data-lightbox="nps" data-title="nps"><img src="../images/s/nps.png" alt="nps" border="2" height="25" width="25"></img></td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://www.scalaformachinelearning.com">scalaformachinelearning.com</a></td>
+			<td>A dedicated space for Scala based Machine Learning Examples</td>
+		  </tr>		  
+		  <tr>
+			<td>
+				<a target="_blank" href="https://dzone.com/articles/operator-overloading-scala">dzone.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/OperatorsAreMethods.scala">github.com</a>
+			</td>
+			<td><b class='highlight'>Operator Overloading</b> in Scala. Operators are nothing just methods</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://baddotrobot.com/blog/2015/07/03/scala-implicit-parameters">baddotrobot.com</a></br>
+				<a target="_blank" href="http://alvinalexander.com/scala/scala-2.10-implicit-class-example">alvinalexander.com</a>
+			</td>
+			<td>
+				<b class='highlight'>Implicit</b> Parameters and Functions in Scala
+				<ul>
+					<li> <a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/ImplicitFuncTest.scala">ImplicitFuncTest</a></li>
+					<li> <a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/ImplicitParamTest.scala">ImplicitParamTest</a></li>
+				</ul>
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/19492542/understanding-what-type-keyword-does-in-scala">stackoverflow.wom</a></td>
+			<td>
+				Understanding <b class='highlight'>type</b> keyword and Anonymous functions
+				<ul><li><a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/AnonymousFuncTest.scala">AnonymousFuncTest</a></li></ul>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://blog.richdougherty.com/2009/04/tail-calls-tailrec-and-trampolines.html">richdougherty.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/number/FactorialTest.scala">github.com</a>
+			</td>
+			<td><b class='highlight'>Tail calls, @tailrec</b> in Scala</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/7484928/what-does-a-lazy-val-do">stackoverflow.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/lang/LazyValTest.scala">github.com</a>
+			</td>
+			<td>
+				<b class='highlight'>lazy val</b> in Scala: A lazy val is most easily understood as a <b class='highlight'>memoized def</b></br>
+				<b class='highlight'>val</b> is executed when it is defined</br> 
+				<b class='highlight'>lazy val</b> is executed when accessed first time and result is saved for future invocation
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/1755345/difference-between-object-and-class-in-scala">stackoverflow.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/5270752/difference-between-case-object-and-object">stackoverflow.com</a>
+			</td>
+			<td>
+				Difference between <b class='highlight'>object</b> and <b class='highlight'>class</b> in Scala</br>
+				Class is a blueprint for objects. objects are program entry point</br>
+				Difference between <b class='highlight'>object</b> and <b class='highlight'>case object</b> in Scala</br>
+			    Companion object shares the same name of class and stay in same class
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.scala-sbt.org/release/docs/index.html">scala-sbt.org</a></br>
+				<a target="_blank" href="http://twitter.github.io/scala_school/sbt.html">github.com</a>
+			</td>
+			<td>
+				Scala build tool: <b class='highlight'>SBT</b></br>
+				'run' command to compile. 'package' command to generate jar</br>
+				<a target="_blank" href="http://www.scala-sbt.org/release/docs/Library-Management.html">Library dependencies</a> | 
+				<a target="_blank" href="http://www.scala-sbt.org/1.0/docs/Organizing-Build.html">Organizing the build</a>
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/9070336/how-to-have-eclipse-recognize-dependencies-from-sbt">stackoverflow.com</a></td>
+			<td>
+				How to have Eclipse recognize dependencies from SBT</br>
+				Add sbt plugin info at project/plugins.sbt</br>
+				[addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "4.0.0")]
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://github.com/typesafehub/config">github.com</a></br>
+				<a target="_blank" href="http://blog.michaelhamrah.com/2014/02/leveraging-typesafes-config-library-across-environments">michaelhamrah.com</a>
+			</td>
+			<td><b class='highlight'>Typesafe Config</b> library</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/com/inbravo/string/Anagram.java">github.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/string/Anagram.scala">github.com</a>
+			</td>
+			<td>Anagram in Java/Scala</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/com/inbravo/string/WordFrequency.java">github.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/string/WordFrequency.scala">github.com</a>
+			</td>
+			<td>Word frequency in a statement in Java/Scala</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://github.com/inbravo/java-src/tree/master/src/com/inbravo/ds/stack/Stack.java">github.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/ds/stack/Stack.scala">github.com</a>
+			</td>
+			<td>Stack in Java/Scala</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://github.com/inbravo/java-src/tree/master/src/com/inbravo/ds/queue/Queue.java">github.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/ds/queue/Queue.scala">github.com</a>
+			</td>
+			<td>Queue in Java/Scala</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://github.com/inbravo/java-src/tree/master/src/com/inbravo/ds/queue/CircularQueue.java">github.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/ds/queue/CircularQueue.scala">github.com</a>
+			</td>
+			<td>CircularQueue in Java/Scala</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/com/inbravo/ds/stack/ReverseTheWord.java">github.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/scala-src/blob/master/src/main/scala/com/inbravo/ds/stack/ReverseTheWord.scala">github.com</a>
+			</td>
+			<td>Reverse the word using Stack in Java/Scala</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://aperiodic.net/phil/scala/s-99">aperiodic.net</a></td>
+			<td>Ninety-Nine Scala Problems</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://semaphoreci.com/community/tutorials/a-hands-on-introduction-to-scalatest">semaphoreci.com</a></td>
+			<td>
+				A Hands-On Introduction to ScalaTest
+				<ul>
+					<li> <a target="_blank" href="http://www.scalatest.org/user_guide/selecting_a_style">Selecting testing styles</a></li>
+					<li> <a target="_blank" href="http://www.scalatest.org/user_guide/using_matchers">Using matchers</a></li>
+					<li> <a target="_blank" href="http://www.scalatest.org/user_guide/defining_base_classes">Defining base classes</a></li>
+				</ul>
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://github.com/concurrent-programming-in-scala">github.com</a></td>
+			<td>Concurrent Programming in Scala</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://blog.jaceklaskowski.pl/2015/05/09/ditching-guices-at-singleton-in-favour-of-scalas-companion-object.html">jaceklaskowski.pl</a></td>
+			<td>
+				Ditching Guice's @Singleton in Favour of Scala's Companion Object</br>
+				Jacek Laskowski is working at DeepSense. <a target="_blank" href="https://www.gitbook.com/book/jaceklaskowski/mastering-apache-spark/details">Spark Open book</a> by him</br>
+				DeepSense won <b class='highlight'>Kaggle Right Whale Recognition Compitition</b></br>
+			</td>
+		  </tr>
+		</table>
+	</div>
+	
+	<!--Footer -->
+	<div align="center">
+		<div data-include="footer.html"></div>
+	</div>	
+</body>
+
+</html>

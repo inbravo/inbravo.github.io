@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- meta information -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Amit Dixit">
+	
+	<!-- JavaScript and Stylesheet -->
+	<link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+	<link rel="stylesheet" href="../css/lightbox.min.css">
+	<script src="../js/jquery-1.11.3.min.js"></script>
+	<script src="../js/lightbox.js"></script>
+	<script src="../js/csi.min.js"></script>
+	<script src="../js/inbravo.js"></script>
+	
+	<!-- Page title -->
+    <title>Industry Bravo</title>
+</head>
+
+<body>
+
+	<!--Header -->
+	<div align="center">
+		<div data-include="header.html"></div>
+	</div>	
+	
+	<div align="center">
+		
+		<table class="tg">
+		  <tr>
+			<td><a target="_blank" href="http://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/index.html">oracle.com</a></td>
+			<td>Oracle HotSpot Virtual Machine Garbage Collection tuning guide</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://blog.jamesdbloom.com/JVMInternals.html#class_file_structure">jamesbloom.com</a></br>
+				<a target="_blank" href="https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-2.html">oracle.com</a></br>
+				<a target="_blank" href="https://www.artima.com/insidejvm/ed2/jvm.html">artima.com
+			</td>
+			<td>
+				JVM internals 
+				<a target="_blank" href="../images/jvm.png" data-lightbox="jvm" data-title="JVM"><img src="../images/jvm.png" alt="JVM" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/jvmf.png" data-lightbox="jvmf" data-title="jvmf"><img src="../images/jvmf.png" alt="JVM" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/jit.png" data-lightbox="jit" data-title="jit"><img src="../images/j/jit.png" alt="jit" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/jbma.png" data-lightbox="jbma" data-title="jbma"><img src="../images/j/jbma.png" alt="jbma" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/jcf.png" data-lightbox="jcf" data-title="jcf"><img src="../images/j/jcf.png" alt="jcf" border="2" height="25" width="25"></img></a>
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/2129044/java-heap-terminology-young-old-and-permanent-generations">stackoverflow.com</a></td>
+			<td>Different section of JVM [Eden/Serviver/Tenured + PermGen/CodeCache] <a target="_blank" href="../images/h.png" data-lightbox="h" data-title="Heap"><img src="../images/h.png" alt="Heap" border="2" height="25" width="25"></img></a></td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://dzone.com/articles/just-time-compiler-jit-hotspot">dzone.com</a> </br>
+				<a target="_blank" href="http://stackoverflow.com/questions/13086690/understanding-the-output-of-xxprintcompilation">stackoverflow.com</a></br>
+				<a target="_blank" href="https://gist.github.com/chrisvest/2932907">github.com</a></br>
+				<a target="_blank" href="https://github.com/dougqh/jvm-mechanics/blob/master/JVM%20Mechanics.pdf">github.com</a>
+			</td>
+			<td>
+				JIT compiler in JVM
+				<a target="_blank" href="../images/jit.png" data-lightbox="jit" data-title="jit"><img src="../images/jit.png" alt="Heap" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/jitop.png" data-lightbox="jitop" data-title="jitop"><img src="../images/j/jitop.png" alt="jitop" border="2" height="25" width="25"></img></a></br>
+				VM option (<b><code>-XX:+PrintCompilation</code></b>) will print all JIT optimizations at runtime</br>
+				VM option (<b><code>-X</code></b>) will print all Non-standard JVM options</br>
+				Output format: <b class="highlight">{compile_id}{method_attributes} {short_name} ({size} bytes)</b>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://openjdk.java.net/groups/hotspot/docs/RuntimeOverview.html">java.net</a></br>
+				<a target="_blank" href="http://hg.openjdk.java.net/jdk8">java.net</a></br>
+			</td>
+			<td>
+				HotSpot JVM Runtime, OpenJDK8 Compiler/JVM source <a target="_blank" href="../images/j/jco.png" data-lightbox="jco" data-title="jco"><img src="../images/j/jco.png" alt="jco" border="2" height="25" width="25"></img></a></br>
+				<ul>
+					<li><a target="_blank" href="http://hg.openjdk.java.net/jdk8/jdk8/hotspot/file/tip/src/share/vm/prims/jvm.cpp">jvm.cpp</a></li>
+					<li><a target="_blank" href="http://hg.openjdk.java.net/jdk8/jdk8/hotspot/file/87ee5ee27509/src/cpu/x86/vm/register_x86.cpp">register.cpp</a></li> 
+					<li><a target="_blank" href="http://hg.openjdk.java.net/jdk8/jdk8/hotspot/file/87ee5ee27509/src/share/vm/runtime/frame.cpp">frame.cpp</a></li>
+					<li><a target="_blank" href="http://hg.openjdk.java.net/jdk8/jdk8/hotspot/file/87ee5ee27509/src/share/vm/classfile/javaClasses.cpp">javaClasses.cpp</a></li>
+					<li><a target="_blank" href="http://hg.openjdk.java.net/jdk8/jdk8/hotspot/file/87ee5ee27509/src/share/vm/classfile/symbolTable.cpp">symbolTable.cpp</a></li>
+					<li><a target="_blank" href="http://hg.openjdk.java.net/jdk8/jdk8/hotspot/file/87ee5ee27509/src/share/vm/memory/heap.cpp">heap.cpp</a></li>
+					<li><a target="_blank" href="http://hg.openjdk.java.net/jdk8/jdk8/hotspot/file/87ee5ee27509/src/share/vm/code/codeCache.cpp">codeCache.cpp</a></li>
+				</ul>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html">oracle.com</a></br>
+				<a target="_blank" href="https://www.artima.com/insidejvm/ed2/jvm5.html">artima.com</a>
+			</td>
+			<td>
+				<a target="_blank" href="http://openjdk.java.net/groups/hotspot/docs/HotSpotGlossary.html">HotSpot JVM Glossary</a> 
+				<ul>
+					<li><a target="_blank" href="http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.1">PC register</a></li>
+					<li><a target="_blank" href="http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.2">Stack</a></li>
+					<li><a target="_blank" href="http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.6">Native Stack</a>,</li>
+					<li><a target="_blank" href="http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.6.1">Local Variables</a></li>
+					<li><a target="_blank" href="http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.6.2">Operand Stacks</a></li>
+					<li><a target="_blank" href="http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.6.3">Dynamic Linking</a></li>
+					<li><a target="_blank" href="http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.5">Constant Pool</a></li>
+					<li><a target="_blank" href="http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.6">Frame</a></li>
+					<li><a target="_blank" href="http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.3">Heap</a></li>
+					<li><a target="_blank" href="http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.4">Method area</a></li>
+				</ul>
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://github.com/HeapStats/heapstats">github.com</a></td>
+			<td>
+				HeapStats, a lightweight monitoring tool for Java heap and GC.</br>
+				Winner of JavaOne Duke’s Choice Awards
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/9095748/method-area-and-permgen">stackoverflow.com</a></td>
+			<td>
+				Method area is a subset of PermGen area 
+				<a target="_blank" href="../images/j/ma.png" data-lightbox="ma" data-title="ma"><img src="../images/j/ma.png" alt="ma" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/jma.png" data-lightbox="jma" data-title="jma"><img src="../images/j/jma.png" alt="jma" border="2" height="25" width="25"></img></a>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://openjdk.java.net/groups/compiler/doc/hhgtjavac/index.html">java.net</a></br>
+				<a target="_blank" href="http://openjdk.java.net/groups/compiler/doc/compilation-overview/index.html">java.net</a>
+			</td>
+			<td>Compilation guide and source <br>Automatic '<a target="_blank" href="http://www.docjar.com/html/api/com/sun/tools/javac/comp/MemberEnter.java.html">java.lang</a>' package loading (line 521 call to 'importAll' method)</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://inbravo.github.io/docs/jm-3-2016.pdf">github.io</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/com/inbravo/runtime/jit/FibonacciNumber.java">github.com</a>
+			</td>
+			<td>
+				JIT compiler and CodeCache in brief <a target="_blank" href="../images/j/om1.png" data-lightbox="om1" data-title="om1"><img src="../images/j/om1.png" alt="om1" border="2" height="25" width="25"></img></a></br>
+				VM option (<b><code>-Xint</code></b>) will run JVM in interpreter mode only; No JIT</br>
+				Example program to see how -Xint can affect performance
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/20522870/about-the-dynamic-de-optimization-of-hotspot">stackoverflow.com</a></td>
+			<td>
+				JIT compiler dynamic De-Optimization</br>
+				If an optimization did not, improve performance and undo that optimization
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://docs.oracle.com/javase/specs/jvms/se6/html/Concepts.doc.html#19175">oracle.com</a></br>
+				<a target="_blank" href="https://docs.oracle.com/javase/8/docs/technotes/tools/findingclasses.html">oracle.com</a>
+			</td>
+			<td>
+				Class Loading in JVM 
+				<a target="_blank" href="../images/j/hjc.png" data-lightbox="hjc" data-title="hjc"><img src="../images/j/hjc.png" alt="hjc" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/cl.png" data-lightbox="cl" data-title="jvma"><img src="../images/j/cl.png" alt="cl" border="2" height="25" width="25"></img></a>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://docs.oracle.com/javase/specs/jvms/se6/html/Concepts.doc.html#22574">oracle.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/17406159/symbolic-references-in-java">stackoverflow.com</a>
+			</td>
+			<td>
+				Class Linking in JVM: Verification, Preparation, Resolution (<b class="acronym">VPR</b>) of Symbolic References</br>
+				<b class="highlight">Symbolic References</b> are used to retrieve the actual object</br>
+				Verification can be turned off by supplying the <b class="highlight">-noverify</b> option
+				<a target="_blank" href="../images/j/cv.png" data-lightbox="cv" data-title="cv"><img src="../images/j/cv.png" alt="cv" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/cpri.png" data-lightbox="cpri" data-title="cpri"><img src="../images/j/cpri.png" alt="cpri" border="2" height="25" width="25"></img></a>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.javainterviewpoint.com/java-virtual-machine-architecture-in-java">javainterviewpoint.com</a></br>
+				<a target="_blank" href="https://www.artima.com/insidejvm/ed2/linkmod.html">artima.com</a>
+			</td>
+			<td>
+				Class Execution in JVM 
+				<a target="_blank" href="../images/j/jvma.png" data-lightbox="jvma" data-title="jvma"><img src="../images/j/jvma.png" alt="jvma" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/jvma1.png" data-lightbox="jvma1" data-title="jvma1"><img src="../images/j/jvma1.png" alt="jvma1" border="2" height="25" width="25"></img></a>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://blog.lse.epita.fr/articles/69-0xcafebabe-java-class-file-format-an-overview.html">lse.epita.fr</a></br>
+				<a target="_blank" href="http://www.murrayc.com/permalink/1998/03/13/the-java-class-file-format">murrayc.com</a>
+			</td>
+			<td>
+				Class Format in JVM <a target="_blank" href="../images/j/co.png" data-lightbox="co" data-title="co"><img src="../images/j/co.png" alt="co" border="2" height="25" width="25"></img></a>
+				Class file uses <b class='highlight'><a target="_blank" href="http://digiassn.blogspot.in/2006/02/why-do-we-use-hexadecimal.html">Hexadecimal</a></b> format
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javap.html">oracle.com</a>
+			</td>
+			<td>
+				JDK class disassembler: <b>javap -v -p -s -sysinfo com.test</b></br>
+				First put your jar in classpath(export CLASSPATH=your-jar.jar) 
+				<a target="_blank" href="../images/j/st.png" data-lightbox="st" data-title="st"><img src="../images/j/st.png" alt="st" border="2" height="25" width="25"></img></a>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://en.wikipedia.org/wiki/Java_bytecode_instruction_listings">wikipedia.org</a></br>
+				<a target="_blank" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html">oracle.com</a></br>
+				<a target="_blank" href="http://www.javaworld.com/article/2077233/core-java/bytecode-basics.html">javaworld.com</a>
+			</td>
+			<td>Java bytecode instruction set</b></td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.javaworld.com/article/2860079/scripting-jvm-languages/invokedynamic-101.html">javaworld.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/8823793/methodhandle-what-is-it-all-about">stackoverflow.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/com/inbravo/jdk7/MethodHandleTest.java">github.com</a>
+			</td>
+			<td>
+				Java bytecode 'invoke' type instructions (<b>VISSD</b>) 
+				<a target="_blank" href="../images/j/inv.png" data-lightbox="inv" data-title="inv"><img src="../images/j/inv.png" alt="inv" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/indy.png" data-lightbox="indy" data-title="inv"><img src="../images/j/indy.png" alt="inv" border="2" height="25" width="25"></img></a>
+				<ul>
+					<li><b>invokevirtual</b> for class methods using <a target="_blank" href="https://en.wikipedia.org/wiki/Dynamic_dispatch">dynamic dispatch</a></li> 
+					<li><b>invokeinterface</b> for interface methods</li> 
+					<li><b>invokestatic</b> for class methods</li> 
+					<li><b>invokespecial</b> for constructor/private methods/super calls</li> 
+					<li><b>invokedynamic</b> (indy) for Lambdas</li> 
+				</ul>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/30002380/why-are-java8-lambdas-invoked-using-invokedynamic">stackoverflow.com</a></br>
+				<a target="_blank" href="http://cr.openjdk.java.net/~briangoetz/lambda/lambda-translation.html">java.net</a></br>
+				<a target="_blank" href="http://wiki.jvmlangsummit.com/images/1/1e/2011_Goetz_Lambda.pdf">jvmlangsummit.com</a>
+			</td>
+			<td>How Lambdas uses <b>invokedynamic</b> (indy)</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://javaeesupportpatterns.blogspot.in/2011/09/gc-overhead-limit-exceeded-java-heap.html">blogspot.in</a></br>
+				<a target="_blank" href="http://javaeesupportpatterns.blogspot.in/2011/08/gc-overhead-limit-exceeded-problem-and.html">blogspot.in</a></br>
+				<a target="_blank" href="http://javaeesupportpatterns.blogspot.ca/2011/11/how-to-analyze-thread-dump-part-1.html">blogspot.in</a>
+			</td>
+			<td>JVM OutOfMemory Error and thread Dump Analysis using Eclipse MAT</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/8387989/where-is-a-static-method-and-a-static-variable-stored-in-java-in-heap-or-in-sta">stackoverflow.com</a></td>
+			<td>How JVM stores static/class references</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/20650054/string-pool-exists-in-both-young-and-old-generation?answertab=active#tab-top">stackoverflow.com</a></td>
+			<td>Interned String and Garbage Collection</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/27131165/what-is-the-difference-between-permgen-and-metaspace/27131342#27131342">stackoverflow.com</a></br>
+				<a target="_blank" href="http://cr.openjdk.java.net/~stefank/8005108/webrev.00/raw_files/new/src/share/vm/memory/metaspace.cpp">openjdk.java.net</a>
+			</td>
+			<td>Difference of Metaspace and PermGen <a target="_blank" href="../images/ms.png" data-lightbox="gc" data-title="MS"><img src="../images/ms.png" alt="MS" border="2" height="25" width="25"></img></a></td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.oracle.com/technetwork/articles/java/vmoptions-jsp-140102.html">oracle.com</a></br>
+				<a target="_blank" href="https://docs.oracle.com/cd/E22289_01/html/821-1274/configuring-the-default-jvm-and-java-arguments.html">oracle.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/7871870/what-is-the-difference-between-x-params-and-xx-params-in-jvm">stackoverflow.com</a>
+			</td>
+			<td>
+				HotSpot VM Options(<b class='acronym'>BGPD</b>): 
+				<a target="_blank" href="../images/jca.png" data-lightbox="jca" data-title="jca"><img src="../images/jca.png" alt="jca" border="2" height="25" width="25"></img></a><b class='highlight'> Standard(-), Non-standard(-X), Developer (-XX)</b> 
+				<ul>
+					<li><a target="_blank" href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html#BehavioralOptions">Behavioral options</a> change the basic behavior of the VM</li>     
+					<li><a target="_blank" href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html#G1Options">Garbage First (G1) Garbage Collection Options</a></li>     
+					<li><a target="_blank" href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html#PerformanceTuning">Performance tuning</a> options to be used to tune VM performance</li>     
+					<li><a target="_blank" href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html#DebuggingOptions">Debugging options</a> to enable tracing/printing/output of VM info</li>
+				</ul>
+				 <code>-XX:+PrintFlagsFinal</code> lists all flags available in VM
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://javapapers.com/java/types-of-java-garbage-collectors">javapapers.com</a></br>
+				<a target="_blank" href="http://www.fasterj.com/articles/oraclecollectors1.shtml">fasterj.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/6236726/whats-the-difference-between-parallelgc-and-paralleloldgc">stackoverflow.com</a></br>
+				<a target="_blank" href="http://www.javacodegeeks.com/2015/07/jvm-buzzwords-java-developers-should-understand.html">javacodegeeks.com</a>
+			</td>
+			<td>
+				Garbage Collection(<b>SPCG</b>):
+				<a target="_blank" href="../images/j/jgca.png" data-lightbox="jgca" data-title="Garbage Collections"><img src="../images/j/jgca.png" alt="Garbage Collections" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/jgct.png" data-lightbox="jgct" data-title="Garbage Collections"><img src="../images/j/jgct.png" alt="Garbage Collections" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/gco.png" data-lightbox="gco" data-title="Garbage Collections"><img src="../images/gco.png" alt="Garbage Collections" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/gc.png" data-lightbox="gc" data-title="Garbage Collections"><img src="../images/gc.png" alt="Garbage Collection" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/gcs.png" data-lightbox="gcs" data-title="Garbage Collections"><img src="../images/gcs.png" alt="Garbage Collections" border="2" height="25" width="25"></img></a>
+				<ul>
+					<li><a target="_blank" href="http://javapapers.com/java/types-of-java-garbage-collectors#serial-garbage-collector">Serial Garbage Collector</a></li>
+					<li><a target="_blank" href="http://javapapers.com/java/types-of-java-garbage-collectors#parallel-garbage-collector">Parallel Garbage Collector</a></li>
+					<li><a target="_blank" href="http://javapapers.com/java/types-of-java-garbage-collectors#cms-garbage-collector">CMS Garbage Collector</a></li>
+					<li><a target="_blank" href="http://javapapers.com/java/types-of-java-garbage-collectors#g1-garbage-collector">G1 Garbage Collector</a></li>
+				</ul>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/g1_gc.html">oracle.com</a></br>
+				<a target="_blank" href="http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/G1GettingStarted/index.html">oracle.com</a>
+			</td>
+			<td>Java G1 Garbage Collector (<b><code>-XX:+UseG1GC</code></b>)  <a target="_blank" href="../images/j/g1gc.png" data-lightbox="g1gc" data-title="g1gc"><img src="../images/j/g1gc.png" alt="g1gc" border="2" height="25" width="25"></img></a></td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/cms.html">oracle.com</a></td>
+			<td>Concurrent Mark Sweep (<b><code>-XX:+UseConcMarkSweepGC</code></b>)</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/2842695/what-is-microbenchmarking">oracle.com</a></br>
+				<a target="_blank" href="http://openjdk.java.net/projects/code-tools/jmh/">java.net</a>
+			</td>
+			<td>
+				JVM Microbenchmarking</br>
+				"About 97% of the time: Premature optimization is the root of all evil" - Donald Knuth
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.securingjava.com/chapter-two/chapter-two-7.html">securingjava.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/20796046/flow-of-class-loading-for-a-simple-program">stackoverflow.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/18214174/how-is-the-java-bootstrap-classloader-loaded">stackoverflow.com</a>
+			</td>
+			<td>Class Loader Architecture 
+				<a target="_blank" href="../images/cl.png" data-lightbox="cl" data-title="cl"><img src="../images/cl.png" alt="Class Loader" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/pc.png" data-lightbox="pc" data-title="pc"><img src="../images/pc.png" alt="Program Counter" border="2" height="25" width="25"></img></a>
+			</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/24746776/what-does-a-jvm-have-to-do-when-calling-a-native-method">stackoverflow.com</a></td>
+			<td>Native instruction using JNI <a target="_blank" href="../images/j/jun.png" data-lightbox="jun" data-title="jun"><img src="../images/j/jun.png" alt="ma" border="2" height="25" width="25"></img></a></td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://superuser.com/questions/585109/how-many-registers-does-intel%C2%AE-core%E2%84%A2-i7-3770t-processor-have">superuser.com</a></td>
+			<td>CPU x86 registers</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://ascii.cl/conversion.htm">ascii.cl</a></td>
+			<td>Decimal, Hexadecimal, Octal, Binary conversion table</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/947182/how-to-explore-which-classes-are-loaded-from-which-jars">stackoverflow.com</a></td>
+			<td>Load all associated class info a running class (<b class="highlight">java -verbose</b>)</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.ibm.com/developerworks/library/j-codetoheap">ibm.com</a></br>
+				<a target="_blank" href="http://www.java-success.com/jvisualvm-to-sample-java-memory">java-success.com</a></br>
+				<a target="_blank" href="http://duke.csc.villanova.edu/jss/webBonuses/primitiveStorage/primitiveStorage.pdf">villanova.edu</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/3698078/where-does-the-jvm-store-primitive-variables">stackoverflow.com</a>
+			</td>
+			<td>How Java objects/primitives stored in memory using <b class="highlight">visualvm</b> <a target="_blank" href="../images/ieee754.png" data-lightbox="ieee754" data-title="pc"><img src="../images/ieee754.png" alt="IEEE 754" border="2" height="25" width="25"></img></a></td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/13312880/byte-in-java-takes-4-bytes-by-default">stackoverflow.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/229886/size-of-a-byte-in-memory-java">stackoverflow.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/com/inbravo/memory/PrimitiveVarsSizeTest.java">github.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/36063096/size-of-a-long-in-memory-java">stackoverflow.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/258120/what-is-the-memory-consumption-of-an-object-in-java/258150#258150">stackoverflow.com</a>
+			</td>
+			<td>
+				Why 'long' consumes more than 8 bytes in memory: <b class="highlight">Memory Padding</b></br>
+				Why 'byte' consumes 4 bytes in memory <a target="_blank" href="../images/j/joim.png" data-lightbox="joim" data-title="joim"><img src="../images/j/joim.png" alt="joim" border="2" height="25" width="25"></img></a>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/15909640/java-gc-tuning-for-strings">stackoverflow.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/8833385/support-for-compressed-strings-being-dropped-in-hotspot-jvm">stackoverflow.com</a>
+			</td>
+			<td>
+				Garbage Collection tuning for Interned Strings</br>
+				Java Compressed Strings VM option (<b><code>-XX:+UseCompressedStrings</code></b>) is discarded in JDK7
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/9338180/why-hotspot-will-optimize-the-following-using-hoisting">stackoverflow.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/11430095/are-hoisting-and-reordering-the-same-thing">stackoverflow.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/tree/master/src/com/inbravo/runtime/jit">github.com</a>
+			</td>
+			<td>JVM optimization using <b class="highlight">hoisting</b> by JIT</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/6923062/java-thread-stack-size-on-64-bit-linux">stackoverflow.com</a></br>
+				<a target="_blank" href="http://vanillajava.blogspot.in/2011/07/java-what-is-limit-to-number-of-threads.html">blogspot.com</a>
+			</td>
+			<td>Maximum number of threads per JVM and (<b><code>-XX:ThreadStackSize</code></b>) VM option</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/3616483/why-does-the-jvm-still-not-support-tail-call-optimization">stackoverflow.com</a></td>
+			<td>Why does the JVM still not support <b class="highlight">tail-call</b> optimization</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://dzone.com/articles/understanding-sunmiscunsafe">dzone.com</a></br>
+				<a target="_blank" href="http://mishadoff.com/blog/java-magic-part-4-sun-dot-misc-dot-unsafe">mishadoff.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/tree/master/src/com/inbravo/runtime/jit/UnsafeObject.java">github.com</a>
+			</td>
+			<td>Understanding <b class="highlight">sun.misc.Unsafe</b> for 'C' like direct memory access in JVM</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://virtualjug.com/vjug24-session-an-introduction-to-jvm-performance-by-rafael-winterhalter">virtualjug.com</a></br>
+				<a target="_blank" href="http://www.javaperformancetuning.com/news/newtips193.shtml">javaperformancetuning.com</a>
+			</td>
+			<td>An introduction to JVM performance by Rafael Winterhalter</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://plumbr.io/blog/garbage-collection/minor-gc-vs-major-gc-vs-full-gc">plumbr.io</a></td>
+			<td>Minor GC vs Major GC vs Full GC</td>
+		  </tr>
+		</table>
+	</div>
+	
+	<!--Footer -->
+	<div align="center">
+		<div data-include="../html/footer.html"></div>
+	</div>	
+</body>
+
+</html>

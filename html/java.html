@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- meta information -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Amit Dixit">
+	
+	<!-- JavaScript and Stylesheet -->
+	<link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+	<link rel="stylesheet" href="../css/lightbox.min.css">
+	<script src="../js/jquery-1.11.3.min.js"></script>
+	<script src="../js/lightbox.js"></script>
+	<script src="../js/csi.min.js"></script>
+	<script src="../js/inbravo.js"></script>
+	
+	<!-- Page title -->
+    <title>Industry Bravo</title>
+</head>
+
+<body>
+
+	<!--Header -->
+	<div align="center">
+		<div data-include="header.html"></div>
+	</div>	
+	
+	<div align="center">
+		<table class="tg">
+		  <tr>
+			<td><a target="_blank" href="http://docs.oracle.com/cd/E19455-01/806-5257/6je9h032b/index.html">oracle.com</a></td>
+			<td>
+				All Multithreading Terms</br>
+				<ul>
+					<li>Green threads scheduled by <b class="highlight">User-Level Process</b></li>
+					<li>Native threads scheduled by the <b class="highlight">Kernel</b></li>
+					<li>Lightweight process (<b class="acronym">LWP</b>): Threads that execute kernel code and system calls</li>
+					<li><b class="highlight">Bound threads</b>: Threads that are permanently bound to LWP</li>
+					<li><b class="highlight">Unbound threads</b>: Solaris thread that context switches quickly without Kernel support </li>
+				</ul>
+			</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/19420239/difference-b-w-intrinsic-locking-client-side-locking-extrinsic-locking?rq=1">stackoverflow.com</a></br>
+				<a target="_blank" href="https://www.securecoding.cert.org/confluence/display/java/LCK11-J.+Avoid+client-side+locking+when+using+classes+that+do+not+commit+to+their+locking+strategy">securecoding.cert.org</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/19419702/what-is-the-use-of-private-final-object-locking-in-java-multithreading">stackoverflow.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/32651154/client-side-locking">stackoverflow.com</a>
+			</td>
+			<td>
+				<b class="highlight">Intrinsic</b> Locking, <b class="highlight">Extrinsic</b> Locking (Client side Locking)
+				<a target="_blank" href="../images/j/lock.png" data-lightbox="lock" data-title="lock"><img src="../images/j/lock.png" alt="lock" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/jcp.png" data-lightbox="jcp" data-title="jcp"><img src="../images/j/jcp.png" alt="jcp" border="2" height="25" width="25"></img></a></br>
+				<b>Avoid Client side Locking</b>: Calling class, will  be affected, if any change in locking of class it used
+			</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://stackoverflow.com/questions/442564/avoid-synchronizedthis-in-java?rq=1">stackoverflow.com</a></br>
+				<a target="_blank" href="https://stackoverflow.com/questions/309631/what-cases-require-synchronized-method-access-in-java">stackoverflow.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/main/java/com/inbravo/concurrency/MonitorPatternTest.java">github.com</a>
+			</td>
+			<td>
+				All synchronized methods of a class use same Lock, which reduces throughput</br>
+				Always avoid <b class="highlight">synchronized(this)</b> and replace it with a lock on a private reference
+			</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://blog.e-zest.net/java-monitor-pattern">e-zest.net</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/6063352/using-object-as-a-mutex-in-java">stackoverflow.com</a>
+			</td>
+			<td>
+				Using Object as a Mutex (<b class="highlight">Java Monitor Pattern</b>)</br>
+				Useful to implement more than one <b class="highlight">Mutexes</b> in your code 
+				<a target="_blank" href="../images/j/jmp.png" data-lightbox="jmp" data-title="jmp"><img src="../images/j/jmp.png" alt="latch" border="2" height="25" width="25"></img></a>
+			</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/5713142/green-threads-vs-non-green-threads">stackoverflow.com</a></td>
+			<td>
+				<b class="highlight">Green</b>  and <b class="highlight">Native</b>  threads in Java
+			</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://tutorials.jenkov.com/java-util-concurrent/countdownlatch.html">jenkov.com</a></br>
+				<a target="_blank" href="http://tutorials.jenkov.com/java-util-concurrent/cyclicbarrier.html">jenkov.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/main/java/com/inbravo/concurrency/CountDownLatchTest.java">github.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/main/java/com/inbravo/concurrency/CyclicBarrierTest.java">github.com</a>
+			</td>
+			<td>Java <b class="highlight">CountDownLatch/CyclicBarrier</b> example 
+				<a target="_blank" href="../images/latch.png" data-lightbox="latch" data-title="latch"><img src="../images/latch.png" alt="latch" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/cb.png" data-lightbox="cb" data-title="cb"><img src="../images/j/cb.png" alt="cb" border="2" height="25" width="25"></img></a>
+			</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://dzone.com/articles/java-concurrency-semaphores">dzone.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/main/java/com/inbravo/concurrency/SemaphoreTest.java">github.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/main/java/com/inbravo/concurrency/BlockingArray.java">github.com</a>
+			</td>
+			<td>Java <b class="highlight">Semaphore</b>/Lock/Condition example <a target="_blank" href="../images/spr.png" data-lightbox="spr" data-title="spr"><img src="../images/spr.png" alt="spr" border="2" height="25" width="25"></img></a></td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://tutorials.jenkov.com/java-util-concurrent/exchanger.html">jenkov.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/main/java/com/inbravo/concurrency/ExchangerTest.java">github.com</a>
+			</td>
+			<td>
+				<b class="highlight">Exchanger</b> example <a target="_blank" href="../images/j/ex.png" data-lightbox="ex" data-title="ex"><img src="../images/j/ex.png" alt="ex" border="2" height="25" width="25"></img></a></br>
+				Exchanger a kind of rendezvous point where two threads can exchange objects
+			</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://blog.narmnevis.com/2010/11/how-does-jvm-map-a-java-thread-to-a-native-thread">narmnevis.com</a></br>
+				<a target="_blank" href="http://www.ibm.com/developerworks/library/j-rtj3/">ibm.com</a>
+			</td>
+			<td>Java threads using JNI <a target="_blank" href="../images/tm.png" data-lightbox="thread" data-title="lambda"><img src="../images/tm.png" alt="thread" border="2" height="25" width="25"></img></a></td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/817856/when-and-how-should-i-use-a-threadlocal-variable">stackoverflow.com</a></br>
+				<a target="_blank" href="http://www.dynatrace.com/en/javabook/memory-leaks.html">dynatrace.com</a></br>
+				<a target="_blank" href="http://tutorials.jenkov.com/java-concurrency/threadlocal.html">jenkov.com</a>
+			</td>
+			<td><b class='highlight'>ThreadLocal</b> and memory leaks <a target="_blank" href="../images/j/tl.png" data-lightbox="tl" data-title="tl"><img src="../images/j/tl.png" alt="tl" border="2" height="25" width="25"></img></a></td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://en.wikipedia.org/wiki/Fiber_%28computer_science%29">wikipedia.org</a></br>
+				<a target="_blank" href="https://en.wikipedia.org/wiki/Address_space">wikipedia.org</a></br>
+				<a target="_blank" href="https://en.wikipedia.org/wiki/Thread-local_storage">wikipedia.org</a></br>
+				<a target="_blank" href="https://en.wikipedia.org/wiki/Thread_%28computing%29#Models">wikipedia.org</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/796217/what-is-the-difference-between-a-thread-and-a-fiber">wikipedia.org</a>
+			</td>
+			<td>
+				<b class='highlight'>Fiber's</b> Co-Operative Multitasking/Thread's Pre-Emptive Multitasking</br>
+				Co-Routines/AddressSpace/Thread-local/Thread Models
+			</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://howtodoinjava.com/core-java/multi-threading/compare-and-swap-cas-algorithm">howtodoinjava.com</a></br>
+				<a target="_blank" href="http://www.javacodegeeks.com/2014/01/want-to-get-faster-with-atomiclong-make-it-wait.html">javacodegeeks.com</a></br>
+				<a target="_blank" href="https://dzone.com/articles/adventures-atomiclong">dzone.com</a>
+			</td>
+			<td>
+				Compare and Swap (<a target="_blank" href="https://en.wikipedia.org/wiki/Compare-and-swap"><b class="acronym">CAS</b></a>) Algorithm<br>
+				Optimistic and Pessimistic Locking</br>
+				Synchronization is coordinated access to mutable state of an object</br>
+				AtomicLong performance implications <a target="_blank" href="../images/j/cas.png" data-lightbox="cas" data-title="cas"><img src="../images/j/cas.png" alt="cas" border="2" height="25" width="25"></img></a>
+			</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/16504231/reentrancy-in-java">stackoverflow.com</td>
+			<td>Reentrant locking mechanism</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/2056243/java-synchronized-block-for-class">stackoverflow.com</td>
+			<td>Java synchronized keyword on .class</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/13051266/race-conditions-check-then-act-and-read-modify-write">stackoverflow.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/21658335/concurrenthashmap-and-compound-operations">stackoverflow.com</a>
+			</td>
+			<td>
+				Race condition/Unlucky timing owing to compound actions</br>
+				Compound Actions: (<b class='acronym'>RPC</b>) 
+				<b class='highlight'>
+					<ul>
+						<li>Read-Modify-Write</li>
+						<li>Put-If-Absent</li>
+						<li>Check-Then-Act</li>
+					</ul>
+				</b>
+			</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/16151606/need-simple-explanation-how-lock-striping-works-with-concurrenthashmap">stackoverflow.com</a></br>
+				<a target="_blank" href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html">oracle.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/510632/whats-the-difference-between-concurrenthashmap-and-collections-synchronizedmap">stackoverflow.com</a></br>
+				<a target="_blank" href="http://inbravo.github.io/docs/refer/ConcurrentHashMap.java">github.com</a>
+			</td>
+			<td>
+				<b class='highlight'><code>ConcurrentHashMap</code></b> uses <b class='highlight'>Lock Stripping</b> 
+				<a target="_blank" href="../images/j/chm.png" data-lightbox="chm" data-title="chm"><img src="../images/j/chm.png" alt="lsjb" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/lsjb.png" data-lightbox="lsjb" data-title="lsjb"><img src="../images/j/lsjb.png" alt="lsjb" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/chm.png" data-lightbox="chm" data-title="chm"><img src="../images/chm.png" alt="chm" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/chms.png" data-lightbox="chms" data-title="chms"><img src="../images/chms.png" alt="chms" border="2" height="25" width="25"></img></a>
+				<ul>
+					<li>Constructor (initialCapacity, loadFactor, concurrencyLevel) : (<b class="acronym">ILC</b>)</li>
+					<li>To store elements: <b class='highlight'>transient volatile Node<K,V>[] table;</b></li>
+					<li><b class='highlight'>static class Node<K,V> implements Map.Entry<K,V></b></li>
+					<li>To handle concurrency: <b class='highlight'>static class Segment<K,V> extends ReentrantLock</b></li>
+					<li>To avoid hash collision: <b class='highlight'>private final void treeifyBin(Node<K,V>[] tab, int index)</b></li>
+				</ul>
+			</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://dzone.com/articles/hashmap-performance">dzone.com</a></br>
+				<a target="_blank" href="http://inbravo.github.io/docs/refer/HashMap.java">github.com</a>
+			</td>
+			<td>
+				<b class='highlight'><code>HashMap</code></b> performance improvements in JDK 8</br>
+				<ul>
+					<li><a target="_blank" href="http://openjdk.java.net/jeps/180"><b class='highlight'>JEP 180</b></a>: Handle Frequent HashMap Collisions with Balanced Trees</li>
+					<li>To store elements: <b class='highlight'>transient volatile Node<K,V>[] table;</b></li>
+					<li><b class='highlight'>static class Node<K,V> implements Map.Entry<K,V></b></li>
+					<li>To avoid hash collision: <b class='highlight'>final void treeify(Node<K,V>[] tab)</b></li>
+				</ul>
+			</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://gee.cs.oswego.edu/dl/html/j9mm.html">gee.cs.oswego.edu</a></td>
+			<td>Using JDK 9 Memory Order Modes : Doug Lea</td>
+			<td>thread</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://www.javapractices.com">javapractices.com</td>
+			<td>Collection of Best Java Practices</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://www.journaldev.com/13121/java-9-features-with-examples">journaldev.com</td>
+			<td>Collection of JDK 9 features</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://docs.oracle.com/javase/8/docs/">oracle.com</td>
+			<td>JDK8 docs <a target="_blank" href="../images/j/jvm.png" data-lightbox="j/jvm" data-title="j/jvm"><img src="../images/j/jvm.png" alt="collection" border="2" height="25" width="25"></img></a></td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/19557829/faster-alternatives-to-javas-reflection">stackoverflow.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/8823793/methodhandle-what-is-it-all-about">stackoverflow.com</a>
+			</td>
+			<td><b>Reflection</b> and <b>MethodHandler</b> comparision</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/4166966/what-is-the-point-of-the-diamond-operator-in-java-7">stackoverflow.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/main/java/com/inbravo/jdk8/DiamondOperatorTest.java">github.com</a>
+			</td>
+			<td><b class="highlight">Diamond Operator</b> in JDK 7/8 <a target="_blank" href="../images/j/do.png" data-lightbox="do" data-title="do"><img src="../images/j/do.png" alt="do" border="2" height="25" width="25"></img></a></td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://www.360doc.com/content/06/1007/20/8473_224657.shtml">360doc.com</td>
+			<td>Keyword 'final' <a target="_blank" href="../images/f.png" data-lightbox="final" data-title="final"><img src="../images/f.png" alt="collection" border="2" height="25" width="25"></img></a></td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://winterbe.com/posts/2014/04/05/java8-nashorn-tutorial">winterbe.com</a></td>
+			<td>JDK 8 Nashorn</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://docs.oracle.com/javase/1.5.0/docs/guide/language/varargs.html">oracle.com</a></td>
+			<td>JDK 5 <b class="highlight">varargs</b> (String... args)</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/main/java/com/inbravo/jdk8/funcinterf/ClassWithDefaultMethodUsage.java">github.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/main/java/com/inbravo/jdk8/funcinterf/InterfaceWithStaticMethod.java">github.com</a>
+			</td>
+			<td>JDK 8 <b class="highlight">static</b> and <b class="highlight">default</b> methods in Interface</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.ibm.com/developerworks/java/library/j-jtp03304">ibm.com</a></br>
+				<a target="_blank" href="https://www.cs.umd.edu/~pugh/java/memoryModel/jsr133.pdf">umd.edu</a>
+			</td>
+			<td>
+				Java Memory Model(<b class="acronym">JMM</b>) and threads specification revision <b>JSR-133</b> 
+				<a target="_blank" href="../images/j/jmm.png" data-lightbox="jmm" data-title="jmm"><img src="../images/j/jmm.png" alt="jmm" border="2" height="25" width="25"></img></a>
+			</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/2423622/volatile-vs-static-in-java/12193970#12193970">stackoverflow.com</a></td>
+			<td>How static is different from volatile in Java <a target="_blank" href="https://github.com/inbravo/ds/tree/master/src/main/java/com/inbravo/concurrency">example</a></td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/2427631/how-is-hashcode-calculated-in-java">stackoverflow.com</a></td>
+			<td>How hashCode works</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://www.securecoding.cert.org/confluence/display/java/2+Rules">securecoding.org</a></td>
+			<td>Oracle Coding Standard for Java</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/21940585/why-package-info-java-file-what-is-the-use-of-package-info-java-class-file">stackoverflow.com</a></td>
+			<td>Purpose of <b class="highlight">package-info.java</b> <a target="_blank" href="../images/j/jpi.png" data-lightbox="jpi" data-title="jpi"><img src="../images/j/jpi.png" alt="jpi" border="2" height="25" width="25"></img></a></td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/8526907/is-javas-system-arraycopy-efficient-for-small-arrays">stackoverflow.com</a></td>
+			<td><b class="highlight">System.arraycopy</b> is efficient owing to JIT optimization</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.javarepl.com/">javarepl.com</a></br>
+				<a target="_blank" href="http://www.javaworld.com/article/2971152/core-java/what-repl-means-for-java.html">javaworld.com</a>
+			</td>
+			<td>Read-Eval-Print-Loop (<b class="acronym">REPL</b>) for Java</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://github.com/inbravo/java-src/tree/master/src/main/java/com/inbravo/string">github.com</a></br>
+				<a target="_blank" href="https://dzone.com/articles/java-8-permgen-metaspace">dzone.com</a>
+			</td>
+			<td>Java String/PermGen/<b>Metaspace</b></td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://pawlan.com/monica/articles/refobjs">pawlan.com</a></br>
+				<a target="_blank" href="http://www.programcreek.com/java-api-examples/com.google.common.collect.MapMaker">programcreek.com</a></br>
+				<a target="_blank" href="http://www.concretepage.com/java/example_weakhashmap">concretepage.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/3210606/using-mapmaker-to-create-a-cache">stackoverflow.com</a>
+			</td>
+			<td>
+				Java Reference Objects: <b class="highlight">Soft, Weak, Phantom</b></br>
+				Example of Guava <b class="highlight">MapMaker</b> and <b class="highlight">WeakHashMap</b>
+			</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://blog.idrsolutions.com/2017/05/java-9-jlink-explained-in-5-minutes">idrsolutions.com</a></td>
+			<td><b class="highlight">jlink</b> explained in 5 minutes</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/2772152/why-is-system-arraycopy-native-in-java">stackoverflow.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/12594046/java-native-method-source-code">stackoverflow.com</a></br>
+				<a target="_blank" href="http://hg.openjdk.java.net/jdk8/jdk8/hotspot/file/87ee5ee27509/src/share/vm/oops/objArrayKlass.cpp">java.net</a>
+			</td>
+			<td>
+				<b class="highlight">System.arraycopy</b> is native and uses 'memcpy/memmove'</br>
+				Native source code of arraycopy
+			</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://community.oracle.com/docs/DOC-1006738">oracle.com</a></td>
+			<td>Reactive Programming with JDK 9 Flow API (Reactive Streams)</td>
+			<td>lang</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="https://www.youtube.com/watch?v=8pDm_kH4YKY">youtube.com</a></br>
+				<a target="_blank" href="http://winterbe.com/posts/2014/03/16/java-8-tutorial">winterbe.com</a></br>
+				<a target="_blank" href="http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/Lambda-QuickStart/index.html">oracle.com</a></br>
+				<a target="_blank" href="http://www.drdobbs.com/jvm/lambda-expressions-in-java-8/240166764">drdobbs.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/tree/master/src/main/java/com/inbravo/jdk8/lambda">github.com</a>
+			</td>
+			<td>
+				Java 8 Lambda <b class="highlight">JSR-335</b> 
+				<a target="_blank" href="../images/l.png" data-lightbox="lambda" data-title="lambda"><img src="../images/l.png" alt="collection" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/j/mh.png" data-lightbox="mh" data-title="mh"><img src="../images/j/mh.png" alt="collection" border="2" height="25" width="25"></img></a></br>
+				An expression with parameter variables has been called a <b class="highlight">Lambda</b></br>
+				JVM instruction set for Lambdas
+			</td>
+			<td>lambda</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://cr.openjdk.java.net/~briangoetz/lambda/lambda-translation.html">java.net</a></br>
+				<a target="_blank" href="https://www.youtube.com/watch?v=MLksirK9nnE">youtube.com</a></br>
+			</td>
+			<td>
+				Translation of Lambda Expressions (Brian Goetz) using <b class="highlight">DeSugaring</b></br>
+				Comparision of <b class="highlight">Lambdas/Reflection/MethodHandle</b>
+			</td>
+			<td>lambda</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://www.vasinov.com/blog/16-months-of-functional-programming/">vasinov.com</a></br>
+			</td>
+			<td>Functional programming in Java</td>
+			<td>lambda</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html">oracle.com</a></td>
+			<td>
+				JDK 8 all functional interfaces</br>
+				It provides target types for lambda expressions and method references
+			</td>
+			<td>lambda</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/20001427/double-colon-operator-in-java-8">stackoverflow.com</a></td>
+			<td>JDK 8 double colon (<b class="highlight">::</b>) operator</td>
+			<td>lambda</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/6212558/java-7-underscore-in-numeric-literals">stackoverflow.com</a></td>
+			<td>JDK 7 underscore in numeric literals(<b class="highlight">int num = 999_333</b>)</td>
+			<td>lambda</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/220658/what-is-the-difference-between-a-closure-and-a-lambda">stackoverflow.com</a></td>
+			<td>Difference between a <b class="highlight">closure</b> and <b class="highlight">lambda</b></td>
+			<td>lambda</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/main/java/com/inbravo/jdk8/functions/PredicateTest.java">github.com</a></td>
+			<td>Usage of <b class="highlight">Predicate</b> in JDK 8 Streaming <a target="_blank" href="../images/j/pdct.png" data-lightbox="pdct" data-title="pdct"><img src="../images/j/pdct.png" alt="pdct" border="2" height="25" width="25"></img></a></td>
+			<td>lambda</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples">winterbe.com</a></br>
+				<a target="_blank" href="https://docs.oracle.com/javase/tutorial/collections/streams/reduction.html">oracle.com</a>
+			</td>
+			<td>JDK 8 Streaming</td>
+			<td>stream</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://www.drdobbs.com/jvm/lambdas-and-streams-in-java-8-libraries/240166818">drdobbs.com</a></td>
+			<td>Purpose of <b class="highlight">Eager</b> and <b class="highlight">Lazy</b> operations in JDK 8 Streaming <a target="_blank" href="../images/j/egr.png" data-lightbox="egr" data-title="egr"><img src="../images/j/egr.png" alt="egr" border="2" height="25" width="25"></img></a></td>
+			<td>stream</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://javapapers.com/java/java-concurrentskiplistmap/">javapapers.com</a></br>
+				<a target="_blank" href="http://stackoverflow.com/questions/1811782/when-should-i-use-concurrentskiplistmap">stackoverflow.com</a></br>
+				<a target="_blank" href="http://www.javamadesoeasy.com/2015/04/treeset-vs-concurrentskiplistset.html">javamadeeasy.com</a>
+			</td>
+			<td>
+				<b class="highlight">ConcurrentSkipListSet/ConcurrentSkipListMap</b> in Java 
+				<a target="_blank" href="../images/sl.png" data-lightbox="sl" data-title="sl"> <img src="../images/sl.png" alt="sl" border="2" height="25" width="25"></img></a>
+				<a target="_blank" href="../images/sls.png" data-lightbox="sls" data-title="sls"> <img src="../images/sls.png" alt="sls" border="2" height="25" width="25"></img></a></br>
+				These Java classes are based on <a target="_blank" href="http://www.mathcs.emory.edu/~cheung/Courses/323/Syllabus/Map/skip-list-impl.html"><b>Skip List</b></a>
+			</td>
+			<td>utils</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://tutorials.jenkov.com/java-util-concurrent/blockingqueue.html">jenkov.com</a></br>
+				<a target="_blank" href="http://crunchify.com/what-is-threadsafe-blockingqueue-in-java-and-when-you-should-use-it-implementation-attached">crunchify.com</a>
+			</td>
+			<td>
+				Blocking Queue (Default methods: Put and Take) in Java <a target="_blank" href="../images/bq.png" data-lightbox="bq" data-title="bq"><img src="../images/bq.png" alt="bq" border="2" height="25" width="25"></img></a>
+				<ul>
+					<li>ArrayBlockingQueue</li>
+					<li>DelayQueue</li>
+					<li>LinkedBlockingQueue</li>
+					<li>PriorityBlockingQueue</li>
+					<li>SynchronousQueue</li>
+				</ul>
+			</td>
+			<td>utils</td>
+		  </tr>
+		  <tr>
+			<td>
+				<a target="_blank" href="http://stackoverflow.com/questions/17853112/in-what-situations-is-the-copyonwritearraylist-suitable">stackoverflow.com</a></br>
+				<a target="_blank" href="http://www.journaldev.com/1289/java-arraylist-vs-copyonwritearraylist-and-exploring-iterator">journaldev.com</a></br>
+				<a target="_blank" href="https://github.com/inbravo/java-src/blob/master/src/main/java/com/inbravo/collection/CowalTest.java">github.com</a>
+			</td>
+			<td>
+				Class <b class="highlight">CopyOnWriteArrayList</b> (<b class="acronym">COWAL</b>) <a target="_blank" href="../images/cowal.png" data-lightbox="cowal" data-title="Map"><img src="../images/cowal.png" alt="cowal" border="2" height="25" width="25"></img></a></br>
+				Copy underlying Array with every <b class="highlight">Mutation Operation</b>(add/set)
+			</td>
+			<td>utils</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/6163166/why-is-arraydeque-better-than-linkedlist/6163204#6163204">stackoverflow.com</a></td>
+			<td>Why is <b class="highlight">ArrayDeque</b> better than <b class="highlight">LinkedList</b></td>
+			<td>utils</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://docs.oracle.com/javase/8/docs/api/java/util/package-tree.html">oracle.com</a></td>
+			<td>Java collection hierarchy <a target="_blank" href="../images/cln.png" data-lightbox="collection" data-title="collection"><img src="../images/cln.png" alt="collection" border="2" height="25" width="25"></img></a></td>
+			<td>utils</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/4343202/difference-between-super-t-and-extends-t-in-java">stackoverflow.com</a></td>
+			<td>Lower(super) and Upper(extends) bound Generics: (<b class="highlight">PECS</b>: Producer Extends, Consumer Super)</td>
+			<td>library</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://stackoverflow.com/questions/1931307/antlr-is-there-a-simple-example">oracle.com</a></td>
+			<td>Example of Java ANTLR: generate interpreter for any language</td>
+			<td>library</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="http://json-b.net">json-b.net</a></td>
+			<td>Java API for JSON Binding : <b class="highlight">JSR 367</b></td>
+			<td>library</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://dzone.com">dzone.com</a></td>
+			<td>
+				DZone scalability/microservices articles
+				<ul>
+					<li><a target="_blank" href="https://dzone.com/articles/scalable-distributed-systems-using-akka-spring-boot-ddd-and-java?utm_source=BestofPerformance&utm_medium=email&utm_campaign=2017-07-10">Scalable, Distributed Systems Using Akka, Spring Boot, DDD, and Java</a></li>
+				</ul>
+			</td>
+			<td>dzone</td>
+		  </tr>
+		  <tr>
+			<td><a target="_blank" href="https://dzone.com">dzone.com</a></td>
+			<td>
+				DZone functional programming articles
+				<ul>
+					<li><a target="_blank" href="https://dzone.com/articles/functor-and-monad-examples-in-plain-java">Functional Programming in Pure Java: Functor and Monad Examples</a></li>
+					<li><a target="_blank" href="https://dzone.com/articles/simplifying-monads-in-scala">Simplifying Monads in Scala</a></li>
+				</ul>
+			</td>
+			<td>dzone</td>
+		  </tr>
+		</table>
+	</div>
+	
+	<!--Footer -->
+	<div align="center">
+		<div data-include="footer.html"></div>
+	</div>	
+</body>
+
+</html>
