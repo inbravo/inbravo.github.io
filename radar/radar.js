@@ -1,6 +1,7 @@
 function init(h,w) {
   $('#title').text(document.title);  
-	   
+  $('#title').css("text-align", "left");  
+  
  var radar = new pv.Panel()
       .width(w)
       .height(h)
@@ -155,8 +156,6 @@ for (var i = 0; i < radar_data.length; i++) {
           .text(function(d) {return total_index++;}) 
           .textBaseline("middle")
           .textStyle("white");            
-
-
     }
 }      
        
