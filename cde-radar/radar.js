@@ -75,6 +75,7 @@ var total_index = 1;
 
 //TODO: Super fragile: re-order the items, by radius, in order to logically group by the rings.
 for (var i = 0; i < radar_data.length; i++) {
+	
     //adjust top by the number of headings.
     if (lastQuadrant != radar_data[i].quadrant) {
         radar.add(pv.Label)         
