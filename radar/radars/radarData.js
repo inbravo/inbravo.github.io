@@ -34,7 +34,7 @@ var radar_data = [
 				]
     },
     { 	
-		"quadrant"	: "Business Intelligence/Data Visualization",
+		"quadrant"	: "BI and Data Visualization",
 		"left"		: w-300-5,
 		"top" 		: 148,
         "color" 	: "#587486",
