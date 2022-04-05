@@ -1,5 +1,6 @@
 function init(h,w) {
   $('#title').text(document.title);  
+  $('#title').css("text-align", "left");  
 	   
  var radar = new pv.Panel()
       .width(w)
