@@ -27,12 +27,13 @@ var radar_data = [
 				[ 	
 					/* ADOPT */
 					{"name":"Spark","pc":{"r": 20, "t": 120},"movement":"c"},
-					{"name":"AWS Redshift","pc":{"r": 50, "t": 140},"movement":"c"},
-					{"name":"Databricks","pc":{"r": 60, "t": 125},"movement":"c"},
-					{"name":"AWS EMR","pc":{"r": 70, "t": 130},"movement":"c"},
-					{"name":"AWS Athena", "pc":{"r":80,"t":150},"movement":"c"},   
-					{"name":"AWS Glue","pc":{"r": 90, "t": 160},"movement":"c"},
-					{"name":"GCP BigQuery","pc":{"r": 90, "t": 170},"movement":"c"},
+					{"name":"AWS Redshift","pc":{"r": 30, "t": 140},"movement":"c"},
+					{"name":"Databricks","pc":{"r": 40, "t": 125},"movement":"c"},
+					{"name":"AWS EMR","pc":{"r": 50, "t": 130},"movement":"c"},
+					{"name":"AWS Athena", "pc":{"r":60,"t":150},"movement":"c"},   
+					{"name":"AWS Glue","pc":{"r": 70, "t": 160},"movement":"c"},
+					{"name":"GCP BigQuery","pc":{"r": 80, "t": 165},"movement":"c"},
+					{"name":"GCP DataProc","pc":{"r": 90, "t": 170},"movement":"c"},
 					{"name":"Airflow", "pc":{"r":90,"t":100},"movement":"c"},   
 					
 					/* TRIAL */
