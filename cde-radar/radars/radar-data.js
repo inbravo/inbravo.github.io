@@ -77,7 +77,7 @@ var radar_data = [
 				]
     },
     { 	
-		"quadrant"	: "Data Storage",
+		"quadrant"	: "Data Store",
         "left" 		: 45,
         "top" 		: (h/2 + 100),
         "color" 	: "#DC6F1D",
