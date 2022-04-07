@@ -26,7 +26,7 @@ var radar_data = [
         "items" 	: 
 				[ 	
 					/* ADOPT */
-					{"name":"Spark","pc":{"r": 20, "t": 120},"movement":"c"},
+					{"name":"Apache Spark","pc":{"r": 20, "t": 120},"movement":"c"},
 					{"name":"AWS Redshift","pc":{"r": 30, "t": 140},"movement":"c"},
 					{"name":"Databricks","pc":{"r": 40, "t": 125},"movement":"c"},
 					{"name":"AWS EMR","pc":{"r": 50, "t": 130},"movement":"c"},
@@ -34,7 +34,7 @@ var radar_data = [
 					{"name":"AWS Glue","pc":{"r": 70, "t": 160},"movement":"c"},
 					{"name":"GCP BigQuery","pc":{"r": 80, "t": 165},"movement":"c"},
 					{"name":"GCP DataProc","pc":{"r": 90, "t": 170},"movement":"c"},
-					{"name":"Airflow", "pc":{"r":90,"t":100},"movement":"c"},   
+					{"name":"Apache Airflow", "pc":{"r":90,"t":100},"movement":"c"},   
 					
 					/* TRIAL */
 					{"name":"Snowflake", "pc":{"r":150,"t":150},"movement":"c"}, 
@@ -62,8 +62,7 @@ var radar_data = [
 					{"name":"Python", "pc": { "r": 60, "t": 70 }, "movement": "c" },
 					{"name":"Scala", "pc": { "r": 70, "t": 70 }, "movement": "c" },
 					{"name":"Java", "pc": { "r": 90, "t": 70 }, "movement": "c" },
-					
-					
+										
 					/* TRIAL */
 					{ name: "Julia", pc: { r: 170, t: 19 }, movement: "c" },
 					
@@ -77,14 +76,30 @@ var radar_data = [
 				]
     },
     { 	
-		"quadrant"	: "Data Store",
+		"quadrant"	: "Data Storage",
         "left" 		: 45,
         "top" 		: (h/2 + 100),
         "color" 	: "#DC6F1D",
         "items" 	: 
 				[ 
-					/* Should stay between Theeta 270-360 */
-					/*{ "name": "AWS S3","pc": {"r": 99,"t": 200 },"movement":"c"}*/
+					/* ADOPT */
+					{ "name": "AWS S3","pc": {"r": 40,"t": 200 },"movement":"c"},
+					{ "name": "AWS DynamoDB", "pc": {"r": 50,"t": 260},"movement":"c"}, 
+					{ "name": "Elastic Search", "pc": {"r": 60,"t": 230},"movement":"c"},
+					{ "name": "Azure Blob Storage", "pc": {"r": 70,"t": 190},"movement":"c"},
+					{ "name": "PostgreSQL", "pc": {"r": 80,"t": 215},"movement":"c"},    
+					
+					/* TRIAL */
+					{ "name": "Google Cloud Storage (GCS)", "pc":{"r": 110,"t": 210},"movement":"c"},  
+
+					/* ASSESS */
+					{ "name": "Google Bigtable", "pc": {"r": 210,"t": 210},"movement":"c"},  
+
+					/* HOLD */
+					{ "name": "Oracle DB", "pc": {"r":310,"t":210},"movement":"c"},
+					{ "name": "MySQL", "pc": {"r":320,"t":220},"movement":"c"},
+					{ "name": "HBase", "pc": {"r":330,"t":230},"movement":"c"},
+					{ "name": "IBM DB2", "pc": {"r":340,"t":240},"movement":"c"}					
                 ]
     },
     { 	
@@ -94,8 +109,22 @@ var radar_data = [
 		"color" 	: "#B70062",
         "items" 	: 
 				[ 
-					/* Should stay between Theeta 360-90 */
-					/* { "name": "Python", "pc": {"r": 60,"t": 10 },"movement":"c"} */
+					/* ADOPT */
+					{ "name": "Tableau", "pc": {"r": 20,"t": 290 },"movement":"c"}, 
+					{ "name": "Power BI", "pc": {"r": 40,"t": 310 },"movement":"c"}, 
+					{ "name": "AWS Quicksight", "pc": {"r": 60,"t": 320 },"movement":"c"},
+					{ "name": "Microstrategy", "pc": {"r": 70,"t": 290},"movement":"c"},
+					{ "name": "Qlik", "pc": {"r": 80,"t": 280},"movement":"c"},
+										
+					/* TRIAL */
+					{ "name": "Looker", "pc":{"r": 110,"t": 300},"movement":"c"},  
+					
+					/* ASSESS */
+					{ "name": "Domo", "pc": {"r": 210,"t": 310},"movement":"c"},  
+					
+					/* HOLD */
+					{ "name": "Oracle OBIEE", "pc": {"r": 320,"t": 290},"movement":"c"},
+					{ "name": "Tibco Spotfire", "pc": {"r": 350,"t": 290},"movement":"c"}
 				]
     }
 ];
