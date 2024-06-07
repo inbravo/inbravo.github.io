@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Amit Dixit">
+	<link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+	<script src="../js/jquery-1.11.3.min.js"></script>
+	<script src="../js/csi.min.js"></script>
+	<script src="../js/inbravo.js"></script>
+    <title>Industry Bravo</title>
+</head>
+
+<body>
+	
+	<!--Header -->
+	<div align="center">
+		<div data-include="header.html"></div>
+	</div>	
+	
+	<div align="center"> 
+		
+		<table class="tg">
+		<tr>
+		<tr>
+			<th>#</th>
+			<th>Objective</th>
+			<th>Spark SQL</th>
+			<th>PySpark</th>
+		</tr>
+		<tr>
+			<td>1.</td>
+			<td>Inspect Missing Data</td>	
+			<td>
+				<code>SELECT count_if(email IS NULL) FROM users_dirty; OR </br>
+				SELECT count(*) FROM users_dirty WHERE email IS NULL;</code>
+			</td>
+			<td>
+				<code>from pyspark.sql.functions import col </br>
+				usersDF = spark.read.table("users_dirty") </br>
+				usersDF.selectExpr("count_if(email IS NULL)") </br>
+				usersDF.where(col("email").isNull()).count()</code>
+			</td>
+		  </tr>
+		  <tr>
+			<td>2.</td>
+			<td>Remove duplicate rows (Dedupe)</td>	
+			<td>
+				<code>SELECT DISTINCT(*) FROM users_dirty</code>
+			</td>
+			<td>
+				<code>usersDF.distinct().display()</code>
+			</td>
+		  </tr>
+		  <tr>
+			<td>3.</td>
+			<td>Dedupe Based on Columns</td>	
+			<td>
+				<code>CREATE OR REPLACE TEMP VIEW deduped_users AS </br>
+				SELECT user_id, user_first_touch_timestamp, max(email) AS email, max(updated) AS updated</br>
+				FROM users_dirty</br>
+				WHERE user_id IS NOT NULL</br>
+				GROUP BY user_id, user_first_touch_timestamp;</br>
+				</code>
+			</td>
+			<td>
+				<code>
+				from pyspark.sql.functions import max</br>
+				dedupedDF = (usersDF</br>
+					.where(col("user_id").isNotNull())</br>
+					.groupBy("user_id", "user_first_touch_timestamp")</br>
+					.agg(max("email").alias("email"), </br>
+						 max("updated").alias("updated"))</br>
+					)
+				</code>
+			</td>
+		 </tr>
+		  <tr>
+			<td>4.</td>
+			<td>Validate data after Dedupe</td>	
+			<td>
+				<code>
+					SELECT max(row_count) <= 1 no_duplicate_ids FROM (</br>
+					SELECT user_id, count(*) AS row_count</br>
+					FROM deduped_users</br>
+					GROUP BY user_id)</br>
+				</code>
+			</td>
+			<td>
+				<code>
+				from pyspark.sql.functions import count</br>
+
+				display(dedupedDF</br>
+					.groupBy("user_id")</br>
+					.agg(count("*").alias("row_count"))</br>
+					.select((max("row_count") <= 1).alias("no_duplicate_ids")))</br>
+				</code>
+			</td>
+		  </tr>
+		  <tr>
+			<td>5.</td>
+			<td>Confirm email is TAGGED with ONLY one user_id</td>	
+			<td>
+				<code>
+					SELECT max(user_id_count) <= 1 at_most_one_id FROM (</br>
+					SELECT email, count(user_id) AS user_id_count</br>
+					FROM deduped_users</br>
+					WHERE email IS NOT NULL</br>
+					GROUP BY email)</br>
+				</code>
+			</td>
+			<td>
+				<code>
+				display(dedupedDF
+					.where(col("email").isNotNull())</br>
+					.groupby("email")</br>
+					.agg(count("user_id").alias("user_id_count"))</br>
+					.select((max("user_id_count") <= 1).alias("at_most_one_id")))</br>
+				</code>
+			</td>
+		  </tr>
+		  <tr>
+			<td>6.</td>
+			<td>Date Format and Regex</td>	
+			<td>
+				<code>
+				SELECT *, </br>
+				  date_format(first_touch, "MMM d, yyyy") AS first_touch_date,</br>
+				  date_format(first_touch, "HH:mm:ss") AS first_touch_time,</br>
+				  regexp_extract(email, "(?<=@).+", 0) AS email_domain</br>
+				FROM (</br>
+				  SELECT *,</br>
+					CAST(user_first_touch_timestamp / 1e6 AS timestamp) AS first_touch </br>
+				  FROM deduped_users</br>
+				</code>
+			</td>
+			<td>
+				<code>
+				from pyspark.sql.functions import date_format, regexp_extract</br>
+
+				display(dedupedDF</br>
+					.withColumn("first_touch", (col("user_first_touch_timestamp") / 1e6).cast("timestamp"))</br>
+					.withColumn("first_touch_date", date_format("first_touch", "MMM d, yyyy"))</br>
+					.withColumn("first_touch_time", date_format("first_touch", "HH:mm:ss"))</br>
+					.withColumn("email_domain", regexp_extract("email", "(?<=@).+", 0))</br>
+				</code>
+			</td>
+		  </tr>
+		</table>
+	</div>
+		
+	<!--Footer -->
+	<div align="center">
+		<div data-include="footer.html"></div>
+	</div>	
+</body>
+
+</html>
