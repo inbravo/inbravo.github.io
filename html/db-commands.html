@@ -150,6 +150,120 @@
 				</code>
 			</td>
 		  </tr>
+		  <tr>
+			<td>7.</td>
+			<td>Create Temp View</td>	
+			<td>
+				<code>
+					CREATE OR REPLACE TEMP VIEW events_strings AS </br>
+					SELECT string(key), string(value) FROM events_raw;</br>
+					SELECT * FROM events_strings</br>
+				</code>
+			</td>
+			<td>
+				<code>
+					from pyspark.sql.functions import col</br>
+
+					events_stringsDF = (spark</br>
+						.table("events_raw")</br>
+						.select(col("key").cast("string"), </br>
+								col("value").cast("string"))</br>
+						)
+					display(events_stringsDF)</br>
+				</code>
+			</td>
+		  </tr>
+		  <tr>
+			<td>8.</td>
+			<td>Nested Data (access subfields in JSON-":" and Struct-".")</td>	
+			<td>
+				<code>
+					SELECT * FROM events_strings WHERE value:event_name = "finalize" ORDER BY key LIMIT 1
+				</code>
+			</td>
+			<td>
+				<code>
+					display(events_stringsDF</br>
+						.where("value:event_name = 'finalize'")</br>
+						.orderBy("key")</br>
+						.limit(1)</br>
+					)
+				</code>
+			</td>
+		  </tr>
+		  <tr>
+			<td>9.</td>
+			<td>User Defined Functions (UDF)</td>	
+			<td>
+				<code>
+					CREATE OR REPLACE FUNCTION sale_announcement(item_name STRING, item_price INT)</br>
+					RETURNS STRING</br>
+					RETURN concat("The ", item_name, " is on sale for $", round(item_price * 0.8, 0));</br>
+
+					SELECT *, sale_announcement(name, price) AS message FROM item_lookup</br>
+					DESCRIBE FUNCTION EXTENDED sale_announcement</br>
+				</code>
+			</td>
+			<td>
+				<code>
+					def sale_announcement(item_name, item_price):</br>
+						return "The ", item_name, " is on sale for $", round(item_price * 0.8, 0)</br>
+
+					display(sale_announcement("Scooter", 4000))</br>
+				</code>
+			</td>
+		  </tr>
+		  <tr>
+			<td>10.</td>
+			<td>Managed Table</td>	
+			<td>
+				<code>
+					CREATE SCHEMA IF NOT EXISTS Test_Schema;</br>
+					DESCRIBE SCHEMA EXTENDED Test_Schema;</br>
+					USE Test_Schema; </br>
+					CREATE OR REPLACE TABLE managed_table (width INT, length INT, height INT);</br>
+					INSERT INTO managed_table </br>
+					VALUES (3, 2, 1);</br>
+					SELECT * FROM managed_table;
+				</code>
+			</td>
+			<td>
+				<code>
+					tbl_location = spark.sql(f"DESCRIBE DETAIL managed_table").first().location</br>
+					print(tbl_location)</br>
+					files = dbutils.fs.ls(tbl_location)</br>
+					display(files)</br>
+				</code>
+			</td>
+		  </tr>
+		  <tr>
+			<td>11.</td>
+			<td>External Table</td>	
+			<td>
+				<code>
+					CREATE SCHEMA IF NOT EXISTS Test_Schema;</br>
+					DESCRIBE SCHEMA EXTENDED Test_Schema;</br>
+					USE Test_Schema; </br>
+
+					CREATE OR REPLACE TEMPORARY VIEW temp_delays USING CSV OPTIONS (</br>
+					  path = '${da.paths.datasets}/flights/departuredelays.csv',</br>
+					  header = "true",</br>
+					  mode = "FAILFAST" -- abort file parsing with a RuntimeException if any malformed lines are encountered</br>
+					);
+					CREATE OR REPLACE TABLE external_table LOCATION '${da.paths.working_dir}/external_table' AS</br>
+					  SELECT * FROM temp_delays;</br>
+
+					SELECT * FROM external_table; </br>
+				</code>
+			</td>
+			<td>
+				<code>
+					tbl_path = f"{DA.paths.working_dir}/external_table"</br>
+					files = dbutils.fs.ls(tbl_path)</br>
+					display(files)</br>
+				</code>
+			</td>
+		  </tr>
 		</table>
 	</div>
 		
