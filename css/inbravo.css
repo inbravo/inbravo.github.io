@@ -17,6 +17,7 @@ body {
 	font-family: var(--font-family-base);
 	line-height: 1.6;
 	color: var(--color-text);
+	background: #f5f7fa;
 	background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 	margin: 0;
 	padding: 20px;
