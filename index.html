@@ -1,79 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<!-- meta information -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Amit Dixit">
-	
-	<!-- JavaScript and Stylesheet -->
-	<link rel="stylesheet" type="text/css" href="css/inbravo.css">
-	<link rel="stylesheet" href="css/lightbox.min.css">
-	<script src="js/jquery-1.11.3.min.js"></script>
-	<script src="js/lightbox.js"></script>
-	<script src="js/csi.min.js"></script>
-	<script src="js/inbravo.js"></script>
-	
-	<!-- Page title -->
-    <title>Industry Bravo</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="InBravo's WorkStation - A personal wiki of technical knowledge, learnings and experiences by Amit Dixit">
+  <meta name="author" content="Amit Dixit">
+  <link rel="icon" type="image/png" href="images/inbravo.png">
+  <link rel="stylesheet" type="text/css" href="css/inbravo.css">
+  <link rel="stylesheet" href="css/lightbox.css">
+  <script src="js/jquery-1.11.3.min.js"></script>
+  <script src="js/lightbox.js"></script>
+  <script src="js/csi.min.js"></script>
+  <script src="js/inbravo.js"></script>
+  <title>InBravo's WorkStation</title>
 </head>
-
 <body>
+  <div class="grid-bg"></div>
+  <div data-include="html/header.html"></div>
 
-	<!--Header -->
-	<div align="center">
-		<div data-include="html/header.html"></div>
-	</div>	
-	
-	<div align="center">
-		<table class="tg">
-		  <tr>
-			<td>
-				<b class="highlight">Who</b></br>This online space belongs to Amit Dixit (hindi: 'अमित दीक्षित')
-			</td>
-		  </tr>
-		  <tr>
-			<td><b class="highlight">What</b></br>
-				A random collection of snippets I've discovered over the years</br> 
-				Some useful and interesting stuff mainly for my reference</br>
-				Content is mainly related to 
-				<ol>
-					<li><b class="highlight"><a class="anchor" href="http://inbravo.github.io/html/design.html">Software Design/Architecture</a></b></li>
-					<li><b class="highlight"><a class="anchor" href="http://inbravo.github.io/html/jvm.html">JVM (my first love in programming)</li>
-                    <li><b class="highlight"><a class="anchor" href="https://inbravo.github.io/html/llm.html">LLM (my recent interest, starting 2025)</li>
-					<li><b class="highlight"><a class="anchor" href="http://inbravo.github.io/html/java.html">Java</a></b></li>
-					<li><b class="highlight"><a class="anchor" href="http://inbravo.github.io/html/java.html">Scala</a></b></li>
-					<li><b class="highlight"><a class="anchor" href="http://inbravo.github.io/html/algo.html">Algorithms</a></b></li>
-					<li><b class="highlight"><a class="anchor" href="https://inbravo.github.io/html/mcycles.html">Motorcycles(passion that drives my life)</a></b></li>
-				</ol>
-			</td>
-		  </tr>
-		  <tr>
-			<td>
-				This is my quick <b class="highlight">Reference Matrix</b></br>
-				Please refer the <b>footer links</b> for various references
-			</td>
-		  </tr>
-		  <tr>
-			<td><b class="highlight">How</b></br>
-				Based on following concepts</br>
-				<ol>
-					<li><a target="_blank" href="https://www.cl.cam.ac.uk/~afb21/publications/Student-ESP.html">A Picture is worth a Thousand words</a></li>
-					<li><a target="_blank" href="http://www.studygs.net/memory/memacronym.htm">Memorizing using Acronyms</a></li>
-					<li><a target="_blank" href="http://writingcenter.uconn.edu/wp-content/uploads/sites/593/2014/06/Style_Points_for_Scientific_Writing1.pdf">Style Points</a> for Writing</li>
-				</ol>
-			</td>
-		  </tr>
-		</table>
-	</div>
-	
-	<!--Footer -->
-	<div align="center">
-		<div data-include="html/footer.html"></div>
-	</div>	
+  <section class="hero">
+    <div class="hero-badge">
+      <span>Available for collaboration</span>
+    </div>
+    <h1>InBravo's WorkStation</h1>
+    <p class="hero-tagline">A curated collection of technical knowledge, learnings, and experiences</p>
+    <p class="hero-author">crafted by <span>Amit Dixit</span></p>
+    <a href="#content" class="terminal-line" id="explore-btn">
+      <span class="prompt">$</span>
+      <span class="command">explore</span>
+      <span class="typing-text">--knowledge-base</span>
+    </a>
+  </section>
+
+  <main id="content">
+    <div class="section-header">
+      <h2 class="section-title">Technical Expertise</h2>
+      <div class="section-line"></div>
+    </div>
+    
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">&#128736;</div>
+        <h3>Software Architecture</h3>
+        <p>Design patterns, SOLID principles, system design, and best practices for building scalable distributed systems.</p>
+        <div class="card-links">
+          <a href="html/design.html">patterns</a>
+          <a href="html/strategy.html">strategy</a>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#9749;</div>
+        <h3>JVM Ecosystem</h3>
+        <p>Deep dive into JVM internals, garbage collection, memory management, concurrency, and performance tuning.</p>
+        <div class="card-links">
+          <a href="html/jvm.html">jvm</a>
+          <a href="html/java.html">java</a>
+          <a href="html/scala.html">scala</a>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#128202;</div>
+        <h3>Data Engineering</h3>
+        <p>Big data processing, lakehouse architecture, ETL pipelines, and modern data platform design.</p>
+        <div class="card-links">
+          <a href="html/databricks.html">databricks</a>
+          <a href="html/spark.html">spark</a>
+          <a href="html/bigdata.html">bigdata</a>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#9729;</div>
+        <h3>Cloud & Infrastructure</h3>
+        <p>AWS services, cloud-native architecture, DevOps practices, and infrastructure as code.</p>
+        <div class="card-links">
+          <a href="html/aws.html">aws</a>
+          <a href="html/devops.html">devops</a>
+          <a href="html/security.html">security</a>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#129302;</div>
+        <h3>AI & Machine Learning</h3>
+        <p>Large Language Models, prompt engineering, neural networks, and cutting-edge AI developments.</p>
+        <div class="card-links">
+          <a href="html/llm.html">llm</a>
+          <a href="html/algo.html">algorithms</a>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#128187;</div>
+        <h3>Computer Science</h3>
+        <p>Algorithms, data structures, system fundamentals, and computational thinking.</p>
+        <div class="card-links">
+          <a href="html/cpu.html">hardware</a>
+          <a href="html/web.html">web</a>
+          <a href="html/algo.html">dsa</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <h2 class="section-title">Beyond Code</h2>
+      <div class="section-line"></div>
+    </div>
+    
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">🏍️</div>
+        <h3>Motorcycles</h3>
+        <p>The passion that drives my life - adventures, mechanics, and the freedom of two wheels.</p>
+        <div class="card-links">
+          <a href="html/mcycles.html">rides</a>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#128247;</div>
+        <h3>Photography</h3>
+        <p>Capturing moments through the lens - composition, techniques, and visual storytelling.</p>
+        <div class="card-links">
+          <a href="html/photography.html">gallery</a>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#9201;</div>
+        <h3>Horology</h3>
+        <p>The art and science of timekeeping - mechanical movements, craftsmanship, and history.</p>
+        <div class="card-links">
+          <a href="html/horology.html">timepieces</a>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#127757;</div>
+        <h3>Exploration</h3>
+        <p>Travel experiences, documentaries, and discovering cultures around the world.</p>
+        <div class="card-links">
+          <a href="html/travel.html">travel</a>
+          <a href="html/documentaries.html">docs</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <h2>whoami</h2>
+      <p>This digital space belongs to <strong style="color: var(--accent-cyan);">Amit Dixit</strong> - a curated collection of technical knowledge, learnings, and experiences accumulated over the years. Built on the philosophy of continuous learning and knowledge sharing.</p>
+      <ul>
+        <li>Visual learning through diagrams and illustrations</li>
+        <li>Memory techniques using acronyms and patterns</li>
+        <li>Clean, structured documentation for quick reference</li>
+      </ul>
+      <div class="bio-actions">
+        <a href="/docs/resume/amit-dixit.pdf" class="bio-btn resume" target="_blank">
+          <span class="bio-btn-icon">📄</span>
+          <span class="bio-btn-text">
+            <span class="bio-btn-label">Resume</span>
+            <span class="bio-btn-action">Download PDF</span>
+          </span>
+        </a>
+        <a href="https://www.linkedin.com/in/inbravo" class="bio-btn linkedin" target="_blank">
+          <span class="bio-btn-icon">💼</span>
+          <span class="bio-btn-text">
+            <span class="bio-btn-label">LinkedIn</span>
+            <span class="bio-btn-action">Let's Connect</span>
+          </span>
+        </a>
+        <a href="https://www.instagram.com/indian.bravo/" class="bio-btn instagram" target="_blank">
+          <span class="bio-btn-icon">📸</span>
+          <span class="bio-btn-text">
+            <span class="bio-btn-label">Instagram</span>
+            <span class="bio-btn-action">@indian.bravo</span>
+          </span>
+        </a>
+        <a href="https://www.goodreads.com/user/show/4629312" class="bio-btn goodreads" target="_blank">
+          <span class="bio-btn-icon">📚</span>
+          <span class="bio-btn-text">
+            <span class="bio-btn-label">Goodreads</span>
+            <span class="bio-btn-action">Book Shelf</span>
+          </span>
+        </a>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">20+</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Topics Covered</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">1000+</div>
+          <div class="stat-label">Snippets & Notes</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div data-include="html/footer.html"></div>
 </body>
-
 </html>
