@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Farmland Scouting Map - UP Uttarakhand Border Belt">
+    <meta name="author" content="Amit Dixit">
+    <link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="../js/jquery-1.11.3.min.js"></script>
+    <script src="../js/csi.min.js"></script>
+    <script src="../js/inbravo.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <title>Farmland Scout Map</title>
+    <style>
+        body { margin: 0; padding: 0; }
+
+        .map-page-wrapper {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+        }
+
+        .map-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent-cyan, #00d4ff);
+            margin: 16px 0 4px;
+            letter-spacing: 0.04em;
+        }
+
+        .map-subtitle {
+            color: var(--text-muted, #888);
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+        }
+
+        /* Filter bar */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .filter-btn {
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            background: #1a1a2e;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            border-color: var(--accent-cyan, #00d4ff);
+            color: var(--accent-cyan, #00d4ff);
+            background: rgba(0, 212, 255, 0.08);
+        }
+
+        .filter-btn.active { font-weight: 600; }
+
+        /* Map container */
+        #scout-map {
+            width: 100%;
+            height: 560px;
+            border-radius: 10px;
+            border: 1px solid #2a2a3e;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+        }
+
+        /* Legend */
+        .map-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 24px;
+            margin-top: 14px;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid #2a2a3e;
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.78rem;
+            color: #aaa;
+        }
+
+        .legend-dot {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            flex-shrink: 0;
+        }
+
+        /* Score table */
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .score-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid #2a2a3e;
+            border-radius: 8px;
+            padding: 14px;
+        }
+
+        .score-card.primary  { border-left: 3px solid #22c55e; }
+        .score-card.secondary { border-left: 3px solid #f59e0b; }
+        .score-card.caution  { border-left: 3px solid #ef4444; }
+        .score-card.home     { border-left: 3px solid #00d4ff; }
+
+        .score-card-name {
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .score-card-district {
+            font-size: 0.73rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #999;
+            padding: 2px 0;
+            border-bottom: 1px solid #1e1e2e;
+        }
+
+        .score-row:last-child { border-bottom: none; }
+        .score-row span:last-child { color: #ccc; text-align: right; max-width: 55%; }
+
+        /* Leaflet popup overrides */
+        .leaflet-popup-content-wrapper {
+            background: #12122a !important;
+            border: 1px solid #2a2a4a !important;
+            border-radius: 8px !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6) !important;
+            color: #e2e8f0 !important;
+        }
+
+        .leaflet-popup-tip { background: #12122a !important; }
+
+        .leaflet-popup-content {
+            margin: 14px 16px !important;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+        }
+
+        .popup-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 4px;
+        }
+
+        .popup-district {
+            font-size: 0.72rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .popup-row {
+            display: flex;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: #aaa;
+            margin-bottom: 4px;
+        }
+
+        .popup-label { color: #555; min-width: 72px; flex-shrink: 0; }
+        .popup-value { color: #ccc; }
+
+        .popup-notes {
+            margin-top: 10px;
+            font-size: 0.73rem;
+            color: #888;
+            border-top: 1px solid #2a2a4a;
+            padding-top: 8px;
+            line-height: 1.5;
+        }
+
+        .popup-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .tag-primary   { background: rgba(34,197,94,0.15);  color: #22c55e; }
+        .tag-secondary { background: rgba(245,158,11,0.15); color: #f59e0b; }
+        .tag-caution   { background: rgba(239,68,68,0.15);  color: #ef4444; }
+        .tag-uk        { background: rgba(139,92,246,0.15); color: #a78bfa; }
+        .tag-home      { background: rgba(0,212,255,0.15);  color: #00d4ff; }
+        .tag-city      { background: rgba(100,116,139,0.15);color: #94a3b8; }
+        .tag-waypoint  { background: rgba(100,116,139,0.1); color: #64748b; }
+
+        .section-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--accent-cyan, #00d4ff);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin: 24px 0 10px;
+        }
+
+        @media (max-width: 600px) {
+            #scout-map { height: 400px; }
+            .score-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div align="center">
+        <div data-include="header.html"></div>
+    </div>
+
+    <div class="map-page-wrapper">
+
+        <div class="map-title">🗺️ Farmland Scout Map</div>
+        <div class="map-subtitle">
+            UP – Uttarakhand Border Belt &nbsp;·&nbsp; Pilkhuwa (Hapur) to Bilaspur (Rampur) Corridor
+        </div>
+
+        <!-- Filter buttons -->
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterMarkers('all', this)">All Locations</button>
+            <button class="filter-btn" onclick="filterMarkers('primary', this)">🟢 Primary Targets</button>
+            <button class="filter-btn" onclick="filterMarkers('secondary', this)">🟡 Secondary Targets</button>
+            <button class="filter-btn" onclick="filterMarkers('caution', this)">🔴 Avoid</button>
+            <button class="filter-btn" onclick="filterMarkers('uk', this)">🟣 Uttarakhand (ref)</button>
+            <button class="filter-btn" onclick="filterMarkers('city', this)">🔵 Major Cities</button>
+            <button class="filter-btn" onclick="filterMarkers('route', this)">🛣️ Your Route</button>
+        </div>
+
+        <!-- Map -->
+        <div id="scout-map"></div>
+
+        <!-- Legend -->
+        <div class="map-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#00d4ff"></div> Your Home (Pilkhuwa)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div> Primary Target (Recommended)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> Secondary Target (Scout)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div> Avoid / Caution</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> Uttarakhand (can't buy)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> Major City (market ref)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#475569"></div> Waypoint / Town</div>
+        </div>
+
+        <!-- Score Cards -->
+        <div class="section-label">Location Scorecard</div>
+        <div class="score-grid" id="score-grid"></div>
+
+    </div>
+
+    <script>
+    // ─── Location Data ────────────────────────────────────────────────────────
+
+    const locations = [
+      {
+        name: "Pilkhuwa",
+        subtitle: "Your Home Base",
+        lat: 28.7136, lng: 77.6539,
+        type: "home",
+        district: "Hapur, UP",
+        distFromHome: "0 km",
+        distFromRudrapur: "~195 km",
+        water: "—",
+        crime: "—",
+        price: "—",
+        highway: "NH-9",
+        soil: "—",
+        notes: "Your starting point. NH-9 connects directly to the entire scouting belt via Moradabad."
+      },
+      {
+        name: "Ghaziabad",
+        lat: 28.6692, lng: 77.4538,
+        type: "city",
+        district: "Ghaziabad, UP",
+        distFromHome: "~30 km",
+        distFromRudrapur: "~215 km",
+        notes: "NCR produce market. Direct highway link from farm to consumer possible."
+      },
+      {
+        name: "Delhi NCR",
+        lat: 28.6139, lng: 77.2090,
+        type: "city",
+        district: "Delhi",
+        distFromHome: "~50 km",
+        distFromRudrapur: "~240 km",
+        notes: "Largest premium organic produce market. Organic subscription box model viable from Terai farms."
+      },
+      {
+        name: "Amroha (JP Nagar)",
+        lat: 28.9042, lng: 78.4678,
+        type: "waypoint",
+        district: "Amroha, UP",
+        distFromHome: "~85 km",
+        distFromRudrapur: "~160 km",
+        highway: "NH-9",
+        notes: "NH-9 waypoint. Rural Amroha land is affordable (₹8–15L/bigha) if budget is tight, but not Terai belt quality."
+      },
+      {
+        name: "Moradabad",
+        lat: 28.8386, lng: 78.7733,
+        type: "city",
+        district: "Moradabad, UP",
+        distFromHome: "~95 km",
+        distFromRudrapur: "~120 km",
+        water: "Good (15–25m depth)",
+        crime: "Moderate (urban core)",
+        price: "₹20–35L/bigha (city fringe)",
+        highway: "NH-9 / NH-74",
+        notes: "Key waypoint. Do not buy near city — too expensive. Target Thakurdwara / Kundarki blocks in rural Moradabad district instead."
+      },
+      {
+        name: "Bijnor",
+        lat: 29.3726, lng: 78.1351,
+        type: "city",
+        district: "Bijnor, UP",
+        distFromHome: "~130 km",
+        distFromRudrapur: "~150 km",
+        water: "Good (Ganga system)",
+        crime: "Low (peaceful district)",
+        price: "₹10–20L/bigha",
+        highway: "NH-119",
+        notes: "Most peaceful district in the belt. Strong Jat/Gujjar agrarian belt. More towards Haridwar corridor than Rudrapur."
+      },
+      {
+        name: "Nagina",
+        lat: 29.4436, lng: 78.4349,
+        type: "secondary",
+        district: "Bijnor, UP",
+        distFromHome: "~145 km",
+        distFromRudrapur: "~145 km",
+        water: "🟢 Good (Ganga system, 10–20m)",
+        crime: "🟢 Low — peaceful Jat/Gujjar belt",
+        price: "₹12–22L/bigha",
+        highway: "NH-119",
+        soil: "Good alluvial, Ganga-fed",
+        notes: "Peaceful option if targeting Haridwar marigold and turmeric market (40 km). Good social stability. Less Rudrapur proximity but strong agrarian culture."
+      },
+      {
+        name: "Najibabad",
+        lat: 29.6133, lng: 78.3404,
+        type: "secondary",
+        district: "Bijnor, UP",
+        distFromHome: "~165 km",
+        distFromRudrapur: "~150 km",
+        water: "🟢 Good (foothills water table)",
+        crime: "🟢 Low",
+        price: "₹10–20L/bigha",
+        highway: "NH-119 / NH-534",
+        soil: "Foothills alluvial, slightly elevated",
+        notes: "Gateway to Uttarakhand hills. Cooler microclimate — 4–6°C cooler than plains. Haridwar market 40 km. Good for lemongrass and turmeric."
+      },
+      {
+        name: "Rampur",
+        lat: 28.8122, lng: 79.0253,
+        type: "city",
+        district: "Rampur, UP",
+        distFromHome: "~140 km",
+        distFromRudrapur: "~80 km",
+        water: "Good (10–20m depth)",
+        crime: "Moderate–High (city core)",
+        price: "₹20–35L/bigha (city fringe)",
+        highway: "NH-9 / SH-37",
+        notes: "District HQ. Rampur Sugar Mill is major offtake option. Do NOT buy near city. Target Bilaspur/Swar tehsils north of here."
+      },
+      {
+        name: "Kundarki Block",
+        lat: 28.9167, lng: 78.8167,
+        type: "secondary",
+        district: "Moradabad, UP",
+        distFromHome: "~155 km",
+        distFromRudrapur: "~110 km",
+        water: "🟢 Good",
+        crime: "🟢 Low (calm rural community)",
+        price: "₹8–18L/bigha",
+        highway: "Between NH-9 and NH-74",
+        soil: "Mixed alluvial, decent",
+        notes: "Budget option — cheapest land in the scouting belt. Good for NCR vegetable supply chain. Less premium than Bilaspur Terai soil but significantly lower entry cost."
+      },
+      {
+        name: "Thakurdwara Block",
+        lat: 29.0833, lng: 78.9333,
+        type: "primary",
+        district: "Moradabad, UP",
+        distFromHome: "~160 km",
+        distFromRudrapur: "~90 km",
+        water: "🟢 Excellent — Ram Ganga canal irrigated",
+        crime: "🟢 Low — calm agrarian community",
+        price: "₹10–20L/bigha",
+        highway: "Near NH-74",
+        soil: "Ram Ganga deep alluvial, very fertile",
+        notes: "Strong second choice after Bilaspur. Canal irrigation = reliable water even without bore well investment. Moradabad administration is slightly cleaner than Rampur. Closer to home."
+      },
+      {
+        name: "Swar Tehsil",
+        lat: 28.9800, lng: 79.0500,
+        type: "secondary",
+        district: "Rampur, UP",
+        distFromHome: "~175 km",
+        distFromRudrapur: "~70 km",
+        water: "🟢 Good (canal + tube well belt)",
+        crime: "🟡 Moderate",
+        price: "₹15–28L/bigha",
+        highway: "On SH-37",
+        soil: "Good alluvial",
+        notes: "On the main Rampur–Rudrapur highway. Good road connectivity for produce transport. Higher prices than interior villages due to main road exposure."
+      },
+      {
+        name: "Bilaspur Tehsil Villages",
+        lat: 29.0200, lng: 79.1800,
+        type: "primary",
+        district: "Rampur, UP",
+        distFromHome: "~185 km",
+        distFromRudrapur: "~20 km",
+        water: "🟢 Excellent — Terai belt, 5–15m depth",
+        crime: "🟢 Low — small villages, rural calm",
+        price: "₹12–25L/bigha (₹8–15L interior)",
+        highway: "5–15 km off SH-37",
+        soil: "Deep alluvial + Terai loam, high organic matter",
+        notes: "TOP PICK. Directly south of Rudrapur on UP side. Interior villages 5–15 km off main road are 30% cheaper and calmer. Sharda–Kosi river system = permanent water security. Rudrapur SIDCUL industrial demand is a direct local market."
+      },
+      {
+        name: "Kashipur",
+        lat: 29.2100, lng: 78.9600,
+        type: "uk",
+        district: "Udham Singh Nagar, Uttarakhand",
+        distFromHome: "~185 km",
+        distFromRudrapur: "~25 km",
+        notes: "Uttarakhand — cannot buy as UP resident. Industrial town. Good market reference for vegetable and dairy offtake."
+      },
+      {
+        name: "Rudrapur",
+        lat: 28.9846, lng: 79.4026,
+        type: "uk",
+        district: "Udham Singh Nagar, Uttarakhand",
+        distFromHome: "~195 km",
+        distFromRudrapur: "0 km",
+        notes: "Uttarakhand — cannot buy. Reference target point. SIDCUL industrial area creates massive local demand for vegetables, dairy, eggs. Bilaspur tehsil (UP side) is 20 km south."
+      },
+      {
+        name: "Haridwar",
+        lat: 29.9457, lng: 78.1642,
+        type: "city",
+        district: "Haridwar, Uttarakhand",
+        distFromHome: "~200 km",
+        distFromRudrapur: "~95 km",
+        notes: "Year-round marigold, turmeric, and organic produce market. Temple economy is enormous. Farms in Bilaspur / Najibabad belt can supply this market."
+      },
+      {
+        name: "Rampur City Periphery",
+        lat: 28.8400, lng: 79.0800,
+        type: "caution",
+        district: "Rampur, UP",
+        distFromHome: "~142 km",
+        distFromRudrapur: "~78 km",
+        water: "🟡 Moderate (urban draw-down)",
+        crime: "🔴 High — urban crime + political volatility",
+        price: "₹25–45L/bigha (overpriced)",
+        notes: "AVOID. City periphery land is overpriced for farming use and carries urban crime patterns. Political environment in Rampur city is complex. Buy in Bilaspur or Swar instead."
+      },
+      {
+        name: "Muzaffarnagar Belt",
+        lat: 29.4727, lng: 77.7085,
+        type: "caution",
+        district: "Muzaffarnagar, UP",
+        distFromHome: "~100 km",
+        distFromRudrapur: "~220 km",
+        water: "🟡 Moderate",
+        crime: "🔴 High — 2013 riots history, communal tension",
+        price: "₹15–30L/bigha",
+        notes: "AVOID for peaceful farming life. Significant communal history. Not worth the social risk even if land price is attractive."
+      }
+    ];
+
+    // ─── Marker colours ───────────────────────────────────────────────────────
+
+    const colours = {
+      home:      { fill: '#00d4ff', border: '#0096b3' },
+      primary:   { fill: '#22c55e', border: '#15803d' },
+      secondary: { fill: '#f59e0b', border: '#b45309' },
+      caution:   { fill: '#ef4444', border: '#b91c1c' },
+      uk:        { fill: '#a78bfa', border: '#7c3aed' },
+      city:      { fill: '#3b82f6', border: '#1d4ed8' },
+      waypoint:  { fill: '#475569', border: '#334155' }
+    };
+
+    const tagLabels = {
+      home:      '🏠 Home',
+      primary:   '🟢 Primary Target',
+      secondary: '🟡 Scout',
+      caution:   '🔴 Avoid',
+      uk:        '🟣 Uttarakhand',
+      city:      '🔵 City / Market',
+      waypoint:  '⚪ Waypoint'
+    };
+
+    // ─── Map init ─────────────────────────────────────────────────────────────
+
+    const map = L.map('scout-map', {
+      center: [29.0, 78.5],
+      zoom: 8,
+      zoomControl: true
+    });
+
+    // Dark tile layer
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 17
+    }).addTo(map);
+
+    // ─── Draw route line (Pilkhuwa → Moradabad → Rampur → Bilaspur) ──────────
+
+    const routeCoords = [
+      [28.7136, 77.6539],  // Pilkhuwa
+      [28.8294, 78.2833],  // Gajraula
+      [28.8386, 78.7733],  // Moradabad
+      [28.8122, 79.0253],  // Rampur
+      [29.0200, 79.1800]   // Bilaspur belt
+    ];
+
+    L.polyline(routeCoords, {
+      color: '#00d4ff',
+      weight: 2.5,
+      opacity: 0.5,
+      dashArray: '6, 6'
+    }).addTo(map).bindTooltip('Your NH-9 / SH-37 Corridor', {
+      permanent: false,
+      direction: 'center',
+      className: 'route-tooltip'
+    });
+
+    // ─── Markers ──────────────────────────────────────────────────────────────
+
+    const markerLayer = {};
+    const allMarkers = [];
+
+    function makeIcon(type, size) {
+      const c = colours[type] || colours.waypoint;
+      const r = size || 10;
+      return L.divIcon({
+        className: '',
+        html: `<div style="
+          width:${r*2}px; height:${r*2}px;
+          background:${c.fill};
+          border:2px solid ${c.border};
+          border-radius:50%;
+          box-shadow: 0 0 8px ${c.fill}66;
+          cursor:pointer;
+        "></div>`,
+        iconSize: [r*2, r*2],
+        iconAnchor: [r, r]
+      });
+    }
+
+    function buildPopup(loc) {
+      const tag = `<span class="popup-tag tag-${loc.type}">${tagLabels[loc.type] || loc.type}</span>`;
+      const rows = [
+        loc.distFromHome     ? `<div class="popup-row"><span class="popup-label">From Home</span><span class="popup-value">${loc.distFromHome}</span></div>` : '',
+        loc.distFromRudrapur ? `<div class="popup-row"><span class="popup-label">To Rudrapur</span><span class="popup-value">${loc.distFromRudrapur}</span></div>` : '',
+        loc.water            ? `<div class="popup-row"><span class="popup-label">Water</span><span class="popup-value">${loc.water}</span></div>` : '',
+        loc.crime            ? `<div class="popup-row"><span class="popup-label">Crime</span><span class="popup-value">${loc.crime}</span></div>` : '',
+        loc.price            ? `<div class="popup-row"><span class="popup-label">Land Price</span><span class="popup-value">${loc.price}</span></div>` : '',
+        loc.highway          ? `<div class="popup-row"><span class="popup-label">Highway</span><span class="popup-value">${loc.highway}</span></div>` : '',
+        loc.soil             ? `<div class="popup-row"><span class="popup-label">Soil</span><span class="popup-value">${loc.soil}</span></div>` : ''
+      ].join('');
+
+      return `
+        <div class="popup-name">${loc.name}</div>
+        <div class="popup-district">${loc.district || ''} ${loc.subtitle ? '— ' + loc.subtitle : ''}</div>
+        ${tag}
+        ${rows}
+        ${loc.notes ? `<div class="popup-notes">${loc.notes}</div>` : ''}
+      `;
+    }
+
+    locations.forEach(loc => {
+      const size = loc.type === 'home' ? 13 : (loc.type === 'city' ? 9 : 10);
+      const marker = L.marker([loc.lat, loc.lng], { icon: makeIcon(loc.type, size) })
+        .addTo(map)
+        .bindPopup(buildPopup(loc), { maxWidth: 300, minWidth: 240 });
+
+      allMarkers.push({ marker, type: loc.type, name: loc.name });
+      if (!markerLayer[loc.type]) markerLayer[loc.type] = [];
+      markerLayer[loc.type].push(marker);
+    });
+
+    // ─── Filter logic ─────────────────────────────────────────────────────────
+
+    const routeTypes = new Set(['home', 'waypoint', 'city']);
+
+    function filterMarkers(filter, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      allMarkers.forEach(({ marker, type }) => {
+        let show = false;
+        if (filter === 'all')   show = true;
+        else if (filter === 'route') show = routeTypes.has(type) || type === 'primary' || type === 'secondary';
+        else show = type === filter;
+
+        if (show) { if (!map.hasLayer(marker)) map.addLayer(marker); }
+        else       { if (map.hasLayer(marker))  map.removeLayer(marker); }
+      });
+
+      // filter score cards
+      document.querySelectorAll('.score-card').forEach(card => {
+        const cardType = card.dataset.type;
+        card.style.display = (filter === 'all' || filter === cardType || filter === 'route') ? '' : 'none';
+      });
+    }
+
+    // ─── Score cards ─────────────────────────────────────────────────────────
+
+    const grid = document.getElementById('score-grid');
+    const cardTypes = ['primary', 'secondary', 'caution'];
+
+    locations
+      .filter(l => cardTypes.includes(l.type) || l.type === 'home')
+      .forEach(loc => {
+        const rows = [
+          ['From Pilkhuwa', loc.distFromHome],
+          ['To Rudrapur',   loc.distFromRudrapur],
+          ['Water Table',   loc.water],
+          ['Crime Level',   loc.crime],
+          ['Land Price',    loc.price],
+          ['Highway',       loc.highway],
+          ['Soil',          loc.soil]
+        ].filter(r => r[1]).map(([k, v]) =>
+          `<div class="score-row"><span>${k}</span><span>${v}</span></div>`
+        ).join('');
+
+        const card = document.createElement('div');
+        card.className = `score-card ${loc.type}`;
+        card.dataset.type = loc.type;
+        card.innerHTML = `
+          <div class="score-card-name">${loc.name}</div>
+          <div class="score-card-district">${loc.district || ''}</div>
+          ${rows}
+          ${loc.notes ? `<div class="popup-notes" style="margin-top:8px;font-size:0.72rem">${loc.notes}</div>` : ''}
+        `;
+        grid.appendChild(card);
+      });
+
+    </script>
+</body>
+</html>
