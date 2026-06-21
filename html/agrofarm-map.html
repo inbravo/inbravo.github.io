@@ -249,6 +249,7 @@
             <button class="filter-btn" onclick="filterMarkers('uk', this)">🟣 Uttarakhand (ref)</button>
             <button class="filter-btn" onclick="filterMarkers('city', this)">🔵 Major Cities</button>
             <button class="filter-btn" onclick="filterMarkers('route', this)">🛣️ Your Route</button>
+            <button class="filter-btn" onclick="filterMarkers('zone', this)">🎯 10-Bigha Zones</button>
             <button class="filter-btn" onclick="toggleCropView(this)">🌾 Crop View</button>
         </div>
 
@@ -264,6 +265,10 @@
             <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> Uttarakhand (can't buy)</div>
             <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> Major City (market ref)</div>
             <div class="legend-item"><div class="legend-dot" style="background:#475569"></div> Waypoint / Town</div>
+            <div class="legend-item">
+                <div style="width:13px;height:13px;background:#f0abfc;border:2px solid #a21caf;border-radius:2px;transform:rotate(45deg);flex-shrink:0;"></div>
+                10-Bigha Target Zone (numbered)
+            </div>
         </div>
 
         <!-- Crop Legend (hidden until Crop View toggled) -->
@@ -469,19 +474,59 @@
         notes: "Peaceful option targeting Haridwar marigold and turmeric market (40 km). Strong agrarian social fabric."
       },
       {
+        name: "Afzalgarh Block",
+        lat: 29.4200, lng: 78.6500,
+        type: "secondary",
+        district: "Bijnor, UP",
+        distFromHome: "~150 km",
+        distFromRudrapur: "~140 km",
+        water: "🟢 Good — Ramganga tributary system",
+        crime: "🟢 Low — rural agrarian block",
+        price: "₹10–20L/bigha",
+        highway: "NH-119 spur roads",
+        soil: "Foothills alluvial, good mineral content",
+        crops: ["🫚 Ginger", "🌿 Turmeric", "🍋 Litchi", "🍃 Lemongrass"],
+        notes: "Underexplored block in Bijnor. Foothills proximity means slightly cooler climate and better soil mineral content than plains. Ginger and turmeric do very well here. Closer to Kotdwara market than Najibabad. Less crowded scouting option."
+      },
+      {
         name: "Najibabad",
         lat: 29.6133, lng: 78.3404,
         type: "secondary",
         district: "Bijnor, UP",
         distFromHome: "~165 km",
         distFromRudrapur: "~150 km",
-        water: "🟢 Good (foothills water table)",
+        water: "🟢 Good (foothills water table, Khoh river)",
         crime: "🟢 Low",
-        price: "₹10–20L/bigha",
+        price: "₹10–22L/bigha",
         highway: "NH-119 / NH-534",
-        soil: "Foothills alluvial, slightly elevated",
-        crops: ["🍃 Lemongrass", "🌿 Turmeric", "🌸 Marigold", "🎋 Bamboo"],
-        notes: "Gateway to Uttarakhand hills. 4–6°C cooler than plains. Haridwar market 40 km. Good for lemongrass, turmeric, bamboo."
+        soil: "Shivalik foothills alluvial, high mineral content",
+        crops: ["🍋 Litchi", "🫚 Ginger", "🍃 Lemongrass", "🌿 Turmeric", "🎋 Bamboo"],
+        notes: "Gateway to Uttarakhand hills. 6–8°C cooler than Pilkhuwa in summer. Khoh river provides natural water. Kotdwara market (UK) is 15 km — accessible for produce. Best for litchi orchard or ginger if you want a distinctive crop not grown in Terai plains."
+      },
+      {
+        name: "Najibabad–Kotdwara UP Belt",
+        lat: 29.6700, lng: 78.4800,
+        type: "zone",
+        district: "Bijnor, UP",
+        distFromHome: "~160 km",
+        distFromRudrapur: "~160 km",
+        water: "🟢 Excellent — Khoh river, natural springs, 8–18m depth",
+        crime: "🟢 Low — foothills villages, stable community",
+        price: "₹10–22L/bigha → 10 bigha = ₹100–220L",
+        highway: "5–12 km south of UK border on UP side",
+        soil: "Shivalik foothills alluvial — mineral-rich, excellent drainage",
+        crops: ["🍋 Litchi", "🫚 Ginger", "🍃 Lemongrass", "🌿 Turmeric"],
+        notes: "Unique option — hill climate without the hill price. Villages on UP side of Kotdwara border get the same cool breeze, Khoh river water, and scenic hill views as Kotdwara but at UP land prices. Kotdwara town (UK) is your market — 10–15 km away. Best for litchi orchard (15-year asset) or ginger (annual cash). No elephant corridor — lower wildlife risk than Pilibhit."
+      },
+      {
+        name: "Kotdwara",
+        lat: 29.7467, lng: 78.5256,
+        type: "uk",
+        district: "Pauri Garhwal, Uttarakhand",
+        distFromHome: "~170 km",
+        distFromRudrapur: "~165 km",
+        crops: [],
+        notes: "Uttarakhand — cannot buy as UP resident. Pauri Garhwal foothills town. Key market reference for the Najibabad-Kotdwara UP belt. Produce from UP-side villages can sell here easily."
       },
       // ── Rampur Belt ──────────────────────────────────────────────────────────
       {
@@ -558,6 +603,93 @@
         crops: ["🌿 Turmeric", "🍃 Lemongrass", "🌸 Marigold", "🥦 Vegetables", "🎋 Bamboo"],
         notes: "TOP PICK. Directly south of Rudrapur on UP side. Interior villages 30% cheaper and calmer. Sharda–Kosi river = permanent water. Rudrapur SIDCUL = direct local market."
       },
+      // ── Pilibhit–Puranpur Target Zones ──────────────────────────────────────
+      {
+        name: "Zone 1 — Puranpur Tehsil South ⭐",
+        lat: 28.4800, lng: 79.9500,
+        type: "zone",
+        district: "Pilibhit, UP",
+        distFromHome: "~275 km",
+        distFromRudrapur: "~115 km",
+        water: "🟢 Excellent — Sharda canal command area, 8–15m depth",
+        crime: "🟢 Low — interior villages, low density",
+        price: "₹5–9L/bigha → 10 bigha = ₹50–90L",
+        highway: "5–12 km south of NH-730",
+        soil: "Sharda alluvial + Terai loam — highest organic matter in belt",
+        crops: ["🍃 Lemongrass", "🎋 Bamboo", "🌿 Turmeric", "🎋 Sugarcane"],
+        notes: "⭐ TOP PICK for 10 bigha. Best price-to-quality ratio in the entire belt. Sharda canal irrigation = no bore well dependency. Away from PTR buffer. Target villages near Khutar block / Maqsoodpur area. Negotiate at ₹6–6.5L/bigha — sellers have few competing buyers for interior land."
+      },
+      {
+        name: "Zone 2 — Puranpur Town Fringe",
+        lat: 28.4700, lng: 80.1000,
+        type: "zone",
+        district: "Pilibhit, UP",
+        distFromHome: "~280 km",
+        distFromRudrapur: "~120 km",
+        water: "🟢 Excellent — Sharda river system",
+        crime: "🟢 Low",
+        price: "₹7–12L/bigha → 10 bigha = ₹70–120L",
+        highway: "3–6 km off NH-730 near Puranpur",
+        soil: "Sharda alluvial, very fertile",
+        crops: ["🎋 Sugarcane", "🌿 Turmeric", "🍃 Lemongrass", "🌸 Marigold"],
+        notes: "Good balance of price and access. Closer to Puranpur town = caretaker easier to find, local market access, KCC from nearby bank. Puranpur sugar mill provides guaranteed sugarcane offtake. 15–20% cheaper than roadside land."
+      },
+      {
+        name: "Zone 3 — Pilibhit City East",
+        lat: 28.6100, lng: 79.8800,
+        type: "zone",
+        district: "Pilibhit, UP",
+        distFromHome: "~235 km",
+        distFromRudrapur: "~90 km",
+        water: "🟢 Good (10–20m depth)",
+        crime: "🟢 Low",
+        price: "₹10–18L/bigha → 10 bigha = ₹100–180L",
+        highway: "2–5 km east of Pilibhit city on NH-730",
+        soil: "Good alluvial, slightly less Terai quality",
+        crops: ["🥦 Vegetables", "🌿 Turmeric", "🎋 Sugarcane"],
+        notes: "Closest to district HQ — best admin support, banking, KCC access, weekly market. But 10 bigha contiguous plots are harder to find and budget gets tight above ₹100L total. Only choose this if proximity to services outweighs cost."
+      },
+      // ── Khatima–Pilibhit Corridor ────────────────────────────────────────────
+      {
+        name: "Khatima",
+        lat: 28.9270, lng: 79.9705,
+        type: "uk",
+        district: "Udham Singh Nagar, Uttarakhand",
+        distFromHome: "~240 km",
+        distFromRudrapur: "~55 km",
+        crops: [],
+        notes: "Uttarakhand — cannot buy. Key northern market anchor for the Khatima–Pilibhit corridor. Wholesale market accepts produce from UP-side villages. Sugar mills and agri mandis here serve farmers from both sides of the border."
+      },
+      {
+        name: "Bisalpur Tehsil (North)",
+        lat: 28.7800, lng: 79.8500,
+        type: "secondary",
+        district: "Pilibhit, UP",
+        distFromHome: "~228 km",
+        distFromRudrapur: "~100 km",
+        water: "🟢 Excellent — Sharda canal command, 8–15m depth",
+        crime: "🟢 Low — tehsil HQ area, stable governance",
+        price: "₹7–14L/bigha",
+        highway: "Khatima–Pilibhit road, 3–6 km interior",
+        soil: "Sharda alluvial, canal-fed, high fertility",
+        crops: ["🍃 Lemongrass", "🌿 Turmeric", "🎋 Sugarcane", "🐟 Fish farming"],
+        notes: "Bisalpur is a tehsil HQ — better admin, banking, KCC access than deep interior. North Bisalpur villages closest to UK border get dual market access (Khatima + Pilibhit). Sharda canal command area means no bore well dependency. Less investor competition than NH-730 belt."
+      },
+      {
+        name: "Zone 6 — Khatima–Pilibhit Corridor",
+        lat: 28.7800, lng: 79.9000,
+        type: "zone",
+        district: "Pilibhit, UP",
+        distFromHome: "~232 km",
+        distFromRudrapur: "~95 km",
+        water: "🟢 Excellent — Sharda river + canal, shallowest water table in belt",
+        crime: "🟢 Low — low investor traffic, genuine farming community",
+        price: "₹6–12L/bigha → 10 bigha = ₹60–120L",
+        highway: "3–7 km west of Khatima–Pilibhit road (interior villages)",
+        soil: "Sharda alluvial — mineral-rich, excellent drainage, naturally fertile",
+        crops: ["🍃 Lemongrass", "🌿 Turmeric", "🎋 Sugarcane", "🌻 Mustard", "🐟 Fish farming"],
+        notes: "Hidden gem corridor — north-south axis vs the well-known east-west NH-730. Dual market access: Khatima (UK) to north and Pilibhit city to south. Sharda river runs parallel on east side. CRITICAL: verify PTR (Pilibhit Tiger Reserve) ESZ boundary before committing — get DFO Pilibhit forest map. Target interior villages 3–7 km WEST of road to stay clear of forest buffer and get 20–30% cheaper land. Scout this on the same trip as NH-730 — drive NH-730 in, drive this corridor out."
+      },
       // ── Pilibhit Belt ────────────────────────────────────────────────────────
       {
         name: "Pilibhit",
@@ -588,6 +720,36 @@
         soil: "Sharda alluvial + Terai loam — among most fertile in UP",
         crops: ["🎋 Bamboo", "🎋 Sugarcane", "🍃 Lemongrass", "🌿 Turmeric"],
         notes: "Cheapest land in the entire belt. Extremely fertile Sharda alluvial soil. Very remote — needs a trusted local caretaker. KCC easily available from established farming community here."
+      },
+      // ── Lakhimpur Kheri Belt ─────────────────────────────────────────────────
+      {
+        name: "Lakhimpur Kheri",
+        lat: 27.9497, lng: 80.7732,
+        type: "city",
+        district: "Lakhimpur Kheri, UP",
+        distFromHome: "~300 km",
+        distFromRudrapur: "~180 km",
+        water: "Good (Sharda system)",
+        crime: "Low–Moderate",
+        price: "₹4–10L/bigha",
+        highway: "NH-730 extension",
+        crops: [],
+        notes: "District HQ. Terai belt extending east of Pilibhit. Cheapest land in the entire UP-UK border zone. Dudhwa National Park in north = higher wildlife pressure. Use as base when scouting northern Lakhimpur Kheri blocks."
+      },
+      {
+        name: "Lakhimpur Kheri Terai Zone",
+        lat: 28.3500, lng: 80.5000,
+        type: "zone",
+        district: "Lakhimpur Kheri, UP",
+        distFromHome: "~295 km",
+        distFromRudrapur: "~170 km",
+        water: "🟢 Excellent — Sharda-Ghaghra system, very shallow (5–12m)",
+        crime: "🟢 Low — sparse population, very rural",
+        price: "₹4–8L/bigha → 10 bigha = ₹40–80L",
+        highway: "Near NH-730, Pallia–Nighasan belt",
+        soil: "Deep Terai alluvial — among the most fertile in India",
+        crops: ["🎋 Bamboo", "🎋 Sugarcane", "🍃 Lemongrass", "🌿 Turmeric"],
+        notes: "Maximum land per rupee in the entire belt. Soil quality rivals Puranpur. Key caution: Dudhwa Tiger Reserve elephant corridor is active — solar fencing is non-negotiable. Target Pallia or Nighasan tehsil blocks that are 5–10 km south of the UK border and clear of the DTR buffer zone. Needs a reliable full-time caretaker — too remote for monthly management alone."
       },
       // ── Uttarakhand Reference ────────────────────────────────────────────────
       {
@@ -658,7 +820,8 @@
       caution:   { fill: '#ef4444', border: '#b91c1c' },
       uk:        { fill: '#a78bfa', border: '#7c3aed' },
       city:      { fill: '#3b82f6', border: '#1d4ed8' },
-      waypoint:  { fill: '#475569', border: '#334155' }
+      waypoint:  { fill: '#475569', border: '#334155' },
+      zone:      { fill: '#f0abfc', border: '#a21caf' }
     };
 
     const tagLabels = {
@@ -668,7 +831,8 @@
       caution:   '🔴 Avoid',
       uk:        '🟣 Uttarakhand',
       city:      '🔵 City / Market',
-      waypoint:  '⚪ Waypoint'
+      waypoint:  '⚪ Waypoint',
+      zone:      '🎯 10-Bigha Target Zone'
     };
 
     // ─── Map init ─────────────────────────────────────────────────────────────
@@ -749,6 +913,7 @@
     const allMarkers = [];
 
     function makeIcon(type, size) {
+      if (type === 'zone') return makeZoneIcon(size);
       const c = colours[type] || colours.waypoint;
       const r = size || 10;
       return L.divIcon({
@@ -763,6 +928,29 @@
         "></div>`,
         iconSize: [r*2, r*2],
         iconAnchor: [r, r]
+      });
+    }
+
+    let zoneCount = 0;
+    function makeZoneIcon() {
+      zoneCount++;
+      const n = zoneCount;
+      return L.divIcon({
+        className: '',
+        html: `<div style="
+          width:30px; height:30px;
+          background:#f0abfc;
+          border:2.5px solid #a21caf;
+          border-radius:4px;
+          transform:rotate(45deg);
+          box-shadow: 0 0 12px #f0abfc99;
+          cursor:pointer;
+          display:flex; align-items:center; justify-content:center;
+        ">
+          <span style="transform:rotate(-45deg); font-size:12px; font-weight:800; color:#4a044e; line-height:1;">${n}</span>
+        </div>`,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
       });
     }
 
