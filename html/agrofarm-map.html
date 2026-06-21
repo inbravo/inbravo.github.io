@@ -249,6 +249,7 @@
             <button class="filter-btn" onclick="filterMarkers('uk', this)">🟣 Uttarakhand (ref)</button>
             <button class="filter-btn" onclick="filterMarkers('city', this)">🔵 Major Cities</button>
             <button class="filter-btn" onclick="filterMarkers('route', this)">🛣️ Your Route</button>
+            <button class="filter-btn" onclick="toggleCropView(this)">🌾 Crop View</button>
         </div>
 
         <!-- Map -->
@@ -263,6 +264,32 @@
             <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> Uttarakhand (can't buy)</div>
             <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> Major City (market ref)</div>
             <div class="legend-item"><div class="legend-dot" style="background:#475569"></div> Waypoint / Town</div>
+        </div>
+
+        <!-- Crop Legend (hidden until Crop View toggled) -->
+        <div class="map-legend" id="crop-legend" style="display:none; margin-top:10px;">
+            <div style="width:100%; font-size:0.75rem; color:var(--accent-cyan,#00d4ff); font-weight:600; margin-bottom:4px;">🌾 Crop Suitability — marker shows primary crop per zone</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#eab308"></div> Turmeric</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div> Lemongrass</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div> Marigold</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#065f46"></div> Bamboo</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#84cc16"></div> Sugarcane</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#06b6d4"></div> Vegetables</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#d97706"></div> Wheat</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e2e8f0"></div> Dairy</div>
+        </div>
+
+        <!-- Route Legend -->
+        <div class="map-legend" style="margin-top:10px;">
+            <div style="width:100%; font-size:0.75rem; color:var(--accent-cyan,#00d4ff); font-weight:600; margin-bottom:4px;">🛣️ Routes from Pilkhuwa</div>
+            <div class="legend-item">
+                <div style="width:28px;height:3px;background:#00d4ff;border-radius:2px;flex-shrink:0;"></div>
+                Route 1 — NH-9 → Moradabad → Rampur → Bilaspur (~185 km)
+            </div>
+            <div class="legend-item">
+                <div style="width:28px;height:3px;background:#f59e0b;border-radius:2px;flex-shrink:0;border-top:2px dashed #f59e0b;border-bottom:none;height:0;"></div>
+                Route 2 — NH-9 → Bareilly → Pilibhit → Puranpur (~265 km)
+            </div>
         </div>
 
         <!-- Score Cards -->
@@ -288,8 +315,71 @@
         price: "—",
         highway: "NH-9",
         soil: "—",
+        crops: [],
         notes: "Your starting point. NH-9 connects directly to the entire scouting belt via Moradabad."
       },
+      // ── Hapur District ──────────────────────────────────────────────────────
+      {
+        name: "Garhmukteshwar",
+        lat: 28.7822, lng: 78.0972,
+        type: "secondary",
+        district: "Hapur, UP",
+        distFromHome: "~40 km",
+        distFromRudrapur: "~175 km",
+        water: "🟢 Good — Ganga alluvial belt, 12–22m depth",
+        crime: "🟢 Low — religious town, stable community",
+        price: "₹25–45L/bigha",
+        highway: "NH-9 / Ganga belt road",
+        soil: "Ganga alluvial — fertile, good moisture retention",
+        crops: ["🌸 Marigold", "🌿 Tulsi", "🥛 Dairy", "🥦 Vegetables"],
+        notes: "Best in Hapur district. Ganga riverside = fertile soil and reliable water. Religious town creates year-round marigold, tulsi, and dairy demand. Weekend visit comfortable at 40 km."
+      },
+      {
+        name: "Simbhaoli",
+        lat: 28.6620, lng: 77.8460,
+        type: "secondary",
+        district: "Hapur, UP",
+        distFromHome: "~20 km",
+        distFromRudrapur: "~210 km",
+        water: "🟡 Moderate — 20–35m depth, tube well needed",
+        crime: "🟢 Low — established sugarcane community",
+        price: "₹20–35L/bigha",
+        highway: "NH-9 adjacent",
+        soil: "Alluvial plains, moderate fertility",
+        crops: ["🎋 Sugarcane", "🌾 Wheat", "🌻 Mustard"],
+        notes: "Closest serious farm — 20 km from Pilkhuwa. Simbhaoli Sugar Mills = guaranteed sugarcane offtake. Good entry-level farm to learn basics before Terai expansion."
+      },
+      {
+        name: "Dhaulana Block",
+        lat: 28.7167, lng: 77.9333,
+        type: "secondary",
+        district: "Hapur, UP",
+        distFromHome: "~25 km",
+        distFromRudrapur: "~195 km",
+        water: "🟡 Moderate — 20–30m depth",
+        crime: "🟢 Low — quiet interior villages",
+        price: "₹15–28L/bigha",
+        highway: "Off NH-9, interior roads",
+        soil: "Mixed alluvial, decent",
+        crops: ["🌾 Wheat", "🌻 Mustard", "🥦 Vegetables"],
+        notes: "Most affordable land in Hapur district. Interior villages away from NH-9 are calm and underpriced. Good starter farm — easy to visit, low cost, learn farming basics."
+      },
+      {
+        name: "Hapur Rural Blocks",
+        lat: 28.7500, lng: 77.8000,
+        type: "secondary",
+        district: "Hapur, UP",
+        distFromHome: "~15 km",
+        distFromRudrapur: "~200 km",
+        water: "🟡 Moderate — 18–30m depth",
+        crime: "🟡 Moderate — NCR adjacency brings some urban spillover",
+        price: "₹22–40L/bigha",
+        highway: "NH-9 corridor",
+        soil: "Western UP alluvial plains",
+        crops: ["🥦 Vegetables", "🌾 Wheat", "🥛 Dairy"],
+        notes: "Villages 10–20 km from Hapur city. Weekly visit possible. NCR proximity = direct vegetable and dairy supply to Ghaziabad/Delhi. NCR land pressure pushing prices up — act sooner."
+      },
+      // ── Reference Cities ─────────────────────────────────────────────────────
       {
         name: "Ghaziabad",
         lat: 28.6692, lng: 77.4538,
@@ -297,6 +387,7 @@
         district: "Ghaziabad, UP",
         distFromHome: "~30 km",
         distFromRudrapur: "~215 km",
+        crops: [],
         notes: "NCR produce market. Direct highway link from farm to consumer possible."
       },
       {
@@ -306,8 +397,10 @@
         district: "Delhi",
         distFromHome: "~50 km",
         distFromRudrapur: "~240 km",
+        crops: [],
         notes: "Largest premium organic produce market. Organic subscription box model viable from Terai farms."
       },
+      // ── Route 1 Waypoints (NH-9 → Rampur → Bilaspur) ─────────────────────────
       {
         name: "Amroha (JP Nagar)",
         lat: 28.9042, lng: 78.4678,
@@ -316,7 +409,8 @@
         distFromHome: "~85 km",
         distFromRudrapur: "~160 km",
         highway: "NH-9",
-        notes: "NH-9 waypoint. Rural Amroha land is affordable (₹8–15L/bigha) if budget is tight, but not Terai belt quality."
+        crops: [],
+        notes: "Route 1 waypoint (NH-9). Rural Amroha land affordable (₹8–15L/bigha) if budget tight, but not Terai quality."
       },
       {
         name: "Moradabad",
@@ -329,8 +423,22 @@
         crime: "Moderate (urban core)",
         price: "₹20–35L/bigha (city fringe)",
         highway: "NH-9 / NH-74",
-        notes: "Key waypoint. Do not buy near city — too expensive. Target Thakurdwara / Kundarki blocks in rural Moradabad district instead."
+        crops: [],
+        notes: "Route 1 & 2 junction. Do not buy near city — too expensive. Target Thakurdwara / Kundarki blocks in rural Moradabad instead."
       },
+      // ── Route 2 Waypoints (NH-9 → Bareilly → Pilibhit) ──────────────────────
+      {
+        name: "Bareilly",
+        lat: 28.3670, lng: 79.4304,
+        type: "waypoint",
+        district: "Bareilly, UP",
+        distFromHome: "~170 km",
+        distFromRudrapur: "~120 km",
+        highway: "NH-9 / NH-30 / NH-730",
+        crops: [],
+        notes: "Route 2 waypoint via NH-9. Major junction city — from here NH-730 takes you north to Pilibhit (~55 km) and Puranpur (~90 km). Also a large grain and sugarcane market."
+      },
+      // ── Bijnor Belt ──────────────────────────────────────────────────────────
       {
         name: "Bijnor",
         lat: 29.3726, lng: 78.1351,
@@ -342,6 +450,7 @@
         crime: "Low (peaceful district)",
         price: "₹10–20L/bigha",
         highway: "NH-119",
+        crops: [],
         notes: "Most peaceful district in the belt. Strong Jat/Gujjar agrarian belt. More towards Haridwar corridor than Rudrapur."
       },
       {
@@ -356,7 +465,8 @@
         price: "₹12–22L/bigha",
         highway: "NH-119",
         soil: "Good alluvial, Ganga-fed",
-        notes: "Peaceful option if targeting Haridwar marigold and turmeric market (40 km). Good social stability. Less Rudrapur proximity but strong agrarian culture."
+        crops: ["🌸 Marigold", "🌿 Turmeric", "🍃 Lemongrass"],
+        notes: "Peaceful option targeting Haridwar marigold and turmeric market (40 km). Strong agrarian social fabric."
       },
       {
         name: "Najibabad",
@@ -370,8 +480,10 @@
         price: "₹10–20L/bigha",
         highway: "NH-119 / NH-534",
         soil: "Foothills alluvial, slightly elevated",
-        notes: "Gateway to Uttarakhand hills. Cooler microclimate — 4–6°C cooler than plains. Haridwar market 40 km. Good for lemongrass and turmeric."
+        crops: ["🍃 Lemongrass", "🌿 Turmeric", "🌸 Marigold", "🎋 Bamboo"],
+        notes: "Gateway to Uttarakhand hills. 4–6°C cooler than plains. Haridwar market 40 km. Good for lemongrass, turmeric, bamboo."
       },
+      // ── Rampur Belt ──────────────────────────────────────────────────────────
       {
         name: "Rampur",
         lat: 28.8122, lng: 79.0253,
@@ -383,7 +495,8 @@
         crime: "Moderate–High (city core)",
         price: "₹20–35L/bigha (city fringe)",
         highway: "NH-9 / SH-37",
-        notes: "District HQ. Rampur Sugar Mill is major offtake option. Do NOT buy near city. Target Bilaspur/Swar tehsils north of here."
+        crops: [],
+        notes: "District HQ. Rampur Sugar Mill is major offtake. Do NOT buy near city. Target Bilaspur/Swar tehsils north of here."
       },
       {
         name: "Kundarki Block",
@@ -397,7 +510,8 @@
         price: "₹8–18L/bigha",
         highway: "Between NH-9 and NH-74",
         soil: "Mixed alluvial, decent",
-        notes: "Budget option — cheapest land in the scouting belt. Good for NCR vegetable supply chain. Less premium than Bilaspur Terai soil but significantly lower entry cost."
+        crops: ["🥦 Vegetables", "🎋 Sugarcane", "🌾 Wheat"],
+        notes: "Budget option — cheapest in Moradabad belt. Good for NCR vegetable supply chain."
       },
       {
         name: "Thakurdwara Block",
@@ -411,7 +525,8 @@
         price: "₹10–20L/bigha",
         highway: "Near NH-74",
         soil: "Ram Ganga deep alluvial, very fertile",
-        notes: "Strong second choice after Bilaspur. Canal irrigation = reliable water even without bore well investment. Moradabad administration is slightly cleaner than Rampur. Closer to home."
+        crops: ["🌿 Turmeric", "🍃 Lemongrass", "🥦 Vegetables", "🎋 Sugarcane"],
+        notes: "Strong second choice after Bilaspur. Canal irrigation = reliable water without bore well. Moradabad admin slightly cleaner than Rampur."
       },
       {
         name: "Swar Tehsil",
@@ -425,7 +540,8 @@
         price: "₹15–28L/bigha",
         highway: "On SH-37",
         soil: "Good alluvial",
-        notes: "On the main Rampur–Rudrapur highway. Good road connectivity for produce transport. Higher prices than interior villages due to main road exposure."
+        crops: ["🎋 Sugarcane", "🌿 Turmeric", "🥦 Vegetables", "🌸 Marigold"],
+        notes: "On Rampur–Rudrapur highway. Good road connectivity for produce transport. Higher prices due to main road exposure."
       },
       {
         name: "Bilaspur Tehsil Villages",
@@ -439,8 +555,10 @@
         price: "₹12–25L/bigha (₹8–15L interior)",
         highway: "5–15 km off SH-37",
         soil: "Deep alluvial + Terai loam, high organic matter",
-        notes: "TOP PICK. Directly south of Rudrapur on UP side. Interior villages 5–15 km off main road are 30% cheaper and calmer. Sharda–Kosi river system = permanent water security. Rudrapur SIDCUL industrial demand is a direct local market."
+        crops: ["🌿 Turmeric", "🍃 Lemongrass", "🌸 Marigold", "🥦 Vegetables", "🎋 Bamboo"],
+        notes: "TOP PICK. Directly south of Rudrapur on UP side. Interior villages 30% cheaper and calmer. Sharda–Kosi river = permanent water. Rudrapur SIDCUL = direct local market."
       },
+      // ── Pilibhit Belt ────────────────────────────────────────────────────────
       {
         name: "Pilibhit",
         lat: 28.6317, lng: 79.8047,
@@ -449,11 +567,12 @@
         distFromHome: "~230 km",
         distFromRudrapur: "~85 km",
         water: "🟢 Excellent — Terai, high water table (8–18m depth)",
-        crime: "🟢 Low — very low population density, peaceful agricultural villages",
+        crime: "🟢 Low — very low density, peaceful agricultural villages",
         price: "₹8–18L/bigha",
         highway: "NH-730 / SH-88",
-        soil: "Terai forest loam — naturally high organic matter, centuries of forest floor",
-        notes: "Deep Terai belt. Very peaceful and low-density. Borders Uttarakhand (USN) directly. Ideal for lemongrass, bamboo, turmeric. Main downside: 230 km from Pilkhuwa — manage monthly visits carefully. Avoid land too close to forest buffer zone (check DFO maps)."
+        soil: "Terai forest loam — naturally high organic matter",
+        crops: ["🍃 Lemongrass", "🎋 Bamboo", "🌿 Turmeric", "🎋 Sugarcane"],
+        notes: "Deep Terai belt. Very peaceful, borders Uttarakhand directly. CIMAP Lucknow supports lemongrass farming here. Avoid land too close to forest buffer zone — check DFO maps."
       },
       {
         name: "Puranpur",
@@ -466,9 +585,11 @@
         crime: "🟢 Low — rural Terai, very calm",
         price: "₹6–14L/bigha",
         highway: "NH-730",
-        soil: "Sharda alluvial + Terai loam — among the most fertile in UP",
-        notes: "Cheapest land in the entire scouting belt. Extremely fertile Sharda river alluvial soil. Very remote — best suited if you plan to hire a local caretaker and visit quarterly. Strong bamboo and sugarcane belt. Kisan Credit Card (KCC) easily available here due to established farming community."
+        soil: "Sharda alluvial + Terai loam — among most fertile in UP",
+        crops: ["🎋 Bamboo", "🎋 Sugarcane", "🍃 Lemongrass", "🌿 Turmeric"],
+        notes: "Cheapest land in the entire belt. Extremely fertile Sharda alluvial soil. Very remote — needs a trusted local caretaker. KCC easily available from established farming community here."
       },
+      // ── Uttarakhand Reference ────────────────────────────────────────────────
       {
         name: "Kashipur",
         lat: 29.2100, lng: 78.9600,
@@ -476,6 +597,7 @@
         district: "Udham Singh Nagar, Uttarakhand",
         distFromHome: "~185 km",
         distFromRudrapur: "~25 km",
+        crops: [],
         notes: "Uttarakhand — cannot buy as UP resident. Industrial town. Good market reference for vegetable and dairy offtake."
       },
       {
@@ -485,7 +607,8 @@
         district: "Udham Singh Nagar, Uttarakhand",
         distFromHome: "~195 km",
         distFromRudrapur: "0 km",
-        notes: "Uttarakhand — cannot buy. Reference target point. SIDCUL industrial area creates massive local demand for vegetables, dairy, eggs. Bilaspur tehsil (UP side) is 20 km south."
+        crops: [],
+        notes: "Uttarakhand — cannot buy. SIDCUL industrial area = massive local demand for vegetables, dairy, eggs. Bilaspur tehsil (UP side) is 20 km south."
       },
       {
         name: "Haridwar",
@@ -494,8 +617,10 @@
         district: "Haridwar, Uttarakhand",
         distFromHome: "~200 km",
         distFromRudrapur: "~95 km",
-        notes: "Year-round marigold, turmeric, and organic produce market. Temple economy is enormous. Farms in Bilaspur / Najibabad belt can supply this market."
+        crops: [],
+        notes: "Year-round marigold, turmeric, and organic produce market. Temple economy is enormous. Bilaspur / Najibabad farms can supply this market."
       },
+      // ── Avoid ────────────────────────────────────────────────────────────────
       {
         name: "Rampur City Periphery",
         lat: 28.8400, lng: 79.0800,
@@ -506,7 +631,8 @@
         water: "🟡 Moderate (urban draw-down)",
         crime: "🔴 High — urban crime + political volatility",
         price: "₹25–45L/bigha (overpriced)",
-        notes: "AVOID. City periphery land is overpriced for farming use and carries urban crime patterns. Political environment in Rampur city is complex. Buy in Bilaspur or Swar instead."
+        crops: [],
+        notes: "AVOID. Overpriced for farming use, urban crime patterns. Political environment complex. Buy Bilaspur or Swar instead."
       },
       {
         name: "Muzaffarnagar Belt",
@@ -518,7 +644,8 @@
         water: "🟡 Moderate",
         crime: "🔴 High — 2013 riots history, communal tension",
         price: "₹15–30L/bigha",
-        notes: "AVOID for peaceful farming life. Significant communal history. Not worth the social risk even if land price is attractive."
+        crops: [],
+        notes: "AVOID. Significant communal history. Not worth the social risk even if land price is attractive."
       }
     ];
 
@@ -552,32 +679,68 @@
       zoomControl: true
     });
 
-    // Dark tile layer
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    // Base layers
+    const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
       subdomains: 'abcd',
       maxZoom: 17
+    });
+
+    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics',
+      maxZoom: 19
+    });
+
+    const topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://opentopomap.org">OpenTopoMap</a>',
+      subdomains: 'abc',
+      maxZoom: 17
+    });
+
+    darkLayer.addTo(map);
+
+    L.control.layers({
+      '🌑 Dark Map': darkLayer,
+      '🛰️ Satellite': satelliteLayer,
+      '🗻 Topographic': topoLayer
+    }, {}, {
+      position: 'topright',
+      collapsed: false
     }).addTo(map);
 
-    // ─── Draw route line (Pilkhuwa → Moradabad → Rampur → Bilaspur) ──────────
+    // ─── Route 1: Pilkhuwa → Moradabad → Rampur → Bilaspur (NH-9 / SH-37) ────
 
-    const routeCoords = [
+    L.polyline([
       [28.7136, 77.6539],  // Pilkhuwa
       [28.8294, 78.2833],  // Gajraula
       [28.8386, 78.7733],  // Moradabad
       [28.8122, 79.0253],  // Rampur
       [29.0200, 79.1800]   // Bilaspur belt
-    ];
-
-    L.polyline(routeCoords, {
+    ], {
       color: '#00d4ff',
       weight: 2.5,
-      opacity: 0.5,
+      opacity: 0.55,
       dashArray: '6, 6'
-    }).addTo(map).bindTooltip('Your NH-9 / SH-37 Corridor', {
-      permanent: false,
-      direction: 'center',
-      className: 'route-tooltip'
+    }).addTo(map).bindTooltip('Route 1 — NH-9 → Rampur → Bilaspur (~185 km)', {
+      direction: 'center'
+    });
+
+    // ─── Route 2: Pilkhuwa → Moradabad → Bareilly → Pilibhit → Puranpur ──────
+
+    L.polyline([
+      [28.7136, 77.6539],  // Pilkhuwa
+      [28.8294, 78.2833],  // Gajraula
+      [28.8386, 78.7733],  // Moradabad
+      [28.3670, 79.4304],  // Bareilly
+      [28.6317, 79.8047],  // Pilibhit
+      [28.5167, 80.1167]   // Puranpur
+    ], {
+      color: '#f59e0b',
+      weight: 2.5,
+      opacity: 0.55,
+      dashArray: '4, 8'
+    }).addTo(map).bindTooltip('Route 2 — NH-9 → Bareilly → Pilibhit → Puranpur (~265 km)', {
+      direction: 'center'
     });
 
     // ─── Markers ──────────────────────────────────────────────────────────────
@@ -605,6 +768,9 @@
 
     function buildPopup(loc) {
       const tag = `<span class="popup-tag tag-${loc.type}">${tagLabels[loc.type] || loc.type}</span>`;
+      const cropsHtml = loc.crops && loc.crops.length
+        ? `<div class="popup-row"><span class="popup-label">Crops</span><span class="popup-value">${loc.crops.join(' · ')}</span></div>`
+        : '';
       const rows = [
         loc.distFromHome     ? `<div class="popup-row"><span class="popup-label">From Home</span><span class="popup-value">${loc.distFromHome}</span></div>` : '',
         loc.distFromRudrapur ? `<div class="popup-row"><span class="popup-label">To Rudrapur</span><span class="popup-value">${loc.distFromRudrapur}</span></div>` : '',
@@ -612,7 +778,8 @@
         loc.crime            ? `<div class="popup-row"><span class="popup-label">Crime</span><span class="popup-value">${loc.crime}</span></div>` : '',
         loc.price            ? `<div class="popup-row"><span class="popup-label">Land Price</span><span class="popup-value">${loc.price}</span></div>` : '',
         loc.highway          ? `<div class="popup-row"><span class="popup-label">Highway</span><span class="popup-value">${loc.highway}</span></div>` : '',
-        loc.soil             ? `<div class="popup-row"><span class="popup-label">Soil</span><span class="popup-value">${loc.soil}</span></div>` : ''
+        loc.soil             ? `<div class="popup-row"><span class="popup-label">Soil</span><span class="popup-value">${loc.soil}</span></div>` : '',
+        cropsHtml
       ].join('');
 
       return `
@@ -624,13 +791,67 @@
       `;
     }
 
+    // ─── Crop view toggle ─────────────────────────────────────────────────────
+
+    const cropColours = {
+      '🌿 Turmeric':   { fill: '#eab308', border: '#a16207' },
+      '🍃 Lemongrass': { fill: '#22c55e', border: '#15803d' },
+      '🌸 Marigold':   { fill: '#f97316', border: '#c2410c' },
+      '🎋 Bamboo':     { fill: '#065f46', border: '#064e3b' },
+      '🎋 Sugarcane':  { fill: '#84cc16', border: '#4d7c0f' },
+      '🥦 Vegetables': { fill: '#06b6d4', border: '#0e7490' },
+      '🌾 Wheat':      { fill: '#d97706', border: '#92400e' },
+      '🥛 Dairy':      { fill: '#e2e8f0', border: '#94a3b8' },
+      '🌿 Tulsi':      { fill: '#4ade80', border: '#16a34a' },
+    };
+
+    let cropViewActive = false;
+
+    function makeCropIcon(loc, size) {
+      if (!loc.crops || !loc.crops.length) return makeIcon(loc.type, size);
+      const primary = loc.crops[0];
+      const c = cropColours[primary] || { fill: '#94a3b8', border: '#475569' };
+      const r = size || 10;
+      const emoji = primary.split(' ')[0];
+      return L.divIcon({
+        className: '',
+        html: `<div style="
+          width:${r*2+4}px; height:${r*2+4}px;
+          background:${c.fill};
+          border:2px solid ${c.border};
+          border-radius:50%;
+          box-shadow: 0 0 10px ${c.fill}88;
+          display:flex; align-items:center; justify-content:center;
+          font-size:${r}px; line-height:1;
+          cursor:pointer;
+        ">${emoji}</div>`,
+        iconSize: [r*2+4, r*2+4],
+        iconAnchor: [r+2, r+2]
+      });
+    }
+
+    function toggleCropView(btn) {
+      cropViewActive = !cropViewActive;
+      btn.classList.toggle('active', cropViewActive);
+      btn.textContent = cropViewActive ? '🌾 Crop View ON' : '🌾 Crop View';
+
+      allMarkers.forEach(({ marker, type, locRef }) => {
+        if (!map.hasLayer(marker)) return;
+        const size = type === 'home' ? 13 : (type === 'city' ? 9 : 10);
+        marker.setIcon(cropViewActive ? makeCropIcon(locRef, size) : makeIcon(type, size));
+      });
+
+      // update crop legend visibility
+      document.getElementById('crop-legend').style.display = cropViewActive ? 'flex' : 'none';
+    }
+
     locations.forEach(loc => {
       const size = loc.type === 'home' ? 13 : (loc.type === 'city' ? 9 : 10);
       const marker = L.marker([loc.lat, loc.lng], { icon: makeIcon(loc.type, size) })
         .addTo(map)
         .bindPopup(buildPopup(loc), { maxWidth: 300, minWidth: 240 });
 
-      allMarkers.push({ marker, type: loc.type, name: loc.name });
+      allMarkers.push({ marker, type: loc.type, name: loc.name, locRef: loc });
       if (!markerLayer[loc.type]) markerLayer[loc.type] = [];
       markerLayer[loc.type].push(marker);
     });
@@ -675,7 +896,8 @@
           ['Crime Level',   loc.crime],
           ['Land Price',    loc.price],
           ['Highway',       loc.highway],
-          ['Soil',          loc.soil]
+          ['Soil',          loc.soil],
+          ['Crops',         loc.crops && loc.crops.length ? loc.crops.join(' · ') : null]
         ].filter(r => r[1]).map(([k, v]) =>
           `<div class="score-row"><span>${k}</span><span>${v}</span></div>`
         ).join('');
