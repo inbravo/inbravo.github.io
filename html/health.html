@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Health Plan — Personal fitness, nutrition and exercise plan">
+  <meta name="author" content="Amit Dixit">
+  <link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+  <script src="../js/jquery-1.11.3.min.js"></script>
+  <script src="../js/csi.min.js"></script>
+  <script src="../js/inbravo.js"></script>
+  <title>Health Plan — InBravo</title>
+  <style>
+    .health-wrap {
+      max-width: 860px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+    }
+
+    .health-hero {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .health-hero h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .health-hero p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Section titles */
+    .h-section {
+      margin-bottom: 48px;
+    }
+
+    .h-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Profile stat cards */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 20px 16px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Rules */
+    .rules-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rules-list li {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-left: 3px solid var(--accent-purple);
+      border-radius: 8px;
+      padding: 14px 18px;
+      color: var(--text-primary);
+      font-size: 0.92rem;
+    }
+
+    .rules-list li span {
+      color: var(--accent-cyan);
+      font-weight: 600;
+      margin-right: 6px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Timeline */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .tl-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .tl-row:last-child {
+      border-bottom: none;
+    }
+
+    .tl-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      min-width: 72px;
+      padding-top: 2px;
+    }
+
+    .tl-text {
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .tl-text small {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      margin-top: 2px;
+    }
+
+    /* Meal cards */
+    .meal-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .meal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .meal-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent-purple);
+      min-width: 60px;
+      padding-top: 3px;
+    }
+
+    .meal-body h4 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .meal-body p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .meal-tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .tag-green { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
+    .tag-purple { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
+    .tag-cyan { background: rgba(34, 211, 238, 0.15); color: var(--accent-cyan); }
+
+    /* Swap table */
+    .swap-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .swap-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .swap-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .swap-table tr:last-child td { border-bottom: none; }
+
+    .swap-table td:first-child {
+      color: var(--accent-pink);
+      text-decoration: line-through;
+      text-decoration-color: rgba(236, 72, 153, 0.4);
+    }
+
+    .swap-table td:nth-child(2) {
+      color: var(--accent-green);
+    }
+
+    .swap-table td:nth-child(3) {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* Weekly schedule */
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+
+    .day-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .day-card.gym-day {
+      border-color: var(--accent-cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .day-card.run-day {
+      border-color: var(--accent-green);
+    }
+
+    .day-name {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .day-icon {
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+
+    .day-label {
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      line-height: 1.3;
+    }
+
+    .gym-day .day-label { color: var(--accent-cyan); }
+    .run-day .day-label { color: var(--accent-green); }
+
+    /* Gym session */
+    .gym-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .gym-block-header {
+      padding: 12px 18px;
+      background: rgba(34, 211, 238, 0.06);
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-cyan);
+    }
+
+    .exercise-list {
+      list-style: none;
+      padding: 8px 0;
+    }
+
+    .exercise-list li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .exercise-list li:last-child { border-bottom: none; }
+
+    .ex-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      min-width: 20px;
+    }
+
+    .ex-name {
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      flex: 1;
+    }
+
+    .ex-sets {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent-purple);
+    }
+
+    .ex-svg {
+      width: 62px;
+      height: 54px;
+      flex-shrink: 0;
+      opacity: 0.75;
+    }
+
+    .ex-img {
+      width: 62px;
+      height: 54px;
+      flex-shrink: 0;
+      object-fit: contain;
+      border-radius: 6px;
+      opacity: 0.85;
+      background: rgba(255,255,255,0.04);
+    }
+
+    @media (max-width: 480px) {
+      .ex-svg { width: 48px; height: 42px; }
+      .ex-img { width: 48px; height: 42px; }
+    }
+
+    /* Interval run */
+    .interval-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .interval-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.88rem;
+    }
+
+    .interval-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-green { background: var(--accent-green); }
+    .dot-cyan { background: var(--accent-cyan); }
+    .dot-purple { background: var(--accent-purple); }
+
+    .interval-row span { color: var(--text-secondary); }
+    .interval-row strong { color: var(--text-primary); }
+
+    /* Month cards */
+    .month-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .month-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .month-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+
+    .m1 .month-label { color: var(--accent-cyan); }
+    .m2 .month-label { color: var(--accent-purple); }
+    .m3 .month-label { color: var(--accent-pink); }
+
+    .month-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .month-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .month-card ul li {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.4;
+    }
+
+    .month-card ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 600px) {
+      .week-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .meal-card {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .health-hero h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="grid-bg"></div>
+  <div data-include="header.html"></div>
+
+  <div class="health-wrap">
+
+    <div class="health-hero">
+      <h1>Health Plan</h1>
+      <p>90 kg → 82 kg &nbsp;·&nbsp; 3 months &nbsp;·&nbsp; Amit Dixit</p>
+    </div>
+
+    <!-- Profile -->
+    <div class="h-section">
+      <div class="h-title">Profile</div>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value">47</div>
+          <div class="stat-label">Age</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">90 kg</div>
+          <div class="stat-label">Current weight</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">82 kg</div>
+          <div class="stat-label">Target weight</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">16 hrs</div>
+          <div class="stat-label">Overnight fast</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">110 g</div>
+          <div class="stat-label">Daily protein</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">1750</div>
+          <div class="stat-label">Daily calories</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rules -->
+    <div class="h-section">
+      <div class="h-title">The 3 Rules</div>
+      <ul class="rules-list">
+        <li><span>01</span> Every meal needs two protein sources — dal alone is not enough</li>
+        <li><span>02</span> Every fruit needs nuts alongside — never fruit alone</li>
+        <li><span>03</span> Never miss gym on Mon / Wed / Fri</li>
+      </ul>
+    </div>
+
+    <!-- Daily Timeline -->
+    <div class="h-section">
+      <div class="h-title">Daily Timeline</div>
+      <div class="timeline">
+        <div class="tl-row">
+          <div class="tl-time">7:30 am</div>
+          <div class="tl-text">Morning drink
+            <small>Ashwagandha + Amla + Cinnamon + ½ tsp honey only</small>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-time">9:00 am</div>
+          <div class="tl-text">Breakfast</div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-time">1:00 pm</div>
+          <div class="tl-text">Snack
+            <small>Only if hungry — fruit + almonds</small>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-time">5:00 pm</div>
+          <div class="tl-text">Dinner
+            <small>Last meal of the day — 16 hr fast begins</small>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-time">7:00 pm</div>
+          <div class="tl-text">Walk (6000 steps)
+            <small>Every day — leads into gym on Mon / Wed / Fri</small>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-time">7:15 pm</div>
+          <div class="tl-text">Pre-gym snack
+            <small>Gym days only — 15 almonds before the walk</small>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-time">8:00 pm</div>
+          <div class="tl-text">Gym
+            <small>Mon / Wed / Fri only</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meals -->
+    <div class="h-section">
+      <div class="h-title">What to Eat</div>
+      <div class="meal-grid">
+        <div class="meal-card">
+          <div class="meal-time">9:00 am</div>
+          <div class="meal-body">
+            <h4>Breakfast</h4>
+            <p>Greek yoghurt 200g + 1 cup milk + one of: Poha / Jave / 2 crumpets + 1 fruit + 15 almonds</p>
+            <span class="meal-tag tag-green">~35g protein</span>
+          </div>
+        </div>
+        <div class="meal-card">
+          <div class="meal-time">1:00 pm</div>
+          <div class="meal-body">
+            <h4>Snack — only if hungry</h4>
+            <p>1 apple or peach + 15 almonds</p>
+            <span class="meal-tag tag-cyan">optional</span>
+          </div>
+        </div>
+        <div class="meal-card">
+          <div class="meal-time">5:00 pm</div>
+          <div class="meal-body">
+            <h4>Dinner</h4>
+            <p>Paneer 150g + 1 cup dal + 1 roti + salad + vegetables</p>
+            <span class="meal-tag tag-purple">~42g protein</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Swaps -->
+    <div class="h-section">
+      <div class="h-title">3 Food Swaps</div>
+      <table class="swap-table">
+        <thead>
+          <tr>
+            <th>Stop</th>
+            <th>Switch to</th>
+            <th>Why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Regular yoghurt</td>
+            <td>Greek yoghurt (Fage / Chobani)</td>
+            <td>Nearly double the protein</td>
+          </tr>
+          <tr>
+            <td>Butter on crumpets</td>
+            <td>Paneer or cottage cheese spread</td>
+            <td>Replaces fat calories with protein</td>
+          </tr>
+          <tr>
+            <td>Fruit alone</td>
+            <td>Fruit + 15 almonds always</td>
+            <td>Stops blood sugar spike</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Weekly schedule -->
+    <div class="h-section">
+      <div class="h-title">Weekly Exercise</div>
+      <div class="week-grid">
+        <div class="day-card gym-day">
+          <div class="day-name">Mon</div>
+          <div class="day-icon">🏋️</div>
+          <div class="day-label">Walk 7pm<br>Gym 8pm</div>
+        </div>
+        <div class="day-card">
+          <div class="day-name">Tue</div>
+          <div class="day-icon">🚶</div>
+          <div class="day-label">Walk 7pm<br>6000 steps</div>
+        </div>
+        <div class="day-card gym-day">
+          <div class="day-name">Wed</div>
+          <div class="day-icon">🏋️</div>
+          <div class="day-label">Walk 7pm<br>Gym 8pm</div>
+        </div>
+        <div class="day-card">
+          <div class="day-name">Thu</div>
+          <div class="day-icon">🚶</div>
+          <div class="day-label">Walk 7pm<br>6000 steps</div>
+        </div>
+        <div class="day-card gym-day">
+          <div class="day-name">Fri</div>
+          <div class="day-icon">🏋️</div>
+          <div class="day-label">Walk 7pm<br>Gym 8pm</div>
+        </div>
+        <div class="day-card run-day">
+          <div class="day-name">Sat</div>
+          <div class="day-icon">🏃</div>
+          <div class="day-label">Intervals<br>12000 steps</div>
+        </div>
+        <div class="day-card">
+          <div class="day-name">Sun</div>
+          <div class="day-icon">🧘</div>
+          <div class="day-label">Easy walk<br>Rest</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gym session -->
+    <div class="h-section">
+      <div class="h-title">Gym Session — 45 mins</div>
+      <div class="gym-block">
+        <div class="gym-block-header">Warm-up</div>
+        <ul class="exercise-list">
+          <li>
+            <span class="ex-num">—</span>
+            <span class="ex-name">Hindu pushups</span>
+            <span class="ex-sets">×10</span>
+            <img class="ex-img" src="../images/health/hindu-pushup.gif" alt="Hindu pushups">
+          </li>
+          <li>
+            <span class="ex-num">—</span>
+            <span class="ex-name">Bodyweight squats</span>
+            <span class="ex-sets">×15</span>
+            <img class="ex-img" src="../images/health/squat.gif" alt="Bodyweight squats">
+          </li>
+        </ul>
+        <div class="gym-block-header">Main lifts</div>
+        <ul class="exercise-list">
+          <li>
+            <span class="ex-num">01</span>
+            <span class="ex-name">Goblet squat</span>
+            <span class="ex-sets">4 sets</span>
+            <img class="ex-img" src="../images/health/squat.gif" alt="Goblet squat">
+          </li>
+          <li>
+            <span class="ex-num">02</span>
+            <span class="ex-name">Romanian deadlift</span>
+            <span class="ex-sets">4 sets</span>
+            <img class="ex-img" src="../images/health/romanian-deadlift.png" alt="Romanian deadlift">
+          </li>
+          <li>
+            <span class="ex-num">03</span>
+            <span class="ex-name">Cable / dumbbell rows</span>
+            <span class="ex-sets">4 sets</span>
+            <img class="ex-img" src="../images/health/rows.png" alt="Cable rows">
+          </li>
+          <li>
+            <span class="ex-num">04</span>
+            <span class="ex-name">Dumbbell bench press</span>
+            <span class="ex-sets">4 sets</span>
+            <img class="ex-img" src="../images/health/bench-press.png" alt="Bench press">
+          </li>
+        </ul>
+        <div class="gym-block-header">Finish</div>
+        <ul class="exercise-list">
+          <li>
+            <span class="ex-num">05</span>
+            <span class="ex-name">Plank</span>
+            <span class="ex-sets">3 × 30 sec</span>
+            <img class="ex-img" src="../images/health/plank.jpg" alt="Plank">
+          </li>
+          <li>
+            <span class="ex-num">06</span>
+            <span class="ex-name">Bench dips</span>
+            <span class="ex-sets">3 sets</span>
+            <img class="ex-img" src="../images/health/bench-dips.png" alt="Bench dips">
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Interval run -->
+    <div class="h-section">
+      <div class="h-title">Saturday Interval Run — 20 mins</div>
+      <div class="interval-block">
+        <div class="interval-row">
+          <div class="interval-dot dot-green"></div>
+          <span><strong>3 min</strong> — brisk walk warm-up</span>
+        </div>
+        <div class="interval-row">
+          <div class="interval-dot dot-cyan"></div>
+          <span><strong>30 sec hard run → 90 sec walk</strong> — repeat ×8</span>
+        </div>
+        <div class="interval-row">
+          <div class="interval-dot dot-purple"></div>
+          <span><strong>2 min</strong> — cool-down walk</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3-month plan -->
+    <div class="h-section">
+      <div class="h-title">3-Month Plan</div>
+      <div class="month-grid">
+        <div class="month-card m1">
+          <div class="month-label">Month 1</div>
+          <h4>Build the habit</h4>
+          <ul>
+            <li>Learn gym exercises — form over weight</li>
+            <li>Cut alcohol to once a week</li>
+            <li>Hit protein target every day</li>
+            <li>Dinner by 5pm daily</li>
+          </ul>
+        </div>
+        <div class="month-card m2">
+          <div class="month-label">Month 2</div>
+          <h4>Add intensity</h4>
+          <ul>
+            <li>Increase weights on squat, deadlift, rows</li>
+            <li>Add one interval round (×9 then ×10)</li>
+            <li>Reduce rice / roti by 25%</li>
+            <li>Hold all habits from Month 1</li>
+          </ul>
+        </div>
+        <div class="month-card m3">
+          <div class="month-label">Month 3</div>
+          <h4>Push</h4>
+          <ul>
+            <li>Progressive overload every week</li>
+            <li>Add fasted morning walk on Tue / Thu</li>
+            <li>Measure waist — aim 2–4 cm reduction</li>
+            <li>Get blood panel done</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
