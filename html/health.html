@@ -363,9 +363,33 @@
       background: rgba(255,255,255,0.04);
     }
 
+    .ex-play {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      background: rgba(34, 211, 238, 0.08);
+      border: 1px solid rgba(34, 211, 238, 0.25);
+      border-radius: 20px;
+      padding: 3px 10px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .ex-play:hover {
+      background: rgba(34, 211, 238, 0.18);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
     @media (max-width: 480px) {
       .ex-svg { width: 48px; height: 42px; }
       .ex-img { width: 48px; height: 42px; }
+      .ex-play { display: none; }
     }
 
     /* Interval run */
@@ -685,12 +709,14 @@
             <span class="ex-num">—</span>
             <span class="ex-name">Hindu pushups</span>
             <span class="ex-sets">×10</span>
+            <a class="ex-play" href="https://www.youtube.com/watch?v=sfDdvDe9uEw" target="_blank">▶ Watch</a>
             <img class="ex-img" src="../images/health/hindu-pushup.gif" alt="Hindu pushups">
           </li>
           <li>
             <span class="ex-num">—</span>
             <span class="ex-name">Bodyweight squats</span>
             <span class="ex-sets">×15</span>
+            <a class="ex-play" href="https://www.youtube.com/watch?v=CKcDiJnLaLY" target="_blank">▶ Watch</a>
             <img class="ex-img" src="../images/health/squat.gif" alt="Bodyweight squats">
           </li>
         </ul>
@@ -700,24 +726,28 @@
             <span class="ex-num">01</span>
             <span class="ex-name">Goblet squat</span>
             <span class="ex-sets">4 sets</span>
+            <a class="ex-play" href="https://www.youtube.com/watch?v=BR4tlEE_A98" target="_blank">▶ Watch</a>
             <img class="ex-img" src="../images/health/squat.gif" alt="Goblet squat">
           </li>
           <li>
             <span class="ex-num">02</span>
             <span class="ex-name">Romanian deadlift</span>
             <span class="ex-sets">4 sets</span>
+            <a class="ex-play" href="https://www.youtube.com/watch?v=aa57T45iFSE" target="_blank">▶ Watch</a>
             <img class="ex-img" src="../images/health/romanian-deadlift.png" alt="Romanian deadlift">
           </li>
           <li>
             <span class="ex-num">03</span>
             <span class="ex-name">Cable / dumbbell rows</span>
             <span class="ex-sets">4 sets</span>
+            <a class="ex-play" href="https://www.youtube.com/watch?v=6TSP1TRMUzs" target="_blank">▶ Watch</a>
             <img class="ex-img" src="../images/health/rows.png" alt="Cable rows">
           </li>
           <li>
             <span class="ex-num">04</span>
             <span class="ex-name">Dumbbell bench press</span>
             <span class="ex-sets">4 sets</span>
+            <a class="ex-play" href="https://www.youtube.com/watch?v=xhEhjF5ozuY" target="_blank">▶ Watch</a>
             <img class="ex-img" src="../images/health/bench-press.png" alt="Bench press">
           </li>
         </ul>
@@ -727,12 +757,14 @@
             <span class="ex-num">05</span>
             <span class="ex-name">Plank</span>
             <span class="ex-sets">3 × 30 sec</span>
+            <a class="ex-play" href="https://www.youtube.com/watch?v=BjGVnfGk6j8" target="_blank">▶ Watch</a>
             <img class="ex-img" src="../images/health/plank.jpg" alt="Plank">
           </li>
           <li>
             <span class="ex-num">06</span>
             <span class="ex-name">Bench dips</span>
             <span class="ex-sets">3 sets</span>
+            <a class="ex-play" href="https://www.youtube.com/watch?v=iH16WFso6fo" target="_blank">▶ Watch</a>
             <img class="ex-img" src="../images/health/bench-dips.png" alt="Bench dips">
           </li>
         </ul>
