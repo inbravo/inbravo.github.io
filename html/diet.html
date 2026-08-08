@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Daily Diet Calculator — track calories and protein">
+  <meta name="author" content="Amit Dixit">
+  <link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+  <script src="../js/jquery-1.11.3.min.js"></script>
+  <script src="../js/csi.min.js"></script>
+  <script src="../js/inbravo.js"></script>
+  <title>Diet Calculator — InBravo</title>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FOOD DATABASE — edit this block to add / change foods
+       Columns: food_name, unit_label, calories, protein
+       unit_label = what "1 unit" means (e.g. "100g", "1 piece")
+       calories   = kcal per 1 unit
+       protein    = grams per 1 unit
+       ═══════════════════════════════════════════════════════════ -->
+  <script type="text/csv" id="food-data">
+food_name,unit_label,calories,protein
+Greek yoghurt (Fage / Chobani plain),100g,57,10
+Milk (full-fat),1 cup (240ml),149,8
+Milk (skimmed),1 cup (240ml),80,8
+Paneer,100g,265,18
+Paneer-Matar,100g,195,12
+Paneer tikka,100g,230,16
+Cottage cheese,100g,98,11
+Dal (cooked),1 cup,150,9
+Moong dal (cooked),1 cup,212,14
+Chana dal (cooked),1 cup,270,17
+Rajma / Kidney beans (cooked),1 cup,225,15
+Chickpeas / Choley (cooked),1 cup,270,15
+Curd / Dahi,1 cup,100,8
+Roti / Chapati,1 piece,70,3
+Pitta bread (white),1 piece,165,6
+Wholemeal pitta,1 piece,145,6
+Nan,1 piece,262,9
+Paratha,1 piece,200,4
+Puri,1 piece,75,2
+Bread slice (white),1 slice,80,3
+Bread slice (wholemeal),1 slice,70,3
+Tiger bloomer slice,1 slice,85,3
+Crumpet,1 piece,80,3
+Poha,1 plate (100g),110,2
+Jave / Broken wheat porridge,1 bowl (150g),130,5
+Dalia (broken wheat cooked),1 bowl,150,5
+Oats (cooked),1 cup,150,5
+Idli,1 piece,40,2
+Dosa (plain),1 piece,120,3
+Rice (cooked plain),1 cup,200,4
+Khichdi,1 bowl,200,7
+Subji / Vegetable curry,1 cup,120,3
+Sambhar,1 cup,80,4
+Mixed salad,1 cup,25,1.5
+Spinach (cooked),1 cup,41,5.4
+Broccoli (cooked),1 cup,55,3.7
+Green beans,100g,35,2
+Bell pepper,100g,31,1
+Cucumber,100g,16,0.7
+Carrot,100g,41,0.9
+Tomato,1 piece,22,1
+Apple,1 piece,95,0.5
+Peach,1 piece,60,1.5
+Grapes,1 cup,100,1
+Banana,1 piece,105,1.3
+Orange,1 piece,62,1.2
+Mango,1 cup,107,1.4
+Watermelon,1 cup,46,0.9
+Almonds,15g,87,3
+Walnuts,15g,98,2
+Peanut butter,1 tbsp,95,4
+Butter,1 tsp,35,0
+Ghee,1 tsp,45,0
+Honey,1 tsp,21,0
+Pickle,1 tsp,15,0
+Papad,1 piece,45,1
+Suji rusk,1 piece,65,1.5
+Tea with milk and sugar,1 cup,45,1
+Tea (black no sugar),1 cup,5,0
+Coffee with milk and sugar,1 cup,45,1
+Ashwagandha powder,1 tsp,6,0.3
+Amla / Indian gooseberry,1 piece,45,0.5
+Cinnamon,1 tsp,6,0
+Protein powder (whey),1 scoop (30g),120,24
+Beer,1 pint (330ml),180,2
+Wine (red),1 glass (150ml),125,0
+Whisky / Spirits,1 shot (30ml),65,0
+  </script>
+
+  <style>
+    .diet-wrap {
+      max-width: 800px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+    }
+
+    .diet-hero {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .diet-hero h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
+
+    .diet-hero p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Daily summary */
+    .summary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .summary-item label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .summary-numbers {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .summary-current {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      line-height: 1;
+    }
+
+    .summary-target {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: var(--border-color);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-kcal { background: var(--accent-cyan); }
+    .progress-protein { background: var(--accent-purple); }
+    .progress-over { background: var(--accent-pink); }
+
+    .summary-item:nth-child(2) .summary-current { color: var(--accent-purple); }
+
+    /* Section title */
+    .d-title {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Meal card */
+    .meal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .meal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: rgba(34, 211, 238, 0.04);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .meal-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-cyan);
+    }
+
+    .meal-subtotal {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .meal-subtotal span {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    /* Add food row */
+    .add-row {
+      display: flex;
+      gap: 8px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-color);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .food-select {
+      flex: 1;
+      min-width: 180px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-primary);
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .food-select:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    .qty-input {
+      width: 70px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-primary);
+      padding: 8px 10px;
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      outline: none;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .qty-input:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    .add-btn {
+      background: rgba(34, 211, 238, 0.1);
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      border-radius: 8px;
+      color: var(--accent-cyan);
+      padding: 8px 16px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .add-btn:hover {
+      background: rgba(34, 211, 238, 0.2);
+      border-color: var(--accent-cyan);
+    }
+
+    /* Food items table */
+    .food-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .food-table th {
+      text-align: left;
+      padding: 8px 18px;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .food-table th:last-child,
+    .food-table td:last-child {
+      text-align: center;
+      width: 36px;
+    }
+
+    .food-table th.num,
+    .food-table td.num {
+      text-align: right;
+    }
+
+    .food-table td {
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      vertical-align: middle;
+    }
+
+    .food-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .food-table td.name {
+      color: var(--text-primary);
+    }
+
+    .food-table td.qty {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .food-table td.kcal {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--accent-cyan);
+    }
+
+    .food-table td.prot {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--accent-purple);
+    }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: var(--transition);
+      line-height: 1;
+    }
+
+    .remove-btn:hover {
+      color: var(--accent-pink);
+      background: rgba(236, 72, 153, 0.1);
+    }
+
+    /* Empty state */
+    .empty-row td {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      padding: 18px;
+      font-style: italic;
+    }
+
+    /* Meal total row */
+    .meal-total-row td {
+      background: rgba(255,255,255,0.02);
+      font-weight: 600;
+      border-top: 1px solid var(--border-color) !important;
+      border-bottom: none !important;
+    }
+
+    .meal-total-row td.kcal { color: var(--accent-cyan); }
+    .meal-total-row td.prot { color: var(--accent-purple); }
+
+    /* Reset + Export row */
+    .actions-row {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    .action-btn {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-family: 'Inter', sans-serif;
+      transition: var(--transition);
+    }
+
+    .action-btn:hover {
+      border-color: var(--text-muted);
+      color: var(--text-primary);
+    }
+
+    .action-btn.export {
+      border-color: rgba(34, 211, 238, 0.3);
+      color: var(--accent-cyan);
+      background: rgba(34, 211, 238, 0.06);
+    }
+
+    .action-btn.export:hover {
+      background: rgba(34, 211, 238, 0.14);
+      border-color: var(--accent-cyan);
+    }
+
+    .action-btn.reset {
+      border-color: rgba(236, 72, 153, 0.3);
+      color: var(--accent-pink);
+      background: rgba(236, 72, 153, 0.06);
+    }
+
+    .action-btn.reset:hover {
+      background: rgba(236, 72, 153, 0.14);
+      border-color: var(--accent-pink);
+    }
+
+    /* Custom food row */
+    .custom-row {
+      display: flex;
+      gap: 8px;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border-color);
+      align-items: center;
+      flex-wrap: wrap;
+      background: rgba(168, 85, 247, 0.03);
+    }
+
+    .custom-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-purple);
+      white-space: nowrap;
+    }
+
+    .custom-name {
+      flex: 2;
+      min-width: 120px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-primary);
+      padding: 7px 10px;
+      font-size: 0.82rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+    }
+
+    .custom-name:focus { border-color: var(--accent-purple); }
+
+    .custom-num {
+      width: 68px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-primary);
+      padding: 7px 8px;
+      font-size: 0.82rem;
+      font-family: 'JetBrains Mono', monospace;
+      outline: none;
+      text-align: center;
+    }
+
+    .custom-num:focus { border-color: var(--accent-purple); }
+
+    .custom-add-btn {
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 8px;
+      color: var(--accent-purple);
+      padding: 7px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .custom-add-btn:hover {
+      background: rgba(168, 85, 247, 0.2);
+      border-color: var(--accent-purple);
+    }
+
+    @media (max-width: 580px) {
+      .summary-row { grid-template-columns: 1fr; }
+      .add-row { flex-wrap: wrap; }
+      .food-select { min-width: 100%; }
+      .food-table th.qty-h,
+      .food-table td.qty { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grid-bg"></div>
+  <div data-include="header.html"></div>
+
+  <div class="diet-wrap">
+
+    <div class="diet-hero">
+      <h1>Diet Calculator</h1>
+      <p>Select foods, enter quantities — totals update instantly</p>
+    </div>
+
+    <!-- Daily summary -->
+    <div class="summary-card">
+      <div class="summary-row">
+        <div class="summary-item">
+          <label>Calories today</label>
+          <div class="summary-numbers">
+            <span class="summary-current" id="total-kcal">0</span>
+            <span class="summary-target">/ 1750 kcal</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill progress-kcal" id="bar-kcal" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="summary-item">
+          <label>Protein today</label>
+          <div class="summary-numbers">
+            <span class="summary-current" id="total-protein">0</span>
+            <span class="summary-target">/ 110 g</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill progress-protein" id="bar-protein" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meals -->
+    <div class="d-title">Meals</div>
+
+    <!-- Breakfast -->
+    <div class="meal-card" id="card-breakfast">
+      <div class="meal-header">
+        <span class="meal-title">Breakfast &nbsp;·&nbsp; 9:00 am</span>
+        <span class="meal-subtotal">
+          <span id="sub-kcal-breakfast">0</span><span style="color:var(--text-muted)"> / 500</span> kcal &nbsp;·&nbsp;
+          <span id="sub-prot-breakfast">0</span>g protein
+        </span>
+      </div>
+      <div class="add-row">
+        <select class="food-select" id="sel-breakfast"></select>
+        <input class="qty-input" id="qty-breakfast" type="number" value="1" min="0.1" step="0.1">
+        <button class="add-btn" onclick="addFood('breakfast')">+ Add</button>
+      </div>
+      <div class="custom-row">
+        <span class="custom-label">Custom</span>
+        <input class="custom-name" id="cname-breakfast" type="text" placeholder="Food name">
+        <input class="custom-num" id="ckcal-breakfast" type="number" placeholder="kcal" min="0">
+        <input class="custom-num" id="cprot-breakfast" type="number" placeholder="protein g" min="0" step="0.1">
+        <button class="custom-add-btn" onclick="addCustom('breakfast')">+ Add</button>
+      </div>
+      <table class="food-table">
+        <thead>
+          <tr>
+            <th>Food</th>
+            <th class="qty-h">Qty × Unit</th>
+            <th class="num">kcal</th>
+            <th class="num">Protein</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tbody-breakfast">
+          <tr class="empty-row"><td colspan="5">No foods added yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Snack -->
+    <div class="meal-card" id="card-snack">
+      <div class="meal-header">
+        <span class="meal-title">Snack &nbsp;·&nbsp; 1:00 pm &nbsp;·&nbsp; <em style="font-weight:400;color:var(--text-muted)">only if hungry</em></span>
+        <span class="meal-subtotal">
+          <span id="sub-kcal-snack">0</span><span style="color:var(--text-muted)"> / 250</span> kcal &nbsp;·&nbsp;
+          <span id="sub-prot-snack">0</span>g protein
+        </span>
+      </div>
+      <div class="add-row">
+        <select class="food-select" id="sel-snack"></select>
+        <input class="qty-input" id="qty-snack" type="number" value="1" min="0.1" step="0.1">
+        <button class="add-btn" onclick="addFood('snack')">+ Add</button>
+      </div>
+      <div class="custom-row">
+        <span class="custom-label">Custom</span>
+        <input class="custom-name" id="cname-snack" type="text" placeholder="Food name">
+        <input class="custom-num" id="ckcal-snack" type="number" placeholder="kcal" min="0">
+        <input class="custom-num" id="cprot-snack" type="number" placeholder="protein g" min="0" step="0.1">
+        <button class="custom-add-btn" onclick="addCustom('snack')">+ Add</button>
+      </div>
+      <table class="food-table">
+        <thead>
+          <tr>
+            <th>Food</th>
+            <th class="qty-h">Qty × Unit</th>
+            <th class="num">kcal</th>
+            <th class="num">Protein</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tbody-snack">
+          <tr class="empty-row"><td colspan="5">No foods added yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Dinner -->
+    <div class="meal-card" id="card-dinner">
+      <div class="meal-header">
+        <span class="meal-title">Dinner &nbsp;·&nbsp; 5:00 pm</span>
+        <span class="meal-subtotal">
+          <span id="sub-kcal-dinner">0</span><span style="color:var(--text-muted)"> / 1000</span> kcal &nbsp;·&nbsp;
+          <span id="sub-prot-dinner">0</span>g protein
+        </span>
+      </div>
+      <div class="add-row">
+        <select class="food-select" id="sel-dinner"></select>
+        <input class="qty-input" id="qty-dinner" type="number" value="1" min="0.1" step="0.1">
+        <button class="add-btn" onclick="addFood('dinner')">+ Add</button>
+      </div>
+      <div class="custom-row">
+        <span class="custom-label">Custom</span>
+        <input class="custom-name" id="cname-dinner" type="text" placeholder="Food name">
+        <input class="custom-num" id="ckcal-dinner" type="number" placeholder="kcal" min="0">
+        <input class="custom-num" id="cprot-dinner" type="number" placeholder="protein g" min="0" step="0.1">
+        <button class="custom-add-btn" onclick="addCustom('dinner')">+ Add</button>
+      </div>
+      <table class="food-table">
+        <thead>
+          <tr>
+            <th>Food</th>
+            <th class="qty-h">Qty × Unit</th>
+            <th class="num">kcal</th>
+            <th class="num">Protein</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tbody-dinner">
+          <tr class="empty-row"><td colspan="5">No foods added yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions-row">
+      <button class="action-btn reset" onclick="resetAll()">Reset day</button>
+      <button class="action-btn export" onclick="exportCSV()">Export food list</button>
+    </div>
+
+  </div>
+
+  <script>
+    const TARGETS = { kcal: 1750, protein: 110 };
+    const MEAL_KCAL = { breakfast: 500, snack: 250, dinner: 1000 };
+    const meals = ['breakfast', 'snack', 'dinner'];
+    let foods = [];
+    let mealItems = { breakfast: [], snack: [], dinner: [] };
+
+    // ── Parse embedded CSV ──────────────────────────────────────
+    function parseCSV(text) {
+      const lines = text.trim().split('\n').filter(l => l.trim() && !l.startsWith('//'));
+      const headers = lines[0].split(',').map(h => h.trim());
+      return lines.slice(1).map(line => {
+        const vals = line.split(',').map(v => v.trim());
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = vals[i] || '');
+        obj.calories = parseFloat(obj.calories) || 0;
+        obj.protein  = parseFloat(obj.protein)  || 0;
+        return obj;
+      }).filter(f => f.food_name);
+    }
+
+    // ── Populate selects ────────────────────────────────────────
+    function populateSelects() {
+      meals.forEach(meal => {
+        const sel = document.getElementById('sel-' + meal);
+        sel.innerHTML = foods.map((f, i) =>
+          `<option value="${i}">${f.food_name} (${f.unit_label})</option>`
+        ).join('');
+      });
+    }
+
+    // ── Add food to meal ────────────────────────────────────────
+    function addFood(meal) {
+      const sel = document.getElementById('sel-' + meal);
+      const qty = parseFloat(document.getElementById('qty-' + meal).value) || 1;
+      const idx = parseInt(sel.value);
+      const food = foods[idx];
+      if (!food) return;
+      mealItems[meal].push({
+        name: food.food_name,
+        unit: food.unit_label,
+        qty: qty,
+        kcal: Math.round(food.calories * qty),
+        protein: Math.round(food.protein * qty * 10) / 10
+      });
+      document.getElementById('qty-' + meal).value = 1;
+      render(meal);
+      updateTotals();
+    }
+
+    // ── Remove food ─────────────────────────────────────────────
+    function removeFood(meal, idx) {
+      mealItems[meal].splice(idx, 1);
+      render(meal);
+      updateTotals();
+    }
+
+    // ── Render meal table ───────────────────────────────────────
+    function render(meal) {
+      const tbody = document.getElementById('tbody-' + meal);
+      const items = mealItems[meal];
+      if (!items.length) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No foods added yet</td></tr>';
+        document.getElementById('sub-kcal-' + meal).textContent = '0';
+        document.getElementById('sub-prot-' + meal).textContent = '0';
+        return;
+      }
+      const totalKcal = items.reduce((s, i) => s + i.kcal, 0);
+      const totalProt = Math.round(items.reduce((s, i) => s + i.protein, 0) * 10) / 10;
+
+      tbody.innerHTML = items.map((item, i) => `
+        <tr>
+          <td class="name">${item.name}</td>
+          <td class="qty">${item.qty} × ${item.unit}</td>
+          <td class="kcal num">${item.kcal}</td>
+          <td class="prot num">${item.protein}g</td>
+          <td><button class="remove-btn" onclick="removeFood('${meal}', ${i})">×</button></td>
+        </tr>
+      `).join('') + `
+        <tr class="meal-total-row">
+          <td colspan="2" style="color:var(--text-muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.06em">Meal total</td>
+          <td class="kcal num">${totalKcal}</td>
+          <td class="prot num">${totalProt}g</td>
+          <td></td>
+        </tr>
+      `;
+
+      const subKcalEl = document.getElementById('sub-kcal-' + meal);
+      subKcalEl.textContent = totalKcal;
+      subKcalEl.style.color = totalKcal > MEAL_KCAL[meal] ? 'var(--accent-pink)' : 'var(--text-secondary)';
+      document.getElementById('sub-prot-' + meal).textContent = totalProt;
+    }
+
+    // ── Update daily totals ─────────────────────────────────────
+    function updateTotals() {
+      let totalKcal = 0, totalProt = 0;
+      meals.forEach(meal => {
+        totalKcal += mealItems[meal].reduce((s, i) => s + i.kcal, 0);
+        totalProt += mealItems[meal].reduce((s, i) => s + i.protein, 0);
+      });
+      totalProt = Math.round(totalProt * 10) / 10;
+
+      document.getElementById('total-kcal').textContent = totalKcal;
+      document.getElementById('total-protein').textContent = totalProt;
+
+      const kcalPct = Math.min((totalKcal / TARGETS.kcal) * 100, 100);
+      const protPct = Math.min((totalProt / TARGETS.protein) * 100, 100);
+      const kcalOver = totalKcal > TARGETS.kcal;
+      const protOver = totalProt > TARGETS.protein;
+
+      const barKcal = document.getElementById('bar-kcal');
+      barKcal.style.width = kcalPct + '%';
+      barKcal.className = 'progress-fill ' + (kcalOver ? 'progress-over' : 'progress-kcal');
+
+      const barProt = document.getElementById('bar-protein');
+      barProt.style.width = protPct + '%';
+      barProt.className = 'progress-fill ' + (protOver ? 'progress-over' : 'progress-protein');
+    }
+
+    // ── Add custom food ─────────────────────────────────────────
+    function addCustom(meal) {
+      const name = document.getElementById('cname-' + meal).value.trim();
+      const kcal = parseFloat(document.getElementById('ckcal-' + meal).value) || 0;
+      const prot = parseFloat(document.getElementById('cprot-' + meal).value) || 0;
+      if (!name || (!kcal && !prot)) return;
+      mealItems[meal].push({ name, unit: 'custom', qty: 1, kcal: Math.round(kcal), protein: prot });
+      document.getElementById('cname-' + meal).value = '';
+      document.getElementById('ckcal-' + meal).value = '';
+      document.getElementById('cprot-' + meal).value = '';
+      render(meal);
+      updateTotals();
+    }
+
+    // ── Reset all ───────────────────────────────────────────────
+    function resetAll() {
+      if (!confirm('Clear all foods for today?')) return;
+      meals.forEach(meal => {
+        mealItems[meal] = [];
+        render(meal);
+      });
+      updateTotals();
+    }
+
+    // ── Export food list as CSV ─────────────────────────────────
+    function exportCSV() {
+      const header = 'food_name,unit_label,calories,protein';
+      const rows = foods.map(f =>
+        `${f.food_name},${f.unit_label},${f.calories},${f.protein}`
+      );
+      const blob = new Blob([header + '\n' + rows.join('\n')], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'foods.csv';
+      a.click();
+    }
+
+    // ── Boot ────────────────────────────────────────────────────
+    const raw = document.getElementById('food-data').textContent;
+    foods = parseCSV(raw).sort((a, b) => a.food_name.localeCompare(b.food_name));
+    populateSelects();
+    updateTotals();
+  </script>
+
+</body>
+</html>
