@@ -180,7 +180,9 @@ a{color:var(--accent);text-decoration:none}
   <a href="https://www.bankofengland.co.uk/prudential-regulation/publication/2021/march/operational-resilience-ss" target="_blank" rel="noopener">PRA SS1/21 Op. Resilience</a> ·
   <a href="https://www.bis.org/publ/bcbs239.htm" target="_blank" rel="noopener">BCBS 239</a> ·
   <a href="https://www.eba.europa.eu/regulation-and-policy/single-rulebook/interactive-single-rulebook/crr3" target="_blank" rel="noopener">CRR3 / Basel IV</a> ·
-  <a href="https://www.finma.ch/en/finma-public/circulars/2023/circular-2023-01/" target="_blank" rel="noopener">FINMA Circular 2023/01</a>
+  <a href="https://www.finma.ch/en/finma-public/circulars/2023/circular-2023-01/" target="_blank" rel="noopener">FINMA Circular 2023/01</a> ·
+  <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1689" target="_blank" rel="noopener">EU AI Act (EU 2024/1689)</a> ·
+  <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32022L2464" target="_blank" rel="noopener">CSRD (EU 2022/2464)</a>
 </div>
 
 <script>
@@ -497,9 +499,67 @@ COUNTRIES.forEach(c=>{
   grid.appendChild(div);
 });
 
+// ── EU AI ACT scores by country ────────────────────────
+const AI_ACT={
+  UK:{score:2,note:'FCA/PRA AI governance guidance (non-legislative) — sector regulators reviewing AI model risk for credit, insurance, and employment decisions',own:'FCA framework'},
+  DE:{score:4,note:'BaFin proactive — high-risk AI for credit scoring, insurance pricing, and employment in scope; Aug 2026 obligations now active across Deutsche Bank, Allianz, and peers'},
+  NL:{score:3,note:'DNB actively supervising AI model risk — ING, Aegon, and Rabobank credit and insurance AI systems directly in scope'},
+  FR:{score:3,note:'ACPR/AMF building AI governance — BNP Paribas and AXA have large credit-scoring AI estates in scope; CNIL adds data governance dimension'},
+  CH:{score:2,note:'FINMA AI guidance developing — Swiss firms self-regulating ahead of formal requirements; not directly subject to EU AI Act',own:'FINMA guidance'},
+  IE:{score:3,note:'CBI expects AI governance for EU-booked entities — Ireland hosts EU AI operations of major US and UK financial groups in scope'},
+  SE:{score:3,note:'Finansinspektionen proactive on model risk — SEB and Swedbank credit scoring and insurance pricing AI systems in scope'},
+  BE:{score:2,note:'NBB/FSMA expectations developing — KBC and Ageas building AI governance capability for in-scope credit and insurance AI'},
+  DK:{score:2,note:'Finanstilsynet supervising AI model risk — Danske Bank credit scoring models are in scope; enforcement building'},
+  ES:{score:2,note:'Banco de España / CNMV — Santander and BBVA global AI estates create in-scope exposure; domestic enforcement developing'},
+  IT:{score:2,note:'Banca d\'Italia — UniCredit and Intesa Sanpaolo have significant credit-scoring AI estates; compliance pace developing'},
+  NO:{score:1,note:'EEA adoption pending — substantive obligations expected with 6-12 month delay; Norwegian firms preparing',own:'EEA (pending)'},
+  FI:{score:2,note:'FIN-FSA — moderate posture; Nordea Finland and OP Financial credit AI in scope once adopted'},
+  AT:{score:2,note:'FMA — Erste Group and Raiffeisen have credit scoring AI across CEE jurisdictions; cross-border in-scope exposure'},
+  PL:{score:1,note:'KNF — enforcement capability developing; Polish banks building AI governance for credit scoring systems'},
+  CZ:{score:1,note:'ČNB — early stage; primarily affects foreign-owned subsidiaries whose parent regulators drive AI Act compliance'},
+  PT:{score:1,note:'Banco de Portugal — limited enforcement; Millennium BCP and Caixa Geral building AI compliance'},
+};
+
+// ── CSRD scores by country ──────────────────────────────
+const CSRD={
+  UK:{score:3,note:'FCA Sustainability Disclosure Requirements (SDR) + TCFD mandatory for listed firms — ESG data lineage now requires same audit-grade quality as financial data',own:'FCA SDR'},
+  DE:{score:4,note:'Wave 1 active — Deutsche Bank, Allianz, Deutsche Telekom in scope; double materiality requires ESG data aggregation infrastructure at financial-reporting quality'},
+  NL:{score:4,note:'Wave 1 active — ING, ABN AMRO, Aegon in scope; Dutch firms advanced on ESG culture but now face audit-grade data quality requirements on legacy DW/BI'},
+  FR:{score:4,note:'Wave 1 active — BNP Paribas, AXA, Crédit Agricole in scope; France already had NFRD; CSRD adds double materiality and assurance — ESG data must be auditable'},
+  CH:{score:2,note:'Swiss Code of Obligations ESG reporting + TCFD for listed — UBS and Swiss Re voluntarily CSRD-aligned; audit-grade ESG data requirement building',own:'Swiss SER'},
+  IE:{score:3,note:'Wave 1/2 active for EU-listed and subsidiary-headquartered firms — ESG data aggregation pressure on legacy BI infrastructure across Ireland-based entities'},
+  SE:{score:3,note:'Wave 1 active — SEB, Swedbank, Handelsbanken in scope; Nordic ESG leadership does not exempt from audit-grade ESG data infrastructure requirement'},
+  BE:{score:3,note:'Wave 1 active — KBC and Ageas in scope; double materiality assessment requires robust ESG data pipelines from legacy reporting systems'},
+  DK:{score:3,note:'Wave 1 active — Danske Bank and Nordea in scope; ESG data must meet audit quality — legacy Informatica and Cloudera pipes under pressure'},
+  ES:{score:2,note:'Wave 1/2 — Santander, BBVA, Telefónica in scope; ESG data aggregation across global operations via legacy reporting infrastructure'},
+  IT:{score:2,note:'Wave 1/2 — UniCredit, Intesa Sanpaolo, Generali in scope; ESG data quality uplift required; legacy SAS and DataStage pipes need governance overlay'},
+  NO:{score:2,note:'EEA adoption expected — Norwegian firms voluntarily CSRD-aligned; Storebrand and DNB among most advanced on ESG data in Nordics',own:'EEA (aligned)'},
+  FI:{score:2,note:'Wave 1/2 — Nordea Finland, OP Financial in scope; ESG data quality requirements hitting legacy BI platforms'},
+  AT:{score:2,note:'Wave 1/2 — Erste Group, Raiffeisen in scope across CEE; cross-border ESG data aggregation adds complexity to legacy infrastructure'},
+  PL:{score:1,note:'Wave 2/3 — Polish listed companies coming into scope; ESG data capability largely undeveloped on legacy infrastructure'},
+  CZ:{score:1,note:'Wave 3 — primarily affects foreign-owned subsidiaries; parent group CSRD obligations drive trickle-down data requirements'},
+  PT:{score:1,note:'Wave 2/3 — Millennium BCP and Caixa Geral coming into scope; ESG data infrastructure early stage'},
+};
+
 // ── CHIP HELPER ────────────────────────────────────────
 function chip(label, type){
   return `<span class="chip chip-${type||'dw'}">${label}</span>`;
+}
+
+function regRow(name, score, note, own){
+  return `
+    <div class="reg-row">
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem">
+          <span class="reg-name">${name}</span>
+          ${own?`<span class="reg-na-tag">${own}</span>`:''}
+          <div class="reg-dots">
+            ${[1,2,3,4].map(i=>`<div class="reg-dot${i<=score?' on':''}"></div>`).join('')}
+          </div>
+        </div>
+        <div class="reg-note">${note}</div>
+      </div>
+    </div>`;
 }
 
 // ── SELECT COUNTRY ─────────────────────────────────────
@@ -511,6 +571,9 @@ function selectCountry(code){
   // Update tile active state
   document.querySelectorAll('.tile').forEach(t=>t.classList.toggle('active',t.dataset.code===code));
   selected=code;
+
+  const aiact=AI_ACT[code]||{score:0,note:'Not applicable'};
+  const csrd=CSRD[code]||{score:0,note:'Not applicable'};
 
   // ── REGULATORY PANEL ──
   const placeholder=document.getElementById('reg-placeholder');
@@ -530,20 +593,9 @@ function selectCountry(code){
     </div>
     <div class="panel-label">Regulation breakdown</div>
     <div class="reg-rows">
-      ${c.regs.map(r=>`
-        <div class="reg-row">
-          <div style="flex:1">
-            <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem">
-              <span class="reg-name">${r.name}</span>
-              ${r.applies===false?`<span class="reg-na-tag">${r.own}</span>`:''}
-              <div class="reg-dots">
-                ${[1,2,3,4].map(i=>`<div class="reg-dot${i<=r.score?' on':''}"></div>`).join('')}
-              </div>
-            </div>
-            <div class="reg-note">${r.note}</div>
-          </div>
-        </div>
-      `).join('')}
+      ${c.regs.map(r=>regRow(r.name,r.score,r.note,r.own)).join('')}
+      ${regRow('EU AI Act',aiact.score,aiact.note,aiact.own)}
+      ${regRow('CSRD',csrd.score,csrd.note,csrd.own)}
     </div>
     <div class="context-box">${c.context}</div>
   `;
