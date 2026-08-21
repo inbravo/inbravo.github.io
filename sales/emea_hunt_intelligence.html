@@ -1204,7 +1204,6 @@ function buildHeatmap(){
       cell.className=`hm-cell heat-${val}`;
       cell.title=`${PLAT_NAMES[id]} · ${reg} · Intensity: ${['None','Low','Medium','High','Very High'][val]}`;
       cell.dataset.tech=PLAT_NAMES[id];cell.dataset.region=reg;
-      if(val>0) cell.textContent=val;
       cell.addEventListener('click',()=>{
         document.getElementById('f-tech').value=cell.dataset.tech;
         document.getElementById('f-region').value='';
