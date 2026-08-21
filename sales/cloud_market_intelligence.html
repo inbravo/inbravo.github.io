@@ -163,11 +163,11 @@ a{color:var(--accent);text-decoration:none}
 <div class="stats-strip">
   <div class="stat-card">
     <div class="stat-n teal">Databricks</div>
-    <div class="stat-l">leading data platform in 14 of 17 EMEA markets — wins the analytics layer regardless of cloud provider choice</div>
+    <div class="stat-l">confirmed in 12 of 17 EMEA markets — wins the analytics layer regardless of whether the enterprise chose AWS, Azure, or GCP</div>
   </div>
   <div class="stat-card">
-    <div class="stat-n sky">AWS + Azure</div>
-    <div class="stat-l">two-cloud duopoly across EMEA FS — GCP leads in exactly 1 market (Spain / BBVA)</div>
+    <div class="stat-n sky">Azure leads</div>
+    <div class="stat-l">dominant cloud in 9 of 17 FS markets — GCP surging: Deutsche Bank, UniCredit, Intesa Sanpaolo, Deutsche Telekom all committed 2024–26</div>
   </div>
   <div class="stat-card">
     <div class="stat-n indigo">UK · NL · SE · DK</div>
@@ -224,52 +224,52 @@ const COUNTRIES=[
     platforms:{databricks:4, snowflake:2, fabric:3},
     signals:[
       {name:'Barclays',     cloud:'aws',              platform:'databricks'},
-      {name:'Lloyds',       clouds:['aws','gcp'],      platform:'databricks'},
-      {name:'HSBC',         clouds:['gcp','azure'],    platform:'databricks'},
-      {name:'BT Group',     cloud:'aws',              platform:null},
-      {name:'Aviva',        cloud:'azure',            platform:null},
+      {name:'Lloyds',       clouds:['gcp','azure'],          platform:'databricks'},
+      {name:'HSBC',         clouds:['gcp','aws','azure'],    platform:'databricks'},
+      {name:'BT Group',     cloud:'aws',                     platform:null},
+      {name:'Aviva',        clouds:['aws'],                  platform:'snowflake'},
     ]
   },
   {
     code:'DE', name:'Germany', flag:'🇩🇪', score:3, col:5, row:3,
-    clouds:{aws:4, azure:3, gcp:2},
-    platforms:{databricks:4, snowflake:2, fabric:2},
+    clouds:{aws:2, azure:3, gcp:4},
+    platforms:{databricks:2, snowflake:2, fabric:2},
     signals:[
-      {name:'Deutsche Bank',    cloud:'aws',   platform:'databricks'},
-      {name:'Allianz',          cloud:'aws',   platform:'databricks'},
-      {name:'Commerzbank',      cloud:'azure', platform:null},
-      {name:'Deutsche Telekom', cloud:'aws',   platform:null},
+      {name:'Deutsche Bank',    cloud:'gcp',              platform:null},
+      {name:'Allianz',          cloud:'aws',              platform:'databricks'},
+      {name:'Commerzbank',      clouds:['gcp','azure'],   platform:null},
+      {name:'Deutsche Telekom', cloud:'gcp',              platform:null},
     ]
   },
   {
     code:'NL', name:'Netherlands', flag:'🇳🇱', score:4, col:4, row:3,
-    clouds:{aws:4, azure:3, gcp:1},
+    clouds:{aws:2, azure:4, gcp:3},
     platforms:{databricks:4, snowflake:2, fabric:2},
     signals:[
-      {name:'ING Group',  cloud:'aws',   platform:'databricks'},
-      {name:'Aegon',      cloud:'aws',   platform:'databricks'},
-      {name:'ABN AMRO',   cloud:'azure', platform:null},
-      {name:'Rabobank',   cloud:'azure', platform:null},
+      {name:'ING Group',  clouds:['azure','gcp'],   platform:'databricks'},
+      {name:'Aegon',      cloud:'aws',              platform:'databricks'},
+      {name:'ABN AMRO',   cloud:'azure',            platform:'databricks'},
+      {name:'Rabobank',   cloud:'azure',            platform:'databricks'},
     ]
   },
   {
     code:'FR', name:'France', flag:'🇫🇷', score:3, col:4, row:5,
-    clouds:{aws:4, azure:3, gcp:2},
-    platforms:{databricks:4, snowflake:2, fabric:2},
+    clouds:{aws:3, azure:3, gcp:1},
+    platforms:{databricks:2, snowflake:2, fabric:2},
     signals:[
-      {name:'BNP Paribas',      cloud:'aws',   platform:'databricks'},
-      {name:'Société Générale', cloud:'aws',   platform:null},
-      {name:'AXA',              cloud:'azure', platform:'snowflake'},
-      {name:'Orange',           cloud:'aws',   platform:null},
+      {name:'BNP Paribas',      cloud:'aws',              platform:null},
+      {name:'Société Générale', clouds:['aws','azure'],    platform:null},
+      {name:'AXA',              cloud:'azure',            platform:'snowflake'},
+      {name:'Orange',           cloud:'aws',              platform:null},
     ]
   },
   {
     code:'CH', name:'Switzerland', flag:'🇨🇭', score:3, col:5, row:4,
-    clouds:{aws:3, azure:4, gcp:1},
-    platforms:{databricks:3, snowflake:3, fabric:2},
+    clouds:{aws:1, azure:4, gcp:1},
+    platforms:{databricks:2, snowflake:3, fabric:2},
     signals:[
       {name:'UBS',       cloud:'azure', platform:null},
-      {name:'Swiss Re',  cloud:'aws',   platform:'databricks'},
+      {name:'Swiss Re',  cloud:'azure', platform:null},
       {name:'Swiss Life',cloud:'azure', platform:null},
     ]
   },
@@ -297,51 +297,51 @@ const COUNTRIES=[
   {
     code:'BE', name:'Belgium', flag:'🇧🇪', score:3, col:4, row:4,
     clouds:{aws:3, azure:4, gcp:1},
-    platforms:{databricks:3, snowflake:2, fabric:2},
+    platforms:{databricks:4, snowflake:2, fabric:2},
     signals:[
       {name:'KBC Group',   cloud:'azure', platform:'databricks'},
       {name:'ING Belgium', cloud:'aws',   platform:null},
-      {name:'Belfius',     cloud:'azure', platform:null},
+      {name:'Belfius',     cloud:'azure', platform:'databricks'},
     ]
   },
   {
     code:'DK', name:'Denmark', flag:'🇩🇰', score:4, col:5, row:2,
     clouds:{aws:4, azure:3, gcp:1},
-    platforms:{databricks:4, snowflake:1, fabric:2},
+    platforms:{databricks:3, snowflake:1, fabric:2},
     signals:[
-      {name:'Danske Bank', cloud:'aws', platform:'databricks'},
-      {name:'Nordea',      cloud:'aws', platform:'databricks'},
+      {name:'Danske Bank', cloud:'aws',   platform:null},
+      {name:'Nordea',      cloud:'aws',   platform:'databricks'},
       {name:'Jyske Bank',  cloud:'azure', platform:null},
     ]
   },
   {
     code:'ES', name:'Spain', flag:'🇪🇸', score:2, col:3, row:4,
     clouds:{aws:3, azure:3, gcp:3},
-    platforms:{databricks:3, snowflake:2, fabric:3},
+    platforms:{databricks:2, snowflake:2, fabric:3},
     signals:[
-      {name:'BBVA',       cloud:'gcp',   platform:'databricks'},
+      {name:'BBVA',       cloud:'gcp',   platform:null},
       {name:'Santander',  cloud:'azure', platform:null},
       {name:'Telefónica', cloud:'aws',   platform:null},
       {name:'CaixaBank',  cloud:'azure', platform:'fabric'},
     ]
   },
   {
-    code:'IT', name:'Italy', flag:'🇮🇹', score:2, col:6, row:5,
-    clouds:{aws:3, azure:3, gcp:2},
-    platforms:{databricks:3, snowflake:2, fabric:2},
+    code:'IT', name:'Italy', flag:'🇮🇹', score:3, col:6, row:5,
+    clouds:{aws:1, azure:1, gcp:4},
+    platforms:{databricks:1, snowflake:2, fabric:2},
     signals:[
-      {name:'UniCredit',       cloud:'aws',   platform:'databricks'},
-      {name:'Intesa Sanpaolo', cloud:'azure', platform:null},
-      {name:'Generali',        cloud:'aws',   platform:null},
+      {name:'UniCredit',       cloud:'gcp', platform:null},
+      {name:'Intesa Sanpaolo', cloud:'gcp', platform:null},
+      {name:'Generali',        cloud:'aws', platform:null},
     ]
   },
   {
     code:'NO', name:'Norway', flag:'🇳🇴', score:3, col:6, row:1,
-    clouds:{aws:3, azure:4, gcp:1},
-    platforms:{databricks:3, snowflake:2, fabric:2},
+    clouds:{aws:1, azure:4, gcp:1},
+    platforms:{databricks:4, snowflake:2, fabric:2},
     signals:[
-      {name:'DNB',        cloud:'azure', platform:null},
-      {name:'Storebrand', cloud:'aws',   platform:'databricks'},
+      {name:'DNB',        cloud:'azure', platform:'databricks'},
+      {name:'Storebrand', cloud:'azure', platform:'databricks'},
     ]
   },
   {
@@ -355,11 +355,11 @@ const COUNTRIES=[
   },
   {
     code:'AT', name:'Austria', flag:'🇦🇹', score:2, col:7, row:4,
-    clouds:{aws:2, azure:4, gcp:1},
-    platforms:{databricks:2, snowflake:2, fabric:3},
+    clouds:{aws:3, azure:4, gcp:1},
+    platforms:{databricks:3, snowflake:2, fabric:3},
     signals:[
-      {name:'Erste Group',    cloud:'azure', platform:'fabric'},
-      {name:'Raiffeisen Bank',cloud:'aws',   platform:null},
+      {name:'Erste Group',    cloud:'azure',          platform:'fabric'},
+      {name:'Raiffeisen Bank',clouds:['aws','azure'], platform:'databricks'},
     ]
   },
   {
@@ -472,7 +472,7 @@ const COMPETE={
       {name:'Deloitte',   strength:2, note:'Active; governance and compliance angle'},
       {name:'CGI',        strength:2, note:'Nordic strength; present in Denmark'},
     ],
-    angle:'Danske Bank AWS + Databricks + Cloudera EoS is the perfect LeapLogic scenario. Accenture will compete on relationship; TCS will compete on price. Win on compliance timeline: Cloudera EoS June 2026 is already past — every month of delay is a DORA ICT risk. Speed of migration is the argument, not cost.'
+    angle:'Danske Bank is on AWS with Amazon Bedrock as the AI layer — Cloudera EoS June 2026 is already past, creating a live DORA ICT risk Accenture cannot resolve faster than LeapLogic. Databricks is not a confirmed Danske Bank commitment — position around what lands on AWS (Amazon Bedrock, Databricks, or both) and lead with migration speed, not platform prescription. Nordea is the higher-conviction Databricks account in Denmark.'
   },
   ES:{
     rivals:[
@@ -490,7 +490,7 @@ const COMPETE={
       {name:'Capgemini',  strength:3, note:'Active; growing Italian data practice'},
       {name:'TCS',        strength:2, note:'Present; growing Italian presence'},
     ],
-    angle:'Engineering Group dominates Italian FS SI but has no automated migration capability — their model is traditional system integration. UniCredit\'s public AWS + Databricks commitment creates an entry. Route via AWS Italy co-sell to establish a channel alongside Engineering Group rather than displacing them directly.'
+    angle:'Engineering Group dominates Italian FS SI but has no automated migration capability — their model is traditional system integration. Italy is now a GCP-dominant FS market: UniCredit (10-yr GCP deal, May 2025) and Intesa Sanpaolo (core banking migration to GCP, complete July 2026) both chose GCP. Route via GCP Italy co-sell to establish a channel. Legacy Teradata and DataStage migration onto GCP-hosted platforms is a scoped conversation Engineering Group cannot automate.'
   },
   NO:{
     rivals:[
