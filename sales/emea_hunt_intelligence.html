@@ -183,6 +183,42 @@ a{color:var(--accent);text-decoration:none}
 .ref-num{color:var(--accent);font-weight:600;flex-shrink:0;min-width:16px}
 
 .no-results{text-align:center;padding:2rem;color:var(--muted);font-size:.8rem}
+
+/* ── PANEL D ── */
+.acct-table tr.row-clickable{cursor:pointer}
+.acct-table tr.row-clickable.d-selected td{background:var(--accent-dim)!important}
+.panel-d-body{padding:.875rem 1rem;display:flex;flex-direction:column;gap:.75rem}
+.d-row{display:flex;flex-wrap:wrap;gap:1.25rem}
+.d-col{flex:1;min-width:160px}
+.d-section-label{font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:.4rem}
+.d-badges{display:flex;flex-wrap:wrap;gap:.35rem}
+.d-badge{font-size:.62rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;padding:.2rem .5rem;border-radius:.25rem;white-space:nowrap;border:1px solid transparent}
+.d-badge-aws      {background:#FFF7ED;color:#C2410C;border-color:#FED7AA}
+.d-badge-azure    {background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE}
+.d-badge-gcp      {background:#F0FDF4;color:#15803D;border-color:#BBF7D0}
+.d-badge-ibm      {background:#EEF2FF;color:#3730A3;border-color:#C7D2FE}
+.d-badge-oracle   {background:#FEF2F2;color:#991B1B;border-color:#FECACA}
+.d-badge-priv     {background:var(--surface2);color:var(--muted);border-color:var(--border)}
+.d-badge-databricks{background:#FEF2F2;color:#B91C1C;border-color:#FECACA}
+.d-badge-snowflake {background:#ECFEFF;color:#0E7490;border-color:#A5F3FC}
+.d-badge-fabric    {background:#F5F3FF;color:#6D28D9;border-color:#DDD6FE}
+.d-badge-vertex    {background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE}
+.d-conf{display:inline-flex;align-items:center;font-size:.62rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;padding:.2rem .55rem;border-radius:.25rem}
+.d-conf-HIGH  {background:#DCFCE7;color:#15803D}
+.d-conf-MEDIUM{background:#FEF3C7;color:#B45309}
+.d-conf-LOW   {background:#FEE2E2;color:#B91C1C}
+.d-notes{font-size:.72rem;color:var(--muted);line-height:1.6;background:var(--surface2);border-radius:.375rem;padding:.625rem .75rem}
+.d-contra{background:#FFFBEB;border-left:3px solid #F59E0B;padding:.5rem .75rem;border-radius:0 .375rem .375rem 0;font-size:.68rem;color:#92400E;line-height:1.5}
+.d-none{text-align:center;padding:2rem;color:var(--dim);font-size:.75rem;line-height:1.6}
+.d-close-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:.25rem;padding:.2rem .55rem;cursor:pointer;font-size:.8rem;font-family:inherit;flex-shrink:0}
+.d-close-btn:hover{border-color:var(--accent);color:var(--accent)}
+:root[data-theme="dark"] .d-badge-aws    ,:root:not([data-theme="light"]) .d-badge-aws    {background:#431407;color:#FB923C;border-color:#7C2D12}
+:root[data-theme="dark"] .d-badge-azure  ,:root:not([data-theme="light"]) .d-badge-azure  {background:#172554;color:#93C5FD;border-color:#1E3A8A}
+:root[data-theme="dark"] .d-badge-gcp    ,:root:not([data-theme="light"]) .d-badge-gcp    {background:#052E16;color:#86EFAC;border-color:#14532D}
+:root[data-theme="dark"] .d-badge-databricks,:root:not([data-theme="light"]) .d-badge-databricks{background:#450A0A;color:#FCA5A5;border-color:#7F1D1D}
+:root[data-theme="dark"] .d-badge-snowflake ,:root:not([data-theme="light"]) .d-badge-snowflake {background:#083344;color:#67E8F9;border-color:#164E63}
+:root[data-theme="dark"] .d-badge-fabric    ,:root:not([data-theme="light"]) .d-badge-fabric    {background:#2E1065;color:#C4B5FD;border-color:#4C1D95}
+:root[data-theme="dark"] .d-contra,:root:not([data-theme="light"]) .d-contra{background:#1C1508;color:#FCD34D}
 </style>
 
 <!-- Tooltip -->
@@ -284,7 +320,7 @@ a{color:var(--accent);text-decoration:none}
     <div class="panel-hdr">
       <div>
         <div class="panel-title">Panel C — Company Profile Explorer</div>
-        <div class="panel-sub">Filter by technology, region, or industry · Named accounts marked in green</div>
+        <div class="panel-sub">Click any row to open Panel D · Filter by technology, region, or industry · Named accounts marked in green</div>
       </div>
     </div>
     <div class="filter-bar" id="filter-bar">
@@ -324,6 +360,18 @@ a{color:var(--accent);text-decoration:none}
         <tbody id="acct-tbody"></tbody>
       </table>
     </div>
+  </div>
+
+  <!-- Panel D: Cloud & Stack Intel -->
+  <div class="panel" id="panel-d" style="display:none">
+    <div class="panel-hdr" style="display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div class="panel-title">Panel D — Cloud &amp; Stack Intel</div>
+        <div class="panel-sub" id="panel-d-sub">Select a company in Panel C to see verified cloud provider, data platform, and legacy stack intelligence</div>
+      </div>
+      <button class="d-close-btn" onclick="closePanelD()">✕ Close</button>
+    </div>
+    <div id="panel-d-body" class="panel-d-body"></div>
   </div>
 
 </div>
@@ -374,6 +422,34 @@ const BUBBLES = [
   {id:'oracle',    name:'Oracle Exadata',tier:3, x:7.0, y:7.5, r:8,  trigger:'OBIEE 12c Sustaining Support Aug 2025⁹ — no security patches', pricing:'Oracle licence cost (100 OCPUs ≈ $2.4M list + $1.2M/yr support¹⁰) + audit risk'},
   {id:'hadoop',    name:'Hadoop',        tier:3, x:6.2, y:9.2, r:6,  trigger:'HDP EoS June 2021¹¹ — 4+ years unpatched in EMEA', pricing:'EU AI Act compliance gap as value lever; security risk as urgency anchor'},
 ];
+
+// Cloud & Stack Intel lookup — keyed by company name
+// Sourced from EMEA FinServ Cloud Intel research (Aug 2026)
+const CLOUD_INTEL = {
+  'Barclays':{clouds:['AWS'],platform:'Databricks',legacy:'Netezza, Informatica (equities DW migrated); HPE GreenLake (hybrid)',conf:'HIGH',contra:false,notes:'Won 2025 Databricks Data Intelligence FSI Award for unified data platform with real-time streaming. AWS primary hyperscaler confirmed via job postings and partnership. Equities DW session at Data+AI Summit 2025.'},
+  'HSBC':{clouds:['GCP','AWS','Azure'],platform:'Databricks',legacy:'Legacy mainframe; distributed data estate',conf:'HIGH',contra:true,contraNote:'Original mapping: GCP+Azure only. AWS also explicitly documented — all three confirmed. 600+ applications on GCP; multi-year GCP AI partnership June 2026.',notes:'600+ applications on GCP; multi-year GCP AI partnership June 2026 (Gemini, 200+ use cases). AWS named as strategic cloud. Azure Databricks + Delta Lake confirmed.'},
+  'Lloyds Banking Group':{clouds:['GCP','Azure'],platform:'GCP Vertex AI',legacy:'IBM Mainframe (Broadcom partnership); Oracle databases',conf:'HIGH',contra:true,contraNote:'Original mapping: AWS+GCP+Databricks. AWS not documented. GCP Vertex AI is the confirmed ML platform — 80+ ML use cases migrated to Vertex AI (Apr 2025).',notes:'GCP primary for ML/AI: migrated 15 modelling systems + 80+ ML use cases to Vertex AI (Apr 2025). Oracle databases to Oracle DB@Azure (Mar 2025). Broadcom mainframe partnership extended Sep 2025.'},
+  'BT Group':{clouds:['AWS'],platform:null,legacy:'Ab Initio (data pipelines — active Impetus migration engagement)',conf:'HIGH',contra:false,notes:'Five-year AWS deal confirmed (Computer Weekly); extended for cloud-first application modernisation. Ab Initio → AWS Glue migration is active Impetus-tracked engagement. No data platform target publicly confirmed.'},
+  'Aviva':{clouds:['AWS'],platform:'Snowflake',legacy:'Oracle (migrated 1.3 PB from Oracle Cloud)',conf:'HIGH',contra:false,notes:'Snowflake official case study: migrated petabyte-scale data estate to Snowflake on AWS in 7 months. 8× faster data processing. Chose Snowflake for cloud-native, multi-cloud, componentised architecture.'},
+  'NatWest Group':{clouds:['AWS'],platform:null,legacy:'IBM DataStage (CP4D — 3× pricing shock on renewal)',conf:'MEDIUM',contra:false,notes:'AWS confirmed as primary cloud for data workloads. IBM CP4D pricing increase creates migration urgency. No target data platform publicly announced.'},
+  'ING Group':{clouds:['Azure','GCP'],platform:'Databricks + Snowflake',legacy:'Teradata (transitioning); legacy on-prem data warehouse',conf:'MEDIUM',contra:true,contraNote:'Original mapping: AWS+Databricks. ING\'s private cloud dominates at 68%; Azure, GCP, and Oracle are public clouds. Both Databricks AND Snowflake are in their tech stack — AWS is not the primary public cloud.',notes:'68% of compute on internal private cloud per 2025 annual report. Kubernetes-native for nearly a decade. Snowflake and Databricks both documented in tech stack (rfp.wiki). Hybrid/multi-cloud with Azure, GCP, Oracle.'},
+  'ABN AMRO':{clouds:['Azure'],platform:'Databricks',legacy:'Legacy data warehouse (migrated to Azure Data Lake + Databricks)',conf:'HIGH',contra:false,notes:'Azure-first data strategy confirmed (Microsoft Customer Story + Databricks). Data mesh on Azure; Azure Data Lake Storage + Databricks + Azure Synapse. Fraud detection, compliance, near-real-time insights. 10× faster time-to-market.'},
+  'Rabobank':{clouds:['Azure'],platform:'Databricks',legacy:'Not confirmed from public sources',conf:'HIGH',contra:false,notes:'Microsoft Customer Story: Azure Data Factory + Azure Data Lake Gen 2 + Azure Synapse + Azure Databricks for global data exchange platform. Databricks for compliance infrastructure with scope-based access controls.'},
+  'Société Générale':{clouds:['AWS','Azure'],platform:null,legacy:'Not confirmed from public sources',conf:'HIGH',contra:false,notes:'AWS and Azure confirmed as the two primary external clouds. Client data on private cloud. GCP not mentioned. Transform to Grow strategic plan drives cloud adoption. No Databricks/Snowflake publicly confirmed.'},
+  'Deutsche Bank':{clouds:['GCP','Oracle Cloud'],platform:null,legacy:'SAP S/4HANA (17 financial reporting systems migrated to GCP); IBM mainframe',conf:'HIGH',contra:true,contraNote:'MAJOR: Original mapping was AWS+Databricks. GCP is clearly the primary strategic cloud (10-year partnership, 260+ apps). No AWS or Databricks publicly confirmed.',notes:'10-year strategic GCP partnership (announced 2020, active). 260+ apps on Google Cloud. SAP S/4HANA migration to GCP. Google Distributed Cloud for on-prem. Oracle also used.'},
+  'Allianz Group':{clouds:['AWS','Azure'],platform:'Databricks',legacy:'SAS (Allianz subsidiaries replacing for Solvency II models); legacy DW',conf:'MEDIUM',contra:false,notes:'Allianz Direct (Munich) on AWS+Databricks: RAG-powered AI agent assist, Unity Catalog. Allianz UK Personal Lines migrated to Databricks SQL (£80K/month savings). Azure AD B2C for identity.'},
+  'Commerzbank':{clouds:['GCP','Azure'],platform:null,legacy:'Not confirmed from public sources',conf:'HIGH',contra:false,notes:'GCP since 2017 for infrastructure modernisation, data analytics, ML (Google Cloud Customer Advisory Board member). Azure OpenAI for cobaGPT internal AI. Target: 85% of decentralised apps in cloud by 2024.'},
+  'Erste Group':{clouds:['Azure'],platform:'Microsoft Fabric',legacy:'Not confirmed from public sources',conf:'HIGH',contra:false,notes:'Azure-first strategy across Erste\'s CEE markets (Austria, Czech Republic, Romania, etc.). Microsoft Fabric confirmed as data platform direction for cross-border financial reporting.'},
+  'UniCredit':{clouds:['GCP'],platform:null,legacy:'Teradata (licence consolidation across Italy/Germany/Austria estate)',conf:'HIGH',contra:true,contraNote:'MAJOR: Original mapping was AWS+Databricks. GCP is confirmed (10-year deal across 13 markets, May 2025). No AWS or Databricks publicly documented.',notes:'10-year GCP partnership signed May 2025, spanning 13 European markets. One of the largest European bank GCP commitments to date. Teradata licence consolidation creates immediate migration opportunity.'},
+  'Intesa Sanpaolo':{clouds:['GCP'],platform:null,legacy:'Oracle Exadata (C@C migration window — OBIEE no patches since Aug 2025)',conf:'HIGH',contra:true,contraNote:'Original mapping: Azure. MAJOR — GCP confirmed as primary cloud; core banking migration to GCP complete July 2026.',notes:'Core banking migration to GCP completed July 2026 — one of the largest Italian bank cloud commitments. Oracle Exadata legacy creates parallel migration opportunity.'},
+  'Telefónica':{clouds:['AWS','Azure','GCP'],platform:null,legacy:'Teradata + Oracle (dual-platform combined licence >€5M/year)',conf:'MEDIUM',contra:false,notes:'Vendor-agnostic multi-cloud approach (AWS+Azure+GCP). Also operates own private telco cloud for network workloads. No specific data platform target confirmed publicly. Dual Teradata+Oracle licence creates CFO-level cost reduction entry.'},
+  'BBVA':{clouds:['GCP'],platform:null,legacy:'Hadoop (HDP EoS June 2021 — 4+ years unpatched in EMEA)',conf:'MEDIUM',contra:true,contraNote:'Original mapping: GCP+Databricks. GCP is confirmed (BBVA Engineering Blog). Databricks NOT publicly confirmed — GCP-native tools (Vertex AI, Chronicle) are documented instead.',notes:'GCP strategic commitment for AI/ML. Vertex AI for ML workloads. Analytics on GCP-native stack. Databricks not present in any public BBVA announcement.'},
+  'Nordea':{clouds:['AWS'],platform:'Databricks',legacy:'Teradata (Finansinspektionen/FIN-FSA data lineage requirements driving migration)',conf:'HIGH',contra:false,notes:'AWS primary cloud; Databricks confirmed for analytics workloads. Nordic-wide data platform standardisation initiative. Multi-entity consolidation across Finland, Sweden, Denmark, Norway.'},
+  'Danske Bank':{clouds:['AWS'],platform:null,legacy:'SAS (IRB credit models under Finanstilsynet approval — EoL Jan 2026)',conf:'HIGH',contra:true,contraNote:'Original mapping: AWS+Databricks. AWS confirmed. Databricks NOT confirmed — Amazon Bedrock is the documented AI platform. Do not lead with Databricks in initial conversation.',notes:'AWS primary cloud confirmed. Amazon Bedrock for AI workloads (documented). SAS 9.4 EoL Jan 2026 creates IRB model recertification risk under Finanstilsynet supervision.'},
+  'Aegon':{clouds:[],platform:null,legacy:'Informatica PowerCenter (EoS March 2026 — DORA ICT risk live)',conf:'LOW',contra:false,notes:'No public cloud provider or data platform announcements found. Aegon has undergone significant restructuring (sold US operations to Transamerica). Recommend checking Aegon Annual Report technology sections directly.'},
+  'Generali Group':{clouds:['AWS'],platform:null,legacy:'SAS (Solvency II ORSA and SCR models across 50+ country operations)',conf:'LOW',contra:false,notes:'AWS present in some Generali subsidiaries. Group-level cloud strategy not publicly consolidated. No Databricks or Snowflake partnership announced. IVASS (Italian FSA) Solvency II supervision applies.'},
+  'Swiss Life France':{clouds:['AWS'],platform:null,legacy:'Netezza (Mako hardware EoS April 2025 — support already ended)',conf:'MEDIUM',contra:false,notes:'Swiss Life Germany on AWS confirmed (AWS Big Data Blog case study): Amazon SageMaker for automated data governance. Note: German subsidiary case study — group-level strategy not confirmed in public sources.'},
+};
 
 // Account data
 const ACCOUNTS = [
@@ -1225,8 +1301,8 @@ function urgClass(u){return u==='Critical'?'urg-critical':u==='High'?'urg-high':
 
 function buildTable(){
   const tb=document.getElementById('acct-tbody');
-  tb.innerHTML=ACCOUNTS.map((a,i)=>`<tr data-tech="${a.tech}" data-region="${a.region}" data-industry="${a.industry}" data-urgency="${a.urg}">
-  <td><strong>${a.name}</strong></td>
+  tb.innerHTML=ACCOUNTS.map((a,i)=>`<tr class="row-clickable" data-tech="${a.tech}" data-region="${a.region}" data-industry="${a.industry}" data-urgency="${a.urg}" data-company="${a.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}">
+  <td><strong>${a.name}</strong>${CLOUD_INTEL[a.name]?'<span style="margin-left:.35rem;font-size:.55rem;font-weight:700;color:var(--accent);font-family:\'Plus Jakarta Sans\',sans-serif;vertical-align:middle" title="Cloud intel available">☁</span>':''}</td>
   <td>${a.country}</td>
   <td>${a.industry}</td>
   <td style="white-space:nowrap">${a.rev}</td>
@@ -1272,10 +1348,78 @@ document.getElementById('btn-reset').addEventListener('click',()=>{
 });
 
 // ══════════════════════════════════════════
+// PANEL D — CLOUD & STACK INTEL
+// ══════════════════════════════════════════
+function cloudBadgeCls(c){
+  const m={'AWS':'aws','Azure':'azure','GCP':'gcp','IBM Cloud':'ibm','IBM':'ibm',
+    'Oracle Cloud':'oracle','Oracle':'oracle','Private Cloud (68%)':'priv',
+    'Databricks':'databricks','Snowflake':'snowflake','Microsoft Fabric':'fabric',
+    'GCP Vertex AI':'vertex','GCP-native':'gcp'};
+  return 'd-badge-'+(m[c]||'priv');
+}
+function platformBadgeCls(p){
+  if(!p) return 'd-badge-priv';
+  const l=p.toLowerCase();
+  if(l.includes('databricks')) return 'd-badge-databricks';
+  if(l.includes('snowflake'))  return 'd-badge-snowflake';
+  if(l.includes('fabric'))     return 'd-badge-fabric';
+  if(l.includes('vertex'))     return 'd-badge-vertex';
+  if(l.includes('gcp'))        return 'd-badge-gcp';
+  return 'd-badge-priv';
+}
+function openPanelD(name){
+  // Highlight selected row
+  document.querySelectorAll('.row-clickable').forEach(r=>r.classList.remove('d-selected'));
+  document.querySelectorAll('.row-clickable').forEach(r=>{
+    if(r.querySelector('strong')?.textContent===name) r.classList.add('d-selected');
+  });
+  const pd=document.getElementById('panel-d');
+  const body=document.getElementById('panel-d-body');
+  document.getElementById('panel-d-sub').textContent=name+' — Cloud & Stack Intelligence';
+  pd.style.display='';
+  const d=CLOUD_INTEL[name];
+  if(!d){
+    body.innerHTML=`<div class="d-none">No verified public intelligence found for <strong>${name}</strong>.<br>Check company technology blog, annual report, or cloud provider case studies directly.</div>`;
+    pd.scrollIntoView({behavior:'smooth',block:'nearest'});
+    return;
+  }
+  const clouds=d.clouds||[];
+  const cloudHtml=clouds.length
+    ?clouds.map(c=>`<span class="d-badge ${cloudBadgeCls(c)}">${c}</span>`).join('')
+    :'<span class="d-badge d-badge-priv">Not confirmed</span>';
+  const platHtml=d.platform
+    ?d.platform.split('+').map(p=>p.trim()).map(p=>`<span class="d-badge ${platformBadgeCls(p)}">${p}</span>`).join('')
+    :'<span class="d-badge d-badge-priv">Not confirmed</span>';
+  const contraHtml=d.contra
+    ?`<div class="d-contra">⚠ <strong>Mapping contradiction:</strong> ${d.contraNote}</div>`:'';
+  const legacyHtml=d.legacy
+    ?`<div><div class="d-section-label">Legacy Platform Context</div><div class="d-notes">${d.legacy}</div></div>`:'';
+  body.innerHTML=`
+    <div class="d-row">
+      <div class="d-col"><div class="d-section-label">Cloud Provider(s)</div><div class="d-badges">${cloudHtml}</div></div>
+      <div class="d-col"><div class="d-section-label">Target Data Platform</div><div class="d-badges">${platHtml}</div></div>
+      <div class="d-col"><div class="d-section-label">Research Confidence</div><span class="d-conf d-conf-${d.conf}">${d.conf}</span></div>
+    </div>
+    ${legacyHtml}
+    ${contraHtml}
+    <div><div class="d-section-label">Intel Notes</div><div class="d-notes">${d.notes}</div></div>`;
+  pd.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function closePanelD(){
+  document.getElementById('panel-d').style.display='none';
+  document.querySelectorAll('.row-clickable').forEach(r=>r.classList.remove('d-selected'));
+}
+
+// ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
 buildHeatmap();
 buildTable();
+// Delegate row clicks to openPanelD — avoids quote-escaping issues with inline onclick
+document.getElementById('acct-tbody').addEventListener('click',function(e){
+  const tr=e.target.closest('tr[data-company]');
+  if(tr) openPanelD(tr.dataset.company);
+});
 // Init theme, then draw — ensures CSS vars are applied before canvas reads them
 const _savedTheme=localStorage.getItem('impetus-theme');
 setTheme(_savedTheme||'light');

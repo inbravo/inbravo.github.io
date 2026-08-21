@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+<title>EMEA FinServ Cloud Intel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;800;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* ─── TOKENS ─── */
+  :root {
+    --bg:          #EEF2F8;
+    --surface:     #FFFFFF;
+    --surface-2:   #F4F7FC;
+    --ink:         #0E1523;
+    --ink-2:       #4A5A72;
+    --ink-3:       #8A9BB5;
+    --border:      #C8D4E8;
+    --border-2:    #DDE5F2;
+    --accent:      #1653F0;
+    --accent-dim:  #EBF0FE;
+    --contra:      #D97706;
+    --contra-bg:   #FFF8EB;
+    --contra-border:#F59E0B;
+
+    /* cloud badges */
+    --aws:   #FF9900; --aws-bg:   #FFF4E0;
+    --azure: #0078D4; --azure-bg: #EBF5FF;
+    --gcp:   #34A853; --gcp-bg:   #EAFAF0;
+    --ibm:   #054ADA; --ibm-bg:   #EAF0FF;
+    --oracle:#C74634; --oracle-bg:#FEF0EE;
+    --priv:  #6B7A92; --priv-bg:  #EEF2F8;
+
+    /* platform badges */
+    --dbr:    #FF3621; --dbr-bg:   #FFF0EE;
+    --snow:   #1A8FBF; --snow-bg:  #EAF6FB;
+    --fabric: #742774; --fabric-bg:#F7EEF7;
+    --gcpnat: #34A853; --gcpnat-bg:#EAFAF0;
+    --vtx:    #4285F4; --vtx-bg:   #EBF2FF;
+
+    /* confidence */
+    --hi:  #15803D; --hi-bg:  #DCFCE7;
+    --med: #B45309; --med-bg: #FEF3C7;
+    --lo:  #B91C1C; --lo-bg:  #FEE2E2;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:          #0B0F1A;
+      --surface:     #111827;
+      --surface-2:   #0F1520;
+      --ink:         #DCE4F2;
+      --ink-2:       #8B9AB5;
+      --ink-3:       #4B5A72;
+      --border:      #1E2D42;
+      --border-2:    #172030;
+      --accent:      #4E7FFF;
+      --accent-dim:  #0D1930;
+      --contra:      #F59E0B;
+      --contra-bg:   #1C1508;
+      --contra-border:#D97706;
+
+      --aws:   #FFB84D; --aws-bg:   #1C1200;
+      --azure: #47A9FF; --azure-bg: #001828;
+      --gcp:   #5DBF78; --gcp-bg:   #001808;
+      --ibm:   #5B8FFF; --ibm-bg:   #001028;
+      --oracle:#FF7B6A; --oracle-bg:#1C0600;
+      --priv:  #8B9BB5; --priv-bg:  #0F1520;
+
+      --dbr:    #FF6B5B; --dbr-bg:   #1C0600;
+      --snow:   #4BBFE8; --snow-bg:  #001C28;
+      --fabric: #B060B0; --fabric-bg:#180818;
+      --gcpnat: #5DBF78; --gcpnat-bg:#001808;
+      --vtx:    #6DA8FF; --vtx-bg:   #001228;
+
+      --hi:  #4ADE80; --hi-bg:  #052E16;
+      --med: #FCD34D; --med-bg: #292003;
+      --lo:  #F87171; --lo-bg:  #2D0A0A;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg:          #0B0F1A;
+    --surface:     #111827;
+    --surface-2:   #0F1520;
+    --ink:         #DCE4F2;
+    --ink-2:       #8B9AB5;
+    --ink-3:       #4B5A72;
+    --border:      #1E2D42;
+    --border-2:    #172030;
+    --accent:      #4E7FFF;
+    --accent-dim:  #0D1930;
+    --contra:      #F59E0B;
+    --contra-bg:   #1C1508;
+    --contra-border:#D97706;
+
+    --aws:   #FFB84D; --aws-bg:   #1C1200;
+    --azure: #47A9FF; --azure-bg: #001828;
+    --gcp:   #5DBF78; --gcp-bg:   #001808;
+    --ibm:   #5B8FFF; --ibm-bg:   #001028;
+    --oracle:#FF7B6A; --oracle-bg:#1C0600;
+    --priv:  #8B9BB5; --priv-bg:  #0F1520;
+
+    --dbr:    #FF6B5B; --dbr-bg:   #1C0600;
+    --snow:   #4BBFE8; --snow-bg:  #001C28;
+    --fabric: #B060B0; --fabric-bg:#180818;
+    --gcpnat: #5DBF78; --gcpnat-bg:#001808;
+    --vtx:    #6DA8FF; --vtx-bg:   #001228;
+
+    --hi:  #4ADE80; --hi-bg:  #052E16;
+    --med: #FCD34D; --med-bg: #292003;
+    --lo:  #F87171; --lo-bg:  #2D0A0A;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-size: 13px;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── HEADER ─── */
+  .page-head {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 24px 14px;
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .page-head-title {
+    flex: 1 1 auto;
+  }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+  }
+  h1 {
+    font-family: 'Epilogue', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: -.03em;
+    color: var(--ink);
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  h1 span {
+    color: var(--accent);
+  }
+  .page-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    margin-top: 4px;
+  }
+  .stats-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .stat-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    padding: 6px 12px;
+    min-width: 56px;
+  }
+  .stat-chip .num {
+    font-family: 'Epilogue', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-chip .lbl {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-top: 2px;
+  }
+
+  /* ─── CONTRADICTION BANNER ─── */
+  .contra-banner {
+    background: var(--contra-bg);
+    border-bottom: 2px solid var(--contra-border);
+    padding: 10px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .contra-banner .icon {
+    font-size: 14px;
+    line-height: 1.4;
+    flex-shrink: 0;
+  }
+  .contra-banner .body {
+    flex: 1;
+  }
+  .contra-banner strong {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--contra);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .contra-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+  }
+  .contra-list li {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--contra);
+    background: color-mix(in srgb, var(--contra) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--contra) 30%, transparent);
+    border-radius: 4px;
+    padding: 2px 8px;
+  }
+
+  /* ─── FILTER BAR ─── */
+  .filter-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+  .filter-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: background .12s, color .12s, border-color .12s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .filter-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .filter-sep {
+    width: 1px;
+    height: 20px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .search-wrap {
+    margin-left: auto;
+  }
+  #search {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface-2);
+    color: var(--ink);
+    width: 180px;
+    outline: none;
+  }
+  #search:focus { border-color: var(--accent); }
+
+  /* ─── TABLE ─── */
+  .table-wrap {
+    padding: 0 24px 40px;
+    overflow-x: auto;
+  }
+
+  .country-section {
+    margin-top: 28px;
+  }
+  .country-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 0 6px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 2px;
+  }
+  .country-flag {
+    font-size: 16px;
+    line-height: 1;
+  }
+  .country-name {
+    font-family: 'Epilogue', sans-serif;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .country-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    margin-left: 4px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+  }
+  thead th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding: 8px 10px 6px;
+    text-align: left;
+    background: transparent;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    position: sticky;
+    top: 45px; /* height of filter bar */
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border-2);
+    transition: background .1s;
+  }
+  tbody tr:hover {
+    background: var(--surface-2);
+  }
+  tbody tr.contra-row {
+    border-left: 3px solid var(--contra);
+    background: var(--contra-bg);
+  }
+  tbody tr.contra-row:hover {
+    background: color-mix(in srgb, var(--contra-bg) 80%, var(--surface-2) 20%);
+  }
+  td {
+    padding: 8px 10px;
+    vertical-align: top;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+  }
+  td.company-name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--ink);
+    white-space: nowrap;
+    min-width: 160px;
+  }
+  td.notes-cell {
+    font-size: 10.5px;
+    color: var(--ink-2);
+    max-width: 300px;
+    line-height: 1.5;
+  }
+  td.legacy-cell {
+    font-size: 10.5px;
+    color: var(--ink-2);
+    max-width: 200px;
+    line-height: 1.5;
+  }
+  .contra-note {
+    color: var(--contra);
+    font-size: 10px;
+    display: block;
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  /* ─── BADGES ─── */
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    min-width: 100px;
+  }
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+    letter-spacing: .03em;
+  }
+  .badge-aws    { background: var(--aws-bg);    color: var(--aws); }
+  .badge-azure  { background: var(--azure-bg);  color: var(--azure); }
+  .badge-gcp    { background: var(--gcp-bg);    color: var(--gcp); }
+  .badge-ibm    { background: var(--ibm-bg);    color: var(--ibm); }
+  .badge-oracle { background: var(--oracle-bg); color: var(--oracle); }
+  .badge-priv   { background: var(--priv-bg);   color: var(--priv); }
+  .badge-dbr    { background: var(--dbr-bg);    color: var(--dbr); }
+  .badge-snow   { background: var(--snow-bg);   color: var(--snow); }
+  .badge-fabric { background: var(--fabric-bg); color: var(--fabric); }
+  .badge-gcpnat { background: var(--gcpnat-bg); color: var(--gcpnat); }
+  .badge-vtx    { background: var(--vtx-bg);    color: var(--vtx); }
+  .badge-tbd    { background: var(--surface-2); color: var(--ink-3); font-style: italic; }
+
+  /* confidence chip */
+  .conf {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .conf-HIGH   { background: var(--hi-bg);  color: var(--hi); }
+  .conf-MEDIUM { background: var(--med-bg); color: var(--med); }
+  .conf-LOW    { background: var(--lo-bg);  color: var(--lo); }
+
+  /* hidden rows */
+  tr.hidden { display: none; }
+  .country-section.hidden { display: none; }
+
+  /* empty state */
+  .empty-state {
+    padding: 60px 24px;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-3);
+    display: none;
+  }
+
+  @media (max-width: 700px) {
+    .page-head { padding: 14px 16px 10px; }
+    .table-wrap { padding: 0 16px 32px; }
+    .filter-bar { padding: 6px 16px; }
+    .contra-banner { padding: 8px 16px; }
+  }
+</style>
+
+<!-- PAGE HEAD -->
+<header class="page-head">
+  <div class="page-head-title">
+    <div class="eyebrow">Impetus Technologies — Sales Intelligence</div>
+    <h1>EMEA FinServ <span>Cloud &amp; Data Stack</span> Intel</h1>
+    <div class="page-meta">46 enterprises · 14 countries · Public sources only · As of Aug 2026</div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-chip"><span class="num">46</span><span class="lbl">Companies</span></div>
+    <div class="stat-chip"><span class="num">8</span><span class="lbl">Contradictions</span></div>
+    <div class="stat-chip"><span class="num">24</span><span class="lbl">High Conf.</span></div>
+    <div class="stat-chip"><span class="num">14</span><span class="lbl">Databricks</span></div>
+    <div class="stat-chip"><span class="num">3</span><span class="lbl">Snowflake</span></div>
+    <div class="stat-chip"><span class="num">16</span><span class="lbl">GCP</span></div>
+  </div>
+</header>
+
+<!-- CONTRADICTION BANNER -->
+<div class="contra-banner">
+  <div class="icon">⚠</div>
+  <div class="body">
+    <strong>Mapping contradictions detected — rows marked with amber rail</strong>
+    <ul class="contra-list">
+      <li>Deutsche Bank — GCP primary, not AWS</li>
+      <li>UniCredit — GCP (10yr deal), not AWS</li>
+      <li>BNP Paribas — IBM Cloud primary, not AWS</li>
+      <li>Lloyds — GCP+Azure confirmed; AWS not documented</li>
+      <li>HSBC — GCP+AWS+Azure (all three); Azure missing from mapping</li>
+      <li>ING Group — complex multi-cloud; both Snowflake &amp; Databricks</li>
+      <li>BBVA — GCP confirmed; Databricks not publicly confirmed</li>
+      <li>Danske Bank — AWS confirmed; Databricks not publicly confirmed (Bedrock instead)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">Cloud</span>
+  <div class="filter-group" id="cloud-filters">
+    <button class="filter-btn active" data-cloud="all">All</button>
+    <button class="filter-btn" data-cloud="AWS">AWS</button>
+    <button class="filter-btn" data-cloud="Azure">Azure</button>
+    <button class="filter-btn" data-cloud="GCP">GCP</button>
+    <button class="filter-btn" data-cloud="IBM">IBM Cloud</button>
+  </div>
+  <div class="filter-sep"></div>
+  <span class="filter-label">Platform</span>
+  <div class="filter-group" id="platform-filters">
+    <button class="filter-btn active" data-platform="all">All</button>
+    <button class="filter-btn" data-platform="Databricks">Databricks</button>
+    <button class="filter-btn" data-platform="Snowflake">Snowflake</button>
+    <button class="filter-btn" data-platform="Fabric">Fabric</button>
+    <button class="filter-btn" data-platform="?">Unknown</button>
+  </div>
+  <div class="filter-sep"></div>
+  <span class="filter-label">Conf.</span>
+  <div class="filter-group" id="conf-filters">
+    <button class="filter-btn active" data-conf="all">All</button>
+    <button class="filter-btn" data-conf="HIGH">High</button>
+    <button class="filter-btn" data-conf="MEDIUM">Medium</button>
+    <button class="filter-btn" data-conf="LOW">Low</button>
+  </div>
+  <div class="filter-sep"></div>
+  <button class="filter-btn" id="contra-toggle" data-contra="false">Contradictions only</button>
+  <div class="search-wrap">
+    <input type="text" id="search" placeholder="Search company…">
+  </div>
+</div>
+
+<!-- TABLE AREA -->
+<div class="table-wrap">
+<div class="empty-state" id="empty-state">No companies match the selected filters.</div>
+
+<div id="table-container">
+
+<!-- UK -->
+<div class="country-section" data-country="UK">
+  <div class="country-header">
+    <span class="country-flag">🇬🇧</span>
+    <span class="country-name">United Kingdom</span>
+    <span class="country-count">(6)</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Cloud Provider(s)</th>
+        <th>Target Data Platform</th>
+        <th>Legacy Platforms</th>
+        <th>Confidence</th>
+        <th>Source / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+
+<tr data-clouds="AWS" data-platforms="Databricks" data-conf="HIGH" data-contra="false" data-name="Barclays">
+  <td class="company-name">Barclays</td>
+  <td><div class="badges"><span class="badge badge-aws">AWS</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks</span></div></td>
+  <td class="legacy-cell">Netezza, Informatica (equities DW migrated); HPE GreenLake (hybrid)</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Won 2025 Databricks Data Intelligence FSI Award for unified data platform with real-time streaming. AWS primary hyperscaler confirmed via job postings and partnership. Equities DW session at Data+AI Summit 2025.</td>
+</tr>
+
+<tr data-clouds="GCP Azure" data-platforms="Vertex AI" data-conf="HIGH" data-contra="true" data-name="Lloyds Banking Group">
+  <td class="company-name">Lloyds Banking Group</td>
+  <td><div class="badges"><span class="badge badge-gcp">GCP</span><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-vtx">GCP Vertex AI</span><span class="badge badge-dbr" style="opacity:.5">Databricks*</span></div></td>
+  <td class="legacy-cell">IBM Mainframe (Broadcom VMware+mainframe partnership), Oracle databases</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">GCP primary for ML/AI: migrated 15 modelling systems + 80+ ML use cases to Vertex AI (Apr 2025). Oracle databases to Oracle DB@Azure (Mar 2025). Broadcom mainframe partnership extended Sep 2025.
+    <span class="contra-note">⚠ Current mapping: AWS+GCP+Databricks. AWS not documented. Databricks has foothold (Mar 2022 per HG Insights) but no public case study. GCP Vertex AI is confirmed ML platform.</span>
+  </td>
+</tr>
+
+<tr data-clouds="GCP AWS Azure" data-platforms="Databricks" data-conf="HIGH" data-contra="true" data-name="HSBC">
+  <td class="company-name">HSBC</td>
+  <td><div class="badges"><span class="badge badge-gcp">GCP</span><span class="badge badge-aws">AWS</span><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks</span></div></td>
+  <td class="legacy-cell">Legacy mainframe; distributed data estate</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">600+ applications on GCP; multi-year GCP AI partnership June 2026 (Gemini, 200+ use cases). AWS named as cloud provider (strategic cloud agreement, CIO Dive). Azure Databricks+Delta Lake confirmed. All three hyperscalers in use.
+    <span class="contra-note">⚠ Current mapping: GCP+Azure. AWS also explicitly documented — all three confirmed.</span>
+  </td>
+</tr>
+
+<tr data-clouds="AWS" data-platforms="?" data-conf="HIGH" data-contra="false" data-name="BT Group">
+  <td class="company-name">BT Group</td>
+  <td><div class="badges"><span class="badge badge-aws">AWS</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Ab Initio (data pipelines — active migration pursuit)</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Five-year AWS deal confirmed (Computer Weekly); extended further for cloud-first, modular application modernization. Ab Initio→AWS Glue migration is active Impetus-tracked engagement. No data platform target publicly confirmed.</td>
+</tr>
+
+<tr data-clouds="AWS" data-platforms="Snowflake" data-conf="HIGH" data-contra="false" data-name="Aviva">
+  <td class="company-name">Aviva</td>
+  <td><div class="badges"><span class="badge badge-aws">AWS</span></div></td>
+  <td><div class="badges"><span class="badge badge-snow">Snowflake</span></div></td>
+  <td class="legacy-cell">Oracle (migrated 1.3 PB from Oracle Cloud)</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Snowflake customer case study (official). Migrated petabyte-scale data estate to Snowflake on AWS in 7 months. 8× faster data processing. Chose Snowflake for cloud-native, multi-cloud, componentised architecture.</td>
+</tr>
+
+<tr data-clouds="?" data-platforms="?" data-conf="LOW" data-contra="false" data-name="abrdn">
+  <td class="company-name">abrdn (Standard Life Aberdeen)</td>
+  <td><div class="badges"><span class="badge badge-tbd">Not found</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not found</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-LOW">LOW</span></td>
+  <td class="notes-cell">No public cloud provider or data platform announcements found. Recommend checking abrdn investor relations and technology press directly.</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- GERMANY -->
+<div class="country-section" data-country="Germany">
+  <div class="country-header">
+    <span class="country-flag">🇩🇪</span>
+    <span class="country-name">Germany</span>
+    <span class="country-count">(5)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="GCP" data-platforms="?" data-conf="HIGH" data-contra="true" data-name="Deutsche Bank">
+  <td class="company-name">Deutsche Bank</td>
+  <td><div class="badges"><span class="badge badge-gcp">GCP</span><span class="badge badge-oracle">Oracle</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">SAP S/4HANA (17 financial reporting systems migrated to GCP); IBM mainframe</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">10-year strategic GCP partnership (announced 2020, active); 260+ apps on Google Cloud; SAP S/4HANA migration to GCP; Google Distributed Cloud for on-prem. Oracle also used. No AWS or Databricks publicly confirmed.
+    <span class="contra-note">⚠ Current mapping: AWS+Databricks. MAJOR CONTRADICTION — GCP is clearly the primary strategic cloud. No AWS partnership documented.</span>
+  </td>
+</tr>
+
+<tr data-clouds="AWS" data-platforms="Databricks" data-conf="MEDIUM" data-contra="false" data-name="Allianz">
+  <td class="company-name">Allianz</td>
+  <td><div class="badges"><span class="badge badge-aws">AWS</span><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks</span></div></td>
+  <td class="legacy-cell">SAS (implied — general insurance sector, Allianz subsidiaries replacing); legacy DW</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">Allianz Direct (Munich) on AWS+Databricks: RAG-powered AI agent assist tool, Unity Catalog. Allianz UK Personal Lines migrated to Databricks SQL (£80K/month savings). Azure AD B2C for identity. Group-level cloud strategy not consolidated in one public announcement.</td>
+</tr>
+
+<tr data-clouds="GCP Azure" data-platforms="?" data-conf="HIGH" data-contra="false" data-name="Commerzbank">
+  <td class="company-name">Commerzbank</td>
+  <td><div class="badges"><span class="badge badge-gcp">GCP</span><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">GCP since 2017 for infrastructure modernization, data analytics, ML (Google Cloud Customer Advisory Board member). Azure OpenAI Service for cobaGPT internal AI tool. Target: 85% of decentralized apps in cloud by 2024. No AWS partnership documented.</td>
+</tr>
+
+<tr data-clouds="GCP" data-platforms="?" data-conf="HIGH" data-contra="false" data-name="Deutsche Telekom">
+  <td class="company-name">Deutsche Telekom</td>
+  <td><div class="badges"><span class="badge badge-gcp">GCP</span></div></td>
+  <td><div class="badges"><span class="badge badge-gcpnat">GCP-native (ODE)</span></div></td>
+  <td class="legacy-cell">40+ legacy siloed data systems (10,000 users each, migrated into One Data Ecosystem)</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Strategic GCP partnership through 2030 (confirmed). One Data Ecosystem (ODE) built on GCP — sovereign data platform consolidating 40+ legacy systems. AI-first strategy. T-Systems offers T Cloud Public on AWS/Azure/GCP for customers, but Telekom's own data platform is GCP.</td>
+</tr>
+
+<tr data-clouds="?" data-platforms="?" data-conf="LOW" data-contra="false" data-name="Munich Re">
+  <td class="company-name">Munich Re</td>
+  <td><div class="badges"><span class="badge badge-tbd">Not found</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not found</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-LOW">LOW</span></td>
+  <td class="notes-cell">No public cloud provider or data platform announcements found via web research. Recommend direct outreach or check Munich Re Technology/Digital annual reports.</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- NETHERLANDS -->
+<div class="country-section" data-country="Netherlands">
+  <div class="country-header">
+    <span class="country-flag">🇳🇱</span>
+    <span class="country-name">Netherlands</span>
+    <span class="country-count">(4)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="Azure GCP AWS" data-platforms="Databricks Snowflake" data-conf="MEDIUM" data-contra="true" data-name="ING Group">
+  <td class="company-name">ING Group</td>
+  <td><div class="badges"><span class="badge badge-priv">Private (68%)</span><span class="badge badge-azure">Azure</span><span class="badge badge-gcp">GCP</span><span class="badge badge-oracle">Oracle</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks</span><span class="badge badge-snow">Snowflake</span></div></td>
+  <td class="legacy-cell">Teradata (transitioning), legacy on-prem data warehouse</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">68% of compute on internal private cloud (IPC) per 2025 annual report; hybrid/multi-cloud with Azure, GCP, Oracle, some AWS. Snowflake and Databricks both documented in tech stack (rfp.wiki). Kubernetes-native for nearly a decade.
+    <span class="contra-note">⚠ Current mapping: AWS+Databricks. Partially inaccurate — ING's private cloud dominates; both Snowflake AND Databricks are used; AWS is not the primary public cloud.</span>
+  </td>
+</tr>
+
+<tr data-clouds="?" data-platforms="?" data-conf="LOW" data-contra="false" data-name="Aegon">
+  <td class="company-name">Aegon</td>
+  <td><div class="badges"><span class="badge badge-tbd">Not found</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not found</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-LOW">LOW</span></td>
+  <td class="notes-cell">No public cloud provider or data platform announcements found. Aegon has undergone significant restructuring (sold US operations). Recommend checking Aegon's Annual Report technology sections.</td>
+</tr>
+
+<tr data-clouds="Azure" data-platforms="Databricks" data-conf="HIGH" data-contra="false" data-name="ABN AMRO">
+  <td class="company-name">ABN AMRO</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks</span></div></td>
+  <td class="legacy-cell">Legacy data warehouse (migrated to Azure Data Lake + Databricks)</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Azure-first data strategy confirmed (Microsoft Customer Story + Databricks customer page). Data mesh on Azure; Azure Data Lake Storage + Databricks + Azure Synapse. Fraud detection, compliance, near-real-time insights. 10× faster time-to-market.</td>
+</tr>
+
+<tr data-clouds="Azure" data-platforms="Databricks" data-conf="HIGH" data-contra="false" data-name="Rabobank">
+  <td class="company-name">Rabobank</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks</span><span class="badge badge-azure" style="opacity:.7">Azure Synapse</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Microsoft Customer Story confirmed: Azure Data Factory + Azure Data Lake Gen 2 + Azure Synapse + Azure Databricks for global data exchange platform. Databricks for compliance infrastructure with scope-based access controls.</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- FRANCE -->
+<div class="country-section" data-country="France">
+  <div class="country-header">
+    <span class="country-flag">🇫🇷</span>
+    <span class="country-name">France</span>
+    <span class="country-count">(4)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="IBM" data-platforms="?" data-conf="HIGH" data-contra="true" data-name="BNP Paribas">
+  <td class="company-name">BNP Paribas</td>
+  <td><div class="badges"><span class="badge badge-ibm">IBM Cloud</span><span class="badge badge-oracle">Oracle</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">SAS (confirmed — replaced with Dataiku for ML/AI workloads); Oracle Exadata</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">IBM Cloud: new multi-year partnership (10-year, Apr 2025); BNP to dedicate data center space to IBM Cloud by 2028. Oracle Exadata Cloud@Customer for on-premises databases (Jan 2025). 3,000 data specialists, 700+ data scientists. No AWS or Databricks partnership documented.
+    <span class="contra-note">⚠ Current mapping: AWS+Databricks. MAJOR CONTRADICTION — primary cloud is IBM Cloud. SAS confirmed as legacy platform being replaced.</span>
+  </td>
+</tr>
+
+<tr data-clouds="AWS Azure" data-platforms="?" data-conf="HIGH" data-contra="false" data-name="Société Générale">
+  <td class="company-name">Société Générale</td>
+  <td><div class="badges"><span class="badge badge-aws">AWS</span><span class="badge badge-azure">Azure</span><span class="badge badge-priv">Private</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Official public statements confirm AWS and Azure as the two primary external clouds. Client data hosted on private cloud. Strategy is hybrid (private + AWS + Azure). GCP not mentioned. Transform to Grow strategic plan drives cloud adoption. No Databricks/Snowflake publicly confirmed.</td>
+</tr>
+
+<tr data-clouds="Azure GCP" data-platforms="Snowflake" data-conf="MEDIUM" data-contra="false" data-name="AXA">
+  <td class="company-name">AXA</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span><span class="badge badge-gcp">GCP</span></div></td>
+  <td><div class="badges"><span class="badge badge-snow">Snowflake</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">Snowflake: official case study ("AXA Reaches New Heights With Smart Data Platform Powered By Snowflake") — regulatory compliance, data governance, eliminated silos. Microsoft Azure partnership for healthcare/insurance platform (Azure API for FHIR). AXA Switzerland on GCP (Google Cloud customer story). Multi-cloud in practice.</td>
+</tr>
+
+<tr data-clouds="AWS Azure GCP" data-platforms="?" data-conf="MEDIUM" data-contra="false" data-name="Orange">
+  <td class="company-name">Orange (Telecom)</td>
+  <td><div class="badges"><span class="badge badge-aws">AWS</span><span class="badge badge-azure">Azure</span><span class="badge badge-gcp">GCP</span><span class="badge badge-priv">Private</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">Orange Business Services has AWS partnership (cloud-native apps, data lakes, fraud detection). Vendor-agnostic multi-cloud approach (AWS+Azure+GCP). Orange also operates own private cloud for telco workloads. No specific data platform target confirmed.</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- SWITZERLAND -->
+<div class="country-section" data-country="Switzerland">
+  <div class="country-header">
+    <span class="country-flag">🇨🇭</span>
+    <span class="country-name">Switzerland</span>
+    <span class="country-count">(3)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="Azure" data-platforms="?" data-conf="HIGH" data-contra="false" data-name="UBS">
+  <td class="company-name">UBS</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Anchor client for Microsoft Azure Switzerland (Cloud Wars confirmed). 50%+ of compute delivered in cloud; 600+ technology components on Azure with hundreds more in pipeline. Azure Switzerland regions (Zurich + Geneva) opened partly for UBS. No Databricks or Snowflake publicly confirmed.</td>
+</tr>
+
+<tr data-clouds="Azure" data-platforms="?" data-conf="HIGH" data-contra="false" data-name="Swiss Re">
+  <td class="company-name">Swiss Re</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Strategic alliance with Microsoft announced (March 2020, ongoing); Microsoft chosen as "strategic partner and preferred public cloud provider." Digital Market Center on Azure: connected vehicles, natural catastrophe resilience, cyber risk platforms. Internal ops modernized to Azure.</td>
+</tr>
+
+<tr data-clouds="AWS" data-platforms="?" data-conf="MEDIUM" data-contra="false" data-name="Swiss Life">
+  <td class="company-name">Swiss Life</td>
+  <td><div class="badges"><span class="badge badge-aws">AWS</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Legacy on-premises data centers (migrated via 30% re-platform + 70% lift-and-shift)</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">Swiss Life Germany documented on AWS (AWS Big Data Blog case study): automated data governance with Amazon SageMaker; comprehensive 2-year cloud migration. Note: this is the German subsidiary — group-level strategy not confirmed in public sources.</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- IRELAND -->
+<div class="country-section" data-country="Ireland">
+  <div class="country-header">
+    <span class="country-flag">🇮🇪</span>
+    <span class="country-name">Ireland</span>
+    <span class="country-count">(3)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="IBM Azure" data-platforms="?" data-conf="MEDIUM" data-contra="false" data-name="AIB">
+  <td class="company-name">AIB (Allied Irish Banks)</td>
+  <td><div class="badges"><span class="badge badge-ibm">IBM</span><span class="badge badge-oracle">Oracle Cloud</span><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">IBM mainframe (z15 — core of hybrid cloud strategy); IBM AutoSys (likely)</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">€65m IBM deal (3-year) for digital transformation; IBM z15 as hybrid cloud foundation. Oracle Cloud EPM for financial planning. Microsoft AI tools (Copilot Studio, M365) rolled out to 10,000 staff. nCino cloud banking platform. Multi-vendor, no single hyperscaler dominant.</td>
+</tr>
+
+<tr data-clouds="?" data-platforms="?" data-conf="LOW" data-contra="false" data-name="Bank of Ireland">
+  <td class="company-name">Bank of Ireland</td>
+  <td><div class="badges"><span class="badge badge-tbd">Not found</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not found</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-LOW">LOW</span></td>
+  <td class="notes-cell">No specific cloud provider or data platform announcements surfaced in public research. Recommend checking Bank of Ireland Technology Annual Report or CIO interviews.</td>
+</tr>
+
+<tr data-clouds="AWS" data-platforms="?" data-conf="LOW" data-contra="false" data-name="Citibank Europe">
+  <td class="company-name">Citibank Europe</td>
+  <td><div class="badges"><span class="badge badge-aws">AWS</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-LOW">LOW</span></td>
+  <td class="notes-cell">Global Citi has AWS partnership for payments modernization; European subsidiary strategy not confirmed separately. LOW confidence — entity-specific data not found. Citi global uses multi-cloud (AWS primary for transformation).</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- SWEDEN -->
+<div class="country-section" data-country="Sweden">
+  <div class="country-header">
+    <span class="country-flag">🇸🇪</span>
+    <span class="country-name">Sweden</span>
+    <span class="country-count">(4)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="?" data-platforms="?" data-conf="LOW" data-contra="false" data-name="Nordea">
+  <td class="company-name">Nordea</td>
+  <td><div class="badges"><span class="badge badge-ibm">IBM</span><span class="badge badge-tbd">HPC not confirmed</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">IBM database infrastructure (confirmed for DB management)</td>
+  <td><span class="conf conf-LOW">LOW</span></td>
+  <td class="notes-cell">IBM confirmed for mission-critical database management and performance monitoring. No major hyperscaler partnership announcement found publicly. Nordea's AI Hub uses AI for Nordic banking services. HQ relocated Helsinki 2018.</td>
+</tr>
+
+<tr data-clouds="GCP Azure AWS" data-platforms="?" data-conf="MEDIUM" data-contra="false" data-name="SEB">
+  <td class="company-name">SEB</td>
+  <td><div class="badges"><span class="badge badge-gcp">GCP</span><span class="badge badge-azure">Azure</span><span class="badge badge-aws">AWS</span></div></td>
+  <td><div class="badges"><span class="badge badge-gcpnat">BigQuery</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">Official SEB tech stack page: GCP preferred for developed apps and data analytics; BigQuery in use; Azure and AWS used when integrating third-party solutions. Multi-cloud in practice but GCP is the data analytics home.</td>
+</tr>
+
+<tr data-clouds="Azure" data-platforms="?" data-conf="MEDIUM" data-contra="false" data-name="Handelsbanken">
+  <td class="company-name">Handelsbanken</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">Handelsbanken CIO stated: "Microsoft cloud technology is a crucial part of Handelsbanken's strategic focus in modernization of critical business applications and agile development cycles." Azure confirmed as strategic cloud. No data platform target identified.</td>
+</tr>
+
+<tr data-clouds="Azure" data-platforms="Databricks" data-conf="HIGH" data-contra="false" data-name="Swedbank">
+  <td class="company-name">Swedbank</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Microsoft Customer Story confirmed: migrated big data platform to Azure Databricks (core of new analytics platform) + Immuta for unified access control. Centralized production data for all customers on Azure. Databricks customer page confirmed.</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- BELGIUM -->
+<div class="country-section" data-country="Belgium">
+  <div class="country-header">
+    <span class="country-flag">🇧🇪</span>
+    <span class="country-name">Belgium</span>
+    <span class="country-count">(2)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="?" data-platforms="?" data-conf="LOW" data-contra="false" data-name="KBC Group">
+  <td class="company-name">KBC Group</td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-LOW">LOW</span></td>
+  <td class="notes-cell">Known for Kate AI assistant (leading Belgian bank app). No cloud provider or data platform publicly confirmed via press releases or case studies. Current mapping shows "Azure+Databricks direction" — cannot verify from public sources.</td>
+</tr>
+
+<tr data-clouds="Azure" data-platforms="Databricks" data-conf="HIGH" data-contra="false" data-name="Belfius">
+  <td class="company-name">Belfius</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks</span><span class="badge badge-azure" style="opacity:.7">Azure Synapse</span></div></td>
+  <td class="legacy-cell">SAS (confirmed — SAS partnership 2018; now transitioning to Azure Databricks for fraud/AML)</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Microsoft Customer Story confirmed: built on Microsoft Intelligent Data Platform using Azure ML, Azure Synapse Analytics, Azure Databricks. Early adopter. Uses platform to assess risks, meet regulatory standards, detect unusual behaviors. SAS was legacy partner (2018 announcement) — active migration target for Impetus.</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- DENMARK -->
+<div class="country-section" data-country="Denmark">
+  <div class="country-header">
+    <span class="country-flag">🇩🇰</span>
+    <span class="country-name">Denmark</span>
+    <span class="country-count">(2)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="AWS" data-platforms="?" data-conf="HIGH" data-contra="true" data-name="Danske Bank">
+  <td class="company-name">Danske Bank</td>
+  <td><div class="badges"><span class="badge badge-aws">AWS</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">AWS-native (Bedrock)</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Multi-year AWS agreement (Mar 2024); extended June 2026 as part of Forward '28 strategy (+DKK 500M tech investment). Amazon Bedrock + Bedrock AgentCore for AI-enabled banking. Focus on infrastructure modernization, AI tools, risk management, customer service.
+    <span class="contra-note">⚠ Current mapping includes Databricks. AWS Bedrock is the AI/data platform of record per public announcements — Databricks not confirmed from any press release or case study.</span>
+  </td>
+</tr>
+
+<tr data-clouds="?" data-platforms="?" data-conf="LOW" data-contra="false" data-name="Nordea Denmark">
+  <td class="company-name">Nordea Denmark</td>
+  <td><div class="badges"><span class="badge badge-tbd">See Nordea (Sweden)</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">See Nordea (Sweden)</span></div></td>
+  <td class="legacy-cell">Same as Nordea group</td>
+  <td><span class="conf conf-LOW">LOW</span></td>
+  <td class="notes-cell">Nordea is a pan-Nordic group (HQ Helsinki). Danish operations follow group-level cloud strategy. See Nordea entry under Sweden. No Denmark-specific announcements found.</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- SPAIN -->
+<div class="country-section" data-country="Spain">
+  <div class="country-header">
+    <span class="country-flag">🇪🇸</span>
+    <span class="country-name">Spain</span>
+    <span class="country-count">(4)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="GCP" data-platforms="?" data-conf="HIGH" data-contra="true" data-name="BBVA">
+  <td class="company-name">BBVA</td>
+  <td><div class="badges"><span class="badge badge-gcp">GCP</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">GCP-native (Chronicle)</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Strategic GCP partnership since 2011; deepened July 2025 (Google Workspace + Gemini for 100,000+ employees). First European bank on Google Cloud Chronicle (security analytics). GCP confirmed as primary. Google Gemini for AI.
+    <span class="contra-note">⚠ Current mapping includes Databricks. No Databricks partnership or case study confirmed from public sources. GCP-native tools (Chronicle, Vertex AI likely) are documented.</span>
+  </td>
+</tr>
+
+<tr data-clouds="AWS Azure" data-platforms="?" data-conf="HIGH" data-contra="false" data-name="Santander">
+  <td class="company-name">Santander</td>
+  <td><div class="badges"><span class="badge badge-aws">AWS</span><span class="badge badge-azure">Azure</span><span class="badge badge-priv">Private</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Multi-cloud + private cloud strategy confirmed: AWS and Azure as public clouds; GCP explicitly not used for storage (only Gemini AI API). 80% of IT in cloud (as of 2022); now targeting higher public cloud ratio. Catalyst platform built with AWS Professional Services. OpenAI, Gemini, Anthropic for GenAI.</td>
+</tr>
+
+<tr data-clouds="AWS Azure GCP" data-platforms="?" data-conf="MEDIUM" data-contra="false" data-name="Telefónica">
+  <td class="company-name">Telefónica</td>
+  <td><div class="badges"><span class="badge badge-aws">AWS</span><span class="badge badge-azure">Azure</span><span class="badge badge-gcp">GCP</span><span class="badge badge-priv">Private</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">5G core network on AWS (Nokia partnership). Infrastructure includes VMware, Huawei Cloud, AWS, Azure, GCP. Multi-cloud and own private cloud for telco workloads. No enterprise data platform target publicly confirmed.</td>
+</tr>
+
+<tr data-clouds="Azure" data-platforms="?" data-conf="MEDIUM" data-contra="true" data-name="CaixaBank">
+  <td class="company-name">CaixaBank</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">Cosmos plan (2025-2027, €5B investment) — cloud adoption target 34% by 2027. Azure/Microsoft Spain region confirmed (anchor client). GalaxIA generative AI tool built with 100+ AI/cloud specialists.
+    <span class="contra-note">⚠ Current mapping includes Microsoft Fabric. Fabric not specifically confirmed from public announcements — Azure broadly confirmed but no Fabric announcement found.</span>
+  </td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- ITALY -->
+<div class="country-section" data-country="Italy">
+  <div class="country-header">
+    <span class="country-flag">🇮🇹</span>
+    <span class="country-name">Italy</span>
+    <span class="country-count">(3)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="GCP" data-platforms="?" data-conf="HIGH" data-contra="true" data-name="UniCredit">
+  <td class="company-name">UniCredit</td>
+  <td><div class="badges"><span class="badge badge-gcp">GCP</span></div></td>
+  <td><div class="badges"><span class="badge badge-gcpnat">GCP-native</span></div></td>
+  <td class="legacy-cell">Legacy app estate (800+ apps; 800+ decommissioned in Intesa's parallel migration)</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">10-year GCP agreement across 13 regional markets (announced May 2025). Cloud-first approach confirmed in 2024 Annual Report. GCP for AI, data analytics, virtualized infrastructure. "Massively advancing the bank's technology footprint."
+    <span class="contra-note">⚠ Current mapping: AWS+Databricks. MAJOR CONTRADICTION — UniCredit is a confirmed GCP strategic partner at group scale. No AWS or Databricks confirmed.</span>
+  </td>
+</tr>
+
+<tr data-clouds="GCP" data-platforms="?" data-conf="HIGH" data-contra="false" data-name="Intesa Sanpaolo">
+  <td class="company-name">Intesa Sanpaolo</td>
+  <td><div class="badges"><span class="badge badge-gcp">GCP</span></div></td>
+  <td><div class="badges"><span class="badge badge-gcpnat">GCP-native (Isytech)</span></div></td>
+  <td class="legacy-cell">800+ legacy apps migrated; 800+ decommissioned in core banking transformation</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Landmark migration completed July 2026: core IT systems moved to Google Cloud regions in Italy (TIM data centers, Turin + Milan). Isytech = cloud-native digital technology platform. 800+ apps migrated, 800+ decommissioned. Completed 2022-2025 goals.</td>
+</tr>
+
+<tr data-clouds="GCP Azure" data-platforms="?" data-conf="MEDIUM" data-contra="false" data-name="Generali">
+  <td class="company-name">Generali</td>
+  <td><div class="badges"><span class="badge badge-gcp">GCP</span><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">Strategic GCP partnership confirmed (digital insurance platform, ML capabilities, customer service). Microsoft GitHub Copilot deployed to ~2,000 developers (Italy, Germany, France) in early 2024. GOSP (Accenture JV) manages group IT. Multi-cloud: GCP for innovation, Azure/Microsoft for developer tooling.</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- NORWAY -->
+<div class="country-section" data-country="Norway">
+  <div class="country-header">
+    <span class="country-flag">🇳🇴</span>
+    <span class="country-name">Norway</span>
+    <span class="country-count">(2)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="Azure" data-platforms="Databricks Snowflake" data-conf="HIGH" data-contra="false" data-name="DNB">
+  <td class="company-name">DNB</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks</span><span class="badge badge-snow">Snowflake</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Azure Databricks deployed for threat detection and security analytics. Snowflake used for data platform IPA (re-architected with Snowflake + Neo4j). Dual-platform: Databricks for cyber/streaming, Snowflake for structured analytics. marimo case study confirms Databricks notebooks in use.</td>
+</tr>
+
+<tr data-clouds="Azure" data-platforms="Databricks" data-conf="HIGH" data-contra="false" data-name="Storebrand">
+  <td class="company-name">Storebrand</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">Databricks customer page confirmed. Azure Databricks for data-driven asset management: product recommendations, fraud protection. Results: 55% platform cost reduction, 9% increase in sales, 29% NPS improvement. 2M+ Norwegian customers on platform.</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- FINLAND -->
+<div class="country-section" data-country="Finland">
+  <div class="country-header">
+    <span class="country-flag">🇫🇮</span>
+    <span class="country-name">Finland</span>
+    <span class="country-count">(1)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="Azure AWS" data-platforms="Databricks" data-conf="MEDIUM" data-contra="false" data-name="OP Financial Group">
+  <td class="company-name">OP Financial Group</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span><span class="badge badge-aws">AWS</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks*</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">Microsoft Azure primary — one of Finland's largest cloud migration programs. Multi-cloud with AWS also mentioned in tech stack (appsruntheworld.com). Databricks mentioned in technology profile. MIT Technology Review (Nov 2022) covers OP's cloud-to-data journey. * Databricks listed in tech stack, not a confirmed public case study.</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- AUSTRIA -->
+<div class="country-section" data-country="Austria">
+  <div class="country-header">
+    <span class="country-flag">🇦🇹</span>
+    <span class="country-name">Austria</span>
+    <span class="country-count">(2)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="Azure" data-platforms="Databricks" data-conf="MEDIUM" data-contra="false" data-name="Erste Group">
+  <td class="company-name">Erste Group</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span><span class="badge badge-aws">AWS</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks</span></div></td>
+  <td class="legacy-cell">Oracle, Cloudera (confirmed for Česká Spořitelna subsidiary), Snowflake (being replaced)</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">Česká Spořitelna (Erste Group subsidiary) selected Databricks as unified platform — Data+AI Summit session: "Unifying Oracle, Cloudera and Snowflake workloads on single platform." Erste Bank uses Confluent for real-time pipelines to Databricks and Snowflake. Group-level consolidation ongoing.</td>
+</tr>
+
+<tr data-clouds="AWS Azure" data-platforms="Databricks" data-conf="HIGH" data-contra="false" data-name="Raiffeisen Bank International">
+  <td class="company-name">Raiffeisen Bank International</td>
+  <td><div class="badges"><span class="badge badge-aws">AWS</span><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks</span><span class="badge badge-tbd">Teradata VantageCloud</span></div></td>
+  <td class="legacy-cell">Teradata (migrated to VantageCloud on AWS), Hadoop (mentioned for peer Raiffeisenbank)</td>
+  <td><span class="conf conf-HIGH">HIGH</span></td>
+  <td class="notes-cell">AWS+Azure confirmed: 50%+ of tech assets moved to AWS+Azure in 3-year program (Hitachi Digital Services partnership). Databricks self-service data platform on AWS via Nordcloud (Unity Catalog + AWS-native services). Teradata VantageCloud on AWS: 250 bank operations, granular analytics.</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- POLAND -->
+<div class="country-section" data-country="Poland">
+  <div class="country-header">
+    <span class="country-flag">🇵🇱</span>
+    <span class="country-name">Poland</span>
+    <span class="country-count">(2)</span>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+
+<tr data-clouds="Azure GCP" data-platforms="?" data-conf="MEDIUM" data-contra="false" data-name="PKO Bank Polski">
+  <td class="company-name">PKO Bank Polski</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span><span class="badge badge-gcp">GCP</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">SAP, Oracle (mentioned in vendor profile)</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">Multi-cloud confirmed: Azure (first SaaS project for internal communication) and GCP (built multi-app platform with OChK experts). Also uses SAP and Oracle. Digital transformation strategy includes cloud applications and AI-driven platforms.</td>
+</tr>
+
+<tr data-clouds="Azure" data-platforms="?" data-conf="MEDIUM" data-contra="false" data-name="mBank">
+  <td class="company-name">mBank</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">Microsoft Customer Story: mBank upskilling program with Microsoft Learn for Azure, Power Apps, and Data Warehouse. Azure confirmed as primary cloud for data and AI work. No specific data platform target confirmed publicly.</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+
+</div><!-- /table-container -->
+</div><!-- /table-wrap -->
+
+<script>
+  // ─── FILTER LOGIC ───
+  const rows = () => document.querySelectorAll('tbody tr[data-name]');
+  const sections = () => document.querySelectorAll('.country-section');
+
+  let activeCloud = 'all';
+  let activePlatform = 'all';
+  let activeConf = 'all';
+  let contraOnly = false;
+  let searchTerm = '';
+
+  function applyFilters() {
+    let visibleCount = 0;
+
+    rows().forEach(row => {
+      const clouds = (row.dataset.clouds || '').toLowerCase();
+      const platforms = (row.dataset.platforms || '').toLowerCase();
+      const conf = row.dataset.conf || '';
+      const isContra = row.dataset.contra === 'true';
+      const name = (row.dataset.name || '').toLowerCase();
+
+      let show = true;
+
+      if (activeCloud !== 'all') {
+        show = show && clouds.includes(activeCloud.toLowerCase());
+      }
+      if (activePlatform !== 'all') {
+        if (activePlatform === '?') {
+          show = show && (platforms === '?' || platforms === '');
+        } else {
+          show = show && platforms.toLowerCase().includes(activePlatform.toLowerCase());
+        }
+      }
+      if (activeConf !== 'all') {
+        show = show && conf === activeConf;
+      }
+      if (contraOnly) {
+        show = show && isContra;
+      }
+      if (searchTerm) {
+        show = show && name.includes(searchTerm.toLowerCase());
+      }
+
+      row.classList.toggle('hidden', !show);
+      if (show) visibleCount++;
+    });
+
+    // hide country sections with no visible rows
+    sections().forEach(section => {
+      const visible = section.querySelectorAll('tbody tr:not(.hidden)').length;
+      section.classList.toggle('hidden', visible === 0);
+    });
+
+    document.getElementById('empty-state').style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+
+  // cloud filter buttons
+  document.getElementById('cloud-filters').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('#cloud-filters .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCloud = btn.dataset.cloud;
+    applyFilters();
+  });
+
+  // platform filter buttons
+  document.getElementById('platform-filters').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('#platform-filters .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activePlatform = btn.dataset.platform;
+    applyFilters();
+  });
+
+  // confidence filter buttons
+  document.getElementById('conf-filters').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('#conf-filters .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeConf = btn.dataset.conf;
+    applyFilters();
+  });
+
+  // contradiction toggle
+  document.getElementById('contra-toggle').addEventListener('click', function() {
+    contraOnly = !contraOnly;
+    this.classList.toggle('active', contraOnly);
+    applyFilters();
+  });
+
+  // search
+  document.getElementById('search').addEventListener('input', function() {
+    searchTerm = this.value;
+    applyFilters();
+  });
+</script>
+</body>
+</html>
