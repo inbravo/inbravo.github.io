@@ -1273,8 +1273,7 @@ buildHeatmap();
 buildTable();
 // Init theme, then draw — ensures CSS vars are applied before canvas reads them
 const _savedTheme=localStorage.getItem('impetus-theme');
-if(_savedTheme){setTheme(_savedTheme);}
-else if(window.matchMedia('(prefers-color-scheme:dark)').matches){setTheme('dark');}
+setTheme(_savedTheme||'light');
 setTimeout(drawBubbles,120);
 // Redraw if iframe resizes after initial paint
 if(typeof ResizeObserver!=='undefined'){

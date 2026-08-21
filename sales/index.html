@@ -159,6 +159,5 @@ btn.addEventListener('click', () => {
   applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
 });
 const _saved = localStorage.getItem('impetus-theme');
-if (_saved) applyTheme(_saved);
-else if (window.matchMedia('(prefers-color-scheme:dark)').matches) applyTheme('dark');
+applyTheme(_saved || 'light');
 </script>

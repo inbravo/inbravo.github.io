@@ -1094,8 +1094,7 @@ setTimeout(update, 80);
     applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
   });
   const saved = localStorage.getItem('impetus-theme');
-  if (saved) applyTheme(saved);
-  else if (window.matchMedia('(prefers-color-scheme:dark)').matches) applyTheme('dark');
+  applyTheme(saved || 'light');
 })();
 </script>
 </body>
