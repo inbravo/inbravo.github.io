@@ -1,0 +1,689 @@
+<title>EMEA Cloud & Platform Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;--dim:#94A3B8;
+  --accent:#6366F1;--accent-dim:#EEF2FF;
+  --hdr:#0F172A;--hdr-text:#F1F5F9;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.1),0 12px 32px rgba(0,0,0,.08);
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;--accent-dim:#1E1B4B;
+  --hdr:#0A0F1E;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
+}}
+:root[data-theme="dark"]{
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;--accent-dim:#1E1B4B;
+  --hdr:#0A0F1E;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:13px;scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;min-height:100vh}
+h1,h2,h3{font-family:'Plus Jakarta Sans',system-ui,sans-serif;line-height:1.2}
+a{color:var(--accent);text-decoration:none}
+
+/* HEADER */
+.hdr{background:var(--hdr);color:var(--hdr-text);padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:100}
+.hdr-brand{display:flex;align-items:center;gap:.75rem}
+.hdr-badge{background:#6366F1;color:#fff;font-size:.65rem;font-weight:700;padding:.15rem .45rem;border-radius:.25rem;letter-spacing:.05em;font-family:'Plus Jakarta Sans',sans-serif}
+.hdr-title{font-size:.95rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hdr-text)}
+.hdr-meta{display:flex;align-items:center;gap:.75rem;font-size:.72rem;color:#94A3B8}
+.theme-btn{background:none;border:1px solid #334155;color:#94A3B8;border-radius:.375rem;padding:.25rem .6rem;cursor:pointer;font-size:.8rem;font-family:inherit}
+.theme-btn:hover{border-color:#6366F1;color:var(--hdr-text)}
+
+/* STATS */
+.stats-strip{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface)}
+.stat-card{flex:1;padding:1rem 1.25rem;border-right:1px solid var(--border)}
+.stat-card:last-child{border-right:none}
+.stat-n{font-size:1.65rem;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;line-height:1;margin-bottom:.25rem}
+.stat-n.teal{color:#0D9488}.stat-n.sky{color:#0284C7}.stat-n.indigo{color:#6366F1}
+.stat-l{font-size:.72rem;color:var(--muted);line-height:1.4}
+
+/* MAIN 3-COL */
+.main-body{display:grid;grid-template-columns:auto 1fr 1fr;gap:0;min-height:520px;border-bottom:1px solid var(--border)}
+
+/* TILE MAP */
+.map-col{padding:1.25rem;border-right:1px solid var(--border);overflow-x:auto}
+.map-label{font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:.75rem}
+.tile-grid{display:grid;grid-template-columns:repeat(8,64px);grid-template-rows:repeat(5,52px);gap:4px;width:fit-content}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:.375rem;cursor:pointer;transition:transform .12s,box-shadow .12s;gap:2px;user-select:none}
+.tile:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);z-index:2}
+.tile.active{outline:2px solid var(--text);outline-offset:1px}
+.tile-flag{font-size:1.1rem;line-height:1}
+.tile-code{font-size:.62rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.04em}
+/* Cloud maturity — teal/blue/violet scale (distinct from red/orange regulatory map) */
+.tile[data-score="4"]{background:#0D9488;color:#fff}
+.tile[data-score="3"]{background:#0284C7;color:#fff}
+.tile[data-score="2"]{background:#7C3AED;color:#fff}
+.tile[data-score="1"]{background:#94A3B8;color:#fff}
+
+.map-legend{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}
+.leg{display:flex;align-items:center;gap:.3rem;font-size:.65rem;color:var(--muted)}
+.leg-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* PLATFORM PANEL */
+.plat-col{padding:1.25rem;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:.75rem;overflow-y:auto}
+/* COMPETE PANEL */
+.comp-col{padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;overflow-y:auto}
+
+.panel-label{font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);font-family:'Plus Jakarta Sans',sans-serif}
+.placeholder{display:flex;align-items:center;justify-content:center;height:100%;color:var(--dim);font-size:.75rem;text-align:center;padding:2rem}
+
+.country-hero{display:flex;align-items:center;gap:.75rem}
+.country-flag-big{font-size:1.75rem;line-height:1}
+.country-name{font-size:1rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif}
+.score-badge{display:inline-flex;align-items:center;font-size:.6rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;padding:.2rem .5rem;border-radius:.25rem;color:#fff}
+.score-badge.s4{background:#0D9488}.score-badge.s3{background:#0284C7}
+.score-badge.s2{background:#7C3AED}.score-badge.s1{background:#94A3B8}
+
+/* CLOUD / PLATFORM STRENGTH ROWS */
+.strength-section{display:flex;flex-direction:column;gap:.4rem}
+.strength-row{display:flex;align-items:center;gap:.5rem}
+.strength-label{font-size:.68rem;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;width:84px;flex-shrink:0}
+.strength-dots{display:flex;gap:3px}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.sdot.on-aws{background:#F97316}
+.sdot.on-azure{background:#3B82F6}
+.sdot.on-gcp{background:#22C55E}
+.sdot.on-databricks{background:#EF4444}
+.sdot.on-snowflake{background:#06B6D4}
+.sdot.on-fabric{background:#8B5CF6}
+
+/* CHIPS */
+.chip{font-size:.58rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;padding:.15rem .4rem;border-radius:.2rem;white-space:nowrap;display:inline-flex;align-items:center}
+.chip-aws    {background:#FFF7ED;color:#C2410C;border:1px solid #FED7AA}
+.chip-azure  {background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE}
+.chip-gcp    {background:#F0FDF4;color:#15803D;border:1px solid #BBF7D0}
+.chip-databricks{background:#FEF2F2;color:#B91C1C;border:1px solid #FECACA}
+.chip-snowflake {background:#ECFEFF;color:#0E7490;border:1px solid #A5F3FC}
+.chip-fabric    {background:#F5F3FF;color:#6D28D9;border:1px solid #DDD6FE}
+:root[data-theme="dark"] .chip-aws    {background:#431407;color:#FB923C;border-color:#7C2D12}
+:root[data-theme="dark"] .chip-azure  {background:#172554;color:#93C5FD;border-color:#1E3A8A}
+:root[data-theme="dark"] .chip-gcp    {background:#052E16;color:#86EFAC;border-color:#14532D}
+:root[data-theme="dark"] .chip-databricks{background:#450A0A;color:#FCA5A5;border-color:#7F1D1D}
+:root[data-theme="dark"] .chip-snowflake {background:#083344;color:#67E8F9;border-color:#164E63}
+:root[data-theme="dark"] .chip-fabric    {background:#2E1065;color:#C4B5FD;border-color:#4C1D95}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .chip-aws    {background:#431407;color:#FB923C;border-color:#7C2D12}
+  :root:not([data-theme="light"]) .chip-azure  {background:#172554;color:#93C5FD;border-color:#1E3A8A}
+  :root:not([data-theme="light"]) .chip-gcp    {background:#052E16;color:#86EFAC;border-color:#14532D}
+  :root:not([data-theme="light"]) .chip-databricks{background:#450A0A;color:#FCA5A5;border-color:#7F1D1D}
+  :root:not([data-theme="light"]) .chip-snowflake {background:#083344;color:#67E8F9;border-color:#164E63}
+  :root:not([data-theme="light"]) .chip-fabric    {background:#2E1065;color:#C4B5FD;border-color:#4C1D95}
+}
+
+/* ENTERPRISE SIGNALS */
+.signal-list{display:flex;flex-direction:column;gap:.35rem}
+.signal-row{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.4rem .6rem;background:var(--surface2);border-radius:.3rem;border:1px solid var(--border)}
+.signal-name{font-size:.72rem;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text)}
+.signal-chips{display:flex;gap:3px;flex-wrap:wrap}
+
+/* COMPETITOR ROWS */
+.rival-list{display:flex;flex-direction:column;gap:.45rem}
+.rival-row{padding:.55rem .7rem;background:var(--surface2);border-radius:.375rem;border:1px solid var(--border)}
+.rival-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.2rem}
+.rival-name{font-size:.75rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text)}
+.rival-badge{font-size:.58rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;padding:.1rem .4rem;border-radius:.2rem;color:#fff}
+.rival-badge.dom{background:#DC2626}.rival-badge.str{background:#F97316}
+.rival-badge.act{background:#D97706}.rival-badge.pre{background:#94A3B8}
+.rival-note{font-size:.64rem;color:var(--muted);line-height:1.45}
+
+.angle-box{background:var(--surface2);border-left:3px solid #0D9488;padding:.65rem .75rem;border-radius:0 .375rem .375rem 0;font-size:.72rem;color:var(--text);line-height:1.6}
+
+/* SOURCES */
+.sources{padding:.75rem 1.25rem 1.5rem;font-size:.65rem;color:var(--dim);line-height:2;border-top:1px solid var(--border)}
+.sources a{color:var(--accent)}
+
+@media(max-width:900px){
+  .main-body{grid-template-columns:1fr}
+  .map-col,.plat-col{border-right:none;border-bottom:1px solid var(--border)}
+}
+</style>
+
+<header class="hdr">
+  <div class="hdr-brand">
+    <span class="hdr-badge">IMPETUS</span>
+    <span class="hdr-title">EMEA Cloud & Platform Intelligence</span>
+  </div>
+  <div class="hdr-meta">
+    <span>EU / UK · Financial Services</span>
+    <span>Aug 2026</span>
+    <button class="theme-btn" id="theme-btn">🌙</button>
+  </div>
+</header>
+
+<div class="stats-strip">
+  <div class="stat-card">
+    <div class="stat-n teal">Databricks</div>
+    <div class="stat-l">leading data platform in 14 of 17 EMEA markets — wins the analytics layer regardless of cloud provider choice</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-n sky">AWS + Azure</div>
+    <div class="stat-l">two-cloud duopoly across EMEA FS — GCP leads in exactly 1 market (Spain / BBVA)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-n indigo">UK · NL · SE · DK</div>
+    <div class="stat-l">4 cloud-native FS markets — cloud decision made, platform decided, legacy still running</div>
+  </div>
+</div>
+
+<div class="main-body">
+
+  <div class="map-col">
+    <div class="map-label">Click a market to explore</div>
+    <div class="tile-grid" id="tile-grid"></div>
+    <div class="map-legend">
+      <span class="leg"><span class="leg-swatch" style="background:#0D9488"></span>Cloud-Native</span>
+      <span class="leg"><span class="leg-swatch" style="background:#0284C7"></span>Cloud-Advanced</span>
+      <span class="leg"><span class="leg-swatch" style="background:#7C3AED"></span>Cloud-Adopting</span>
+      <span class="leg"><span class="leg-swatch" style="background:#94A3B8"></span>Cloud-Emerging</span>
+    </div>
+  </div>
+
+  <div class="plat-col" id="plat-col">
+    <div class="panel-label">Platform Intelligence</div>
+    <div class="placeholder" id="plat-placeholder">← Select a market</div>
+    <div id="plat-content" style="display:none"></div>
+  </div>
+
+  <div class="comp-col" id="comp-col">
+    <div class="panel-label">Competitive Landscape</div>
+    <div class="placeholder" id="comp-placeholder">← Select a market</div>
+    <div id="comp-content" style="display:none"></div>
+  </div>
+
+</div>
+
+<div class="sources">
+  Sources (public announcements &amp; analyst reports):
+  <a href="https://aws.amazon.com/financial-services/customers/" target="_blank" rel="noopener">AWS FS Customer References</a> ·
+  <a href="https://azure.microsoft.com/en-us/industries/financial/" target="_blank" rel="noopener">Microsoft Azure FS</a> ·
+  <a href="https://www.databricks.com/customers" target="_blank" rel="noopener">Databricks Customers</a> ·
+  <a href="https://www.snowflake.com/en/customers/" target="_blank" rel="noopener">Snowflake Customers</a> ·
+  Gartner Magic Quadrant for Cloud Database Management Systems 2025 · IDC Cloud IT Infrastructure Q1 2026
+</div>
+
+<script>
+// ── COUNTRIES ──────────────────────────────────────────
+// score: 4=Cloud-Native, 3=Cloud-Advanced, 2=Cloud-Adopting, 1=Cloud-Emerging
+// clouds / platforms: relative strength 1-4 based on public announcements
+// signals: named enterprises with confirmed public cloud/platform commitments
+
+const COUNTRIES=[
+  {
+    code:'UK', name:'United Kingdom', flag:'🇬🇧', score:4, col:3, row:2,
+    clouds:{aws:4, azure:4, gcp:2},
+    platforms:{databricks:4, snowflake:2, fabric:3},
+    signals:[
+      {name:'Barclays',     cloud:'aws',   platform:'databricks'},
+      {name:'Lloyds',       cloud:'aws',   platform:'databricks'},
+      {name:'HSBC',         cloud:'azure', platform:'databricks'},
+      {name:'BT Group',     cloud:'aws',   platform:null},
+      {name:'Aviva',        cloud:'azure', platform:null},
+    ]
+  },
+  {
+    code:'DE', name:'Germany', flag:'🇩🇪', score:3, col:5, row:3,
+    clouds:{aws:4, azure:3, gcp:2},
+    platforms:{databricks:4, snowflake:2, fabric:2},
+    signals:[
+      {name:'Deutsche Bank',    cloud:'aws',   platform:'databricks'},
+      {name:'Allianz',          cloud:'aws',   platform:'databricks'},
+      {name:'Commerzbank',      cloud:'azure', platform:null},
+      {name:'Deutsche Telekom', cloud:'aws',   platform:null},
+    ]
+  },
+  {
+    code:'NL', name:'Netherlands', flag:'🇳🇱', score:4, col:4, row:3,
+    clouds:{aws:4, azure:3, gcp:1},
+    platforms:{databricks:4, snowflake:2, fabric:2},
+    signals:[
+      {name:'ING Group',  cloud:'aws',   platform:'databricks'},
+      {name:'Aegon',      cloud:'aws',   platform:'databricks'},
+      {name:'ABN AMRO',   cloud:'azure', platform:null},
+      {name:'Rabobank',   cloud:'azure', platform:null},
+    ]
+  },
+  {
+    code:'FR', name:'France', flag:'🇫🇷', score:3, col:4, row:5,
+    clouds:{aws:4, azure:3, gcp:2},
+    platforms:{databricks:4, snowflake:2, fabric:2},
+    signals:[
+      {name:'BNP Paribas',      cloud:'aws',   platform:'databricks'},
+      {name:'Société Générale', cloud:'aws',   platform:null},
+      {name:'AXA',              cloud:'azure', platform:'snowflake'},
+      {name:'Orange',           cloud:'aws',   platform:null},
+    ]
+  },
+  {
+    code:'CH', name:'Switzerland', flag:'🇨🇭', score:3, col:5, row:4,
+    clouds:{aws:3, azure:4, gcp:1},
+    platforms:{databricks:3, snowflake:3, fabric:2},
+    signals:[
+      {name:'UBS',       cloud:'azure', platform:null},
+      {name:'Swiss Re',  cloud:'aws',   platform:'databricks'},
+      {name:'Swiss Life',cloud:'azure', platform:null},
+    ]
+  },
+  {
+    code:'IE', name:'Ireland', flag:'🇮🇪', score:4, col:2, row:3,
+    clouds:{aws:4, azure:3, gcp:2},
+    platforms:{databricks:3, snowflake:2, fabric:2},
+    signals:[
+      {name:'AIB',              cloud:'aws',   platform:null},
+      {name:'Bank of Ireland',  cloud:'azure', platform:null},
+      {name:'Citibank Europe',  cloud:'aws',   platform:'databricks'},
+    ]
+  },
+  {
+    code:'SE', name:'Sweden', flag:'🇸🇪', score:4, col:7, row:1,
+    clouds:{aws:3, azure:4, gcp:1},
+    platforms:{databricks:3, snowflake:3, fabric:2},
+    signals:[
+      {name:'Nordea',        cloud:'aws',   platform:'databricks'},
+      {name:'SEB',           cloud:'azure', platform:null},
+      {name:'Handelsbanken', cloud:'azure', platform:null},
+      {name:'Swedbank',      cloud:'aws',   platform:null},
+    ]
+  },
+  {
+    code:'BE', name:'Belgium', flag:'🇧🇪', score:3, col:4, row:4,
+    clouds:{aws:3, azure:4, gcp:1},
+    platforms:{databricks:3, snowflake:2, fabric:2},
+    signals:[
+      {name:'KBC Group',   cloud:'azure', platform:'databricks'},
+      {name:'ING Belgium', cloud:'aws',   platform:null},
+      {name:'Belfius',     cloud:'azure', platform:null},
+    ]
+  },
+  {
+    code:'DK', name:'Denmark', flag:'🇩🇰', score:4, col:5, row:2,
+    clouds:{aws:4, azure:3, gcp:1},
+    platforms:{databricks:4, snowflake:1, fabric:2},
+    signals:[
+      {name:'Danske Bank', cloud:'aws', platform:'databricks'},
+      {name:'Nordea',      cloud:'aws', platform:'databricks'},
+      {name:'Jyske Bank',  cloud:'azure', platform:null},
+    ]
+  },
+  {
+    code:'ES', name:'Spain', flag:'🇪🇸', score:2, col:3, row:4,
+    clouds:{aws:3, azure:3, gcp:3},
+    platforms:{databricks:3, snowflake:2, fabric:3},
+    signals:[
+      {name:'BBVA',       cloud:'gcp',   platform:'databricks'},
+      {name:'Santander',  cloud:'azure', platform:null},
+      {name:'Telefónica', cloud:'aws',   platform:null},
+      {name:'CaixaBank',  cloud:'azure', platform:'fabric'},
+    ]
+  },
+  {
+    code:'IT', name:'Italy', flag:'🇮🇹', score:2, col:6, row:5,
+    clouds:{aws:3, azure:3, gcp:2},
+    platforms:{databricks:3, snowflake:2, fabric:2},
+    signals:[
+      {name:'UniCredit',       cloud:'aws',   platform:'databricks'},
+      {name:'Intesa Sanpaolo', cloud:'azure', platform:null},
+      {name:'Generali',        cloud:'aws',   platform:null},
+    ]
+  },
+  {
+    code:'NO', name:'Norway', flag:'🇳🇴', score:3, col:6, row:1,
+    clouds:{aws:3, azure:4, gcp:1},
+    platforms:{databricks:3, snowflake:2, fabric:2},
+    signals:[
+      {name:'DNB',        cloud:'azure', platform:null},
+      {name:'Storebrand', cloud:'aws',   platform:'databricks'},
+    ]
+  },
+  {
+    code:'FI', name:'Finland', flag:'🇫🇮', score:3, col:8, row:1,
+    clouds:{aws:3, azure:3, gcp:1},
+    platforms:{databricks:3, snowflake:2, fabric:2},
+    signals:[
+      {name:'Nordea Finland', cloud:'aws',   platform:'databricks'},
+      {name:'OP Financial',   cloud:'azure', platform:null},
+    ]
+  },
+  {
+    code:'AT', name:'Austria', flag:'🇦🇹', score:2, col:7, row:4,
+    clouds:{aws:2, azure:4, gcp:1},
+    platforms:{databricks:2, snowflake:2, fabric:3},
+    signals:[
+      {name:'Erste Group',    cloud:'azure', platform:'fabric'},
+      {name:'Raiffeisen Bank',cloud:'aws',   platform:null},
+    ]
+  },
+  {
+    code:'PL', name:'Poland', flag:'🇵🇱', score:2, col:7, row:3,
+    clouds:{aws:3, azure:3, gcp:1},
+    platforms:{databricks:2, snowflake:2, fabric:3},
+    signals:[
+      {name:'PKO Bank Polski', cloud:'azure', platform:null},
+      {name:'mBank',           cloud:'aws',   platform:null},
+    ]
+  },
+  {
+    code:'CZ', name:'Czech Rep.', flag:'🇨🇿', score:1, col:8, row:4,
+    clouds:{aws:2, azure:3, gcp:1},
+    platforms:{databricks:1, snowflake:2, fabric:3},
+    signals:[
+      {name:'ČSOB (KBC)',     cloud:'azure', platform:null},
+      {name:'Komerční banka', cloud:'azure', platform:null},
+    ]
+  },
+  {
+    code:'PT', name:'Portugal', flag:'🇵🇹', score:1, col:2, row:5,
+    clouds:{aws:2, azure:3, gcp:1},
+    platforms:{databricks:1, snowflake:2, fabric:2},
+    signals:[
+      {name:'Millennium BCP', cloud:'azure', platform:null},
+      {name:'Caixa Geral',    cloud:'azure', platform:null},
+    ]
+  },
+];
+
+// ── COMPETITOR DATA ────────────────────────────────────
+// strength: 4=Dominant, 3=Strong, 2=Active, 1=Present
+const COMPETE={
+  UK:{
+    rivals:[
+      {name:'Accenture',  strength:4, note:'Market leader in UK FS data transformation — established relationships at Barclays, HSBC, Lloyds; AWS + Azure dual practices'},
+      {name:'Wipro',      strength:3, note:'Deep UK FS heritage; Holmes automation platform competes on automation narrative — watch for head-to-head'},
+      {name:'Infosys',    strength:3, note:'Growing UK FS practice; Cobalt cloud accelerators positioned as migration tools'},
+      {name:'Cognizant',  strength:3, note:'Strong UK FS account base; Synapse data practice targeting same modernisation deals'},
+      {name:'Deloitte',   strength:3, note:'Dominant in analytics governance and strategy; less competitive on execution delivery'},
+    ],
+    angle:'LeapLogic\'s 60-80% automation is the only independently verifiable claim in this market — Accenture, Wipro, and Infosys sell accelerators, not automation. Break into incumbent relationships with a scoped PoC on one migration workstream. Lead with the compliance timeline (DORA, Op. Resilience), not the technology.'
+  },
+  DE:{
+    rivals:[
+      {name:'Capgemini',  strength:4, note:'Dominant in German FS data — long-standing relationships at Deutsche Bank, Commerzbank, Allianz; AWS practice is their flagship'},
+      {name:'Accenture',  strength:3, note:'Strong across German FS; competes on broad transformation rather than specialist migration'},
+      {name:'IBM',        strength:3, note:'Significant German presence via T-Systems parent relationship; IBM DataStage estate creates vested interest in retaining current stack'},
+      {name:'TCS',        strength:2, note:'Growing German presence; price-competitive but limited cloud migration tooling'},
+    ],
+    angle:'Capgemini dominates but lacks a native automated migration tool — they build, not automate. IBM has a direct conflict of interest on DataStage migration. BaFin\'s aggressive DORA enforcement and Informatica EoS create a compliance-led entry that bypasses relationship moats. Route via AWS Germany co-sell where Capgemini is a known partner.'
+  },
+  NL:{
+    rivals:[
+      {name:'Capgemini',  strength:4, note:'Very strong in Netherlands — primary data transformation partner at ING, ABN AMRO, and Rabobank'},
+      {name:'Accenture',  strength:3, note:'Strong Dutch practice; competes on cloud strategy and broad transformation programmes'},
+      {name:'TCS',        strength:2, note:'Growing Dutch presence; ING is a key TCS account'},
+      {name:'Infosys',    strength:2, note:'Present; growing Netherlands practice'},
+    ],
+    angle:'ING and Aegon are already on Databricks — the cloud and platform decisions are made. DNB\'s BCBS 239 enforcement creates urgency Capgemini cannot accelerate with their standard delivery approach. Lead with migration speed and audit-readiness, not platform selection. Route initial approach through AWS Netherlands.'
+  },
+  FR:{
+    rivals:[
+      {name:'Capgemini',  strength:4, note:'Home market — absolute dominant in French FS data; BNP Paribas and SocGen are flagship accounts'},
+      {name:'Sopra Steria',strength:3, note:'Strong French SI; growing data practice targeting same accounts'},
+      {name:'Atos/Eviden',strength:3, note:'French national SI; financially challenged but retains key FS relationships'},
+      {name:'Accenture',  strength:3, note:'Strong across French FS; competes at Tier 1 bank level'},
+    ],
+    angle:'Capgemini\'s home territory — relationship moat is real. The FRTB data lineage requirement creates a specialist conversation around Ab Initio → Databricks migration that Capgemini cannot credibly own at depth. BNP Paribas and SocGen run multi-vendor strategies — route through AWS France co-sell for an independent entry point.'
+  },
+  CH:{
+    rivals:[
+      {name:'Accenture',  strength:4, note:'Dominant in Swiss banking — UBS and Julius Bär are key accounts; deep relationship moat'},
+      {name:'IBM',        strength:3, note:'Strong Swiss FS presence; competing on governance and hybrid cloud positioning'},
+      {name:'Capgemini',  strength:2, note:'Present but smaller Swiss practice than France or Germany'},
+    ],
+    angle:'Accenture owns Swiss banking relationships but UBS\'s post-CS integration has created a sprawling legacy data estate across two merged institutions — neither Accenture nor IBM has a credible automated migration approach at that scale. FINMA\'s 2023/01 circular creates a compliance entry point outside existing relationship cycles.'
+  },
+  IE:{
+    rivals:[
+      {name:'Accenture',  strength:4, note:'Dublin is Accenture\'s European hub — overwhelming market presence across all Irish FS accounts'},
+      {name:'TCS',        strength:3, note:'Significant TCS presence in Ireland; price-competitive; key accounts at AIB and Bank of Ireland'},
+      {name:'Deloitte',   strength:3, note:'Strong Irish FS practice; governance and compliance positioning'},
+      {name:'Infosys',    strength:2, note:'Present; growing Irish practice'},
+    ],
+    angle:'Accenture\'s European HQ advantage is the dominant force in Ireland. TCS competes aggressively on price. EU AI Act obligations for EU-booked financial firms create a data governance conversation that falls outside Accenture\'s standard transformation playbook — a genuine specialist entry point.'
+  },
+  SE:{
+    rivals:[
+      {name:'Accenture',  strength:4, note:'Market leader in Swedish FS — Handelsbanken, SEB, Swedbank are key accounts'},
+      {name:'CGI',        strength:3, note:'Hidden competitor — Canadian SI with deep Nordic roots; strong local relationships, low profile internationally'},
+      {name:'TCS',        strength:3, note:'Significant Swedish presence; Nordea is a key TCS account'},
+      {name:'Capgemini',  strength:2, note:'Present; growing Nordic practice'},
+    ],
+    angle:'Nordic banks are technically sophisticated — they evaluate tools, not just relationships. LeapLogic\'s automation percentage will be tested in a PoC before any deal. CGI is the underestimated competitor — strong local relationships. Win on verifiable automation speed rather than relationship or price.'
+  },
+  BE:{
+    rivals:[
+      {name:'Capgemini',  strength:4, note:'Dominant in Belgian FS — KBC is a flagship Capgemini account'},
+      {name:'Deloitte',   strength:3, note:'Strong Belgian practice; governance and compliance positioning'},
+      {name:'Accenture',  strength:3, note:'Active in Belgian FS; competes on broader transformation'},
+    ],
+    angle:'KBC is Azure + Databricks-directed with an active Cloudera EoS (June 2026) — the highest-conviction single-account opportunity in Belgium. Capgemini holds the KBC relationship but the Cloudera migration timeline creates urgency they cannot deliver faster than LeapLogic. DORA pressure adds a second compliance lever.'
+  },
+  DK:{
+    rivals:[
+      {name:'Accenture',  strength:4, note:'Market leader in Danish FS; Danske Bank and Nordea are key accounts'},
+      {name:'TCS',        strength:3, note:'Strong Danish presence; competing on Danske Bank modernisation programmes'},
+      {name:'Deloitte',   strength:2, note:'Active; governance and compliance angle'},
+      {name:'CGI',        strength:2, note:'Nordic strength; present in Denmark'},
+    ],
+    angle:'Danske Bank AWS + Databricks + Cloudera EoS is the perfect LeapLogic scenario. Accenture will compete on relationship; TCS will compete on price. Win on compliance timeline: Cloudera EoS June 2026 is already past — every month of delay is a DORA ICT risk. Speed of migration is the argument, not cost.'
+  },
+  ES:{
+    rivals:[
+      {name:'Accenture',  strength:4, note:'Dominant in Spanish FS — Santander and BBVA are key accounts globally and in Spain'},
+      {name:'Indra',      strength:3, note:'Leading Spanish local SI — strongest domestic data practice; deep bank relationships; often overlooked by non-Spanish competitors'},
+      {name:'Capgemini',  strength:3, note:'Strong Spanish presence; growing data practice'},
+      {name:'TCS',        strength:2, note:'Present; growing Iberian practice via Santander account'},
+    ],
+    angle:'BBVA\'s GCP + Databricks decision is a unique public reference — Accenture serves BBVA but the legacy Teradata → Databricks migration at scale is a specialist play LeapLogic can own. Indra is the competitor to watch — strong local bank relationships and a growing data modernisation practice that most non-Spanish firms underestimate.'
+  },
+  IT:{
+    rivals:[
+      {name:'Engineering Group',strength:4, note:'Dominant Italian SI — market leader in Italian FS data; UniCredit and Intesa Sanpaolo are flagship accounts; no automated migration tooling'},
+      {name:'Accenture',  strength:3, note:'Strong Italian practice; competing at major bank level'},
+      {name:'Capgemini',  strength:3, note:'Active; growing Italian data practice'},
+      {name:'TCS',        strength:2, note:'Present; growing Italian presence'},
+    ],
+    angle:'Engineering Group dominates Italian FS SI but has no automated migration capability — their model is traditional system integration. UniCredit\'s public AWS + Databricks commitment creates an entry. Route via AWS Italy co-sell to establish a channel alongside Engineering Group rather than displacing them directly.'
+  },
+  NO:{
+    rivals:[
+      {name:'Accenture',  strength:4, note:'Primary competitor in Norwegian FS — DNB is a key Accenture account'},
+      {name:'Sopra Steria',strength:3, note:'Strong Norwegian roots — Sopra Steria Nordics is a significant SI with deep bank relationships; frequently underestimated'},
+      {name:'TCS',        strength:2, note:'Present; growing Nordic practice'},
+      {name:'CGI',        strength:2, note:'Nordic strength extends to Norway'},
+    ],
+    angle:'Sopra Steria is the competitor to watch — Nordic roots and DNB relationships that Accenture does not fully own. DNB\'s cloud maturity and Finanstilsynet\'s DORA enforcement create a compliance urgency window. The migration automation story is credible here — Norwegian banks will run a technical evaluation rather than just choose on relationship.'
+  },
+  FI:{
+    rivals:[
+      {name:'CGI',        strength:4, note:'Dominant in Finland — strongest local SI in the Nordics; deep OP Financial and public sector relationships'},
+      {name:'Accenture',  strength:3, note:'Active in Finnish FS; competing at Nordea Finland level'},
+      {name:'TCS',        strength:2, note:'Growing Nordic presence'},
+    ],
+    angle:'CGI is the dominant force in Finland — do not underestimate their local relationship depth. Nordea Finland\'s AWS + Databricks commitment creates the entry point: DataStage and Informatica migration to Databricks is a concrete, scoped conversation CGI cannot automate. Route initial approach via AWS Finland or the Nordea pan-Nordic account team.'
+  },
+  AT:{
+    rivals:[
+      {name:'Accenture',  strength:4, note:'Market leader in Austrian FS; Erste Group is a key account'},
+      {name:'IBM',        strength:3, note:'Strong Austrian presence; competing on hybrid cloud and governance'},
+      {name:'Capgemini',  strength:2, note:'Present; smaller Austrian practice'},
+    ],
+    angle:'Accenture leads but Erste Group\'s pan-CEE operation creates complexity that strains Accenture\'s consistent delivery across jurisdictions. IBM has an interest in retaining the existing stack. Cross-border DORA obligations across Erste\'s Austrian, Czech, and Romanian entities create a multi-jurisdiction compliance angle.'
+  },
+  PL:{
+    rivals:[
+      {name:'Accenture',  strength:3, note:'Growing Polish practice; competing at PKO Bank Polski level'},
+      {name:'Capgemini',  strength:3, note:'Strong Polish presence; large engineering centre in Poland'},
+      {name:'TCS',        strength:2, note:'Active; competitive on price in Polish market'},
+      {name:'Infosys',    strength:2, note:'Present; growing'},
+    ],
+    angle:'Poland is price-competitive — Capgemini and Accenture both have large, lower-cost Polish delivery centres. Do not compete on cost. Lead with regulatory urgency (DORA, EU AI Act compliance) and migration speed as the differentiating arguments — these create a timeline that cost competition cannot answer.'
+  },
+  CZ:{
+    rivals:[
+      {name:'Accenture',  strength:3, note:'Active in Czech FS; primarily through parent-country relationships'},
+      {name:'IBM',        strength:3, note:'Strong Czech presence; established relationships'},
+      {name:'Capgemini',  strength:2, note:'Present; smaller Czech practice'},
+    ],
+    angle:'Czech Republic is a subsidiary market — key modernisation decisions are made in Frankfurt (Komerční banka / SocGen), Paris (ČSOB / KBC), or Vienna (Erste subsidiary). Target parent-level engagement and trickle down rather than competing locally where incumbents have deeper presence.'
+  },
+  PT:{
+    rivals:[
+      {name:'Accenture',  strength:3, note:'Active in Portuguese FS; Millennium BCP is a key account'},
+      {name:'Capgemini',  strength:3, note:'Present; growing Portuguese practice'},
+      {name:'Altia',      strength:2, note:'Local Portuguese SI — deep domestic bank relationships; often invisible to non-Portuguese firms'},
+    ],
+    angle:'Portugal is the smallest market in the map. Pursue as part of an Iberian strategy with Spain as the lead account market — Santander and BBVA\'s shared infrastructure creates natural cross-border pull. Altia is the local competitor to monitor; Accenture and Capgemini are the serious competitors at Millennium BCP level.'
+  },
+};
+
+// ── SCORE LABELS ───────────────────────────────────────
+const SCORE_LABELS={4:'Cloud-Native',3:'Cloud-Advanced',2:'Cloud-Adopting',1:'Cloud-Emerging'};
+const RIVAL_LABELS={4:'Dominant',3:'Strong',2:'Active',1:'Present'};
+const RIVAL_CSS={4:'dom',3:'str',2:'act',1:'pre'};
+
+// ── BUILD TILE MAP ─────────────────────────────────────
+const grid=document.getElementById('tile-grid');
+COUNTRIES.forEach(c=>{
+  const div=document.createElement('div');
+  div.className='tile';
+  div.dataset.score=c.score;
+  div.dataset.code=c.code;
+  div.style.gridColumn=c.col;
+  div.style.gridRow=c.row;
+  div.innerHTML=`<span class="tile-flag">${c.flag}</span><span class="tile-code">${c.code}</span>`;
+  div.title=`${c.name} — ${SCORE_LABELS[c.score]}`;
+  div.addEventListener('click',()=>selectCountry(c.code));
+  grid.appendChild(div);
+});
+
+// ── HELPERS ────────────────────────────────────────────
+function strengthDots(val, type){
+  return [1,2,3,4].map(i=>`<div class="sdot${i<=val?' on-'+type:''}"></div>`).join('');
+}
+function chip(label, cls){
+  return `<span class="chip chip-${cls}">${label}</span>`;
+}
+
+// ── SELECT COUNTRY ─────────────────────────────────────
+function selectCountry(code){
+  const c=COUNTRIES.find(x=>x.code===code);
+  const comp=COMPETE[code];
+  if(!c||!comp) return;
+
+  document.querySelectorAll('.tile').forEach(t=>t.classList.toggle('active',t.dataset.code===code));
+
+  // ── PLATFORM PANEL ──
+  document.getElementById('plat-placeholder').style.display='none';
+  const pc=document.getElementById('plat-content');
+  pc.style.display='flex';
+  pc.style.flexDirection='column';
+  pc.style.gap='.75rem';
+
+  pc.innerHTML=`
+    <div class="country-hero">
+      <span class="country-flag-big">${c.flag}</span>
+      <div>
+        <div class="country-name">${c.name}</div>
+        <span class="score-badge s${c.score}">${SCORE_LABELS[c.score]}</span>
+      </div>
+    </div>
+
+    <div class="panel-label">Cloud Provider Strength</div>
+    <div class="strength-section">
+      <div class="strength-row">
+        <span class="strength-label">AWS</span>
+        <div class="strength-dots">${strengthDots(c.clouds.aws,'aws')}</div>
+        ${chip('AWS','aws')}
+      </div>
+      <div class="strength-row">
+        <span class="strength-label">Azure</span>
+        <div class="strength-dots">${strengthDots(c.clouds.azure,'azure')}</div>
+        ${chip('Azure','azure')}
+      </div>
+      <div class="strength-row">
+        <span class="strength-label">GCP</span>
+        <div class="strength-dots">${strengthDots(c.clouds.gcp,'gcp')}</div>
+        ${chip('GCP','gcp')}
+      </div>
+    </div>
+
+    <div class="panel-label">Data Platform Adoption</div>
+    <div class="strength-section">
+      <div class="strength-row">
+        <span class="strength-label">Databricks</span>
+        <div class="strength-dots">${strengthDots(c.platforms.databricks,'databricks')}</div>
+        ${chip('Databricks','databricks')}
+      </div>
+      <div class="strength-row">
+        <span class="strength-label">Snowflake</span>
+        <div class="strength-dots">${strengthDots(c.platforms.snowflake,'snowflake')}</div>
+        ${chip('Snowflake','snowflake')}
+      </div>
+      <div class="strength-row">
+        <span class="strength-label">MS Fabric</span>
+        <div class="strength-dots">${strengthDots(c.platforms.fabric,'fabric')}</div>
+        ${chip('Fabric','fabric')}
+      </div>
+    </div>
+
+    <div class="panel-label">Enterprise Signals (public)</div>
+    <div class="signal-list">
+      ${c.signals.map(s=>`
+        <div class="signal-row">
+          <span class="signal-name">${s.name}</span>
+          <div class="signal-chips">
+            ${s.cloud?chip(s.cloud==='aws'?'AWS':s.cloud==='azure'?'Azure':'GCP',s.cloud):''}
+            ${s.platform?chip(s.platform==='databricks'?'Databricks':s.platform==='snowflake'?'Snowflake':'Fabric',s.platform):''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  // ── COMPETITOR PANEL ──
+  document.getElementById('comp-placeholder').style.display='none';
+  const cc=document.getElementById('comp-content');
+  cc.style.display='flex';
+  cc.style.flexDirection='column';
+  cc.style.gap='.75rem';
+
+  cc.innerHTML=`
+    <div class="panel-label">Main Competitors</div>
+    <div class="rival-list">
+      ${comp.rivals.map(r=>`
+        <div class="rival-row">
+          <div class="rival-hdr">
+            <span class="rival-name">${r.name}</span>
+            <span class="rival-badge ${RIVAL_CSS[r.strength]}">${RIVAL_LABELS[r.strength]}</span>
+          </div>
+          <div class="rival-note">${r.note}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="panel-label">Impetus Angle</div>
+    <div class="angle-box">${comp.angle}</div>
+  `;
+}
+
+window.addEventListener('DOMContentLoaded',()=>selectCountry('UK'));
+
+// ── THEME ──────────────────────────────────────────────
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+const themeBtn=document.getElementById('theme-btn');
+function setTheme(t){
+  document.documentElement.dataset.theme=t;
+  themeBtn.textContent=t==='dark'?'☀️':'🌙';
+  lsSet('impetus-theme',t);
+}
+themeBtn.addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
+setTheme(lsGet('impetus-theme')||'light');
+</script>
