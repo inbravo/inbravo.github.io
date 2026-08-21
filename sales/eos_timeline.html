@@ -43,8 +43,10 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',system-ui,sans-serif;line-height:1.2}
 .stat-n.indigo{color:#6366F1}
 .stat-l{font-size:.72rem;color:var(--muted);line-height:1.4}
 
-.canvas-section{padding:1.25rem;overflow-x:auto}
+.canvas-section{padding:1.25rem 1.25rem 0;overflow-x:auto}
 .canvas-wrap{position:relative;min-width:640px}
+.tl-sticky-hdr{position:sticky;top:44px;z-index:50;background:var(--bg);border-bottom:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+#hdr-canvas{display:block;width:100%}
 #eos-canvas{display:block;width:100%;cursor:crosshair}
 
 .tooltip{position:absolute;pointer-events:none;display:none;background:var(--surface);border:1px solid var(--border);border-radius:.5rem;padding:.65rem .85rem;font-size:.72rem;box-shadow:var(--shadow);max-width:260px;z-index:10;line-height:1.5}
@@ -95,6 +97,9 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',system-ui,sans-serif;line-height:1.2}
 
 <div class="canvas-section">
   <div class="canvas-wrap" id="canvas-wrap">
+    <div class="tl-sticky-hdr">
+      <canvas id="hdr-canvas"></canvas>
+    </div>
     <canvas id="eos-canvas"></canvas>
     <div class="tooltip" id="eos-tooltip"></div>
   </div>
@@ -170,16 +175,19 @@ const REGULATORY = [
 ];
 
 // ── CANVAS SETUP ──────────────────────────────────────
-const canvas = document.getElementById('eos-canvas');
-const ctx    = canvas.getContext('2d');
-const tip    = document.getElementById('eos-tooltip');
+const canvas    = document.getElementById('eos-canvas');
+const ctx       = canvas.getContext('2d');
+const hdrCanvas = document.getElementById('hdr-canvas');
+const ctx2      = hdrCanvas.getContext('2d');
+const tip       = document.getElementById('eos-tooltip');
 
-const L_PAD = 182;  // width of name column
-const R_PAD = 20;
-const T_PAD = 52;   // space above rows for reg label + year axis
-const B_PAD = 32;
-const ROW_H  = 30;
-const HDR_H  = 34;
+const L_PAD    = 182;
+const R_PAD    = 20;
+const T_PAD    = 8;    // small top breathing room in body canvas
+const B_PAD    = 16;
+const HDR_CANVAS_H = 48; // height of sticky header canvas
+const ROW_H    = 30;
+const HDR_H    = 34;
 
 function isDark(){
   const t=document.documentElement.dataset.theme;
@@ -238,6 +246,61 @@ function fmtDate(d){
 
 let hitAreas=[];
 
+// ── STICKY HEADER CANVAS ──────────────────────────────
+function drawHeader(){
+  const wrap=document.getElementById('canvas-wrap');
+  const W=wrap.clientWidth||800;
+  const dpr=window.devicePixelRatio||1;
+  const H=HDR_CANVAS_H;
+
+  hdrCanvas.width=W*dpr; hdrCanvas.height=H*dpr;
+  hdrCanvas.style.width=W+'px'; hdrCanvas.style.height=H+'px';
+  ctx2.setTransform(1,0,0,1,0,0);
+  ctx2.scale(dpr,dpr);
+
+  const c=C();
+  ctx2.fillStyle=c.bg;
+  ctx2.fillRect(0,0,W,H);
+
+  const years=[2021,2022,2023,2024,2025,2026,2027,2028];
+
+  // Gridline ticks + year labels
+  years.forEach(y=>{
+    const x=xPos(y,W);
+    ctx2.strokeStyle=c.border;
+    ctx2.lineWidth=0.5; ctx2.setLineDash([]);
+    ctx2.beginPath(); ctx2.moveTo(x,H-12); ctx2.lineTo(x,H); ctx2.stroke();
+    ctx2.fillStyle=c.dim;
+    ctx2.font=`500 9px Inter,system-ui`;
+    ctx2.textAlign='center';
+    ctx2.fillText(y,x,H-16);
+  });
+
+  // Regulatory dotted line + label
+  REGULATORY.forEach(reg=>{
+    const x=xPos(reg.date,W);
+    ctx2.strokeStyle=reg.color;
+    ctx2.lineWidth=1; ctx2.setLineDash([3,3]);
+    ctx2.beginPath(); ctx2.moveTo(x,0); ctx2.lineTo(x,H); ctx2.stroke();
+    ctx2.setLineDash([]);
+    ctx2.fillStyle=reg.color;
+    ctx2.font=`600 8px "Plus Jakarta Sans",system-ui`;
+    ctx2.textAlign='left';
+    ctx2.fillText(reg.name,x+4,11);
+  });
+
+  // TODAY line + label
+  const nowX=xPos(NOW,W);
+  ctx2.strokeStyle=c.nowCol;
+  ctx2.lineWidth=1.5; ctx2.setLineDash([4,3]);
+  ctx2.beginPath(); ctx2.moveTo(nowX,0); ctx2.lineTo(nowX,H); ctx2.stroke();
+  ctx2.setLineDash([]);
+  ctx2.fillStyle=c.nowCol;
+  ctx2.font=`700 8px "Plus Jakarta Sans",system-ui`;
+  ctx2.textAlign='center';
+  ctx2.fillText('TODAY',nowX,11);
+}
+
 function draw(){
   const wrap=document.getElementById('canvas-wrap');
   const W=wrap.clientWidth||800;
@@ -259,46 +322,31 @@ function draw(){
   ctx.fillStyle=c.bg;
   ctx.fillRect(0,0,W,H);
 
-  // Year gridlines + labels
+  // Year gridlines (body — no labels, no top annotations)
   const years=[2021,2022,2023,2024,2025,2026,2027,2028];
   years.forEach(y=>{
     const x=xPos(y,W);
     ctx.strokeStyle=c.border;
-    ctx.lineWidth=0.5;
-    ctx.setLineDash([]);
-    ctx.beginPath(); ctx.moveTo(x,T_PAD-10); ctx.lineTo(x,H-B_PAD); ctx.stroke();
-    ctx.fillStyle=c.dim;
-    ctx.font=`400 9px Inter,system-ui`;
-    ctx.textAlign='center';
-    ctx.fillText(y,x,H-B_PAD+14);
+    ctx.lineWidth=0.5; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
   });
 
-  // Regulatory marker
+  // Regulatory dotted line (body, no label)
   REGULATORY.forEach(reg=>{
     const x=xPos(reg.date,W);
     ctx.strokeStyle=reg.color;
-    ctx.lineWidth=1;
-    ctx.setLineDash([3,3]);
-    ctx.beginPath(); ctx.moveTo(x,10); ctx.lineTo(x,H-B_PAD); ctx.stroke();
+    ctx.lineWidth=1; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle=reg.color;
-    ctx.font=`600 8px "Plus Jakarta Sans",system-ui`;
-    ctx.textAlign='left';
-    ctx.fillText(reg.name,x+4,18);
-    hitAreas.push({x1:x-2,x2:x+70,y1:0,y2:28,item:{name:reg.name,date:reg.date,detail:reg.detail,target:'',dora:false,type:'reg',src:'DORA',srcUrl:reg.srcUrl}});
+    hitAreas.push({x1:x-6,x2:x+6,y1:0,y2:H,item:{name:reg.name,date:reg.date,detail:reg.detail,target:'',dora:false,type:'reg',src:'DORA',srcUrl:reg.srcUrl}});
   });
 
-  // NOW line
+  // TODAY line (body, no label)
   const nowX=xPos(NOW,W);
   ctx.strokeStyle=c.nowCol;
-  ctx.lineWidth=1.5;
-  ctx.setLineDash([4,3]);
-  ctx.beginPath(); ctx.moveTo(nowX,10); ctx.lineTo(nowX,H-B_PAD); ctx.stroke();
+  ctx.lineWidth=1.5; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(nowX,0); ctx.lineTo(nowX,H); ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle=c.nowCol;
-  ctx.font=`700 8px "Plus Jakarta Sans",system-ui`;
-  ctx.textAlign='center';
-  ctx.fillText('TODAY',nowX,30);
 
   // Swimlanes + rows
   let rowY=T_PAD;
@@ -456,19 +504,21 @@ const themeBtn=document.getElementById('theme-btn');
 function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
 function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
 
+function drawAll(){ drawHeader(); draw(); }
+
 function setTheme(t){
   document.documentElement.dataset.theme=t;
   themeBtn.textContent=t==='dark'?'☀️':'🌙';
   lsSet('impetus-theme',t);
-  draw();
+  drawAll();
 }
 themeBtn.addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
 
 // ── INIT ──────────────────────────────────────────────
 setTheme(lsGet('impetus-theme')||'light');
 
-document.fonts.ready.then(draw);
+document.fonts.ready.then(drawAll);
 
 let _rt;
-window.addEventListener('resize',()=>{clearTimeout(_rt);_rt=setTimeout(draw,80);});
+window.addEventListener('resize',()=>{clearTimeout(_rt);_rt=setTimeout(drawAll,80);});
 </script>
