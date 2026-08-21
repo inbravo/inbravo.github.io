@@ -220,14 +220,14 @@ a{color:var(--accent);text-decoration:none}
 const COUNTRIES=[
   {
     code:'UK', name:'United Kingdom', flag:'🇬🇧', score:4, col:3, row:2,
-    clouds:{aws:4, azure:4, gcp:2},
+    clouds:{aws:4, azure:4, gcp:3},
     platforms:{databricks:4, snowflake:2, fabric:3},
     signals:[
-      {name:'Barclays',     cloud:'aws',   platform:'databricks'},
-      {name:'Lloyds',       cloud:'aws',   platform:'databricks'},
-      {name:'HSBC',         cloud:'azure', platform:'databricks'},
-      {name:'BT Group',     cloud:'aws',   platform:null},
-      {name:'Aviva',        cloud:'azure', platform:null},
+      {name:'Barclays',     cloud:'aws',              platform:'databricks'},
+      {name:'Lloyds',       clouds:['aws','gcp'],      platform:'databricks'},
+      {name:'HSBC',         clouds:['gcp','azure'],    platform:'databricks'},
+      {name:'BT Group',     cloud:'aws',              platform:null},
+      {name:'Aviva',        cloud:'azure',            platform:null},
     ]
   },
   {
@@ -280,7 +280,7 @@ const COUNTRIES=[
     signals:[
       {name:'AIB',              cloud:'aws',   platform:null},
       {name:'Bank of Ireland',  cloud:'azure', platform:null},
-      {name:'Citibank Europe',  cloud:'aws',   platform:'databricks'},
+      {name:'Citibank Europe',  clouds:['aws','gcp'], platform:'databricks'},
     ]
   },
   {
@@ -634,17 +634,20 @@ function selectCountry(code){
       </div>
     </div>
 
-    <div class="panel-label">Enterprise Signals (public)</div>
+    <div class="panel-label">Enterprise Signals <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.62rem;color:var(--dim)">(confirmed public partnerships)</span></div>
     <div class="signal-list">
-      ${c.signals.map(s=>`
+      ${c.signals.map(s=>{
+        const CLOUD_LABEL={aws:'AWS',azure:'Azure',gcp:'GCP'};
+        const clist=s.clouds||(s.cloud?[s.cloud]:[]);
+        return `
         <div class="signal-row">
           <span class="signal-name">${s.name}</span>
           <div class="signal-chips">
-            ${s.cloud?chip(s.cloud==='aws'?'AWS':s.cloud==='azure'?'Azure':'GCP',s.cloud):''}
+            ${clist.map(cl=>chip(CLOUD_LABEL[cl]||cl,cl)).join('')}
             ${s.platform?chip(s.platform==='databricks'?'Databricks':s.platform==='snowflake'?'Snowflake':'Fabric',s.platform):''}
           </div>
-        </div>
-      `).join('')}
+        </div>`;
+      }).join('')}
     </div>
   `;
 
