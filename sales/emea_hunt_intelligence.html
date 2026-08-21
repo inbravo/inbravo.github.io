@@ -1207,7 +1207,10 @@ function buildHeatmap(){
       if(val>0) cell.textContent=val;
       cell.addEventListener('click',()=>{
         document.getElementById('f-tech').value=cell.dataset.tech;
-        document.getElementById('f-region').value=reg;
+        document.getElementById('f-region').value='';
+        document.getElementById('f-industry').value='';
+        activeFilter=id;
+        drawBubbles();
         applyFilters();
         document.getElementById('acct-table').scrollIntoView({behavior:'smooth',block:'start'});
       });
