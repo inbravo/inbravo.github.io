@@ -1071,6 +1071,7 @@ function getTheme(){return document.documentElement.dataset.theme||'system';}
 function setTheme(t){
   document.documentElement.dataset.theme=t;
   themeBtn.textContent=t==='dark'?'☀️':'🌙';
+  localStorage.setItem('impetus-theme',t);
   drawBubbles();
 }
 themeBtn.addEventListener('click',()=>{
@@ -1271,10 +1272,9 @@ document.getElementById('btn-reset').addEventListener('click',()=>{
 buildHeatmap();
 buildTable();
 // Init theme, then draw — ensures CSS vars are applied before canvas reads them
-if(window.matchMedia('(prefers-color-scheme:dark)').matches){
-  document.documentElement.dataset.theme='dark';
-  themeBtn.textContent='☀️';
-}
+const _savedTheme=localStorage.getItem('impetus-theme');
+if(_savedTheme){setTheme(_savedTheme);}
+else if(window.matchMedia('(prefers-color-scheme:dark)').matches){setTheme('dark');}
 setTimeout(drawBubbles,120);
 // Redraw if iframe resizes after initial paint
 if(typeof ResizeObserver!=='undefined'){

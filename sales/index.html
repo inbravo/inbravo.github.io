@@ -153,9 +153,12 @@ const root = document.documentElement;
 function applyTheme(t) {
   root.dataset.theme = t;
   btn.textContent = t === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('impetus-theme', t);
 }
 btn.addEventListener('click', () => {
   applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
 });
-if (window.matchMedia('(prefers-color-scheme:dark)').matches) applyTheme('dark');
+const _saved = localStorage.getItem('impetus-theme');
+if (_saved) applyTheme(_saved);
+else if (window.matchMedia('(prefers-color-scheme:dark)').matches) applyTheme('dark');
 </script>
