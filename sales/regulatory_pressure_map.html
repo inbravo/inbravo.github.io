@@ -1,0 +1,583 @@
+<title>EMEA Regulatory Pressure Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;--dim:#94A3B8;
+  --accent:#6366F1;--accent-dim:#EEF2FF;
+  --hdr:#0F172A;--hdr-text:#F1F5F9;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.1),0 12px 32px rgba(0,0,0,.08);
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;--accent-dim:#1E1B4B;
+  --hdr:#0A0F1E;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
+}}
+:root[data-theme="dark"]{
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;--accent-dim:#1E1B4B;
+  --hdr:#0A0F1E;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:13px;scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;min-height:100vh}
+h1,h2,h3{font-family:'Plus Jakarta Sans',system-ui,sans-serif;line-height:1.2}
+a{color:var(--accent);text-decoration:none}
+
+/* HEADER */
+.hdr{background:var(--hdr);color:var(--hdr-text);padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:100}
+.hdr-brand{display:flex;align-items:center;gap:.75rem}
+.hdr-badge{background:#6366F1;color:#fff;font-size:.65rem;font-weight:700;padding:.15rem .45rem;border-radius:.25rem;letter-spacing:.05em;font-family:'Plus Jakarta Sans',sans-serif}
+.hdr-title{font-size:.95rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hdr-text)}
+.hdr-meta{display:flex;align-items:center;gap:.75rem;font-size:.72rem;color:#94A3B8}
+.theme-btn{background:none;border:1px solid #334155;color:#94A3B8;border-radius:.375rem;padding:.25rem .6rem;cursor:pointer;font-size:.8rem;transition:border-color .15s;font-family:inherit}
+.theme-btn:hover{border-color:#6366F1;color:var(--hdr-text)}
+
+/* STATS */
+.stats-strip{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface)}
+.stat-card{flex:1;padding:1rem 1.25rem;border-right:1px solid var(--border)}
+.stat-card:last-child{border-right:none}
+.stat-n{font-size:1.65rem;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;line-height:1;margin-bottom:.25rem}
+.stat-n.red{color:#DC2626}.stat-n.orange{color:#F97316}.stat-n.indigo{color:#6366F1}
+.stat-l{font-size:.72rem;color:var(--muted);line-height:1.4}
+
+/* MAIN 3-COL LAYOUT */
+.main-body{display:grid;grid-template-columns:auto 1fr 1fr;gap:0;min-height:520px;border-bottom:1px solid var(--border)}
+
+/* TILE MAP */
+.map-col{padding:1.25rem;border-right:1px solid var(--border);overflow-x:auto}
+.map-label{font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:.75rem}
+.tile-grid{display:grid;grid-template-columns:repeat(8,64px);grid-template-rows:repeat(5,52px);gap:4px;width:fit-content}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:.375rem;cursor:pointer;transition:transform .12s,box-shadow .12s;gap:2px;position:relative;user-select:none}
+.tile:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);z-index:2}
+.tile.active{outline:2px solid var(--text);outline-offset:1px}
+.tile-flag{font-size:1.1rem;line-height:1}
+.tile-code{font-size:.62rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.04em}
+.tile[data-score="4"]{background:#DC2626;color:#fff}
+.tile[data-score="3"]{background:#F97316;color:#fff}
+.tile[data-score="2"]{background:#FBBF24;color:#0F172A}
+.tile[data-score="1"]{background:#94A3B8;color:#fff}
+
+/* LEGEND */
+.map-legend{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}
+.leg{display:flex;align-items:center;gap:.3rem;font-size:.65rem;color:var(--muted)}
+.leg-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* REG PANEL */
+.reg-col{padding:1.25rem;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:.75rem}
+.panel-label{font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);font-family:'Plus Jakarta Sans',sans-serif}
+.country-hero{display:flex;align-items:center;gap:.75rem}
+.country-flag-big{font-size:1.75rem;line-height:1}
+.country-name{font-size:1rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif}
+.score-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.6rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;padding:.2rem .5rem;border-radius:.25rem;color:#fff}
+.score-badge.s4{background:#DC2626}.score-badge.s3{background:#F97316}.score-badge.s2{background:#FBBF24;color:#0F172A}.score-badge.s1{background:#94A3B8}
+.reg-rows{display:flex;flex-direction:column;gap:.5rem}
+.reg-row{display:flex;align-items:center;gap:.5rem}
+.reg-name{font-size:.68rem;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);width:80px;flex-shrink:0}
+.reg-dots{display:flex;gap:3px}
+.reg-dot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.reg-dot.on{background:#6366F1}
+.reg-dot.na{background:var(--border);opacity:.4}
+.reg-note{font-size:.62rem;color:var(--muted);line-height:1.3}
+.reg-na-tag{font-size:.58rem;color:var(--dim);font-style:italic}
+.context-box{background:var(--surface2);border-left:3px solid var(--accent);padding:.6rem .75rem;border-radius:0 .375rem .375rem 0;font-size:.72rem;color:var(--text);line-height:1.6}
+.placeholder{display:flex;align-items:center;justify-content:center;height:100%;color:var(--dim);font-size:.75rem;text-align:center;padding:2rem}
+
+/* ENTERPRISE PANEL */
+.ent-col{padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;overflow-y:auto}
+.ent-list{display:flex;flex-direction:column;gap:.5rem}
+.ent-row{background:var(--surface);border:1px solid var(--border);border-radius:.4rem;padding:.6rem .75rem;display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;transition:border-color .12s}
+.ent-row:hover{border-color:var(--accent)}
+.ent-name{font-size:.75rem;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text)}
+.ent-chips{display:flex;flex-wrap:wrap;gap:3px;margin-top:.25rem}
+.chip{font-size:.56rem;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;padding:.1rem .35rem;border-radius:.2rem;white-space:nowrap}
+.chip-dw {background:#DBEAFE;color:#1D4ED8}
+.chip-etl{background:#FEF3C7;color:#92400E}
+.chip-bi {background:#F3E8FF;color:#6B21A8}
+:root[data-theme="dark"] .chip-dw {background:#172554;color:#93C5FD}
+:root[data-theme="dark"] .chip-etl{background:#451A03;color:#FCD34D}
+:root[data-theme="dark"] .chip-bi {background:#2E1065;color:#D8B4FE}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip-dw{background:#172554;color:#93C5FD}}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip-etl{background:#451A03;color:#FCD34D}}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip-bi{background:#2E1065;color:#D8B4FE}}
+
+/* SOURCES */
+.sources{padding:.75rem 1.25rem 1.5rem;font-size:.65rem;color:var(--dim);line-height:2;border-top:1px solid var(--border)}
+.sources a{color:var(--accent)}
+
+@media(max-width:900px){
+  .main-body{grid-template-columns:1fr}
+  .map-col,.reg-col{border-right:none;border-bottom:1px solid var(--border)}
+}
+</style>
+
+<header class="hdr">
+  <div class="hdr-brand">
+    <span class="hdr-badge">IMPETUS</span>
+    <span class="hdr-title">EMEA Regulatory Pressure Map</span>
+  </div>
+  <div class="hdr-meta">
+    <span>EU / UK · Financial Services</span>
+    <span>Aug 2026</span>
+    <button class="theme-btn" id="theme-btn">🌙</button>
+  </div>
+</header>
+
+<div class="stats-strip">
+  <div class="stat-card">
+    <div class="stat-n red">4</div>
+    <div class="stat-l">markets at very high enforcement pressure today</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-n orange">BCBS 239</div>
+    <div class="stat-l">formal findings issued in UK, DE, NL, FR, CH — data aggregation is under scrutiny</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-n indigo">Jan 2025</div>
+    <div class="stat-l">DORA + CRR3 active — unpatched legacy platforms are now reportable ICT risk</div>
+  </div>
+</div>
+
+<div class="main-body">
+
+  <!-- COL 1: TILE MAP -->
+  <div class="map-col">
+    <div class="map-label">Click a market to explore</div>
+    <div class="tile-grid" id="tile-grid"></div>
+    <div class="map-legend">
+      <span class="leg"><span class="leg-swatch" style="background:#DC2626"></span>Very High</span>
+      <span class="leg"><span class="leg-swatch" style="background:#F97316"></span>High</span>
+      <span class="leg"><span class="leg-swatch" style="background:#FBBF24"></span>Medium</span>
+      <span class="leg"><span class="leg-swatch" style="background:#94A3B8"></span>Developing</span>
+    </div>
+  </div>
+
+  <!-- COL 2: REGULATORY DETAIL -->
+  <div class="reg-col" id="reg-col">
+    <div class="panel-label">Regulatory Breakdown</div>
+    <div class="placeholder" id="reg-placeholder">← Select a market</div>
+    <div id="reg-content" style="display:none"></div>
+  </div>
+
+  <!-- COL 3: IMPACTED ENTERPRISES -->
+  <div class="ent-col" id="ent-col">
+    <div class="panel-label">Impacted Enterprises</div>
+    <div class="placeholder" id="ent-placeholder">← Select a market</div>
+    <div class="ent-list" id="ent-list" style="display:none"></div>
+  </div>
+
+</div>
+
+<div class="sources">
+  Sources:
+  <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32022R2554" target="_blank" rel="noopener">DORA (EU 2022/2554)</a> ·
+  <a href="https://www.bankofengland.co.uk/prudential-regulation/publication/2021/march/operational-resilience-ss" target="_blank" rel="noopener">PRA SS1/21 Op. Resilience</a> ·
+  <a href="https://www.bis.org/publ/bcbs239.htm" target="_blank" rel="noopener">BCBS 239</a> ·
+  <a href="https://www.eba.europa.eu/regulation-and-policy/single-rulebook/interactive-single-rulebook/crr3" target="_blank" rel="noopener">CRR3 / Basel IV</a> ·
+  <a href="https://www.finma.ch/en/finma-public/circulars/2023/circular-2023-01/" target="_blank" rel="noopener">FINMA Circular 2023/01</a>
+</div>
+
+<script>
+// ── DATA ───────────────────────────────────────────────────────────────
+// score: 4=Very High, 3=High, 2=Medium, 1=Developing
+// regs: { score 0-4, note, applies (false = own equivalent regime) }
+// context: key implication for modernisation conversation
+// enterprises: [ { name, techs: [{label, type:'dw'|'etl'|'bi'}] } ]
+
+const COUNTRIES = [
+  {
+    code:'UK', name:'United Kingdom', flag:'🇬🇧', score:4,
+    col:3, row:2, /* UK */
+    regs:[
+      {name:'Op. Resilience', score:4, note:'PRA SS1/21 / FCA PS6/21 — DORA equivalent; ICT continuity for important business services is legally mandated', applies:true, own:'Own regime'},
+      {name:'BCBS 239',       score:4, note:'PRA actively enforces — formal findings issued to major UK banks on data aggregation capability'},
+      {name:'Basel 3.1',      score:4, note:'PRA implementation Jan 2026 — delayed but stringent; model governance and risk data quality requirements'},
+      {name:'UK GDPR',        score:3, note:'ICO enforcement active; UK GDPR equivalent to EU standard post-Brexit'},
+    ],
+    context:'The PRA\'s operational resilience framework is the most detailed in EMEA. Banks must demonstrate ICT resilience for every important business service — legacy, unsupported ETL or DW platforms break that demonstration directly. BCBS 239 findings are an active lever.',
+    enterprises:[
+      {name:'Barclays',              techs:[{l:'Netezza',dw:'dw'},{l:'Informatica',t:'etl'},{l:'DataStage',t:'etl'}]},
+      {name:'HSBC',                  techs:[{l:'Teradata',t:'dw'},{l:'DataStage',t:'etl'}]},
+      {name:'Lloyds Banking Group',  techs:[{l:'Informatica',t:'etl'},{l:'SAS',t:'bi'}]},
+      {name:'BT Group',              techs:[{l:'Ab Initio',t:'etl'},{l:'Hadoop',t:'dw'}]},
+      {name:'Aviva',                 techs:[{l:'SAS',t:'bi'},{l:'Informatica',t:'etl'}]},
+      {name:'Standard Life Abrdn',   techs:[{l:'SAS',t:'bi'}]},
+    ]
+  },
+  {
+    code:'DE', name:'Germany', flag:'🇩🇪', score:4,
+    col:5, row:3,
+    regs:[
+      {name:'DORA',     score:4, note:'BaFin is among the most aggressive DORA enforcers in the EU — on-site ICT inspections already underway'},
+      {name:'BCBS 239', score:4, note:'BaFin has issued formal findings to Deutsche Bank and Commerzbank on risk data aggregation'},
+      {name:'CRR3',     score:4, note:'Fully applicable — German banks carry significant model exposure across credit, market, and operational risk'},
+      {name:'GDPR',     score:4, note:'16 state-level DPAs — all active; Germany leads EU in number of GDPR enforcement actions'},
+    ],
+    context:'BaFin\'s enforcement posture on DORA is the most aggressive in the EU, with on-site inspections focused on ICT risk management. Running Informatica PowerCenter past its March 2026 EoS is a direct BaFin regulatory finding. BCBS 239 formal findings add additional urgency for the major banks.',
+    enterprises:[
+      {name:'Deutsche Bank',     techs:[{l:'Teradata',t:'dw'},{l:'SAS',t:'bi'},{l:'Oracle Exadata',t:'dw'}]},
+      {name:'Commerzbank',       techs:[{l:'Teradata',t:'dw'},{l:'Informatica',t:'etl'}]},
+      {name:'Allianz',           techs:[{l:'SAS',t:'bi'},{l:'Informatica',t:'etl'}]},
+      {name:'Deutsche Telekom',  techs:[{l:'Hadoop',t:'dw'},{l:'Teradata',t:'dw'}]},
+      {name:'Munich Re',         techs:[{l:'SAS',t:'bi'}]},
+    ]
+  },
+  {
+    code:'NL', name:'Netherlands', flag:'🇳🇱', score:4,
+    col:4, row:3,
+    regs:[
+      {name:'DORA',     score:4, note:'DNB is widely regarded as the EU\'s most proactive operational resilience regulator — supervisory expectations exceed the DORA baseline'},
+      {name:'BCBS 239', score:4, note:'DNB has a track record of formal enforcement on risk data governance'},
+      {name:'CRR3',     score:4, note:'ING, ABN AMRO, Rabobank all face significant model governance requirements'},
+      {name:'GDPR',     score:3, note:'AP (Autoriteit Persoonsgegevens) — increasingly active enforcement'},
+    ],
+    context:'DNB sets the tone for EU operational resilience enforcement. Dutch banks face simultaneous pressure across DORA, BCBS 239, and CRR3 — three separate regulatory streams all exposing the same legacy data infrastructure. This makes the Netherlands one of the highest-conviction markets for urgency-led conversations.',
+    enterprises:[
+      {name:'ING Group',  techs:[{l:'Teradata',t:'dw'},{l:'Hadoop',t:'dw'},{l:'Informatica',t:'etl'}]},
+      {name:'ABN AMRO',   techs:[{l:'Teradata',t:'dw'},{l:'Informatica',t:'etl'}]},
+      {name:'Aegon',      techs:[{l:'Informatica',t:'etl'},{l:'SAS',t:'bi'}]},
+      {name:'Rabobank',   techs:[{l:'SAS',t:'bi'},{l:'Informatica',t:'etl'}]},
+      {name:'NN Group',   techs:[{l:'SAS',t:'bi'}]},
+    ]
+  },
+  {
+    code:'FR', name:'France', flag:'🇫🇷', score:4,
+    col:4, row:5,
+    regs:[
+      {name:'DORA',     score:3, note:'ACPR / AMF enforcement — strong for Tier 1 institutions; BNP Paribas and SocGen under active DORA scrutiny'},
+      {name:'BCBS 239', score:3, note:'ACPR enforcement growing — risk data aggregation findings at major French banks in review'},
+      {name:'CRR3',     score:4, note:'French banks carry heavy FRTB model exposure — significant data lineage requirements for IMA models'},
+      {name:'GDPR',     score:4, note:'CNIL is consistently one of the EU\'s top 3 GDPR enforcers by volume and fine size'},
+    ],
+    context:'The simultaneous pressure of DORA ICT compliance, CRR3 model governance, and FRTB data lineage requirements creates a rare regulatory convergence — all pointing at the same legacy platforms. BNP Paribas and Société Générale face this on a global scale.',
+    enterprises:[
+      {name:'BNP Paribas',       techs:[{l:'Teradata',t:'dw'},{l:'Ab Initio',t:'etl'},{l:'Informatica',t:'etl'}]},
+      {name:'Société Générale',  techs:[{l:'SAS',t:'bi'},{l:'DataStage',t:'etl'}]},
+      {name:'Crédit Agricole',   techs:[{l:'Teradata',t:'dw'},{l:'SAS',t:'bi'}]},
+      {name:'AXA',               techs:[{l:'SAS',t:'bi'},{l:'Informatica',t:'etl'}]},
+      {name:'Orange',            techs:[{l:'Hadoop',t:'dw'},{l:'Teradata',t:'dw'}]},
+    ]
+  },
+  {
+    code:'CH', name:'Switzerland', flag:'🇨🇭', score:3,
+    col:5, row:4,
+    regs:[
+      {name:'FINMA Circ.',score:4, note:'FINMA Circular 2023/01 on operational risks is functionally equivalent to DORA — applies to UBS and systemically important banks', applies:true, own:'Own regime'},
+      {name:'BCBS 239',   score:4, note:'FINMA strictly enforces for systemically important banks — UBS and successors under active review'},
+      {name:'Basel III.1',score:3, note:'FINMA implementation — Switzerland operates ahead of EU timelines'},
+      {name:'nFADP',      score:2, note:'New Swiss Data Protection Act (Sept 2023) — GDPR-equivalent requirements', applies:true, own:'Own regime'},
+    ],
+    context:'FINMA\'s 2023/01 circular creates DORA-equivalent obligations for Swiss banks, without the EU legislative process. UBS (post-CS integration) faces FINMA scrutiny on consolidated ICT risk across a significantly expanded balance sheet — legacy platform complexity is a direct risk.',
+    enterprises:[
+      {name:'UBS',        techs:[{l:'Teradata',t:'dw'},{l:'Oracle Exadata',t:'dw'},{l:'SAS',t:'bi'}]},
+      {name:'Swiss Life', techs:[{l:'Informatica',t:'etl'},{l:'SAP BW',t:'bi'}]},
+      {name:'Swiss Re',   techs:[{l:'SAS',t:'bi'},{l:'Informatica',t:'etl'}]},
+      {name:'Julius Bär', techs:[{l:'Teradata',t:'dw'}]},
+      {name:'Zurich Ins.',techs:[{l:'SAS',t:'bi'}]},
+    ]
+  },
+  {
+    code:'IE', name:'Ireland', flag:'🇮🇪', score:3,
+    col:2, row:3,
+    regs:[
+      {name:'DORA',     score:3, note:'CBI (Central Bank of Ireland) has significantly increased supervisory expectations post-2023 — enforcement track record building'},
+      {name:'BCBS 239', score:2, note:'Applies to Irish-headquartered systemically important institutions'},
+      {name:'CRR3',     score:3, note:'Ireland is EU hub for many US/UK financial firms — CRR3 applies to EU-booked entities'},
+      {name:'GDPR',     score:3, note:'DPC handles many cross-border cases for EU-based Big Tech and financial firms'},
+    ],
+    context:'Ireland\'s status as the EU base for US and UK financial groups means regulatory expectations often exceed what the local IT infrastructure can demonstrate. CBI is ramping enforcement — Irish subsidiaries of global banks face DORA compliance obligations their legacy platforms were not designed for.',
+    enterprises:[
+      {name:'AIB',              techs:[{l:'Teradata',t:'dw'},{l:'SAS',t:'bi'}]},
+      {name:'Bank of Ireland',  techs:[{l:'Informatica',t:'etl'},{l:'SAS',t:'bi'}]},
+      {name:'Zurich (EU HQ)',   techs:[{l:'SAS',t:'bi'}]},
+      {name:'Citibank Europe',  techs:[{l:'Teradata',t:'dw'}]},
+    ]
+  },
+  {
+    code:'SE', name:'Sweden', flag:'🇸🇪', score:3,
+    col:7, row:1,
+    regs:[
+      {name:'DORA',     score:3, note:'Finansinspektionen (FI) enforces DORA with Nordic rigour — proactive supervisory expectations'},
+      {name:'BCBS 239', score:3, note:'FI applies to systemically important banks — SEB and Swedbank under active review'},
+      {name:'CRR3',     score:3, note:'Applicable to Swedish banks — significant model governance uplift required'},
+      {name:'GDPR',     score:3, note:'IMY (Integritetsskyddsmyndigheten) — active enforcement'},
+    ],
+    context:'Swedish banks have significant legacy Teradata, SAS, and Informatica deployments that predate the cloud era. Finansinspektionen\'s DORA enforcement creates direct exposure — ICT risk assessments now extend to third-party legacy vendors whose platforms are past end-of-support.',
+    enterprises:[
+      {name:'SEB',           techs:[{l:'Teradata',t:'dw'},{l:'SAS',t:'bi'}]},
+      {name:'Swedbank',      techs:[{l:'Informatica',t:'etl'},{l:'SAS',t:'bi'}]},
+      {name:'Handelsbanken', techs:[{l:'Teradata',t:'dw'}]},
+      {name:'Nordea',        techs:[{l:'Informatica',t:'etl'},{l:'DataStage',t:'etl'}]},
+    ]
+  },
+  {
+    code:'BE', name:'Belgium', flag:'🇧🇪', score:3,
+    col:4, row:4,
+    regs:[
+      {name:'DORA',     score:3, note:'NBB and FSMA are active DORA enforcers — Belgium has a high density of EU financial institutions'},
+      {name:'BCBS 239', score:3, note:'Applicable to KBC and ING Belgium as systemically important'},
+      {name:'CRR3',     score:3, note:'Belgian banks and insurers face full CRR3 applicability'},
+      {name:'GDPR',     score:3, note:'APD (Autorité de protection des données) — active enforcement'},
+    ],
+    context:'Belgium hosts a disproportionate number of EU financial institutions given its size. NBB\'s DORA enforcement covers both domestic banks and EU branches of international firms. KBC\'s Cloudera deployment — past EoS June 2026 — is an immediate DORA ICT risk conversation.',
+    enterprises:[
+      {name:'KBC Group',   techs:[{l:'Cloudera',t:'dw'},{l:'SAS',t:'bi'}]},
+      {name:'ING Belgium', techs:[{l:'Teradata',t:'dw'},{l:'Informatica',t:'etl'}]},
+      {name:'Ageas',       techs:[{l:'SAS',t:'bi'},{l:'Informatica',t:'etl'}]},
+      {name:'Belfius',     techs:[{l:'SAS',t:'bi'}]},
+    ]
+  },
+  {
+    code:'DK', name:'Denmark', flag:'🇩🇰', score:3,
+    col:5, row:2,
+    regs:[
+      {name:'DORA',     score:3, note:'Finanstilsynet enforces DORA — proactive, well-resourced Nordic regulator'},
+      {name:'BCBS 239', score:3, note:'Applies to Danske Bank and Nordea Denmark as systemically important'},
+      {name:'CRR3',     score:3, note:'Applicable — Danske Bank faces significant model governance requirements'},
+      {name:'GDPR',     score:3, note:'Datatilsynet — active enforcement'},
+    ],
+    context:'Danske Bank\'s Cloudera CDP platform (EoS June 2026) creates an immediate DORA ICT risk exposure under Finanstilsynet\'s oversight. IRB model governance under Basel IV is a parallel pressure point requiring robust data lineage across the risk data infrastructure.',
+    enterprises:[
+      {name:'Danske Bank', techs:[{l:'Cloudera',t:'dw'},{l:'Informatica',t:'etl'}]},
+      {name:'Nordea',      techs:[{l:'Informatica',t:'etl'},{l:'DataStage',t:'etl'}]},
+      {name:'Jyske Bank',  techs:[{l:'SAS',t:'bi'}]},
+    ]
+  },
+  {
+    code:'ES', name:'Spain', flag:'🇪🇸', score:2,
+    col:3, row:4,
+    regs:[
+      {name:'DORA',     score:2, note:'Banco de España / CNMV — DORA applicable; enforcement pace building but below NW European levels'},
+      {name:'BCBS 239', score:2, note:'Applies to Santander and BBVA as G-SIBs — supervisory expectations moderate'},
+      {name:'CRR3',     score:3, note:'Santander and BBVA face global CRR3 exposure; significant model estates'},
+      {name:'GDPR',     score:3, note:'AEPD is one of EU\'s most active GDPR enforcers by number of sanctions'},
+    ],
+    context:'Santander and BBVA are G-SIBs with global legacy data estates — Spain is the regulatory home base but the modernisation conversation is driven by their global CRR3 and BCBS 239 obligations more than domestic Spanish enforcement. Telefónica\'s Hadoop/Teradata footprint is a separate telco opportunity.',
+    enterprises:[
+      {name:'Santander',  techs:[{l:'Teradata',t:'dw'},{l:'DataStage',t:'etl'}]},
+      {name:'BBVA',       techs:[{l:'Teradata',t:'dw'},{l:'SAS',t:'bi'}]},
+      {name:'CaixaBank',  techs:[{l:'SAS',t:'bi'},{l:'Informatica',t:'etl'}]},
+      {name:'Telefónica', techs:[{l:'Hadoop',t:'dw'},{l:'Teradata',t:'dw'}]},
+    ]
+  },
+  {
+    code:'IT', name:'Italy', flag:'🇮🇹', score:2,
+    col:6, row:5,
+    regs:[
+      {name:'DORA',     score:2, note:'Banca d\'Italia / CONSOB — DORA applicable; compliance culture historically slower than NW Europe'},
+      {name:'BCBS 239', score:2, note:'UniCredit and Intesa Sanpaolo as G-SIBs; enforcement developing'},
+      {name:'CRR3',     score:2, note:'Applicable — major Italian banks have complex model estates'},
+      {name:'GDPR',     score:3, note:'Garante (Autorità Garante) — consistently active; one of EU\'s most active enforcers'},
+    ],
+    context:'Italian banks have large legacy SAS and DataStage estates. While Banca d\'Italia\'s DORA enforcement pace is slower than northern peers, the Garante\'s GDPR activity and the EU-wide CRR3 timeline create external pressure on data governance maturity. UniCredit\'s pan-European footprint amplifies exposure.',
+    enterprises:[
+      {name:'UniCredit',        techs:[{l:'Teradata',t:'dw'},{l:'SAS',t:'bi'},{l:'DataStage',t:'etl'}]},
+      {name:'Intesa Sanpaolo',  techs:[{l:'SAS',t:'bi'},{l:'Informatica',t:'etl'}]},
+      {name:'Generali',         techs:[{l:'SAS',t:'bi'}]},
+      {name:'Mediobanca',       techs:[{l:'SAS',t:'bi'}]},
+    ]
+  },
+  {
+    code:'NO', name:'Norway', flag:'🇳🇴', score:2,
+    col:6, row:1,
+    regs:[
+      {name:'DORA',     score:2, note:'EEA member — DORA applies via EEA agreement with slight transposition delay; Finanstilsynet enforcement'},
+      {name:'BCBS 239', score:2, note:'Applies to DNB and SpareBank 1 as systemically important'},
+      {name:'Basel IV', score:2, note:'Norway implements via EEA — timeline slightly behind EU'},
+      {name:'GDPR',     score:2, note:'Datatilsynet — active but smaller scale than major EU DPAs'},
+    ],
+    context:'Norway\'s EEA membership means DORA applies with a short transposition delay. DNB (the bank) has a significant SAS and Teradata estate and faces the same operational resilience requirements as EU peers. Finanstilsynet is a well-resourced, professional regulator — enforcement quality is high.',
+    enterprises:[
+      {name:'DNB',        techs:[{l:'Teradata',t:'dw'},{l:'SAS',t:'bi'}]},
+      {name:'Storebrand', techs:[{l:'SAS',t:'bi'}]},
+      {name:'SpareBank 1',techs:[{l:'SAS',t:'bi'}]},
+    ]
+  },
+  {
+    code:'FI', name:'Finland', flag:'🇫🇮', score:2,
+    col:8, row:1,
+    regs:[
+      {name:'DORA',     score:2, note:'FIN-FSA (Finanssivalvonta) — DORA applicable; smaller financial sector, moderate enforcement intensity'},
+      {name:'BCBS 239', score:2, note:'Applies to Nordea Finland as systemically important institution'},
+      {name:'CRR3',     score:2, note:'Applicable — Nordea is the primary exposed institution'},
+      {name:'GDPR',     score:2, note:'Tietosuojavaltuutettu — active but moderate scale'},
+    ],
+    context:'Finland\'s most significant regulatory exposure runs through Nordea, which is headquartered in Helsinki but operates across all Nordic markets. Nordea\'s legacy DataStage and Informatica footprint creates DORA ICT risk across multiple jurisdictions simultaneously.',
+    enterprises:[
+      {name:'Nordea Finland', techs:[{l:'DataStage',t:'etl'},{l:'Informatica',t:'etl'}]},
+      {name:'OP Financial',   techs:[{l:'SAS',t:'bi'},{l:'Teradata',t:'dw'}]},
+    ]
+  },
+  {
+    code:'AT', name:'Austria', flag:'🇦🇹', score:2,
+    col:7, row:4,
+    regs:[
+      {name:'DORA',     score:2, note:'FMA (Finanzmarktaufsicht) — DORA applicable; mid-tier enforcement posture'},
+      {name:'BCBS 239', score:2, note:'Applies to Erste Group and Raiffeisen as systemically important'},
+      {name:'CRR3',     score:2, note:'Applicable — Austrian banks have CEE exposure adding model complexity'},
+      {name:'GDPR',     score:2, note:'Datenschutzbehörde — moderate enforcement activity'},
+    ],
+    context:'Erste Group and Raiffeisen operate across Central and Eastern Europe, creating complex cross-border data governance obligations under DORA and BCBS 239. Legacy SAS and Teradata estates span multiple regulatory jurisdictions — a modernisation conversation that benefits from the pan-CEE complexity angle.',
+    enterprises:[
+      {name:'Erste Group',    techs:[{l:'Teradata',t:'dw'},{l:'SAS',t:'bi'}]},
+      {name:'Raiffeisen Bank',techs:[{l:'Informatica',t:'etl'},{l:'SAS',t:'bi'}]},
+    ]
+  },
+  {
+    code:'PL', name:'Poland', flag:'🇵🇱', score:1,
+    col:7, row:3,
+    regs:[
+      {name:'DORA',     score:1, note:'KNF — DORA applicable; enforcement capability and capacity developing'},
+      {name:'BCBS 239', score:1, note:'Applies to PKO Bank Polski as systemically important; supervision developing'},
+      {name:'CRR3',     score:2, note:'Applicable — Polish banks are building compliance capability'},
+      {name:'GDPR',     score:2, note:'UODO — growing enforcement activity'},
+    ],
+    context:'Poland has a large and growing banking sector with significant legacy technology. KNF\'s DORA enforcement is at an early stage, but PKO Bank Polski and mBank have real legacy Teradata and SAS estates. The conversation is currently more cost-driven than compliance-driven.',
+    enterprises:[
+      {name:'PKO Bank Polski', techs:[{l:'Teradata',t:'dw'},{l:'SAS',t:'bi'}]},
+      {name:'mBank',           techs:[{l:'DataStage',t:'etl'}]},
+      {name:'Pekao',           techs:[{l:'SAS',t:'bi'}]},
+    ]
+  },
+  {
+    code:'CZ', name:'Czech Rep.', flag:'🇨🇿', score:1,
+    col:8, row:4,
+    regs:[
+      {name:'DORA',     score:1, note:'ČNB — DORA applicable; enforcement at early stage'},
+      {name:'BCBS 239', score:1, note:'Limited systemic institution scope in Czech market'},
+      {name:'CRR3',     score:1, note:'Applicable — primarily affects foreign-owned subsidiaries'},
+      {name:'GDPR',     score:2, note:'ÚOOÚ — moderate enforcement'},
+    ],
+    context:'Czech Republic is primarily a subsidiary market — Komerční banka (SocGen), ČSOB (KBC), and Erste subsidiary all face regulatory pressure driven by their parent group\'s home regulators (FR, BE, AT) rather than ČNB directly. The modernisation conversation should be routed through the parent.',
+    enterprises:[
+      {name:'Komerční banka', techs:[{l:'Teradata',t:'dw'}]},
+      {name:'ČSOB (KBC)',     techs:[{l:'SAS',t:'bi'}]},
+    ]
+  },
+  {
+    code:'PT', name:'Portugal', flag:'🇵🇹', score:1,
+    col:2, row:5,
+    regs:[
+      {name:'DORA',     score:1, note:'Banco de Portugal / CMVM — DORA applicable; smaller financial sector, developing enforcement'},
+      {name:'BCBS 239', score:1, note:'Limited G-SIB or O-SII scope in Portugal'},
+      {name:'CRR3',     score:1, note:'Applicable to Portuguese banks; limited systemic complexity'},
+      {name:'GDPR',     score:2, note:'CNPD — active enforcement proportionate to market size'},
+    ],
+    context:'Portugal is a smaller market where the modernisation conversation is predominantly cost-driven rather than regulatory. Millennium BCP\'s Teradata estate provides an entry point, but urgency framing is weaker than in northern markets. Best approached as part of a broader Iberian or pan-EU account strategy.',
+    enterprises:[
+      {name:'Millennium BCP', techs:[{l:'Teradata',t:'dw'},{l:'SAS',t:'bi'}]},
+      {name:'Caixa Geral',    techs:[{l:'SAS',t:'bi'}]},
+    ]
+  },
+];
+
+// ── SCORE LABELS ───────────────────────────────────────
+const SCORE_LABELS={4:'Very High',3:'High',2:'Medium',1:'Developing'};
+const SCORE_COLORS={4:'#DC2626',3:'#F97316',2:'#FBBF24',1:'#94A3B8'};
+const SCORE_TEXT  ={4:'#fff',  3:'#fff',  2:'#0F172A',1:'#fff'};
+
+// ── BUILD TILE MAP ─────────────────────────────────────
+const grid=document.getElementById('tile-grid');
+COUNTRIES.forEach(c=>{
+  const div=document.createElement('div');
+  div.className='tile';
+  div.dataset.score=c.score;
+  div.dataset.code=c.code;
+  div.style.gridColumn=c.col;
+  div.style.gridRow=c.row;
+  div.innerHTML=`<span class="tile-flag">${c.flag}</span><span class="tile-code">${c.code}</span>`;
+  div.title=`${c.name} — ${SCORE_LABELS[c.score]}`;
+  div.addEventListener('click',()=>selectCountry(c.code));
+  grid.appendChild(div);
+});
+
+// ── CHIP HELPER ────────────────────────────────────────
+function chip(label, type){
+  return `<span class="chip chip-${type||'dw'}">${label}</span>`;
+}
+
+// ── SELECT COUNTRY ─────────────────────────────────────
+let selected=null;
+function selectCountry(code){
+  const c=COUNTRIES.find(x=>x.code===code);
+  if(!c) return;
+
+  // Update tile active state
+  document.querySelectorAll('.tile').forEach(t=>t.classList.toggle('active',t.dataset.code===code));
+  selected=code;
+
+  // ── REGULATORY PANEL ──
+  const placeholder=document.getElementById('reg-placeholder');
+  const content=document.getElementById('reg-content');
+  placeholder.style.display='none';
+  content.style.display='flex';
+  content.style.flexDirection='column';
+  content.style.gap='.75rem';
+
+  content.innerHTML=`
+    <div class="country-hero">
+      <span class="country-flag-big">${c.flag}</span>
+      <div>
+        <div class="country-name">${c.name}</div>
+        <span class="score-badge s${c.score}">${SCORE_LABELS[c.score]} Pressure</span>
+      </div>
+    </div>
+    <div class="panel-label">Regulation breakdown</div>
+    <div class="reg-rows">
+      ${c.regs.map(r=>`
+        <div class="reg-row">
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem">
+              <span class="reg-name">${r.name}</span>
+              ${r.applies===false?`<span class="reg-na-tag">${r.own}</span>`:''}
+              <div class="reg-dots">
+                ${[1,2,3,4].map(i=>`<div class="reg-dot${i<=r.score?' on':''}"></div>`).join('')}
+              </div>
+            </div>
+            <div class="reg-note">${r.note}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="context-box">${c.context}</div>
+  `;
+
+  // ── ENTERPRISE PANEL ──
+  const entPlaceholder=document.getElementById('ent-placeholder');
+  const entList=document.getElementById('ent-list');
+  entPlaceholder.style.display='none';
+  entList.style.display='flex';
+
+  entList.innerHTML=c.enterprises.map(e=>`
+    <div class="ent-row">
+      <div>
+        <div class="ent-name">${e.name}</div>
+        <div class="ent-chips">
+          ${e.techs.map(t=>chip(t.l, t.t||'dw')).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Default: select UK on load
+window.addEventListener('DOMContentLoaded',()=>selectCountry('UK'));
+
+// ── THEME ──────────────────────────────────────────────
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+const themeBtn=document.getElementById('theme-btn');
+function setTheme(t){
+  document.documentElement.dataset.theme=t;
+  themeBtn.textContent=t==='dark'?'☀️':'🌙';
+  lsSet('impetus-theme',t);
+}
+themeBtn.addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
+setTheme(lsGet('impetus-theme')||'light');
+</script>
