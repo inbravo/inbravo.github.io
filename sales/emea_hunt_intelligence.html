@@ -1170,8 +1170,11 @@ canvas.addEventListener('click',e=>{
     activeFilter=activeFilter===hit.id?'':hit.id;
     const sel=document.getElementById('f-tech');
     sel.value=activeFilter?PLAT_NAMES[activeFilter]:'';
+    document.getElementById('f-region').value='';
+    document.getElementById('f-industry').value='';
     applyFilters();
     drawBubbles();
+    document.getElementById('acct-table').scrollIntoView({behavior:'smooth',block:'start'});
   }
 });
 
@@ -1206,7 +1209,7 @@ function buildHeatmap(){
         document.getElementById('f-tech').value=cell.dataset.tech;
         document.getElementById('f-region').value=reg;
         applyFilters();
-        document.getElementById('tab-hunt-map').querySelector('#acct-table').scrollIntoView({behavior:'smooth',block:'nearest'});
+        document.getElementById('acct-table').scrollIntoView({behavior:'smooth',block:'start'});
       });
       con.appendChild(cell);
     });
