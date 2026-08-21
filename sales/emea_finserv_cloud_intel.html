@@ -114,6 +114,23 @@
     --lo:  #F87171; --lo-bg:  #2D0A0A;
   }
 
+
+  /* ─── THEME TOGGLE ─── */
+  .theme-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--ink-2);
+    border-radius: .375rem;
+    padding: .25rem .65rem;
+    cursor: pointer;
+    font-size: .8rem;
+    font-family: inherit;
+    transition: border-color .15s, color .15s;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+  .theme-btn:hover { border-color: var(--accent); color: var(--ink); }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
@@ -494,6 +511,7 @@
     <div class="stat-chip"><span class="num">3</span><span class="lbl">Snowflake</span></div>
     <div class="stat-chip"><span class="num">16</span><span class="lbl">GCP</span></div>
   </div>
+  <button class="theme-btn" id="themeBtn" title="Toggle theme">🌙</button>
 </header>
 
 <!-- CONTRADICTION BANNER -->
@@ -1330,6 +1348,23 @@
     searchTerm = this.value;
     applyFilters();
   });
+
+  // theme toggle
+  (function() {
+    var btn = document.getElementById('themeBtn');
+    var root = document.documentElement;
+    function applyTheme(t) {
+      root.setAttribute('data-theme', t);
+      btn.textContent = t === 'dark' ? '☀️' : '🌙';
+      try { localStorage.setItem('impetus-theme', t); } catch(e){}
+    }
+    btn.addEventListener('click', function() {
+      applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+    var saved;
+    try { saved = localStorage.getItem('impetus-theme'); } catch(e){}
+    applyTheme(saved || 'light');
+  })();
 </script>
 </body>
 </html>
