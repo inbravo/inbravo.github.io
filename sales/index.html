@@ -1,0 +1,161 @@
+<title>Sales Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;--dim:#94A3B8;
+  --accent:#6366F1;--accent-dim:#EEF2FF;
+  --green:#10B981;--green-dim:#ECFDF5;
+  --hdr:#0F172A;--hdr-text:#F1F5F9;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.1),0 12px 32px rgba(0,0,0,.08);
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;
+  --accent-dim:#1E1B4B;--green-dim:#064E3B;
+  --hdr:#0A0F1E;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
+}}
+:root[data-theme="dark"]{
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;
+  --accent-dim:#1E1B4B;--green-dim:#064E3B;
+  --hdr:#0A0F1E;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:13px;scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;min-height:100vh}
+h1,h2,h3{font-family:'Plus Jakarta Sans',system-ui,sans-serif;line-height:1.2}
+
+/* ── HEADER ── */
+.hdr{background:var(--hdr);color:var(--hdr-text);padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:100}
+.hdr-brand{display:flex;align-items:center;gap:.75rem}
+.hdr-badge{background:#6366F1;color:#fff;font-size:.65rem;font-weight:700;padding:.15rem .45rem;border-radius:.25rem;letter-spacing:.05em;font-family:'Plus Jakarta Sans',sans-serif}
+.hdr-title{font-size:.95rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hdr-text)}
+.hdr-meta{display:flex;align-items:center;gap:.75rem;font-size:.72rem;color:#94A3B8}
+.theme-btn{background:none;border:1px solid #334155;color:#94A3B8;border-radius:.375rem;padding:.25rem .6rem;cursor:pointer;font-size:.8rem;transition:border-color .15s,color .15s;font-family:inherit}
+.theme-btn:hover{border-color:#6366F1;color:var(--hdr-text)}
+
+/* ── HERO ── */
+.hero{padding:2.5rem 1.5rem 1.5rem;text-align:center;max-width:560px;margin:0 auto}
+.hero-eyebrow{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:.6rem}
+.hero-title{font-size:1.75rem;font-weight:800;color:var(--text);margin-bottom:.6rem}
+.hero-sub{font-size:.82rem;color:var(--muted);line-height:1.6;max-width:400px;margin:0 auto}
+
+/* ── CARD GRID ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;padding:1.5rem;max-width:900px;margin:0 auto}
+
+/* ── CARD ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:.625rem;overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .2s,transform .2s;display:flex;flex-direction:column}
+.card:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px)}
+.card-strip{height:4px}
+.card-strip.indigo{background:linear-gradient(90deg,#4F46E5,#818CF8)}
+.card-strip.green{background:linear-gradient(90deg,#059669,#34D399)}
+.card-body{padding:1.25rem;flex:1;display:flex;flex-direction:column;gap:.75rem}
+.card-icon{font-size:1.75rem;line-height:1}
+.card-title{font-size:1rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text)}
+.card-desc{font-size:.75rem;color:var(--muted);line-height:1.6;flex:1}
+.card-tags{display:flex;flex-wrap:wrap;gap:.35rem}
+.tag{font-size:.6rem;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.04em;padding:.2rem .5rem;border-radius:.25rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border)}
+.card-footer{padding:.875rem 1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-updated{font-size:.65rem;color:var(--dim)}
+.btn-open{display:inline-flex;align-items:center;gap:.35rem;padding:.375rem .875rem;border-radius:.375rem;font-size:.72rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;text-decoration:none;transition:opacity .15s,transform .1s;cursor:pointer}
+.btn-open:hover{opacity:.88;transform:translateX(2px)}
+.btn-open.indigo{background:#6366F1;color:#fff}
+.btn-open.green{background:#10B981;color:#fff}
+.btn-open svg{width:12px;height:12px;flex-shrink:0}
+
+/* ── FOOTER ── */
+.page-footer{text-align:center;padding:2rem 1rem;font-size:.65rem;color:var(--dim);border-top:1px solid var(--border);margin-top:1rem}
+</style>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-brand">
+    <span class="hdr-badge">IMPETUS</span>
+    <span class="hdr-title">Sales Intelligence Hub</span>
+  </div>
+  <div class="hdr-meta">
+    <span>EU / UK · H2 2026</span>
+    <button class="theme-btn" id="themeBtn">🌙</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Sales Toolkit</div>
+  <h1 class="hero-title">All Sales Tools</h1>
+  <p class="hero-sub">Central access to every sales intelligence asset — hunt maps, calculators, and pipeline plans for the EU / UK H2 2026 motion.</p>
+</section>
+
+<!-- CARD GRID -->
+<main class="grid">
+
+  <!-- Card 1: EMEA Hunt Intelligence -->
+  <article class="card">
+    <div class="card-strip indigo"></div>
+    <div class="card-body">
+      <div class="card-icon">🎯</div>
+      <div class="card-title">EMEA Hunt Intelligence</div>
+      <p class="card-desc">41 validated target accounts across 12 legacy platforms — bubble chart by market penetration &amp; migration urgency, urgency heatmap, and a company profile explorer with clickable source references.</p>
+      <div class="card-tags">
+        <span class="tag">Hunt Map</span>
+        <span class="tag">41 Accounts</span>
+        <span class="tag">12 Platforms</span>
+        <span class="tag">5 EMEA Regions</span>
+        <span class="tag">LeapLogic</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Updated Aug 2026</span>
+      <a href="emea_hunt_intelligence.html" class="btn-open indigo">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+  <!-- Card 2: Pipeline Calculator -->
+  <article class="card">
+    <div class="card-strip green"></div>
+    <div class="card-body">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Pipeline Calculator</div>
+      <p class="card-desc">Model the EU / UK sales pipeline — enter deal parameters, coverage ratios, and win rates to forecast quarterly targets and build a business case for H2 2026 commitments.</p>
+      <div class="card-tags">
+        <span class="tag">Calculator</span>
+        <span class="tag">EU / UK</span>
+        <span class="tag">H2 2026</span>
+        <span class="tag">Forecast</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Updated Aug 2026</span>
+      <a href="pipeline_calculator.html" class="btn-open green">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+</main>
+
+<footer class="page-footer">Impetus Technologies · Sales Intelligence · Confidential · Not for distribution</footer>
+
+<script>
+const btn = document.getElementById('themeBtn');
+const root = document.documentElement;
+function applyTheme(t) {
+  root.dataset.theme = t;
+  btn.textContent = t === 'dark' ? '☀️' : '🌙';
+}
+btn.addEventListener('click', () => {
+  applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
+});
+if (window.matchMedia('(prefers-color-scheme:dark)').matches) applyTheme('dark');
+</script>

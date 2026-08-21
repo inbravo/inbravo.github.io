@@ -1,0 +1,1286 @@
+<title>EMEA Hunt Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500&display=swap">
+<style>
+:root {
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;--dim:#94A3B8;
+  --accent:#6366F1;--accent-dim:#EEF2FF;
+  --t1:#EF4444;--t1-bg:#FEF2F2;--t1-border:#FECACA;
+  --t2:#F59E0B;--t2-bg:#FFFBEB;--t2-border:#FDE68A;
+  --t3:#3B82F6;--t3-bg:#EFF6FF;--t3-border:#BFDBFE;
+  --green:#10B981;--green-bg:#ECFDF5;
+  --hdr:#0F172A;--hdr-text:#F1F5F9;
+  --heat0:#F1F5F9;--heat1:#BFDBFE;--heat2:#93C5FD;--heat3:#3B82F6;--heat4:#1D4ED8;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;
+  --accent-dim:#1E1B4B;
+  --t1-bg:#450A0A;--t1-border:#7F1D1D;
+  --t2-bg:#451A03;--t2-border:#78350F;
+  --t3-bg:#172554;--t3-border:#1E3A8A;
+  --green-bg:#064E3B;
+  --hdr:#0A0F1E;
+  --heat0:#1E293B;--heat1:#1E3A8A;--heat2:#1D4ED8;--heat3:#2563EB;--heat4:#3B82F6;
+}}
+:root[data-theme="dark"]{
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;
+  --accent-dim:#1E1B4B;
+  --t1-bg:#450A0A;--t1-border:#7F1D1D;
+  --t2-bg:#451A03;--t2-border:#78350F;
+  --t3-bg:#172554;--t3-border:#1E3A8A;
+  --green-bg:#064E3B;
+  --hdr:#0A0F1E;
+  --heat0:#1E293B;--heat1:#1E3A8A;--heat2:#1D4ED8;--heat3:#2563EB;--heat4:#3B82F6;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:13px;scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+h1,h2,h3,h4{font-family:'Plus Jakarta Sans',system-ui,sans-serif;line-height:1.2}
+sup{font-size:.65em;color:var(--accent);cursor:help}
+a{color:var(--accent);text-decoration:none}
+
+/* ── HEADER ── */
+.hdr{background:var(--hdr);color:var(--hdr-text);padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:100}
+.hdr-brand{display:flex;align-items:center;gap:.75rem}
+.hdr-badge{background:#6366F1;color:#fff;font-size:.65rem;font-weight:700;padding:.15rem .45rem;border-radius:.25rem;letter-spacing:.05em;font-family:'Plus Jakarta Sans',sans-serif}
+.hdr-title{font-size:.95rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hdr-text)}
+.hdr-meta{display:flex;align-items:center;gap:.75rem;font-size:.72rem;color:#94A3B8}
+.theme-btn{background:none;border:1px solid #334155;color:#94A3B8;border-radius:.375rem;padding:.25rem .6rem;cursor:pointer;font-size:.8rem;transition:border-color .15s}
+.theme-btn:hover{border-color:#6366F1;color:var(--hdr-text)}
+
+/* ── TAB NAV ── */
+.tab-nav{background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0;overflow-x:auto;scrollbar-width:none;position:sticky;top:44px;z-index:90}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;padding:.6rem .9rem;font-size:.72rem;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif;transition:color .15s,border-color .15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-btn.tier-1{color:var(--t1)}
+.tab-btn.tier-1.active{border-bottom-color:var(--t1)}
+.tab-btn.tier-2{color:var(--t2)}
+.tab-btn.tier-2.active{border-bottom-color:var(--t2)}
+.tab-btn.tier-3{color:var(--t3)}
+.tab-btn.tier-3.active{border-bottom-color:var(--t3)}
+.tab-sep{width:1px;height:20px;background:var(--border);flex-shrink:0;margin:0 .25rem}
+.tier-chip{font-size:.6rem;font-weight:700;color:var(--dim);padding:0 .5rem;letter-spacing:.06em;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif}
+
+/* ── TAB PANELS ── */
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ── HUNT MAP LAYOUT ── */
+.hunt-map{padding:1rem;display:flex;flex-direction:column;gap:1rem}
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:900px){.panel-grid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;overflow:hidden}
+.panel-hdr{padding:.625rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.panel-title{font-size:.75rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif}
+.panel-sub{font-size:.65rem;color:var(--muted)}
+.panel-body{padding:1rem}
+
+/* ── BUBBLE CHART ── */
+#bubble-canvas{display:block;width:100%}
+.chart-legend{display:flex;gap:1rem;margin-top:.5rem;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:.3rem;font-size:.65rem;color:var(--muted)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.chart-tooltip{position:fixed;background:var(--hdr);color:var(--hdr-text);border-radius:.375rem;padding:.4rem .6rem;font-size:.65rem;pointer-events:none;z-index:200;display:none;max-width:200px;line-height:1.4}
+
+/* ── HEATMAP ── */
+.heatmap-wrap{overflow-x:auto}
+.heatmap{display:grid;gap:2px}
+.hm-cell{border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;color:#fff;transition:opacity .15s;height:26px;min-height:26px}
+.hm-cell:hover{opacity:.8;outline:2px solid var(--accent)}
+.hm-cell.active-filter{outline:2px solid var(--accent)}
+.hm-col-label{font-size:.58rem;font-weight:600;color:var(--muted);text-align:center;padding:.1rem;height:26px;display:flex;align-items:flex-end;justify-content:center;line-height:1.1}
+.hm-row-label{font-size:.62rem;color:var(--muted);display:flex;align-items:center;padding-right:.25rem;height:26px;white-space:nowrap}
+.heat-0{background:var(--heat0);color:var(--dim)}
+.heat-1{background:var(--heat1);color:#1E40AF}
+.heat-2{background:var(--heat2);color:#1E40AF}
+.heat-3{background:var(--heat3)}
+.heat-4{background:var(--heat4)}
+.hm-legend{display:flex;align-items:center;gap:.5rem;margin-top:.5rem;font-size:.62rem;color:var(--muted)}
+.hm-legend-bar{display:flex;gap:2px}
+.hm-legend-swatch{width:14px;height:10px;border-radius:2px}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;flex-wrap:wrap;gap:.5rem;padding:.75rem 1rem;border-bottom:1px solid var(--border);background:var(--surface2)}
+.filter-bar label{font-size:.65rem;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:.35rem}
+.filter-bar select{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:.25rem;padding:.25rem .5rem;font-size:.68rem;cursor:pointer;font-family:'Inter',sans-serif}
+.filter-bar select:focus{outline:none;border-color:var(--accent)}
+.btn-reset{background:none;border:1px solid var(--border);color:var(--muted);border-radius:.25rem;padding:.25rem .6rem;font-size:.65rem;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-reset:hover{border-color:var(--accent);color:var(--accent)}
+.match-count{margin-left:auto;font-size:.65rem;color:var(--muted)}
+
+/* ── ACCOUNT TABLE ── */
+.tbl-wrap{overflow-x:auto}
+.acct-table{width:100%;border-collapse:collapse;font-size:.7rem}
+.acct-table th{background:var(--surface2);padding:.5rem .75rem;text-align:left;font-size:.62rem;font-weight:700;color:var(--muted);white-space:nowrap;border-bottom:1px solid var(--border);font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.03em}
+.acct-table td{padding:.5rem .75rem;border-bottom:1px solid var(--border);vertical-align:top;max-width:200px}
+.acct-table tr:last-child td{border-bottom:none}
+.acct-table tr:hover td{background:var(--surface2)}
+.acct-table tr.hidden{display:none}
+.tag-named{background:#F0FDF4;color:#166534;border:1px solid #BBF7D0;border-radius:999px;padding:.1rem .4rem;font-size:.58rem;font-weight:700;white-space:nowrap}
+:root[data-theme="dark"] .tag-named,:root:not([data-theme="light"]) .tag-named{background:#14532D;color:#86EFAC;border-color:#166534}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag-named{background:#14532D;color:#86EFAC;border-color:#166534}}
+.urg-critical{color:var(--t1);font-weight:600}
+.urg-high{color:var(--t2);font-weight:600}
+.urg-medium{color:var(--t3);font-weight:500}
+.src-cell{font-size:.68rem;max-width:180px}
+.src-link{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+.src-link:hover{opacity:.8}
+.tech-chip{display:inline-block;padding:.1rem .4rem;border-radius:.25rem;font-size:.62rem;font-weight:600;white-space:nowrap}
+
+/* ── PLATFORM TAB SECTIONS ── */
+.plat-wrap{max-width:1100px;margin:0 auto;padding:1rem}
+.plat-hdr{border-radius:.5rem;padding:1rem 1.25rem;margin-bottom:1rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.plat-hdr-left h2{font-size:1.3rem;font-weight:800;margin-bottom:.25rem}
+.plat-hdr-left .tagline{font-size:.78rem;opacity:.85}
+.plat-hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:.35rem}
+.tier-badge{display:inline-flex;align-items:center;gap:.35rem;border-radius:999px;padding:.2rem .65rem;font-size:.65rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif}
+.eos-badge{background:rgba(0,0,0,.25);border-radius:.375rem;padding:.25rem .6rem;font-size:.68rem;font-weight:600}
+.eos-label{opacity:.7;margin-right:.3rem}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1rem}
+@media(max-width:800px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;padding:.75rem 1rem}
+.kpi-val{font-size:1.15rem;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:.15rem}
+.kpi-label{font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.kpi-sub{font-size:.62rem;color:var(--dim);margin-top:.15rem}
+
+.section-card{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;margin-bottom:1rem;overflow:hidden}
+.section-hdr{padding:.625rem 1rem;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;gap:.5rem}
+.section-body{padding:1rem}
+
+.why-list{list-style:none;display:flex;flex-direction:column;gap:.625rem}
+.why-item{display:flex;gap:.625rem;font-size:.75rem;line-height:1.5}
+.why-icon{flex-shrink:0;font-size:.85rem;margin-top:.1rem}
+
+.hunt-table{width:100%;border-collapse:collapse;font-size:.7rem}
+.hunt-table th{background:var(--surface2);padding:.45rem .75rem;text-align:left;font-size:.62rem;font-weight:700;color:var(--muted);white-space:nowrap;border-bottom:1px solid var(--border);font-family:'Plus Jakarta Sans',sans-serif}
+.hunt-table td{padding:.5rem .75rem;border-bottom:1px solid var(--border);vertical-align:top}
+.hunt-table tr:last-child td{border-bottom:none}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+
+.partner-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+.partner-chip{display:inline-flex;align-items:center;gap:.35rem;border:1px solid var(--border);border-radius:.375rem;padding:.25rem .6rem;font-size:.68rem;font-weight:600}
+.partner-chip svg{flex-shrink:0}
+.partner-angle{font-size:.68rem;color:var(--muted);margin-top:.5rem;line-height:1.5}
+
+.comp-grid{display:flex;flex-direction:column;gap:.5rem}
+.comp-item{display:flex;gap:.625rem;font-size:.72rem}
+.comp-name{font-weight:600;white-space:nowrap;min-width:110px}
+.comp-angle{color:var(--muted);line-height:1.45}
+
+.pricing-box{background:var(--surface2);border-radius:.375rem;padding:.75rem 1rem;font-size:.75rem;line-height:1.6;margin-bottom:.75rem}
+
+.refs-section{padding:.75rem 1rem;background:var(--surface2);border-top:1px solid var(--border)}
+.refs-list{list-style:none;display:flex;flex-direction:column;gap:.2rem}
+.refs-list li{font-size:.62rem;color:var(--muted);display:flex;gap:.4rem}
+.ref-num{color:var(--accent);font-weight:600;flex-shrink:0;min-width:16px}
+
+.no-results{text-align:center;padding:2rem;color:var(--muted);font-size:.8rem}
+</style>
+
+<!-- Tooltip -->
+<div class="chart-tooltip" id="chart-tooltip"></div>
+
+<div id="app">
+<header class="hdr">
+  <div class="hdr-brand">
+    <span class="hdr-badge">EMEA</span>
+    <span class="hdr-title">Legacy Modernization Hunt Intelligence</span>
+  </div>
+  <div class="hdr-meta">
+    <span>Impetus Technologies · LeapLogic</span>
+    <span>Aug 2026</span>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+  </div>
+</header>
+
+<nav class="tab-nav" id="tab-nav">
+  <button class="tab-btn active" data-tab="hunt-map">Hunt Map</button>
+  <div class="tab-sep"></div>
+  <span class="tier-chip">TIER 1 — CRITICAL</span>
+  <button class="tab-btn tier-1" data-tab="ab-initio">Ab Initio</button>
+  <button class="tab-btn tier-1" data-tab="netezza">Netezza</button>
+  <button class="tab-btn tier-1" data-tab="sas">SAS</button>
+  <button class="tab-btn tier-1" data-tab="cloudera">Cloudera</button>
+  <div class="tab-sep"></div>
+  <span class="tier-chip">TIER 2 — HIGH</span>
+  <button class="tab-btn tier-2" data-tab="teradata">Teradata</button>
+  <button class="tab-btn tier-2" data-tab="informatica">Informatica</button>
+  <button class="tab-btn tier-2" data-tab="datastage">DataStage</button>
+  <button class="tab-btn tier-2" data-tab="alteryx">Alteryx</button>
+  <div class="tab-sep"></div>
+  <span class="tier-chip">TIER 3 — STRATEGIC</span>
+  <button class="tab-btn tier-3" data-tab="sap-bw">SAP BW</button>
+  <button class="tab-btn tier-3" data-tab="talend">Talend</button>
+  <button class="tab-btn tier-3" data-tab="oracle">Oracle Exadata</button>
+  <button class="tab-btn tier-3" data-tab="hadoop">Hadoop</button>
+</nav>
+
+<main id="main">
+
+<!-- ══════════════════════════════════════════
+     TAB 1 — HUNT MAP
+═══════════════════════════════════════════ -->
+<section class="tab-panel active" id="tab-hunt-map">
+<div class="hunt-map">
+
+  <!-- Panel A + B side by side -->
+  <div class="panel-grid">
+
+    <!-- Panel A: Priority Matrix -->
+    <div class="panel">
+      <div class="panel-hdr">
+        <div>
+          <div class="panel-title">Panel A — Priority Matrix</div>
+          <div class="panel-sub">X: EMEA Market Penetration · Y: Migration Urgency · Size: Install Base Density · Click bubble to filter Panel C</div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <canvas id="bubble-canvas" height="280"></canvas>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--t1)"></div>Tier 1 — Critical</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--t2)"></div>Tier 2 — High</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--t3)"></div>Tier 3 — Strategic</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel B: Regional Heatmap -->
+    <div class="panel">
+      <div class="panel-hdr">
+        <div>
+          <div class="panel-title">Panel B — Regional Intensity Heatmap</div>
+          <div class="panel-sub">Enterprise install concentration by platform × region · Click cell to filter Panel C</div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="heatmap-wrap">
+          <div id="heatmap-container"></div>
+        </div>
+        <div class="hm-legend">
+          <span>Low</span>
+          <div class="hm-legend-bar">
+            <div class="hm-legend-swatch heat-0"></div>
+            <div class="hm-legend-swatch heat-1"></div>
+            <div class="hm-legend-swatch heat-2"></div>
+            <div class="hm-legend-swatch heat-3"></div>
+            <div class="hm-legend-swatch heat-4"></div>
+          </div>
+          <span>Very High</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel C: Company Profile Explorer -->
+  <div class="panel">
+    <div class="panel-hdr">
+      <div>
+        <div class="panel-title">Panel C — Company Profile Explorer</div>
+        <div class="panel-sub">Filter by technology, region, or industry · Named accounts marked in green</div>
+      </div>
+    </div>
+    <div class="filter-bar" id="filter-bar">
+      <label>Technology
+        <select id="f-tech">
+          <option value="">All</option>
+          <option>Ab Initio</option><option>Netezza</option><option>SAS</option><option>Cloudera</option>
+          <option>Teradata</option><option>Informatica</option><option>DataStage</option><option>Alteryx</option>
+          <option>SAP BW</option><option>Talend</option><option>Oracle Exadata</option><option>Hadoop</option>
+        </select>
+      </label>
+      <label>Region
+        <select id="f-region">
+          <option value="">All</option>
+          <option>UK/Ireland</option><option>Germany/DACH</option><option>France/Benelux</option>
+          <option>Nordics</option><option>Southern Europe</option><option>Eastern Europe/MEA</option>
+        </select>
+      </label>
+      <label>Industry
+        <select id="f-industry">
+          <option value="">All</option>
+          <option>Banking</option><option>Insurance</option><option>Telco</option>
+          <option>Manufacturing</option><option>Pharma</option><option>Energy</option><option>Government</option><option>Aviation</option>
+        </select>
+      </label>
+      <button class="btn-reset" id="btn-reset">Reset</button>
+      <span class="match-count" id="match-count"></span>
+    </div>
+    <div class="tbl-wrap">
+      <table class="acct-table" id="acct-table">
+        <thead>
+          <tr>
+            <th>Company</th><th>Country</th><th>Industry</th><th>Revenue Tier</th>
+            <th>Technology</th><th>Source</th>
+          </tr>
+        </thead>
+        <tbody id="acct-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- Platform tabs injected by JS -->
+<div id="platform-tabs"></div>
+
+</main>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+
+const REGIONS = ['UK/Ireland','Germany/DACH','France/Benelux','Nordics','Southern Europe','Eastern Europe/MEA'];
+const PLAT_KEYS = ['ab-initio','netezza','sas','cloudera','teradata','informatica','datastage','alteryx','sap-bw','talend','oracle','hadoop'];
+const PLAT_NAMES = {
+  'ab-initio':'Ab Initio','netezza':'Netezza','sas':'SAS','cloudera':'Cloudera',
+  'teradata':'Teradata','informatica':'Informatica','datastage':'DataStage','alteryx':'Alteryx',
+  'sap-bw':'SAP BW','talend':'Talend','oracle':'Oracle Exadata','hadoop':'Hadoop'
+};
+
+// Heatmap: [ab-initio, netezza, sas, cloudera, teradata, informatica, datastage, alteryx, sap-bw, talend, oracle, hadoop]
+// per region row
+const HEATMAP = {
+  'UK/Ireland':        [4,4,4,3,4,4,4,3,3,2,4,3],
+  'Germany/DACH':      [3,3,3,4,4,3,3,2,4,3,4,3],
+  'France/Benelux':    [2,3,4,3,3,4,3,2,3,4,3,3],
+  'Nordics':           [2,3,4,3,3,2,2,2,3,2,3,3],
+  'Southern Europe':   [1,2,3,2,3,3,2,2,3,2,3,2],
+  'Eastern Europe/MEA':[1,2,2,2,2,2,2,1,2,2,2,2]
+};
+
+// Bubble chart data: {id, name, tier, x(0-10 market penetration), y(0-10 urgency), r(install density), trigger, pricing}
+const BUBBLES = [
+  {id:'ab-initio', name:'Ab Initio',     tier:1, x:3.0, y:8.5, r:3,  trigger:'No cloud-native roadmap disclosed', pricing:'Licence elimination — customer annual cost $800K–$2M+ used as anchor'},
+  {id:'netezza',   name:'Netezza',       tier:1, x:4.5, y:9.8, r:6,  trigger:'Mako hardware EoS April 2025¹ — support already ended', pricing:'Hardware refresh cost + annual support ($150K–$400K) as anchor'},
+  {id:'sas',       name:'SAS',           tier:1, x:8.5, y:8.2, r:9,  trigger:'SAS 9.4 EoL Jan 2026² — Viya migration is full rewrite', pricing:'Viya uplift cost vs migration cost comparison'},
+  {id:'cloudera',  name:'Cloudera',      tier:1, x:7.5, y:9.5, r:7,  trigger:'CDP Private Cloud EoS June 2026³ — 5× pricing shock', pricing:'CDP subscription cost ($300K–$1M+) vs open Databricks migration'},
+  {id:'teradata',  name:'Teradata',      tier:2, x:8.0, y:5.5, r:8,  trigger:'CFO-driven cost review — $500K–$3M annual licences', pricing:'Annual Teradata licence as anchor; cloud right-sizing argument'},
+  {id:'informatica',name:'Informatica',  tier:2, x:5.0, y:8.0, r:7,  trigger:'PowerCenter EoS March 2026⁴ — DORA compliance risk', pricing:'PowerCenter maintenance cost + DORA non-compliance exposure'},
+  {id:'datastage', name:'DataStage',     tier:2, x:2.5, y:6.5, r:6,  trigger:'IBM CP4D pricing increase — 3× on renewal', pricing:'CP4D renewal delta vs migration investment'},
+  {id:'alteryx',   name:'Alteryx',       tier:2, x:4.0, y:5.5, r:4,  trigger:'Post-bankruptcy vendor risk⁵ — Clearlake Capital acquisition', pricing:'Licence continuity risk + pricing uncertainty as motivator'},
+  {id:'sap-bw',    name:'SAP BW',        tier:3, x:9.5, y:6.0, r:9,  trigger:'BW 7.5 mainstream Dec 2027⁶; BO 4.3 mainstream Dec 2026⁷', pricing:'SAP annual maintenance (18–22% of licence) as anchor'},
+  {id:'talend',    name:'Talend',        tier:3, x:4.0, y:6.2, r:5,  trigger:'Open Studio retired Jan 2024⁸ — live security gap', pricing:'New Qlik Talend Cloud pricing shock ($3.6K–$27.5K/month)'},
+  {id:'oracle',    name:'Oracle Exadata',tier:3, x:7.0, y:7.5, r:8,  trigger:'OBIEE 12c Sustaining Support Aug 2025⁹ — no security patches', pricing:'Oracle licence cost (100 OCPUs ≈ $2.4M list + $1.2M/yr support¹⁰) + audit risk'},
+  {id:'hadoop',    name:'Hadoop',        tier:3, x:6.2, y:9.2, r:6,  trigger:'HDP EoS June 2021¹¹ — 4+ years unpatched in EMEA', pricing:'EU AI Act compliance gap as value lever; security risk as urgency anchor'},
+];
+
+// Account data
+const ACCOUNTS = [
+  // UK / Ireland
+  {name:'Barclays',named:true,country:'UK',region:'UK/Ireland',industry:'Banking',rev:'£32B+',tech:'Ab Initio',techId:'ab-initio',urg:'Critical',lever:'No cloud roadmap + Databricks BrickBuilder alignment (Wave 3 CDO engagement active)',entry:'Existing Impetus relationship — CDO group engagement',contact:'CDO / Data Engineering Lead',src:'Ab Initio EMEA banking reference; Databricks BrickBuilder partner programme',srcUrl:'https://www.databricks.com/customers'},
+  {name:'HSBC',named:true,country:'UK',region:'UK/Ireland',industry:'Banking',rev:'$51B+',tech:'Oracle Exadata',techId:'oracle',urg:'High',lever:'OBIEE Sustaining Support (no patches since Aug 2025) + Oracle audit exposure',entry:'CISO/Risk angle via OBIEE security gap',contact:'CTO / Head of Data Platform',src:'Oracle EMEA financial services reference customer',srcUrl:'https://www.oracle.com/industries/financial-services/banking/'},
+  {name:'Lloyds Banking Group',named:true,country:'UK',region:'UK/Ireland',industry:'Banking',rev:'£18B',tech:'Oracle Exadata',techId:'oracle',urg:'High',lever:'Exadata Cloud@Customer expansion March 2025 — migration window open now',entry:'Oracle account team co-sell motion',contact:'Head of Data Engineering / CTO',src:'Oracle Exadata C@C press announcement, Mar 2025',srcUrl:'https://www.oracle.com/news/'},
+  {name:'NatWest Group',named:true,country:'UK',region:'UK/Ireland',industry:'Banking',rev:'£14B',tech:'DataStage',techId:'datastage',urg:'High',lever:'IBM CP4D pricing 3× uplift on renewal + DORA ICT risk for PRA-regulated entity',entry:'IBM renewal interception — benchmarking + DORA PRA resilience angle',contact:'Head of Data Engineering / CDO',src:'IBM DataStage EMEA banking reference',srcUrl:'https://www.ibm.com/case-studies'},
+  {name:'Vodafone',named:true,country:'UK',region:'UK/Ireland',industry:'Telco',rev:'£44B',tech:'Hadoop',techId:'hadoop',urg:'High',lever:'HDP EoS June 2021 — 4+ years unpatched; DORA ICT risk for EU subsidiaries; OFCOM compliance',entry:'DORA risk conversation for EU opcos + HDP patch gap',contact:'Group CTO / VP Data Platform',src:'HDP EMEA telco analytics; Cloudera industry references',srcUrl:'https://www.cloudera.com/about/customers.html'},
+  {name:'BT Group',named:true,country:'UK',region:'UK/Ireland',industry:'Telco',rev:'£21B',tech:'Ab Initio',techId:'ab-initio',urg:'Critical',lever:'No cloud roadmap from Ab Initio — BT billing and mediation on Ab Initio; OFCOM and DORA ICT risk for critical national infrastructure',entry:'CTO/CDO roadmap conversation + OFCOM / DORA critical national infrastructure angle',contact:'Group CTO / Head of Data Engineering',src:'Ab Initio EMEA telco reference (billing/mediation systems)',srcUrl:''},
+  {name:'HMRC',named:true,country:'UK',region:'UK/Ireland',industry:'Government',rev:'£900M opex',tech:'Hadoop',techId:'hadoop',urg:'High',lever:'HDP EoS June 2021 — HMRC CONNECT programme uses Hadoop for tax gap analysis; NCSC guidance on unsupported software',entry:'G-Cloud 14 / Crown Commercial Service channel + NCSC advisory angle',contact:'Chief Digital & Information Officer / Head of Technology',src:'HMRC CONNECT programme — HMRC annual report disclosure',srcUrl:'https://www.gov.uk/government/collections/hmrc-annual-report-and-accounts'},
+  // France / Benelux
+  {name:'Aegon',named:true,country:'Netherlands',region:'France/Benelux',industry:'Insurance',rev:'€11B',tech:'Informatica',techId:'informatica',urg:'Critical',lever:'PowerCenter EoS March 2026 — DORA ICT risk live',entry:'DORA compliance + no-patch security risk',contact:'CDO / Integration Architecture Lead',src:'Informatica EMEA insurance reference (PowerCenter)',srcUrl:'https://www.informatica.com/gb/customer-success.html'},
+  {name:'Swiss Life France',named:true,country:'France',region:'France/Benelux',industry:'Insurance',rev:'CHF21B',tech:'Netezza',techId:'netezza',urg:'Critical',lever:'Mako hardware EoS April 2025 — support already ended',entry:'Hardware refresh conversation via IBM account team',contact:'VP Technology / Infrastructure Lead',src:'IBM Netezza EMEA insurance analytics deployment',srcUrl:'https://www.ibm.com/case-studies'},
+  {name:'European Investment Bank',named:true,country:'Luxembourg',region:'France/Benelux',industry:'Banking',rev:'€85B assets',tech:'DataStage',techId:'datastage',urg:'High',lever:'DORA ICT resilience requirements live Jan 2025',entry:'Regulatory compliance angle via VP Technology',contact:'VP Technology / IT Risk',src:'IBM DataStage deployment; Impetus named reference account',srcUrl:''},
+  {name:'ING Group',named:true,country:'Netherlands',region:'France/Benelux',industry:'Banking',rev:'€22B',tech:'Informatica',techId:'informatica',urg:'Critical',lever:'PowerCenter EoS March 2026 + DORA ICT risk — ING DORA filing live Jan 2025; unpatched integration layer is reportable ICT risk',entry:'DORA compliance angle via Group CIO / IT Risk',contact:'Group CIO / Head of Data Integration',src:'Informatica EMEA banking reference; ING DORA ICT filing',srcUrl:'https://www.informatica.com/gb/customer-success.html'},
+  {name:'Société Générale',named:true,country:'France',region:'France/Benelux',industry:'Banking',rev:'€22B',tech:'Cloudera',techId:'cloudera',urg:'Critical',lever:'CDP EoS June 2026 + DORA ICT resilience — unpatched Hadoop post-EoS reportable under ACPR/ECB supervision',entry:'DSI (CIO) DORA compliance + CDP no-patch conversation',contact:'DSI / Head of Data Engineering',src:'Cloudera CDP EMEA banking deployment (publicly referenced)',srcUrl:'https://www.cloudera.com/about/customers.html'},
+  {name:'Crédit Agricole',named:true,country:'France',region:'France/Benelux',industry:'Banking',rev:'€24B',tech:'SAS',techId:'sas',urg:'High',lever:'SAS 9.4 EoL Jan 2026 — IRB credit models on SAS create ACPR recertification risk if environment unsupported',entry:'SAS 9.4 renewal interception — ACPR IRB model risk angle',contact:'Chief Risk Officer / VP Quantitative Analytics',src:'SAS EMEA banking risk analytics reference',srcUrl:'https://www.sas.com/en_gb/customers.html'},
+  {name:'Airbus',named:true,country:'France',region:'France/Benelux',industry:'Manufacturing',rev:'€68B',tech:'SAP BW',techId:'sap-bw',urg:'High',lever:'BusinessObjects 4.3 mainstream Dec 2026 — aviation ESG/CSRD reporting requirements adding BI volume pressure',entry:'BO Dec 2026 deadline — SAP Competence Centre or CFO ESG reporting angle',contact:'SAP Competence Centre Lead / Group CDO',src:'SAP EMEA manufacturing reference customer',srcUrl:'https://www.sap.com/uk/stories/customer-stories.html'},
+  {name:'Rabobank',named:true,country:'Netherlands',region:'France/Benelux',industry:'Banking',rev:'€12B',tech:'Informatica',techId:'informatica',urg:'Critical',lever:'PowerCenter EoS March 2026 — 89 local member banks creates complex integration estate; DORA ICT risk + DNB supervisory expectations',entry:'DORA compliance + PowerCenter EoS urgency via Group CIO',contact:'Group CIO / Head of Enterprise Data Integration',src:'Informatica EMEA banking reference (cooperative banking model)',srcUrl:'https://www.informatica.com/gb/customer-success.html'},
+  {name:'NN Group',named:true,country:'Netherlands',region:'France/Benelux',industry:'Insurance',rev:'€18B',tech:'SAS',techId:'sas',urg:'High',lever:'SAS 9.4 EoL Jan 2026 — Solvency II SCR models across Netherlands, Belgium, Japan; Viya cost shock; DNB patching expectations',entry:'Solvency II SCR risk + SAS renewal interception via Group CDO',contact:'Group CDO / Chief Actuary',src:'SAS EMEA insurance reference (Solvency II actuarial)',srcUrl:'https://www.sas.com/en_gb/customers.html'},
+  {name:'ABN AMRO',named:true,country:'Netherlands',region:'France/Benelux',industry:'Banking',rev:'€7B',tech:'Cloudera',techId:'cloudera',urg:'Critical',lever:'CDP EoS June 2026 + DORA ICT risk — DNB supervisory expectations on patched ICT infrastructure',entry:'DORA filing + CDP no-patch risk via Group CTO',contact:'Group CTO / Head of Data Engineering',src:'Cloudera CDP EMEA banking deployment',srcUrl:'https://www.cloudera.com/about/customers.html'},
+  {name:'Orange',named:true,country:'France',region:'France/Benelux',industry:'Telco',rev:'€44B',tech:'Cloudera',techId:'cloudera',urg:'Critical',lever:'CDP EoS June 2026 + DORA ICT risk for telecom infrastructure operator — ARCEP compliance',entry:'DORA + ARCEP regulatory risk angle via Group CTO',contact:'Group CTO / VP Big Data & AI',src:'Cloudera CDP EMEA telco reference (publicly referenced)',srcUrl:'https://www.cloudera.com/about/customers.html'},
+  {name:'Air France-KLM',named:true,country:'France',region:'France/Benelux',industry:'Aviation',rev:'€20B',tech:'Teradata',techId:'teradata',urg:'High',lever:'Teradata licence cost vs cloud — post-COVID cost pressure; CSRD aviation ESG reporting on flight emissions growing analytics volumes',entry:'CFO cost reduction + CSRD aviation ESG reporting angle via Group CDO',contact:'Group CDO / Head of Data Platform',src:'Teradata aviation analytics reference',srcUrl:'https://www.teradata.com/case-studies'},
+  // Germany / DACH
+  {name:'Deutsche Bank',named:true,country:'Germany',region:'Germany/DACH',industry:'Banking',rev:'€28B',tech:'Oracle Exadata',techId:'oracle',urg:'High',lever:'Oracle audit risk + OBIEE no-patch since Aug 2025',entry:'Risk angle via internal audit referral',contact:'Head of Data Platform / CTO Office',src:'Oracle EMEA financial services reference customer',srcUrl:'https://www.oracle.com/industries/financial-services/banking/'},
+  {name:'Deutsche Bank',named:true,country:'Germany',region:'Germany/DACH',industry:'Banking',rev:'€28B',tech:'SAS',techId:'sas',urg:'High',lever:'SAS 9.4 EoL Jan 2026 — FRTB market risk and BCBS 239 risk aggregation models on SAS; BaFin model recertification risk if SAS unsupported post-EoL',entry:'SAS renewal interception via Group CRO — BaFin FRTB / BCBS 239 compliance angle',contact:'Group CRO / Head of Risk Analytics',src:'SAS EMEA banking risk analytics (FRTB / BCBS 239)',srcUrl:'https://www.sas.com/en_gb/customers.html'},
+  {name:'Allianz Group',named:true,country:'Germany',region:'Germany/DACH',industry:'Insurance',rev:'€161B',tech:'SAS',techId:'sas',urg:'High',lever:'SAS 9.4 EoL Jan 2026 — Solvency II ORSA and SCR models on SAS; Viya migration = full actuarial rewrite cost shock',entry:'SAS renewal interception via CFO — Solvency II ORSA risk angle',contact:'Group CDO / Chief Actuary / VP Data Science',src:'SAS EMEA insurance actuarial reference',srcUrl:'https://www.sas.com/en_gb/customers.html'},
+  {name:'Zurich Insurance',named:true,country:'Switzerland',region:'Germany/DACH',industry:'Insurance',rev:'$71B',tech:'Informatica',techId:'informatica',urg:'Critical',lever:'PowerCenter EoS March 2026 — IDMC uplift vs LeapLogic migration decision; Swiss FINMA operational resilience requirements',entry:'PowerCenter renewal interception — FINMA risk + IDMC total cost comparison',contact:'Group CTO / Head of Enterprise Data Integration',src:'Informatica IDMC EMEA reference customer',srcUrl:'https://www.informatica.com/gb/customer-success.html'},
+  {name:'Commerzbank',named:true,country:'Germany',region:'Germany/DACH',industry:'Banking',rev:'€9B',tech:'Teradata',techId:'teradata',urg:'High',lever:'Teradata licence renegotiation window — BaFin stress-test data volume requirements driving cloud migration business case',entry:'CFO cost reduction via Teradata renewal — BaFin compliance angle',contact:'Head of Data Analytics / VP Technology',src:'Teradata EMEA banking reference (German market)',srcUrl:'https://www.teradata.com/case-studies'},
+  {name:'Siemens AG',named:true,country:'Germany',region:'Germany/DACH',industry:'Manufacturing',rev:'€78B',tech:'SAP BW',techId:'sap-bw',urg:'High',lever:'BO 4.3 mainstream Dec 2026 — Siemens runs BO across 80+ countries; BW-on-HANA migration opens simultaneous LeapLogic window',entry:'SAP modernisation programme + BO Dec 2026 deadline via CIO',contact:'Group CIO / SAP Competence Centre Lead',src:'SAP EMEA manufacturing reference customer',srcUrl:'https://www.sap.com/uk/stories/customer-stories.html'},
+  {name:'Munich Re',named:true,country:'Germany',region:'Germany/DACH',industry:'Insurance',rev:'€67B',tech:'SAS',techId:'sas',urg:'High',lever:'SAS 9.4 EoL Jan 2026 — catastrophe risk modelling and reinsurance pricing on SAS; BaFin/EIOPA Solvency II SCR validation risk; Viya migration cost shock',entry:'SAS renewal interception via Group CRO — BaFin/EIOPA compliance angle',contact:'Group Chief Risk Officer / VP Data Science',src:'SAS EMEA reinsurance risk modelling reference',srcUrl:'https://www.sas.com/en_gb/customers.html'},
+  {name:'Bayer AG',named:true,country:'Germany',region:'Germany/DACH',industry:'Pharma',rev:'€47B',tech:'SAS',techId:'sas',urg:'High',lever:'SAS 9.4 EoL Jan 2026 — pharmacovigilance and regulatory submissions on SAS; EMA/FDA validated environment recertification risk if SAS unsupported',entry:'SAS renewal interception via VP Regulatory Affairs — EMA compliance angle',contact:'VP Data Science / Head of Regulatory Informatics',src:'SAS EMEA pharma reference (pharmacovigilance)',srcUrl:'https://www.sas.com/en_gb/customers.html'},
+  {name:'BASF SE',named:true,country:'Germany',region:'Germany/DACH',industry:'Manufacturing',rev:'€69B',tech:'SAP BW',techId:'sap-bw',urg:'High',lever:'BusinessObjects 4.3 mainstream Dec 2026 — BASF runs BO across global supply-chain and procurement reporting; CSRD ESG volumes forcing BI refresh',entry:'BO Dec 2026 deadline via SAP Competence Centre + CSRD ESG reporting angle',contact:'Group CIO / SAP Programme Lead',src:'SAP EMEA chemicals/manufacturing reference',srcUrl:'https://www.sap.com/uk/stories/customer-stories.html'},
+  {name:'E.ON',named:true,country:'Germany',region:'Germany/DACH',industry:'Energy',rev:'€100B',tech:'SAP BW',techId:'sap-bw',urg:'High',lever:'BusinessObjects 4.3 mainstream Dec 2026 — E.ON runs BO across 30+ country energy network reporting; CSRD ESG volumes forcing BI infrastructure refresh',entry:'BO Dec 2026 deadline + CSRD ESG reporting angle via Group CIO',contact:'Group CIO / Head of Data & Analytics',src:'SAP EMEA energy utilities reference',srcUrl:'https://www.sap.com/uk/stories/customer-stories.html'},
+  {name:'Volkswagen Group',named:true,country:'Germany',region:'Germany/DACH',industry:'Manufacturing',rev:'€295B',tech:'SAP BW',techId:'sap-bw',urg:'High',lever:'BO 4.3 mainstream Dec 2026 — VW Group runs BO across 12 brands and 120+ plants globally; CSRD supply-chain ESG reporting accelerating BW data volumes',entry:'BO Dec 2026 deadline via Group SAP Centre of Excellence + CSRD ESG reporting',contact:'Group CIO / Head of SAP Platform',src:'SAP EMEA reference customer (automotive manufacturing)',srcUrl:'https://www.sap.com/uk/stories/customer-stories.html'},
+  {name:'Erste Group',named:true,country:'Austria',region:'Germany/DACH',industry:'Banking',rev:'€8B',tech:'SAS',techId:'sas',urg:'High',lever:'SAS 9.4 EoL Jan 2026 — IRB credit risk models across 7 CEE markets under EBA/local FSA approval; model recertification risk if SAS unsupported',entry:'SAS renewal interception via Group CRO — EBA IRB model compliance across CEE markets',contact:'Group Chief Risk Officer / Head of Quantitative Analytics',src:'SAS CEE banking reference (IRB risk models)',srcUrl:'https://www.sas.com/en_gb/customers.html'},
+  // Southern Europe
+  {name:'Telefónica',named:true,country:'Spain',region:'Southern Europe',industry:'Telco',rev:'€39B',tech:'Teradata + Oracle',techId:'teradata',urg:'High',lever:'Dual-platform combined licence cost >€5M/year',entry:'CFO cost reduction play via Group CDO',contact:'Group CDO / VP Data Engineering',src:'Teradata global telco reference customer',srcUrl:'https://www.teradata.com/case-studies'},
+  {name:'Santander',named:true,country:'Spain',region:'Southern Europe',industry:'Banking',rev:'€56B',tech:'Teradata',techId:'teradata',urg:'High',lever:'Teradata global licence consolidation pressure — Banco de España stress-test analytics driving cloud migration decision',entry:'CFO cost reduction + Banco de España regulatory analytics angle',contact:'Group CDO / VP Data Architecture',src:'Teradata global banking reference customer',srcUrl:'https://www.teradata.com/case-studies'},
+  {name:'BBVA',named:true,country:'Spain',region:'Southern Europe',industry:'Banking',rev:'€27B',tech:'Hadoop',techId:'hadoop',urg:'High',lever:'HDP EoS June 2021 — 4+ years unpatched; Banco de España ICT risk framework requires patched infrastructure under DORA',entry:'Banco de España ICT compliance + HDP patch gap conversation',contact:'Global Head of Data Engineering / CTO',src:'BBVA Engineering Blog — big data analytics platform (HDP)',srcUrl:'https://www.bbvaapimarket.com/en/api-world/bbva-and-big-data-tools-and-technologies/'},
+  {name:'CaixaBank',named:true,country:'Spain',region:'Southern Europe',industry:'Banking',rev:'€15B',tech:'Oracle Exadata',techId:'oracle',urg:'High',lever:'Oracle Exadata C@C migration window + OBIEE Sustaining Support (no patches Aug 2025) — Banco de España stress-test volume growth post-Bankia merger',entry:'Oracle co-sell + Banco de España regulatory analytics angle',contact:'Head of Risk Data / CTO',src:'Oracle EMEA financial services reference (Spanish banking)',srcUrl:'https://www.oracle.com/industries/financial-services/banking/'},
+  {name:'Intesa Sanpaolo',named:true,country:'Italy',region:'Southern Europe',industry:'Banking',rev:'€22B',tech:'Oracle Exadata',techId:'oracle',urg:'High',lever:'Exadata C@C migration window open; OBIEE no patches since Aug 2025; Banca d\'Italia stress-test volume growth',entry:'Oracle co-sell + Banca d\'Italia regulatory analytics angle',contact:'CTO / Head of Analytics Platform',src:'Oracle EMEA financial services reference (Italian banking)',srcUrl:'https://www.oracle.com/industries/financial-services/banking/'},
+  {name:'UniCredit',named:true,country:'Italy',region:'Southern Europe',industry:'Banking',rev:'€24B',tech:'Teradata',techId:'teradata',urg:'High',lever:'Teradata licence consolidation across Italy/Germany/Austria estate — ECB SSM stress-test + BCBS 239 cross-border data lineage',entry:'CFO cost reduction + ECB SSM / BCBS 239 compliance angle via Group CDO',contact:'Group CDO / Head of Data Platform',src:'Teradata EMEA banking reference (Italian market)',srcUrl:'https://www.teradata.com/case-studies'},
+  {name:'Generali Group',named:true,country:'Italy',region:'Southern Europe',industry:'Insurance',rev:'€100B',tech:'SAS',techId:'sas',urg:'High',lever:'SAS 9.4 EoL Jan 2026 — Solvency II ORSA and SCR models across 50+ country operations; Viya migration = full actuarial rewrite; IVASS (Italian FSA) supervision',entry:'Solvency II ORSA risk + SAS renewal interception via Group Chief Actuary',contact:'Group Chief Actuary / Group CDO',src:'SAS EMEA insurance actuarial reference',srcUrl:'https://www.sas.com/en_gb/customers.html'},
+  // Nordics
+  {name:'Nordea',named:true,country:'Finland',region:'Nordics',industry:'Banking',rev:'€9B',tech:'Teradata',techId:'teradata',urg:'High',lever:'Teradata licence cost + Finansinspektionen/FIN-FSA data lineage requirements; Nordic multi-entity consolidation driving cloud',entry:'CFO cost reduction + FIN-FSA/Finansinspektionen compliance angle',contact:'Group CDO / Head of Data Warehouse',src:'Teradata Nordics banking reference',srcUrl:'https://www.teradata.com/case-studies'},
+  {name:'SEB Group',named:true,country:'Sweden',region:'Nordics',industry:'Banking',rev:'SEK212B',tech:'SAS',techId:'sas',urg:'High',lever:'SAS 9.4 EoL Jan 2026 — IRB credit risk models under Finansinspektionen approval; unsupported SAS = recertification risk',entry:'SAS renewal interception via CRO — Finansinspektionen IRB compliance angle',contact:'Chief Risk Officer / Head of Quantitative Risk',src:'SAS Nordics banking credit risk reference',srcUrl:'https://www.sas.com/en_gb/customers.html'},
+  {name:'Danske Bank',named:true,country:'Denmark',region:'Nordics',industry:'Banking',rev:'DKK42B',tech:'SAS',techId:'sas',urg:'High',lever:'SAS 9.4 EoL Jan 2026 — IRB credit models under Finanstilsynet approval; Viya migration = full model rewrite cost shock',entry:'SAS renewal interception via CRO — Finanstilsynet IRB compliance angle',contact:'Chief Risk Officer / Head of Quantitative Analytics',src:'SAS Nordics banking IRB reference',srcUrl:'https://www.sas.com/en_gb/customers.html'},
+];
+
+// Platform tab data
+const PLATFORMS = {
+'ab-initio':{
+  name:'Ab Initio', vendor:'Ab Initio Software LLC', tier:1,
+  hdrColor:'linear-gradient(135deg,#7F1D1D,#991B1B)',
+  tagline:'Proprietary batch ETL with no cloud roadmap — highest per-seat cost in EMEA data engineering',
+  eos:'No cloud-native version announced (Aug 2026)',
+  trigger:'No cloud roadmap disclosed by vendor',
+  kpis:[
+    {val:'~400',label:'EMEA Enterprises',sub:'Financial services dominant'},
+    {val:'$800K–$2M+',label:'Annual Licence (customer)',sub:'Per enterprise, list price'},
+    {val:'Critical',label:'Migration Urgency',sub:'No cloud successor path'},
+    {val:'Very High',label:'Migration Complexity',sub:'Proprietary MPJ language + GDE'},
+  ],
+  why:[
+    {icon:'🔒',txt:'No cloud-native version of Ab Initio has been announced. Customers face perpetual on-premises lock-in with zero migration roadmap from the vendor — uniquely exposed in EMEA\'s cloud-first regulatory environment.'},
+    {icon:'💸',txt:'Annual licensing exceeds $1M+ for most enterprise deployments. Unlike Databricks or Apache Spark, cost cannot be justified by performance differentiation alone. CFO pressure is accelerating.'},
+    {icon:'⚠️',txt:'Global SI ecosystem has fewer than five certified delivery partners — creating single-point-of-failure delivery risk and near-zero competitive pricing on professional services.'},
+  ],
+  hunt:[
+    {profile:'Tier 1 investment bank or insurer',region:'UK / Germany',motion:'CTO/CDO cloud strategy review — position MPJ→Databricks DLT via LeapLogic automation',timeline:'Q4 2026',lever:'Eliminate $1M+ annual licence; consolidate onto existing Databricks estate'},
+    {profile:'Sovereign wealth / asset manager',region:'Switzerland / Luxembourg',motion:'Risk conversation — vendor concentration and no supported cloud path (DORA ICT risk)',timeline:'Q1 2027',lever:'Operational resilience + DORA 5th-party risk mitigation'},
+    {profile:'Large retail bank',region:'UK',motion:'Databricks account team co-sell — CTO infrastructure consolidation motion',timeline:'H1 2027',lever:'Platform consolidation savings + AI-ready lakehouse architecture'},
+  ],
+  targetProfile:'Financial services enterprises with 10+ year Ab Initio deployments running high-volume batch ETL (overnight settlement, risk aggregation, trade reconciliation). Economic buyer is CTO or Data Engineering Lead. Decision cycle 9–15 months. Entry via licence renewal intercept or Databricks co-sell.',
+  partners:[
+    {name:'Databricks',logo:'databricks',angle:'Replace MPJ workloads with Databricks Delta Live Tables; GDE metadata → Databricks Jobs via LeapLogic. BrickBuilder designation applicable.'},
+    {name:'AWS',logo:'aws',angle:'Ab Initio on-prem → AWS Glue or EMR Serverless migration for AWS-committed accounts. AWS MAP program funding may offset migration cost.'},
+  ],
+  pricing:'Lead with the customer\'s existing Ab Initio annual licence cost ($800K–$2M+ per enterprise). Frame LeapLogic as the mechanism to eliminate that recurring cost rather than adding a new one. In UK and Switzerland, financial services accounts have the highest propensity to invest in migration to eliminate this cost. DACH and Nordic accounts often require a phased business case tied to a regulatory trigger (DORA, BCBS 239).',
+  competitors:[
+    {name:'Next Pathway SHIFT',angle:'General-purpose ETL migration tool. No Ab Initio-specific parser or MPJ language support.'},
+    {name:'Accenture (manual)',angle:'Manual rewrite approach — 2–3× longer timeline, no code automation, higher blended rate.'},
+    {name:'Internal IT teams',angle:'Most common displacement risk. Counter with LeapLogic acceleration — show proof of 60–80% code automation on PoC scope.'},
+  ],
+  refs:[
+    'Ab Initio makes no public product lifecycle disclosures. No cloud-native version announced as of August 2026.',
+    'DORA (EU Regulation 2022/2554), effective 17 January 2025. ICT third-party risk provisions apply to financial entities.',
+  ],
+},
+'netezza':{
+  name:'Netezza', vendor:'IBM', tier:1,
+  hdrColor:'linear-gradient(135deg,#7F1D1D,#B91C1C)',
+  tagline:'Appliance hardware EoS April 2025 — support has ended, patches have stopped',
+  eos:'Netezza Mako hardware EoS: April 2025 (PASSED)',
+  trigger:'No security patches since April 2025',
+  kpis:[
+    {val:'800+',label:'EMEA Sites',sub:'BFSI and retail dominant'},
+    {val:'$150K–$400K',label:'Annual Support (customer)',sub:'Per appliance, hardware included'},
+    {val:'Critical',label:'Migration Urgency',sub:'EoS already passed'},
+    {val:'Medium',label:'Migration Complexity',sub:'SQL-heavy; LeapLogic handles NzSQL→Databricks SQL'},
+  ],
+  why:[
+    {icon:'🔴',txt:'Netezza Mako hardware reached End of Support on 1 April 2025.¹ IBM has ceased issuing security patches. Any Netezza customer still operational is running unpatched hardware — a live DORA ICT compliance breach for regulated entities.'},
+    {icon:'💾',txt:'Physical appliance refresh has reached end-of-life. There is no hardware migration path within the IBM ecosystem. Customers must move off the platform, not simply upgrade.'},
+    {icon:'📋',txt:'Netezza Performance Server (NPS) on Cloud Pak for Data does exist but requires full data migration — and many EMEA accounts have concluded NPS doesn\'t justify the cost relative to Databricks SQL or Snowflake.'},
+  ],
+  hunt:[
+    {profile:'Mid-size BFSI (bank or insurer)',region:'UK / France / Netherlands',motion:'DORA ICT risk angle — running unsupported hardware is a reportable ICT incident risk',timeline:'Q3 2026 (urgent)',lever:'Eliminate live DORA exposure; appliance retirement cost as anchor'},
+    {profile:'Large retail bank',region:'Germany / Switzerland',motion:'Security and compliance audit triggered by internal CISO — IBM Mako EoS flagged',timeline:'Q4 2026',lever:'Security posture + hardware support cost savings'},
+    {profile:'Nordic insurance group',region:'Sweden / Denmark',motion:'Databricks partner co-sell — NzSQL migration via LeapLogic as PoC with BrickBuilder funding',timeline:'Q4 2026',lever:'AI-ready architecture post-migration; Solvency II compliance benefit'},
+  ],
+  targetProfile:'Any organisation still running physical Netezza Mako appliances. Decision urgency is immediate — EoS passed April 2025. Primary buyer is CTO or Infrastructure Lead; CISO is secondary stakeholder for security exposure conversation. Short decision cycle expected: 3–6 months from initial engagement.',
+  partners:[
+    {name:'Databricks',logo:'databricks',angle:'Primary migration target for analytical workloads. LeapLogic converts NzSQL to Databricks SQL. BrickBuilder designation supports co-sell funding.'},
+    {name:'Snowflake',logo:'snowflake',angle:'Strong target for NzSQL-heavy accounts in UK and Netherlands already standardised on Snowflake for other workloads.'},
+    {name:'AWS',logo:'aws',angle:'Amazon Redshift migration path for AWS-committed accounts. AWS MAP funding available for qualifying migrations.'},
+  ],
+  pricing:'Lead with the annual Netezza appliance support cost ($150K–$400K per site) plus the security and compliance exposure from running unpatched hardware post-EoS. For regulated EMEA entities, frame the DORA ICT risk cost (potential regulatory penalty + incident reporting cost) as an additional value lever. Do not anchor to Impetus pricing — anchor to what the customer is currently spending.',
+  competitors:[
+    {name:'AWS SCT / DMS',angle:'Free migration tools from AWS for Redshift targets. Counter with complexity: NzSQL edge cases, stored procedures, UDFs require automation depth LeapLogic provides.'},
+    {name:'Flyway / Liquibase',angle:'Schema migration tools, not ETL pipeline migration. Incomplete for full Netezza estate.'},
+    {name:'IBM NPS on CP4D',angle:'IBM\'s own migration path. Counter with higher long-term cost and no AI/ML capability.'},
+  ],
+  refs:[
+    'Netezza Mako hardware End of Support: 1 April 2025. IBM official lifecycle announcement.',
+    'Netezza software End of Support: December 2025. IBM Software Support Lifecycle.',
+    'DORA (EU Regulation 2022/2554), Article 8 — ICT risk management framework, effective 17 January 2025.',
+  ],
+},
+'sas':{
+  name:'SAS', vendor:'SAS Institute', tier:1,
+  hdrColor:'linear-gradient(135deg,#7F1D1D,#B91C1C)',
+  tagline:'Largest EMEA install base — SAS 9.4 EoL Jan 2026 and Viya rewrite is not an upgrade',
+  eos:'SAS 9.4 Mainstream EoL: January 2026',
+  trigger:'Viya migration requires full code rewrite — not an in-place upgrade',
+  kpis:[
+    {val:'2,000+',label:'EMEA Enterprises',sub:'Highest EMEA density of any platform on this list'},
+    {val:'$150K–$600K+',label:'Annual Licence (customer)',sub:'Analytics; higher for risk/fraud modules'},
+    {val:'High',label:'Migration Urgency',sub:'SAS 9.4 EoL January 2026'},
+    {val:'High',label:'Migration Complexity',sub:'SAS PROC code requires transpilation — LeapLogic covers ~70%'},
+  ],
+  why:[
+    {icon:'🔁',txt:'SAS Viya is a complete platform rewrite — not an upgrade. Existing SAS 9.4 PROC code does not run natively on Viya. Every customer faces a migration project regardless of whether they stay with SAS or move to Python/Databricks.²'},
+    {icon:'💰',txt:'SAS licensing models are among the most opaque in enterprise software. Renewal negotiations routinely produce 20–40% increases. LeapLogic positions migration as an alternative to negotiating a renewal from a position of lock-in.'},
+    {icon:'📊',txt:'SAS 9.4 reaches mainstream End of Life in January 2026.² After that date, new defect fixes stop. Only Extended Support (at premium cost) and Sustaining Support remain, and these have restricted scope.'},
+  ],
+  hunt:[
+    {profile:'BFSI risk and analytics team',region:'UK / Nordics / Germany',motion:'SAS 9.4 renewal interception — present at least 6 months before renewal date',timeline:'Q3–Q4 2026',lever:'Viya rewrite cost vs LeapLogic-automated migration: show PoC scope comparison'},
+    {profile:'Actuarial / Solvency II modelling',region:'Netherlands / Belgium / UK',motion:'Solvency II compliance angle — SAS EoL creates model validation regulatory risk',timeline:'Q4 2026',lever:'Regulatory model audit trail + cost reduction vs SAS Viya uplift'},
+    {profile:'Pharmaceutical trial analytics',region:'Germany / Switzerland',motion:'IDMP/pharmacovigilance data compliance — SAS 9.4 is approved tooling; migration path needs to maintain compliance',timeline:'H1 2027',lever:'Regulatory continuity + cost reduction (SAS pharma licences are among the highest)'},
+  ],
+  targetProfile:'The largest opportunity pool in EMEA by volume. BFSI accounts use SAS for risk modelling, fraud detection, and regulatory reporting; pharma uses it for clinical trial analysis; government uses it for population analytics. The Viya migration conversation is active at virtually every SAS renewal. Economic buyer splits between CDO (analytics consolidation) and CFO (cost reduction).',
+  partners:[
+    {name:'AWS',logo:'aws',angle:'SAS → Amazon SageMaker for ML workloads. AWS MAP funding available. LeapLogic automates SAS PROC migration to Python/PySpark.'},
+    {name:'Databricks',logo:'databricks',angle:'SAS analytics → Databricks MLflow + notebooks. Strong for BFSI accounts already on Databricks for other workloads.'},
+    {name:'Microsoft',logo:'microsoft',angle:'SAS → Azure ML + Fabric for Microsoft-committed EMEA accounts. Strong in UK public sector and German manufacturing.'},
+  ],
+  pricing:'Frame around the Viya migration cost (which the customer must pay regardless of destination) vs the LeapLogic-enabled migration path. SAS annual licence costs ($150K–$600K for analytics; higher for risk modules) are the anchor — frame migration as eliminating that recurring cost permanently. In BFSI, add the regulatory model validation cost as an additional lever.',
+  competitors:[
+    {name:'DataRobot / H2O.ai',angle:'ML-focused tools for analytics workload displacement. Positioned as Viya alternative, not migration engines.'},
+    {name:'Dataiku',angle:'Strong in French and German data science teams. Co-sell potential with LeapLogic (Dataiku for governance, Databricks for execution).'},
+    {name:'Manual Python rewrite (internal)',angle:'Most common competitor. Counter with PoC showing 60–80% SAS PROC automation rate via LeapLogic.'},
+  ],
+  refs:[
+    'SAS 9.4 Mainstream Support ends January 2026. SAS Institute Product Support timeline.',
+    'SAS Viya is a complete re-architecture of the SAS platform; SAS 9.x programs require migration to run on Viya.',
+    'Solvency II (EU Directive 2009/138/EC, amended by Solvency II 2 2025 package) requires actuarial model validation — a SAS EoL migration must preserve audit trail.',
+  ],
+},
+'cloudera':{
+  name:'Cloudera', vendor:'Cloudera Inc.', tier:1,
+  hdrColor:'linear-gradient(135deg,#7F1D1D,#B91C1C)',
+  tagline:'CDP Private Cloud EoS June 2026 — 5× licensing shock following Hadoop-era pricing',
+  eos:'CDP Private Cloud Base EoS: June 2026 (PASSED)',
+  trigger:'EoS passed; 5× pricing shock on CDP subscription renewal',
+  kpis:[
+    {val:'~600',label:'EMEA Enterprises',sub:'BFSI, telco, public sector'},
+    {val:'$300K–$1M+',label:'Annual CDP Subscription',sub:'5× increase vs HDP-era pricing'},
+    {val:'Critical',label:'Migration Urgency',sub:'EoS June 2026 — already passed'},
+    {val:'Medium-High',label:'Migration Complexity',sub:'Spark/Hive workloads — LeapLogic + BrickBuilder'},
+  ],
+  why:[
+    {icon:'🔴',txt:'Cloudera CDP Private Cloud Base reached End of Support in June 2026.³ Security patches have stopped. EMEA financial and regulated entities running CDP are now in breach of DORA ICT requirements for supported software.'},
+    {icon:'💸',txt:'The transition from Hortonworks/Cloudera open-source HDP to CDP subscription introduced pricing increases of 3–5× for most accounts. Many EMEA customers absorbed the first renewal; very few will absorb a second without evaluating alternatives.'},
+    {icon:'🏃',txt:'Databricks has actively targeted Cloudera accounts with BrickBuilder EMEA co-sell funding (EPAM, Cognizant as key SIs). EMEA accounts are being approached. Impetus needs to be in the room before the customer signs with a BrickBuilder competitor.'},
+  ],
+  hunt:[
+    {profile:'BFSI enterprise on CDP Private Cloud',region:'UK / Netherlands / Germany',motion:'DORA ICT risk angle — CDP EoS is a reportable operational risk event for regulated entities',timeline:'Q3 2026 (urgent)',lever:'DORA compliance + CDP subscription cost elimination'},
+    {profile:'Telco data platform team',region:'France / Spain / UK',motion:'CFO cost review — CDP subscription renewal vs Databricks migration ROI',timeline:'Q3–Q4 2026',lever:'CDP subscription elimination + AI/ML capability unlock'},
+    {profile:'Public sector / utilities',region:'Germany / UK',motion:'BrickBuilder program co-sell with EPAM or Cognizant — migration funding available',timeline:'Q4 2026',lever:'BrickBuilder migration funding + EU AI Act compliance readiness'},
+  ],
+  targetProfile:'Enterprises still on Cloudera CDP Private Cloud Base or Classic clusters. In EMEA, highest concentration in UK banking, Dutch banking, German telco, and French public sector. CDP renewal conversations are the primary entry point. BrickBuilder co-sell is a strong door-opener — Databricks carries migration funding that offsets initial costs.',
+  partners:[
+    {name:'Databricks',logo:'databricks',angle:'Primary migration target. Databricks BrickBuilder EMEA program provides migration funding. LeapLogic automates Hive/Spark workload migration. BrickBuilder SIs: EPAM (Danone), Cognizant (GSK).'},
+    {name:'AWS',logo:'aws',angle:'AWS EMR Serverless for Spark-heavy workloads in AWS-committed accounts. MAP funding available.'},
+    {name:'Microsoft',logo:'microsoft',angle:'Microsoft Fabric for Azure-committed EMEA accounts, particularly UK public sector and German manufacturing.'},
+  ],
+  pricing:'Lead with the CDP subscription renewal cost ($300K–$1M+ annually, 3–5× the HDP-era price) and the DORA compliance exposure from running EoS software. BrickBuilder program funding from Databricks can be positioned as offsetting migration investment — but frame it as accelerating value, not making migration "free". Do not anchor to Impetus rate card.',
+  competitors:[
+    {name:'Databricks (direct)',angle:'Databricks fields its own professional services team for BrickBuilder accounts. LeapLogic differentiates on automation depth and multi-cloud target output (not only Databricks).'},
+    {name:'AWS EMR Serverless (self-service)',angle:'AWS tooling is free but requires significant internal engineering. Counter with time-to-value and complexity of large estate migrations.'},
+    {name:'Cloudera (in-place upgrade)',angle:'CDP Data Hub on cloud exists but at even higher cost. Most accounts have already evaluated and rejected it.'},
+  ],
+  refs:[
+    'Cloudera CDP Private Cloud Base End of Support: June 2026. Cloudera Product Support Lifecycle.',
+    'DORA (EU Regulation 2022/2554), effective 17 January 2025.',
+    'Databricks BrickBuilder EMEA program — EPAM reference: Danone migration; Cognizant reference: GSK migration. Databricks BrickBuilder partner directory.',
+  ],
+},
+'teradata':{
+  name:'Teradata', vendor:'Teradata Corporation', tier:2,
+  hdrColor:'linear-gradient(135deg,#78350F,#B45309)',
+  tagline:'Highest per-seat cost in enterprise DW — CFO-driven migration conversations accelerating across EMEA',
+  eos:'No EoS — licensing cost and cloud strategy are primary drivers',
+  trigger:'Annual licence $500K–$3M; CFO cost reduction mandates in 2025–2026',
+  kpis:[
+    {val:'~500',label:'EMEA Large Enterprises',sub:'BFSI, telco, retail dominant'},
+    {val:'$500K–$3M',label:'Annual Licence (customer)',sub:'Larger deployments at high end'},
+    {val:'High',label:'Migration Urgency',sub:'CFO cost review + cloud strategy'},
+    {val:'High',label:'Migration Complexity',sub:'BTEQ, FastLoad, stored procedures — LeapLogic automates ~70%'},
+  ],
+  why:[
+    {icon:'💰',txt:'Teradata\'s per-node licensing model generates annual costs of $500K–$3M for large EMEA deployments. Cloud economics have shifted the benchmark — equivalent analytical workloads on Databricks or Snowflake run at a fraction of the cost.'},
+    {icon:'☁️',txt:'Teradata VantageCloud exists but faces slow enterprise adoption. Many accounts that evaluated it chose cloud-native alternatives (Snowflake, Databricks SQL) for lower total cost and broader ecosystem.'},
+    {icon:'📉',txt:'Teradata\'s EMEA customer base is in structural decline. Revenue pressure has led to relationship deterioration at renewal — creating windows where competitor-led conversations gain traction.'},
+  ],
+  hunt:[
+    {profile:'Large retail or investment bank',region:'UK / Germany / Spain',motion:'CFO-driven cost reduction — benchmark Teradata TCO against Databricks or Snowflake',timeline:'Q4 2026',lever:'Licence cost reduction plus AI/ML capability that Teradata cannot match'},
+    {profile:'Telco analytics team',region:'France / Spain',motion:'CDO cloud strategy — position Databricks as modern analytics platform replacing Teradata DW',timeline:'H1 2027',lever:'Real-time analytics capability + cost reduction vs Teradata renewal'},
+    {profile:'Private bank / wealth management',region:'Switzerland',motion:'Data sovereignty conversation — Swiss cloud hosting on Azure or Snowflake (Swiss region)',timeline:'H1 2027',lever:'Swiss data sovereignty + cost reduction + AI readiness'},
+  ],
+  targetProfile:'Large enterprises with multi-year Teradata investments where licence renewal is within 12 months. CFO is typically the economic buyer; CDO is the technical champion. Decision cycle 6–12 months. Teradata renewal is the primary entry point — be in the room before the renewal is signed.',
+  partners:[
+    {name:'Databricks',logo:'databricks',angle:'Teradata BTEQ/SQL → Databricks SQL via LeapLogic. Strong for analytics-heavy BFSI accounts.'},
+    {name:'Snowflake',logo:'snowflake',angle:'Teradata to Snowflake is among the most requested EMEA migrations. LeapLogic supports Teradata SQL dialect conversion to Snowflake SQL.'},
+    {name:'AWS',logo:'aws',angle:'Teradata → Amazon Redshift for AWS-committed accounts. MAP funding available.'},
+  ],
+  pricing:'Lead with the customer\'s annual Teradata licence cost ($500K–$3M for large deployments) as the anchor. Build a 3-year TCO comparison — Teradata licence + maintenance vs migration investment + first three years of Databricks/Snowflake. Regional propensity: UK and DACH accounts respond to CFO-led cost benchmarking; France and Southern Europe respond more to strategic platform narrative.',
+  competitors:[
+    {name:'Next Pathway SHIFT',angle:'Automated migration tool targeting Teradata-to-Snowflake specifically. Strong EMEA presence. Differentiate on LeapLogic\'s multi-target output and broader ETL pipeline coverage.'},
+    {name:'WhereScape RED',angle:'Data modelling and migration automation. Positioned as Teradata schema migration, not full ETL estate migration.'},
+    {name:'Teradata internal upgrade (VantageCloud)',angle:'Teradata\'s own cloud offering. Higher cost than alternatives. Counter with TCO comparison.'},
+  ],
+  refs:[
+    'Next Pathway SHIFT platform — EMEA Teradata migration automation competitor. next-pathway.com.',
+    'DORA (EU Regulation 2022/2554), effective 17 January 2025.',
+  ],
+},
+'informatica':{
+  name:'Informatica', vendor:'Informatica Inc.', tier:2,
+  hdrColor:'linear-gradient(135deg,#78350F,#B45309)',
+  tagline:'PowerCenter EoS March 2026 — 1,200+ EMEA enterprises, DORA multiplier active',
+  eos:'Informatica PowerCenter EoS: March 2026 (PASSED)',
+  trigger:'EoS March 2026 — no patches; DORA ICT compliance breach for regulated entities',
+  kpis:[
+    {val:'1,200+',label:'EMEA Enterprises',sub:'Highest ETL install base in EMEA'},
+    {val:'$100K–$500K',label:'Annual Maintenance (customer)',sub:'Per enterprise, per year'},
+    {val:'Critical',label:'Migration Urgency',sub:'EoS March 2026 — already passed'},
+    {val:'Medium',label:'Migration Complexity',sub:'Mappings/workflows — LeapLogic automates 60–75%'},
+  ],
+  why:[
+    {icon:'🔴',txt:'Informatica PowerCenter reached End of Support in March 2026.⁴ Security patches have stopped. For EMEA regulated entities under DORA, running unsupported ETL software is a reportable ICT risk event.'},
+    {icon:'💸',txt:'Informatica\'s push to migrate customers to IDMC (Intelligent Data Management Cloud) comes with a subscription model that many PowerCenter customers find cost-prohibitive — creating a strong pull toward open alternatives.'},
+    {icon:'🔄',txt:'Many EMEA PowerCenter accounts also run Talend or DataStage alongside PowerCenter. A multi-tool estate migration via LeapLogic covers the full pipeline footprint — not just PowerCenter.'},
+  ],
+  hunt:[
+    {profile:'Financial institution (bank or insurer)',region:'France / UK / Netherlands',motion:'DORA ICT risk angle — PowerCenter EoS is a live compliance breach',timeline:'Q3 2026 (urgent)',lever:'DORA compliance + PowerCenter maintenance cost elimination'},
+    {profile:'Retail or consumer goods group',region:'Germany / UK',motion:'CDO data platform modernisation — replace PowerCenter with Azure Data Factory or Databricks',timeline:'Q4 2026',lever:'Licence cost + AI-ready data pipeline architecture'},
+    {profile:'Multi-tool estate (PowerCenter + Talend/DataStage)',region:'UK / France',motion:'Full estate migration — LeapLogic converts the full ETL footprint in one engagement',timeline:'H1 2027',lever:'Multi-tool licence elimination + single migration engagement scope'},
+  ],
+  targetProfile:'Any EMEA enterprise still running Informatica PowerCenter in production. BFSI and retail have the highest concentration. Aegon (Netherlands) is a named reference. IDMC upgrade conversation is the primary displacement trigger — if Informatica is pitching IDMC at renewal, be in the room with the total cost comparison.',
+  partners:[
+    {name:'AWS',logo:'aws',angle:'PowerCenter → AWS Glue migration. AWS MAP program funding. Strong for UK and DACH accounts.'},
+    {name:'Databricks',logo:'databricks',angle:'PowerCenter ETL → Databricks Delta Live Tables. Strong for BFSI accounts already on Databricks lakehouse.'},
+    {name:'Microsoft',logo:'microsoft',angle:'PowerCenter → Azure Data Factory. Dominant path for Microsoft-committed EMEA accounts.'},
+  ],
+  pricing:'Lead with the PowerCenter annual maintenance cost ($100K–$500K per enterprise) and the DORA exposure from running EoS ETL software. For accounts evaluating Informatica IDMC upgrade, build a comparison: IDMC total cost vs migration investment + Databricks/ADF licence. Frame LeapLogic as the migration accelerator that eliminates the IDMC cost.',
+  competitors:[
+    {name:'Informatica IDMC (self-upgrade)',angle:'Informatica\'s own cloud upgrade path. Counter with higher long-term cost and same-vendor dependency.'},
+    {name:'Azure Data Factory (self-service)',angle:'Free for Azure accounts but requires manual mapping rewrites. Counter with LeapLogic automation for large estates.'},
+    {name:'Talend (Qlik Talend Cloud)',angle:'Informatica customers sometimes evaluate Talend, but Talend\'s own Open Studio is now retired — counter with that risk.'},
+  ],
+  refs:[
+    'Informatica PowerCenter End of Support: March 2026. Informatica Product Support Lifecycle.',
+    'DORA (EU Regulation 2022/2554), effective 17 January 2025.',
+    'Aegon — named reference account, Netherlands, PowerCenter estate.',
+  ],
+},
+'datastage':{
+  name:'DataStage', vendor:'IBM', tier:2,
+  hdrColor:'linear-gradient(135deg,#78350F,#B45309)',
+  tagline:'IBM CP4D pricing 3× on renewal — DORA compliance pressure in EMEA public sector and banking',
+  eos:'No formal EoS — IBM CP4D subscription pricing is the primary driver',
+  trigger:'IBM CP4D annual pricing 3× on renewal vs legacy DataStage licencing',
+  kpis:[
+    {val:'~700',label:'EMEA Sites',sub:'Heavy UK/Germany public sector + banking'},
+    {val:'$200K–$800K',label:'Annual CP4D Cost (customer)',sub:'Full platform bundle'},
+    {val:'High',label:'Migration Urgency',sub:'Pricing shock + DORA pressure'},
+    {val:'High',label:'Migration Complexity',sub:'Parallel jobs, sequences — LeapLogic covers common patterns'},
+  ],
+  why:[
+    {icon:'💸',txt:'IBM Cloud Pak for Data (CP4D), the required container platform for modern DataStage, has imposed 3× pricing increases at renewal for many EMEA accounts. The cost jump is triggering competitive evaluations at the CDO and CFO level.'},
+    {icon:'📋',txt:'DORA ICT risk provisions require EMEA financial entities to assess vendor concentration risk. IBM CP4D creates significant single-vendor dependency for ETL, data quality, and governance — regulators are beginning to scrutinise this.'},
+    {icon:'🏛️',txt:'UK public sector DataStage deployments — a large portion of the UK estate — face G-Cloud 14 procurement constraints that make IBM renewals procedurally complex. Alternative solutions via CCS frameworks are easier to procure.'},
+  ],
+  hunt:[
+    {profile:'UK financial institution',region:'UK/Ireland',motion:'DORA ICT risk + CP4D renewal cost comparison — present before IBM renewal',timeline:'Q3–Q4 2026',lever:'CP4D cost reduction + DORA single-vendor risk mitigation'},
+    {profile:'European Investment Bank / supranational',region:'Luxembourg / France',motion:'DORA ICT resilience — EIB is named reference account; use regulatory narrative',timeline:'Q4 2026',lever:'DORA compliance + CP4D pricing elimination'},
+    {profile:'UK public sector body',region:'UK',motion:'G-Cloud 14 procurement — AWS Glue or Azure Data Factory as CCS framework alternative',timeline:'H1 2027',lever:'Government procurement path + CP4D cost elimination'},
+  ],
+  targetProfile:'Enterprises with DataStage at the core of their ETL pipeline, particularly where IBM CP4D is the delivery vehicle. European Investment Bank (EIB, Luxembourg) is a named reference account. UK banking and UK government have the highest concentration. IBM renewal is the primary entry point.',
+  partners:[
+    {name:'AWS',logo:'aws',angle:'DataStage → AWS Glue for cloud-native ETL. AWS MAP funding for qualifying migrations. Strong for AWS-committed EMEA accounts.'},
+    {name:'Microsoft',logo:'microsoft',angle:'DataStage → Azure Data Factory. Dominant path for UK public sector and German banking on Azure.'},
+    {name:'Databricks',logo:'databricks',angle:'DataStage batch ETL → Databricks Delta Live Tables for analytics-heavy pipelines.'},
+  ],
+  pricing:'Lead with the IBM CP4D renewal price increase (3× delta vs legacy pricing) as the primary value anchor. For UK public sector, G-Cloud 14 procurement path is an enabler — frame Impetus as a CCS-approved alternative. Do not anchor to Impetus rate card; anchor to the CP4D renewal delta.',
+  competitors:[
+    {name:'Informatica IDMC',angle:'Often evaluated alongside DataStage migration. Note that PowerCenter EoS creates its own displacement pressure — Informatica is not a stable landing zone.'},
+    {name:'Azure Data Factory (self-service)',angle:'Free for Azure accounts but requires manual rewrite for complex parallel jobs. Counter with LeapLogic automation on large estates.'},
+    {name:'IBM (in-place upgrade to NPS)',angle:'IBM\'s own upgrade path exists but at higher cost. Counter with independent cost comparison.'},
+  ],
+  refs:[
+    'DORA (EU Regulation 2022/2554), effective 17 January 2025.',
+    'G-Cloud 14 — UK Crown Commercial Service digital marketplace framework.',
+    'European Investment Bank — named DataStage reference account.',
+  ],
+},
+'alteryx':{
+  name:'Alteryx', vendor:'Alteryx Inc. (Clearlake Capital)', tier:2,
+  hdrColor:'linear-gradient(135deg,#78350F,#B45309)',
+  tagline:'Post-bankruptcy acquisition by Clearlake Capital — licence model changes creating customer uncertainty',
+  eos:'No EoS — vendor viability concern following Feb 2024 acquisition',
+  trigger:'Clearlake Capital acquisition Feb 2024 — pricing and roadmap uncertainty',
+  kpis:[
+    {val:'~400',label:'EMEA Enterprises',sub:'Analyst/data science teams'},
+    {val:'$15K–$60K',label:'Per-user Annual Licence',sub:'Designer + Server combination'},
+    {val:'High',label:'Migration Urgency',sub:'Vendor risk + pricing changes'},
+    {val:'Low-Medium',label:'Migration Complexity',sub:'Workflow to Python/Notebooks — LeapLogic partial coverage'},
+  ],
+  why:[
+    {icon:'⚠️',txt:'Alteryx filed for Chapter 11 bankruptcy and was acquired by Clearlake Capital in February 2024.⁵ Post-acquisition, licence pricing models have been restructured and enterprise agreements are being renegotiated — creating customer uncertainty about long-term cost trajectory.'},
+    {icon:'💼',txt:'The Alteryx user base is business analysts and data scientists — not data engineers. This is a different buyer than most platforms on this list. The conversation is about empowering business users on modern self-service tools, not infrastructure migration.'},
+    {icon:'🔄',txt:'Many Alteryx deployments co-exist with a data engineering platform (Databricks, Snowflake). The migration conversation is about replacing the analyst front-end while retaining the underlying data platform.'},
+  ],
+  hunt:[
+    {profile:'Enterprise analytics team (BFSI/energy)',region:'UK / Germany',motion:'Vendor risk assessment — Clearlake acquisition impact on roadmap and pricing',timeline:'Q4 2026',lever:'Vendor continuity risk + pricing uncertainty at next renewal'},
+    {profile:'CDO consolidation play',region:'UK / Netherlands',motion:'Analytics platform rationalisation — replace Alteryx with Databricks notebooks / Fabric Power BI',timeline:'H1 2027',lever:'Platform consolidation savings + AI/ML integration'},
+  ],
+  targetProfile:'Business analytics teams using Alteryx Designer for data prep and blending workflows. Typically sits alongside a separate data engineering platform. The CDO is the primary entry point — this is a data platform rationalisation conversation, not a legacy infrastructure migration. Lower urgency than Tier 1 platforms.',
+  partners:[
+    {name:'Databricks',logo:'databricks',angle:'Alteryx workflows → Databricks notebooks for engineering teams; Databricks SQL for analyst self-service.'},
+    {name:'Microsoft',logo:'microsoft',angle:'Alteryx → Microsoft Fabric + Power BI for Microsoft-committed accounts. Strong in UK and German enterprises.'},
+    {name:'Snowflake',logo:'snowflake',angle:'Alteryx data prep → Snowflake Snowpark for Snowflake-native accounts.'},
+  ],
+  pricing:'Frame around the vendor continuity risk (private equity ownership, post-bankruptcy pricing trajectory) rather than a hard EoS date. Alteryx per-user licensing ($15K–$60K per user for Designer + Server) is the anchor. Regional propensity: UK accounts respond most strongly to vendor risk narrative; German accounts want a detailed platform roadmap comparison.',
+  competitors:[
+    {name:'KNIME (open-source)',angle:'Free, strong German community. Counter with enterprise support SLA and Databricks integration depth.'},
+    {name:'Dataiku',angle:'Strong analytics platform competitor in France and Germany. Potential co-sell rather than head-to-head.'},
+    {name:'Internal Python/notebooks migration',angle:'Most common path. Counter with business user adoption risk — not all Alteryx users can switch to Python.'},
+  ],
+  refs:[
+    'Alteryx Chapter 11 bankruptcy filing and Clearlake Capital acquisition: February 2024. Bloomberg, SEC filing.',
+    'DORA (EU Regulation 2022/2554), effective 17 January 2025.',
+  ],
+},
+'sap-bw':{
+  name:'SAP BW / BusinessObjects', vendor:'SAP SE', tier:3,
+  hdrColor:'linear-gradient(135deg,#1E3A5F,#1D4ED8)',
+  tagline:'Two simultaneous deadlines: BW 7.5 mainstream Dec 2027 and BusinessObjects 4.3 mainstream Dec 2026',
+  eos:'BW 7.5 mainstream: Dec 2027 · BusinessObjects 4.3 mainstream: Dec 2026',
+  trigger:'BO Dec 2026 is the earlier and often overlooked trigger — use as entry point',
+  kpis:[
+    {val:'3,000+',label:'EMEA Enterprises',sub:'Largest EMEA install base on this list'},
+    {val:'18–22%',label:'SAP Annual Maintenance',sub:'Of licence value, per year'},
+    {val:'High',label:'Migration Urgency',sub:'BO 4.3 Dec 2026 + BW 7.5 Dec 2027'},
+    {val:'High',label:'Migration Complexity',sub:'ABAP + BEx queries + BO reports — LeapLogic ABAP layer'},
+  ],
+  why:[
+    {icon:'📅',txt:'SAP BW 7.5 mainstream support ends December 31, 2027.⁶ Extended support runs to 2030 at a 2–4% annual premium. Most large EMEA SAP accounts will want to complete migration before the premium kicks in — creating a 2025–2027 migration window.'},
+    {icon:'📊',txt:'BusinessObjects 4.3 mainstream support ends December 2026.⁷ BusinessObjects 4.2 is already EOL (December 2024). This deadline is less visible than BW but closer — and BO is where business users feel the impact most immediately.'},
+    {icon:'🏗️',txt:'SAP Business Data Cloud (GA October 2025⁸) provides an embedded Databricks workspace via Unity Catalog for zero-copy data sharing — but it does not migrate ABAP transformation logic, BEx queries, or BO reports. LeapLogic occupies the gap: "SAP BDC moves your data. LeapLogic migrates your logic."'},
+  ],
+  hunt:[
+    {profile:'SAP-centric DACH manufacturer or utility',region:'Germany / Austria / Switzerland',motion:'Enter via BO Dec 2026 deadline (sooner than BW 2027) — present to SAP Competence Centre',timeline:'Q3 2026',lever:'BO maintenance elimination + BW migration cost avoidance via LeapLogic automation'},
+    {profile:'Financial institution with SAP BW for finance/risk reporting',region:'UK / Netherlands / France',motion:'BW 7.5 migration — SAP Business Data Cloud + Databricks positioning',timeline:'H1 2027',lever:'SAP BDC data layer + LeapLogic logic migration = complete modernisation'},
+    {profile:'Large European retailer or consumer goods',region:'France / Germany / UK',motion:'Capgemini partner co-sell — SAP migration joint go-to-market (Capgemini deepened SAP agreement Nov 2025)',timeline:'H1 2027',lever:'Combined SAP and data platform modernisation cost reduction'},
+  ],
+  targetProfile:'SAP ERP accounts with BW for analytical/finance reporting and BusinessObjects for enterprise BI. DACH is the highest density region globally. UK and French BFSI are next. The SAP Competence Centre is the primary entry point — not the CDO. Capgemini is the strongest EMEA co-sell partner (deepened SAP relationship November 2025).',
+  partners:[
+    {name:'Databricks',logo:'databricks',angle:'SAP Business Data Cloud + Databricks embedded workspace. LeapLogic handles ABAP and BEx migration to Databricks SQL and Python.'},
+    {name:'Microsoft',logo:'microsoft',angle:'SAP BW → Microsoft Fabric for Azure-committed EMEA accounts. Strong in UK and DACH.'},
+    {name:'AWS',logo:'aws',angle:'SAP BW → AWS Redshift / Databricks on AWS. Less common than Azure/Databricks paths.'},
+  ],
+  pricing:'Lead with the SAP annual maintenance cost (18–22% of licence value per year — typically $150K–$500K for large BW estates). Use the BO Dec 2026 deadline as the entry — it is closer and more concrete than BW 2027. Frame LeapLogic as accelerating SAP BDC adoption by handling the logic migration SAP BDC does not cover. Regional propensity: DACH accounts respond to structured cost-benefit with SAP Competence Centre sponsorship; UK/France respond to strategic platform narrative.',
+  competitors:[
+    {name:'One Data (DACH)',angle:'DACH-based startup positioning on 80% effort reduction. Early-stage but growing. Differentiate on LeapLogic\'s proven automation depth and global delivery.'},
+    {name:'SNP / Kyron (Germany)',angle:'German-origin SAP-to-SAP migration specialists. Different positioning — they stay within SAP ecosystem.'},
+    {name:'Databricks Lakebridge',angle:'Free tool from Databricks (post-BladeBridge acquisition, Feb 2025). Targets schema migration, not full ABAP/BEx logic migration — LeapLogic covers what Lakebridge does not.'},
+  ],
+  refs:[
+    'SAP BW 7.5 Mainstream Maintenance end date: December 31, 2027. SAP Product Availability Matrix (PAM).',
+    'SAP BusinessObjects BI 4.3 Mainstream Maintenance end date: December 2026. SAP PAM.',
+    'SAP Business Data Cloud with embedded Databricks workspace: GA October 2025. SAP News Center.',
+    'Capgemini deepened SAP agreement: November 2025. Capgemini press release.',
+    'Databricks acquired BladeBridge (now Databricks Lakebridge): February 2025. Databricks Blog.',
+  ],
+},
+'talend':{
+  name:'Talend (Qlik Talend Cloud)', vendor:'Qlik (formerly Talend)', tier:3,
+  hdrColor:'linear-gradient(135deg,#1E3A5F,#1D4ED8)',
+  tagline:'Open Studio retired January 2024 — live security gap; new pricing $3.6K–$27.5K/month',
+  eos:'Talend Open Studio: retired January 31, 2024',
+  trigger:'Open Studio retired — unpatched open-source; opaque new pricing model',
+  kpis:[
+    {val:'~500',label:'EMEA Enterprises',sub:'Manufacturing, retail, BFSI'},
+    {val:'$3.6K–$27.5K',label:'Monthly Qlik Talend Cloud',sub:'Tier-dependent; shocking vs open-source past'},
+    {val:'High',label:'Migration Urgency',sub:'Open Studio retired; pricing shock'},
+    {val:'Medium',label:'Migration Complexity',sub:'Talend Jobs → ADF/Glue — LeapLogic covers standard patterns'},
+  ],
+  why:[
+    {icon:'🔴',txt:'Talend Open Studio was officially retired on January 31, 2024.⁹ Any enterprise still running Open Studio is operating on unsupported, unpatched software — a live security and DORA compliance risk.'},
+    {icon:'💸',txt:'Qlik Talend Cloud pricing ($3.6K–$27.5K/month or $43K–$330K annually) represents a massive step-up from the open-source Open Studio model most EMEA customers had previously. The pricing shock is the primary displacement trigger.'},
+    {icon:'🔧',txt:'Many EMEA Talend accounts run Talend alongside other ETL tools (SSIS, DataStage, or even PowerCenter). LeapLogic\'s multi-tool migration capability — converting the full ETL estate in one engagement — is the primary differentiator against Talend-only migration tools.'},
+  ],
+  hunt:[
+    {profile:'Manufacturing or retail enterprise on Open Studio',region:'France / Germany / Netherlands',motion:'Security risk angle — Open Studio is unpatched; DORA risk if regulated',timeline:'Q3 2026',lever:'Security posture + Qlik Talend Cloud cost avoidance'},
+    {profile:'Multi-tool ETL estate (Talend + SSIS + DataStage)',region:'UK / Germany',motion:'Full ETL estate migration — LeapLogic converts all tools in single engagement',timeline:'Q4 2026',lever:'Multi-tool licence elimination in one migration programme'},
+    {profile:'BFSI on Qlik Talend Cloud (post-upgrade)',region:'France / UK',motion:'Pricing shock at next renewal — benchmark Qlik Talend Cloud vs Databricks/ADF',timeline:'H1 2027',lever:'Annual subscription elimination + Databricks capability'},
+  ],
+  targetProfile:'Two distinct buyer profiles: (1) Open Studio users — urgency is immediate due to retirement; CISO is the entry point for security risk. (2) Qlik Talend Cloud subscribers facing renewal — CDO/CFO is entry point for cost comparison. Multi-tool estate accounts represent the highest value potential — LeapLogic\'s differentiator is converting the full stack.',
+  partners:[
+    {name:'Microsoft',logo:'microsoft',angle:'Talend → Azure Data Factory. Primary path for Microsoft-committed EMEA accounts. Strong in France and UK.'},
+    {name:'Databricks',logo:'databricks',angle:'Talend → Databricks Delta Live Tables for analytics-heavy pipelines. Strong for BFSI accounts.'},
+    {name:'AWS',logo:'aws',angle:'Talend → AWS Glue for AWS-committed accounts. MAP funding available.'},
+  ],
+  pricing:'Two anchor points: (1) For Open Studio users — security risk cost + Qlik Talend Cloud subscription cost as the alternative anchor. (2) For Qlik Talend Cloud subscribers — current subscription ($43K–$330K/year) vs migration investment + lower-cost destination platform. For multi-tool estates, frame the combined licence elimination as the value potential.',
+  competitors:[
+    {name:'Maia (Qlik native tool)',angle:'Qlik\'s own automated migration tool for Talend-to-Talend-Cloud. Counter with: customers leaving Talend don\'t want to stay with Qlik.'},
+    {name:'Azure Data Factory (self-service)',angle:'Free for Azure accounts but requires manual rewrite. Counter with LeapLogic automation for large Talend estates.'},
+    {name:'dbt + Fivetran (ELT)',angle:'Growing alternative for data engineering teams. Different architecture — target customers already evaluating modern ELT stack.'},
+  ],
+  refs:[
+    'Talend Open Studio retirement: January 31, 2024. Qlik/Talend official announcement.',
+    'Qlik Talend Cloud pricing: Starter $3,600/month, Standard $9,900/month, Enterprise $11,000–$27,500/month. Qlik pricing page, 2025.',
+    'DORA (EU Regulation 2022/2554), effective 17 January 2025.',
+  ],
+},
+'oracle':{
+  name:'Oracle Exadata / OBIEE', vendor:'Oracle Corporation', tier:3,
+  hdrColor:'linear-gradient(135deg,#1E3A5F,#1D4ED8)',
+  tagline:'Two simultaneous conversations: OBIEE 12c Sustaining Support Aug 2025 (act now) + Exadata audit risk',
+  eos:'OBIEE 12c: Sustaining Support since Aug 2025 — no new security patches',
+  trigger:'OBIEE: no patches since Aug 2025 · Exadata: Oracle audit risk in 50%+ of EMEA enterprises',
+  kpis:[
+    {val:'800+',label:'EMEA Exadata Sites',sub:'Lloyds, HSBC, Deutsche Bank named'},
+    {val:'$2.4M+',label:'100 OCPUs List Price',sub:'+ $1.2M/yr support¹⁰ — audit risk adds more'},
+    {val:'High',label:'Migration Urgency',sub:'OBIEE act now; Exadata DW strategic'},
+    {val:'High',label:'Migration Complexity',sub:'PL/SQL, OBIEE RPD — LeapLogic covers primary patterns'},
+  ],
+  why:[
+    {icon:'🔴',txt:'Oracle OBIEE 12c entered Sustaining Support in August 2025.⁹ In Sustaining Support, Oracle provides no new security patches, no new fixes — only technical support through existing documentation. EMEA enterprises running OBIEE 12c are operating without security updates.'},
+    {icon:'💰',txt:'Oracle Exadata licensing creates two risks: (1) Known costs — 100 OCPUs ≈ $2.375M list + $1.23M annual support for full option stack.¹⁰ (2) Audit risk — over 50% of EMEA Exadata enterprises are expected to face unplanned Oracle licence compliance costs by 2026.'},
+    {icon:'⚠️',txt:'Oracle is pursuing an aggressive EMEA licence audit programme. VMware virtualisation (following Broadcom acquisition of VMware) has triggered Oracle licence compliance issues for many data centre customers. Oracle audit exposure is a live financial risk for most EMEA Exadata accounts.'},
+  ],
+  hunt:[
+    {profile:'UK bank / insurer with OBIEE 12c in production',region:'UK / Ireland',motion:'OBIEE Sustaining Support angle — no security patches since Aug 2025; DORA ICT risk',timeline:'Q3 2026 (urgent)',lever:'DORA ICT compliance + OBIEE patch gap — act now before Oracle audit cycle'},
+    {profile:'German or Spanish bank with Exadata estate',region:'Germany / Spain / Austria',motion:'Oracle audit risk — benchmark known Exadata cost + audit exposure vs migration',timeline:'Q4 2026',lever:'Audit risk elimination + Exadata licence cost reduction on migration'},
+    {profile:'Lloyds / HSBC / Deutsche Bank extension accounts',region:'UK / Germany',motion:'Existing named account relationship — post Cloud@Customer announcement open migration window',timeline:'H1 2027',lever:'C@C → cloud migration: architecture modernisation + licence cost reduction'},
+  ],
+  targetProfile:'Two distinct buyer conversations with different timelines: (1) OBIEE 12c — CDO/Analytics Lead, urgent (no patches since Aug 2025). (2) Exadata DW — CTO/CFO, strategic (audit risk + long-term cost). Named EMEA accounts: Barclays, HSBC (UK), Deutsche Bank (Germany), Telefónica (Spain), Lloyds Banking Group (UK — Exadata C@C expansion March 2025).',
+  partners:[
+    {name:'Databricks',logo:'databricks',angle:'Oracle Exadata/DW → Databricks SQL Warehouse. Databricks Lakebridge (post-BladeBridge acquisition, free) is a direct competitor — differentiate on PL/SQL depth and multi-cloud target.'},
+    {name:'AWS',logo:'aws',angle:'Oracle → Amazon Aurora / Redshift. AWS MAP + DMS tool for schema migration. Strong for AWS-committed accounts.'},
+    {name:'Snowflake',logo:'snowflake',angle:'Oracle Exadata → Snowflake Data Cloud. Strong for accounts seeking SaaS-only architecture.'},
+    {name:'Microsoft',logo:'microsoft',angle:'OBIEE 12c → Microsoft Fabric + Power BI. Dominant OBIEE replacement path for Microsoft-committed EMEA accounts.'},
+  ],
+  pricing:'Two separate pricing conversations: (1) OBIEE — frame around annual Oracle BI licence + maintenance vs migration investment + Microsoft Fabric / Tableau / Looker licence. (2) Exadata DW — frame around audit risk exposure (often unpredictable and 3–5× annual licence) + known annual support cost ($1.2M+) vs migration investment. Do NOT anchor to Impetus rate card — anchor to Oracle spend.',
+  competitors:[
+    {name:'Databricks Lakebridge (FREE)',angle:'⚠️ Critical threat: Databricks acquired BladeBridge in February 2025 and released Lakebridge as a free Oracle migration tool. Differentiate: Lakebridge handles schema migration; LeapLogic handles PL/SQL logic, ETL pipelines, OBIEE reports, and multi-cloud target output.'},
+    {name:'Oracle Autonomous Database',angle:'Oracle\'s own cloud offering. Most EMEA CIOs evaluating Oracle migration don\'t want to stay with Oracle — use as validation of migration urgency, not a competitor.'},
+    {name:'AWS DMS / SCT',angle:'Free AWS tools for schema migration. Counter with PL/SQL complexity, stored procedures, and ETL pipeline coverage.'},
+  ],
+  refs:[
+    'Oracle OBIEE 12c Sustaining Support: effective August 2025. Oracle Lifetime Support Policy.',
+    'Oracle Exadata pricing: 100 OCPUs list price approximately $2,375,000; annual support approximately $1,230,000 for full option stack. Oracle Technology Price List.',
+    'Lloyds Banking Group Exadata Cloud@Customer expansion: March 2025. Press release.',
+    'Databricks acquired BladeBridge (now Databricks Lakebridge): February 2025. Databricks Blog.',
+    'DORA (EU Regulation 2022/2554), effective 17 January 2025.',
+  ],
+},
+'hadoop':{
+  name:'Hadoop (Non-Cloudera)', vendor:'Apache / Various', tier:3,
+  hdrColor:'linear-gradient(135deg,#1E3A5F,#1D4ED8)',
+  tagline:'HDP EoS June 2021 — 4+ years unpatched in EMEA; EU AI Act compliance gap is the new urgency',
+  eos:'Hortonworks HDP End of Support: June 2021 (4+ years ago)',
+  trigger:'4+ years unpatched; EU AI Act compliance requires auditable, AI-ready data platform',
+  kpis:[
+    {val:'~600',label:'EMEA Sites',sub:'20% of global Hadoop install base'},
+    {val:'$200K–$800K',label:'Annual Hadoop Ops Cost',sub:'Infra + engineering team, on-prem'},
+    {val:'High',label:'Migration Urgency',sub:'HDP EoS + EU AI Act + Databricks BrickBuilder'},
+    {val:'Medium-High',label:'Migration Complexity',sub:'Hive/Spark workloads — LeapLogic + BrickBuilder path'},
+  ],
+  why:[
+    {icon:'🔴',txt:'Hortonworks Data Platform (HDP) reached End of Support in June 2021 — over four years ago. Any EMEA enterprise still running HDP is operating on unpatched infrastructure with known CVEs. For regulated entities under DORA, this is a live ICT non-compliance event.'},
+    {icon:'🤖',txt:'Hadoop\'s HDFS batch-only architecture is fundamentally incompatible with EU AI Act compliance requirements — real-time data lineage, auditability, and governance are requirements for high-risk AI systems. Any EMEA enterprise building AI applications on a Hadoop lake faces regulatory exposure under EU AI Act enforcement from 2025.'},
+    {icon:'🏆',txt:'Impetus holds the Databricks BrickBuilder designation for Hadoop workloads — alongside EPAM (reference: Danone) and Cognizant (reference: GSK). BrickBuilder program provides co-sell funding and migration support. This is a competitive differentiator to lead with in EMEA.'},
+  ],
+  hunt:[
+    {profile:'BFSI enterprise on HDP or Ambari-managed cluster',region:'UK / Germany / France',motion:'DORA ICT risk angle — HDP EoS June 2021 is a historical compliance gap; escalate to CISO',timeline:'Q3 2026 (urgent)',lever:'DORA compliance + HDP infra cost elimination + AI-ready architecture'},
+    {profile:'UK government or NHS-adjacent organisation',region:'UK',motion:'G-Cloud 14 + NCSC guidance on unsupported software — HDP is a named risk category',timeline:'Q4 2026',lever:'NCSC compliance + G-Cloud procurement path + AI Act readiness'},
+    {profile:'European pharma or consumer goods on HDP',region:'Germany / Netherlands / France',motion:'EU AI Act — Hadoop architecture blocks compliant AI system deployment',timeline:'H1 2027',lever:'EU AI Act compliance readiness + data science productivity on Databricks'},
+  ],
+  targetProfile:'Organisations still running HDP or Ambari-managed Hadoop clusters — not Cloudera CDP (a separate motion). In EMEA, highest concentration in UK banking, UK government, German manufacturing, and French telco. BrickBuilder program is a strong door-opener — Databricks carries co-sell funding. Named EMEA references: Danone (via EPAM), GSK (via Cognizant).',
+  partners:[
+    {name:'Databricks',logo:'databricks',angle:'Primary migration target for all Hadoop workloads. Databricks BrickBuilder designation covers Hadoop migrations. Impetus listed alongside EPAM (Danone) and Cognizant (GSK) as BrickBuilder-certified.'},
+    {name:'AWS',logo:'aws',angle:'Hadoop → AWS EMR Serverless or S3/Glue. AWS MAP funding for qualifying migrations. Strong for AWS-committed accounts.'},
+    {name:'Microsoft',logo:'microsoft',angle:'Hadoop → Microsoft Fabric for Azure-committed EMEA accounts, particularly UK public sector and German manufacturing.'},
+  ],
+  pricing:'Lead with the HDP infrastructure and operations cost (on-prem Hadoop clusters typically cost $200K–$800K/year in infrastructure + engineering team cost) combined with the compliance exposure (DORA + EU AI Act). BrickBuilder program funding from Databricks can be positioned as offsetting migration investment. EU AI Act compliance framing is EMEA-specific and not available in US market — lead with it.',
+  competitors:[
+    {name:'Databricks Lakebridge (FREE)',angle:'Databricks Lakebridge (post-BladeBridge acquisition, Feb 2025) is expanding to cover Hadoop workloads. Counter: LeapLogic provides multi-cloud target output (Databricks + Snowflake + Fabric), automation depth, and Impetus\'s BrickBuilder delivery credentials.'},
+    {name:'AWS EMR Serverless (self-service)',angle:'Free AWS tooling for Spark-heavy workloads. Counter with complexity of large HDFS estate migrations and LeapLogic automation for Hive metastore, HBase, and custom MR jobs.'},
+    {name:'Cloudera (in-place upgrade to CDP)',angle:'Cloudera CDP is itself EoS (June 2026). Counter: migrating from HDP to CDP is migrating from one sunset platform to another.'},
+  ],
+  refs:[
+    'Hortonworks Data Platform (HDP) End of Support: June 2021. Cloudera/Hortonworks Support Lifecycle.',
+    'EU AI Act (EU Regulation 2024/1689) — compliance obligations for high-risk AI systems applicable from August 2026.',
+    'Databricks BrickBuilder EMEA program — EPAM reference: Danone; Cognizant reference: GSK. Databricks BrickBuilder Partner Directory.',
+    'DORA (EU Regulation 2022/2554), effective 17 January 2025.',
+    'Databricks acquired BladeBridge (now Databricks Lakebridge): February 2025. Databricks Blog.',
+  ],
+},
+};
+
+// ══════════════════════════════════════════
+// PARTNER LOGO SVGs
+// ══════════════════════════════════════════
+const LOGOS = {
+  aws:`<svg width="28" height="18" viewBox="0 0 28 18" fill="none"><text x="0" y="13" font-family="Arial" font-weight="900" font-size="13" fill="#FF9900">AWS</text></svg>`,
+  microsoft:`<svg width="18" height="18" viewBox="0 0 18 18"><rect x="0" y="0" width="8" height="8" fill="#F25022"/><rect x="10" y="0" width="8" height="8" fill="#7FBA00"/><rect x="0" y="10" width="8" height="8" fill="#00A4EF"/><rect x="10" y="10" width="8" height="8" fill="#FFB900"/></svg>`,
+  gcp:`<svg width="18" height="18" viewBox="0 0 18 18"><path d="M9 2 L16 6.5 L16 11.5 L9 16 L2 11.5 L2 6.5Z" fill="none" stroke="#4285F4" stroke-width="2"/><circle cx="9" cy="9" r="3" fill="#EA4335"/></svg>`,
+  databricks:`<svg width="20" height="18" viewBox="0 0 20 18"><path d="M10 0 L20 5.5 L10 11 L0 5.5Z" fill="#FF3621"/><path d="M0 8 L10 13.5 L20 8 L10 11Z" fill="#FF3621" opacity=".6"/><path d="M0 10.5 L10 16 L20 10.5 L10 13.5Z" fill="#FF3621" opacity=".35"/></svg>`,
+  snowflake:`<svg width="18" height="18" viewBox="0 0 18 18"><line x1="9" y1="1" x2="9" y2="17" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/><line x1="2" y1="5" x2="16" y2="13" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/><line x1="16" y1="5" x2="2" y2="13" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+};
+
+// ══════════════════════════════════════════
+// RENDER PLATFORM TABS
+// ══════════════════════════════════════════
+function tierColor(t){return t===1?'var(--t1)':t===2?'var(--t2)':'var(--t3)';}
+function tierLabel(t){return t===1?'Tier 1 — Critical':t===2?'Tier 2 — High':'Tier 3 — Strategic';}
+function techChip(techId){
+  const t=PLAT_KEYS.indexOf(techId);
+  const tier=t<4?1:t<8?2:3;
+  const c=tier===1?'var(--t1)':tier===2?'var(--t2)':'var(--t3)';
+  const bg=tier===1?'var(--t1-bg)':tier===2?'var(--t2-bg)':'var(--t3-bg)';
+  return `<span class="tech-chip" style="background:${bg};color:${c}">${PLAT_NAMES[techId]||techId}</span>`;
+}
+
+function renderPlatform(id,d){
+  const tc=tierColor(d.tier);
+  return `<section class="tab-panel" id="tab-${id}">
+<div class="plat-wrap">
+<div class="plat-hdr" style="background:${d.hdrColor};color:#fff">
+  <div class="plat-hdr-left">
+    <h2>${d.name}</h2>
+    <div class="tagline">${d.tagline}</div>
+  </div>
+  <div class="plat-hdr-right">
+    <span class="tier-badge" style="background:rgba(255,255,255,.2)">${tierLabel(d.tier)}</span>
+    <span class="eos-badge"><span class="eos-label">Trigger:</span>${d.trigger}</span>
+  </div>
+</div>
+
+<div class="kpi-grid">
+${d.kpis.map(k=>`<div class="kpi-card"><div class="kpi-val" style="color:${tc}">${k.val}</div><div class="kpi-label">${k.label}</div><div class="kpi-sub">${k.sub}</div></div>`).join('')}
+</div>
+
+<div class="section-card">
+<div class="section-hdr" style="border-left:3px solid ${tc};padding-left:.75rem">Why Accounts Are Leaving</div>
+<div class="section-body">
+<ul class="why-list">
+${d.why.map((w,i)=>`<li class="why-item"><span class="why-icon">${w.icon}</span><span>${w.txt}</span></li>`).join('')}
+</ul>
+</div>
+</div>
+
+<div class="section-card">
+<div class="section-hdr" style="border-left:3px solid ${tc};padding-left:.75rem">Hunt Plan</div>
+<div class="section-body" style="padding:0;overflow-x:auto">
+<table class="hunt-table">
+<thead><tr><th>Target Profile</th><th>Primary Region</th><th>Entry Motion</th><th>Value Lever</th></tr></thead>
+<tbody>
+${d.hunt.map(h=>`<tr><td>${h.profile}</td><td>${h.region}</td><td>${h.motion}</td><td>${h.lever}</td></tr>`).join('')}
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="two-col">
+<div class="section-card" style="margin-bottom:0">
+<div class="section-hdr" style="border-left:3px solid ${tc};padding-left:.75rem">Target Account Profile</div>
+<div class="section-body" style="font-size:.75rem;line-height:1.65">${d.targetProfile}</div>
+</div>
+<div class="section-card" style="margin-bottom:0">
+<div class="section-hdr" style="border-left:3px solid ${tc};padding-left:.75rem">Partner Co-sell Motion</div>
+<div class="section-body">
+${d.partners.map(p=>`<div class="partner-chip">${LOGOS[p.logo]||''}${p.name}</div>`).join(' ')}
+${d.partners.map(p=>`<p class="partner-angle"><strong>${p.name}:</strong> ${p.angle}</p>`).join('')}
+</div>
+</div>
+</div>
+
+<div class="section-card" style="margin-top:1rem">
+<div class="section-hdr" style="border-left:3px solid ${tc};padding-left:.75rem">Pricing Anchor</div>
+<div class="section-body">
+<div class="pricing-box">${d.pricing}</div>
+</div>
+</div>
+
+<div class="section-card" style="margin-top:1rem">
+<div class="section-hdr" style="border-left:3px solid ${tc};padding-left:.75rem">Competitive Context</div>
+<div class="section-body">
+<div class="comp-grid">
+${d.competitors.map(c=>`<div class="comp-item"><span class="comp-name" style="color:${tc}">${c.name}</span><span class="comp-angle">${c.angle}</span></div>`).join('')}
+</div>
+</div>
+<div class="refs-section">
+<div style="font-size:.65rem;font-weight:700;color:var(--muted);margin-bottom:.35rem;letter-spacing:.04em">SOURCES</div>
+<ul class="refs-list">
+${d.refs.map((r,i)=>`<li><span class="ref-num">[${i+1}]</span><span>${linkifyRef(r)}</span></li>`).join('')}
+</ul>
+</div>
+</div>
+
+</div>
+</section>`;
+}
+
+// Inject platform tabs
+// Source URL lookup — matched as substring of ref text
+const REF_URLS=[
+  {match:'DORA (EU Regulation 2022/2554)',           url:'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32022R2554'},
+  {match:'EU AI Act (EU Regulation 2024/1689)',      url:'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1689'},
+  {match:'Oracle Lifetime Support',                  url:'https://www.oracle.com/support/lifetime-support/'},
+  {match:'Oracle Technology Price List',             url:'https://www.oracle.com/assets/technology-price-list-070617.pdf'},
+  {match:'IBM official lifecycle',                   url:'https://www.ibm.com/support/pages/lifecycle'},
+  {match:'IBM Software Support Lifecycle',           url:'https://www.ibm.com/support/pages/lifecycle'},
+  {match:'SAS Institute Product Support',            url:'https://support.sas.com/en/technical-support/maintenance-schedule.html'},
+  {match:'SAP Product Availability Matrix',          url:'https://support.sap.com/en/release-upgrade-maintenance.html'},
+  {match:'SAP PAM',                                  url:'https://support.sap.com/en/release-upgrade-maintenance.html'},
+  {match:'SAP News Center',                          url:'https://news.sap.com'},
+  {match:'Capgemini press release',                  url:'https://www.capgemini.com/news/'},
+  {match:'Databricks Blog',                          url:'https://www.databricks.com/blog'},
+  {match:'Databricks BrickBuilder Partner Directory',url:'https://partner-finder.databricks.com/'},
+  {match:'Databricks BrickBuilder partner directory',url:'https://partner-finder.databricks.com/'},
+  {match:'Qlik/Talend official announcement',        url:'https://www.qlik.com/us/company/press-room'},
+  {match:'Qlik pricing page',                        url:'https://www.qlik.com/us/products/talend-data-integration'},
+  {match:'Cloudera Product Support Lifecycle',       url:'https://www.cloudera.com/documentation/enterprise/latest/topics/rn_consolidated_pcm.html'},
+  {match:'Cloudera/Hortonworks Support Lifecycle',   url:'https://www.cloudera.com/documentation/enterprise/latest/topics/rn_consolidated_pcm.html'},
+  {match:'Informatica Product Support Lifecycle',    url:'https://knowledge.informatica.com/s/article/000083179'},
+  {match:'G-Cloud 14',                               url:'https://www.crowncommercial.gov.uk/agreements/RM1557.14'},
+  {match:'Bloomberg, SEC filing',                    url:'https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=alteryx&type=8-K'},
+];
+function linkifyRef(text){
+  for(const {match,url} of REF_URLS){
+    if(text.includes(match)) return '<a href="'+url+'" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">'+text+'</a>';
+  }
+  return text;
+}
+
+const ptDiv=document.getElementById('platform-tabs');
+ptDiv.innerHTML=PLAT_KEYS.map(id=>renderPlatform(id,PLATFORMS[id])).join('');
+
+// ══════════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════════
+const tabBtns=[...document.querySelectorAll('.tab-btn')];
+const tabPanels=[...document.querySelectorAll('.tab-panel')];
+
+function switchTab(id){
+  tabBtns.forEach(b=>{b.classList.toggle('active',b.dataset.tab===id);});
+  tabPanels.forEach(p=>{p.classList.toggle('active',p.id===`tab-${id}`);});
+  if(id==='hunt-map') setTimeout(drawBubbles,50);
+}
+tabBtns.forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+
+// ══════════════════════════════════════════
+// THEME TOGGLE
+// ══════════════════════════════════════════
+const themeBtn=document.getElementById('theme-btn');
+function getTheme(){return document.documentElement.dataset.theme||'system';}
+function setTheme(t){
+  document.documentElement.dataset.theme=t;
+  themeBtn.textContent=t==='dark'?'☀️':'🌙';
+  drawBubbles();
+}
+themeBtn.addEventListener('click',()=>{
+  const cur=document.documentElement.dataset.theme;
+  setTheme(cur==='dark'?'light':'dark');
+});
+
+// ══════════════════════════════════════════
+// BUBBLE CHART
+// ══════════════════════════════════════════
+const canvas=document.getElementById('bubble-canvas');
+const ctx=canvas.getContext('2d');
+const tooltip=document.getElementById('chart-tooltip');
+let activeFilter='';
+
+const TIER_COLORS={1:'#EF4444',2:'#F59E0B',3:'#3B82F6'};
+
+function isDark(){return document.documentElement.dataset.theme==='dark'||(document.documentElement.dataset.theme!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches);}
+
+function drawBubbles(){
+  const W=canvas.parentElement.clientWidth-32;
+  if(W<=0){setTimeout(drawBubbles,100);return;}
+  canvas.width=W;canvas.height=280;
+  const pad={l:50,r:20,t:20,b:40};
+  const cw=W-pad.l-pad.r,ch=280-pad.t-pad.b;
+  const dark=isDark();
+  const textCol=dark?'#F1F5F9':'#0F172A';
+  const mutedCol=dark?'#94A3B8':'#64748B';
+  const borderCol=dark?'#334155':'#E2E8F0';
+  ctx.clearRect(0,0,W,280);
+  // Grid
+  ctx.strokeStyle=borderCol;ctx.lineWidth=1;
+  for(let i=0;i<=5;i++){
+    const x=pad.l+i*cw/5;const y=pad.t+i*ch/5;
+    ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,pad.t+ch);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cw,y);ctx.stroke();
+  }
+  // Axis labels
+  ctx.font=`500 10px Inter,sans-serif`;ctx.fillStyle=mutedCol;ctx.textAlign='center';
+  ctx.fillText('EMEA Market Penetration →',pad.l+cw/2,280-4);
+  ctx.save();ctx.translate(12,pad.t+ch/2);ctx.rotate(-Math.PI/2);
+  ctx.fillText('Migration Urgency →',0,0);ctx.restore();
+  // Tick labels
+  ctx.font=`500 9px Inter,sans-serif`;ctx.fillStyle=mutedCol;
+  ['Low','','','','','High'].forEach((l,i)=>{ctx.fillText(l,pad.l+i*cw/5,pad.t+ch+14);});
+
+  BUBBLES.forEach(b=>{
+    const x=pad.l+b.x*cw/10;
+    const y=pad.t+(10-b.y)*ch/10;
+    const r=b.r*2.5+6;
+    const fill=TIER_COLORS[b.tier];
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fillStyle=fill+'33';ctx.fill();
+    ctx.strokeStyle=fill;ctx.lineWidth=activeFilter===b.id?2.5:1.5;ctx.stroke();
+    if(activeFilter===b.id){ctx.beginPath();ctx.arc(x,y,r+3,0,Math.PI*2);ctx.strokeStyle=fill+'88';ctx.lineWidth=2;ctx.stroke();}
+    ctx.font=`600 9px Plus Jakarta Sans,sans-serif`;ctx.fillStyle=fill;ctx.textAlign='center';
+    const label=b.name.length>10?b.name.split(' ')[0]:b.name;
+    ctx.fillText(label,x,y+3);
+  });
+}
+
+// Bubble click and hover
+canvas.addEventListener('mousemove',e=>{
+  const rect=canvas.getBoundingClientRect();
+  const mx=e.clientX-rect.left,my=e.clientY-rect.top;
+  const W=canvas.width;const pad={l:50,r:20,t:20,b:40};
+  const cw=W-pad.l-pad.r,ch=280-pad.t-pad.b;
+  let hit=null;
+  BUBBLES.forEach(b=>{
+    const x=pad.l+b.x*cw/10,y=pad.t+(10-b.y)*ch/10,r=b.r*3.5+8;
+    if(Math.hypot(mx-x,my-y)<r+2) hit=b;
+  });
+  if(hit){
+    canvas.style.cursor='pointer';
+    tooltip.style.display='block';
+    tooltip.style.left=(e.clientX+12)+'px';
+    tooltip.style.top=(e.clientY-10)+'px';
+    tooltip.innerHTML=`<strong>${hit.name}</strong><br>${hit.trigger}<br><em style="opacity:.75">${hit.pricing}</em>`;
+  } else {
+    canvas.style.cursor='';
+    tooltip.style.display='none';
+  }
+});
+canvas.addEventListener('mouseleave',()=>tooltip.style.display='none');
+canvas.addEventListener('click',e=>{
+  const rect=canvas.getBoundingClientRect();
+  const mx=e.clientX-rect.left,my=e.clientY-rect.top;
+  const W=canvas.width;const pad={l:50,r:20,t:20,b:40};
+  const cw=W-pad.l-pad.r,ch=280-pad.t-pad.b;
+  let hit=null;
+  BUBBLES.forEach(b=>{
+    const x=pad.l+b.x*cw/10,y=pad.t+(10-b.y)*ch/10,r=b.r*3.5+8;
+    if(Math.hypot(mx-x,my-y)<r+2) hit=b;
+  });
+  if(hit){
+    activeFilter=activeFilter===hit.id?'':hit.id;
+    const sel=document.getElementById('f-tech');
+    sel.value=activeFilter?PLAT_NAMES[activeFilter]:'';
+    applyFilters();
+    drawBubbles();
+  }
+});
+
+// ══════════════════════════════════════════
+// HEATMAP
+// ══════════════════════════════════════════
+function buildHeatmap(){
+  const cols=PLAT_KEYS.length+1,rows=REGIONS.length+1;
+  const con=document.getElementById('heatmap-container');
+  con.style.display='grid';
+  con.style.gridTemplateColumns=`80px repeat(${PLAT_KEYS.length},1fr)`;
+  con.style.gap='2px';
+  // Header row
+  const corner=document.createElement('div');corner.style.gridColumn='1';con.appendChild(corner);
+  PLAT_KEYS.forEach(id=>{
+    const d=document.createElement('div');d.className='hm-col-label';
+    d.textContent=PLAT_NAMES[id].split(' ')[0];d.title=PLAT_NAMES[id];
+    con.appendChild(d);
+  });
+  // Data rows
+  REGIONS.forEach(reg=>{
+    const rl=document.createElement('div');rl.className='hm-row-label';rl.textContent=reg.split('/')[0];rl.title=reg;
+    con.appendChild(rl);
+    PLAT_KEYS.forEach((id,pi)=>{
+      const val=HEATMAP[reg][pi];
+      const cell=document.createElement('div');
+      cell.className=`hm-cell heat-${val}`;
+      cell.title=`${PLAT_NAMES[id]} · ${reg} · Intensity: ${['None','Low','Medium','High','Very High'][val]}`;
+      cell.dataset.tech=PLAT_NAMES[id];cell.dataset.region=reg;
+      if(val>0) cell.textContent=val;
+      cell.addEventListener('click',()=>{
+        document.getElementById('f-tech').value=cell.dataset.tech;
+        document.getElementById('f-region').value=reg;
+        applyFilters();
+        document.getElementById('tab-hunt-map').querySelector('#acct-table').scrollIntoView({behavior:'smooth',block:'nearest'});
+      });
+      con.appendChild(cell);
+    });
+  });
+}
+
+// ══════════════════════════════════════════
+// ACCOUNT TABLE
+// ══════════════════════════════════════════
+function urgClass(u){return u==='Critical'?'urg-critical':u==='High'?'urg-high':'urg-medium';}
+
+function buildTable(){
+  const tb=document.getElementById('acct-tbody');
+  tb.innerHTML=ACCOUNTS.map((a,i)=>`<tr data-tech="${a.tech}" data-region="${a.region}" data-industry="${a.industry}" data-urgency="${a.urg}">
+  <td><strong>${a.name}</strong></td>
+  <td>${a.country}</td>
+  <td>${a.industry}</td>
+  <td style="white-space:nowrap">${a.rev}</td>
+  <td>${techChip(a.techId)}</td>
+  <td class="src-cell">${a.srcUrl?'<a href="'+a.srcUrl+'" target="_blank" rel="noopener noreferrer" class="src-link">'+a.src+'</a>':a.src||'—'}</td>
+</tr>`).join('');
+  updateCount();
+}
+
+function applyFilters(){
+  const tech=document.getElementById('f-tech').value;
+  const region=document.getElementById('f-region').value;
+  const industry=document.getElementById('f-industry').value;
+  let shown=0;
+  [...document.getElementById('acct-tbody').querySelectorAll('tr')].forEach(r=>{
+    const match=
+      (!tech||r.dataset.tech===tech)&&
+      (!region||r.dataset.region===region)&&
+      (!industry||r.dataset.industry===industry);
+    r.classList.toggle('hidden',!match);
+    if(match) shown++;
+  });
+  document.getElementById('match-count').textContent=`${shown} of ${ACCOUNTS.length} accounts`;
+}
+
+function updateCount(){
+  document.getElementById('match-count').textContent=`${ACCOUNTS.length} of ${ACCOUNTS.length} accounts`;
+}
+
+document.getElementById('btn-reset').addEventListener('click',()=>{
+  ['f-tech','f-region','f-industry'].forEach(id=>document.getElementById(id).value='');
+  activeFilter='';drawBubbles();applyFilters();
+});
+['f-tech','f-region','f-industry'].forEach(id=>{
+  document.getElementById(id).addEventListener('change',()=>{
+    if(id==='f-tech'){
+      const v=document.getElementById('f-tech').value;
+      activeFilter=v?PLAT_KEYS.find(k=>PLAT_NAMES[k]===v)||'':'';
+      drawBubbles();
+    }
+    applyFilters();
+  });
+});
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+buildHeatmap();
+buildTable();
+// Init theme, then draw — ensures CSS vars are applied before canvas reads them
+if(window.matchMedia('(prefers-color-scheme:dark)').matches){
+  document.documentElement.dataset.theme='dark';
+  themeBtn.textContent='☀️';
+}
+setTimeout(drawBubbles,120);
+// Redraw if iframe resizes after initial paint
+if(typeof ResizeObserver!=='undefined'){
+  new ResizeObserver(()=>{
+    if(document.getElementById('tab-hunt-map').classList.contains('active')) drawBubbles();
+  }).observe(canvas.parentElement);
+}
+window.addEventListener('resize',()=>{if(document.getElementById('tab-hunt-map').classList.contains('active')) drawBubbles();});
+</script>

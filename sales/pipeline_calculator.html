@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pipeline Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #EEF2F7;
+  --surface: #FFFFFF;
+  --surface-2: #F4F7FB;
+  --border: #D0DAE6;
+  --accent: #1A4DB8;
+  --accent-muted: #D6E2F8;
+  --good: #0A7A5C;
+  --good-bg: #CCF0E5;
+  --warn: #B45309;
+  --warn-bg: #FEF3C7;
+  --danger: #B91C1C;
+  --danger-bg: #FEE2E2;
+  --text-1: #0C1B33;
+  --text-2: #3D5A82;
+  --text-3: #8BA3BF;
+  --input-bg: #EEF2F7;
+  --c-partner: #6D28D9;
+  --c-marketing: #0E7490;
+  --c-self: #065F46;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #07101D;
+    --surface: #0C1926;
+    --surface-2: #0F2035;
+    --border: #152D46;
+    --accent: #3B82F6;
+    --accent-muted: #1A3560;
+    --good: #10B981;
+    --good-bg: #01251A;
+    --warn: #F59E0B;
+    --warn-bg: #281A00;
+    --danger: #F87171;
+    --danger-bg: #280A0A;
+    --text-1: #DCE8F5;
+    --text-2: #5E8AAF;
+    --text-3: #274560;
+    --input-bg: #07101D;
+    --c-partner: #A78BFA;
+    --c-marketing: #22D3EE;
+    --c-self: #34D399;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #07101D;
+  --surface: #0C1926;
+  --surface-2: #0F2035;
+  --border: #152D46;
+  --accent: #3B82F6;
+  --accent-muted: #1A3560;
+  --good: #10B981;
+  --good-bg: #01251A;
+  --warn: #F59E0B;
+  --warn-bg: #281A00;
+  --danger: #F87171;
+  --danger-bg: #280A0A;
+  --text-1: #DCE8F5;
+  --text-2: #5E8AAF;
+  --text-3: #274560;
+  --input-bg: #07101D;
+  --c-partner: #A78BFA;
+  --c-marketing: #22D3EE;
+  --c-self: #34D399;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Barlow', system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  background: var(--bg);
+  color: var(--text-1);
+  min-height: 100vh;
+}
+/* ── Header ─────────────────────────── */
+.page-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 13px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.header-title {
+  font-family: 'Barlow Semi Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-1);
+}
+.header-sub {
+  font-size: 11.5px;
+  color: var(--text-2);
+  margin-top: 1px;
+}
+.scenario-bar { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.scenario-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-3);
+}
+.scenario-btns {
+  display: flex;
+  gap: 3px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px;
+}
+.scenario-btn {
+  font-family: 'Barlow Semi Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 11px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-2);
+  transition: all 0.12s;
+}
+.scenario-btn:hover { color: var(--text-1); }
+.scenario-btn.active { background: var(--accent); color: #fff; }
+/* ── Layout ──────────────────────────── */
+.calc-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  height: calc(100vh - 53px);
+}
+/* ── Inputs ──────────────────────────── */
+.inputs-panel {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 16px;
+  overflow-y: auto;
+  height: 100%;
+}
+.input-section {
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+.input-section:last-child { border-bottom: none; margin-bottom: 0; }
+.input-section-title {
+  font-family: 'Barlow Semi Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  margin-bottom: 12px;
+}
+.input-row { margin-bottom: 12px; }
+.input-row:last-child { margin-bottom: 0; }
+.input-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: var(--text-1);
+  font-size: 12px;
+}
+.input-hint { font-size: 10px; color: var(--text-3); font-weight: 400; }
+.slider-wrap { display: flex; align-items: center; gap: 8px; }
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+input[type="range"]:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+.slider-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 46px;
+  text-align: right;
+  flex-shrink: 0;
+}
+input[type="number"] {
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-1);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.12s;
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+input[type="number"]:focus { border-color: var(--accent); }
+.num-wrap { display: flex; align-items: center; gap: 6px; }
+.num-unit { font-size: 12px; color: var(--text-2); flex-shrink: 0; }
+.channel-chips {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  margin-top: 10px;
+}
+.chip {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 4px;
+  text-align: center;
+  background: var(--surface-2);
+}
+.chip-label {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+  margin-bottom: 2px;
+}
+.chip-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+}
+.helper { font-size: 10px; color: var(--text-3); margin-top: 3px; }
+/* ── Results ─────────────────────────── */
+.results-panel {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  height: 100%;
+}
+/* KPI grid */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  flex-shrink: 0;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 14px;
+}
+.kpi-eyebrow {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-3);
+  margin-bottom: 5px;
+}
+.kpi-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--text-1);
+  line-height: 1;
+  margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.kpi-sub { font-size: 10.5px; color: var(--text-2); }
+.kpi-card.accent { border-color: var(--accent); }
+.kpi-card.accent .kpi-value { color: var(--accent); }
+/* Charts row */
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 14px;
+}
+.card-title {
+  font-family: 'Barlow Semi Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 12px;
+}
+canvas { display: block; max-width: 100%; }
+/* Activity */
+.activity-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 14px;
+  flex-shrink: 0;
+}
+.activity-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.act-block {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 12px;
+}
+.act-block-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 9px;
+}
+.act-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 11.5px;
+}
+.act-row:last-child { border-bottom: none; }
+.act-lbl { color: var(--text-2); }
+.act-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+.act-val.amber { color: var(--warn); }
+.act-val.red { color: var(--danger); }
+/* Sensitivity */
+.sens-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 14px;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+.sens-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  min-width: 420px;
+}
+.sens-table th, .sens-table td {
+  padding: 7px 10px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.sens-table th {
+  font-family: 'Barlow Semi Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-3);
+  background: var(--surface-2);
+}
+.sens-table td { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+.sens-table .row-hdr { text-align: left; font-family: 'Barlow', sans-serif; font-weight: 600; color: var(--text-2); font-size: 11.5px; }
+.sens-table .cur { background: var(--accent-muted); color: var(--accent); font-weight: 700; border-radius: 3px; }
+/* Per seller */
+.ps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.ps-block {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 12px;
+  text-align: center;
+}
+.ps-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 3px;
+}
+.ps-lbl {
+  font-size: 10px;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+/* Responsive */
+@media (max-width: 1000px) {
+  .calc-layout { grid-template-columns: 1fr; height: auto; }
+  .inputs-panel { height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .charts-row { grid-template-columns: 1fr; }
+  .activity-cols { grid-template-columns: 1fr; }
+  .ps-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .header-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="header-inner">
+    <div>
+      <div class="header-title">Pipeline Calculator</div>
+      <div class="header-sub">Work backward from revenue target to daily activity — what needs to happen and how much of it</div>
+    </div>
+    <div class="scenario-bar">
+      <span class="scenario-label">Scenario</span>
+      <div class="scenario-btns">
+        <button class="scenario-btn" onclick="applyScenario('conservative')">Conservative</button>
+        <button class="scenario-btn active" onclick="applyScenario('base')">Base</button>
+        <button class="scenario-btn" onclick="applyScenario('aggressive')">Aggressive</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="calc-layout">
+
+  <!-- ─── INPUTS ─────────────────────────────── -->
+  <aside class="inputs-panel">
+
+    <div class="input-section">
+      <div class="input-section-title">Revenue Goal</div>
+
+      <div class="input-row">
+        <div class="input-label">Revenue Target <span class="input-hint">new revenue only</span></div>
+        <div class="num-wrap">
+          <span class="num-unit">$</span>
+          <input type="number" id="revenueTarget" value="20" min="1" max="500" step="1">
+          <span class="num-unit">M</span>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-label">Time Horizon <span class="slider-val" id="vTimeHorizon">18 mo</span></div>
+        <div class="slider-wrap">
+          <input type="range" id="timeHorizon" min="6" max="36" value="18" step="1">
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-label">Expansion Revenue Offset <span class="slider-val" id="vExpansion">10%</span></div>
+        <div class="slider-wrap">
+          <input type="range" id="expansionOffset" min="0" max="50" value="10" step="5">
+        </div>
+        <div class="helper">Recurring from Prism/CE add-ons reduces new revenue needed</div>
+      </div>
+    </div>
+
+    <div class="input-section">
+      <div class="input-section-title">Deal Economics</div>
+
+      <div class="input-row">
+        <div class="input-label">Average Deal Size <span class="slider-val" id="vDealSize">$500K</span></div>
+        <div class="slider-wrap">
+          <input type="range" id="dealSize" min="100" max="2000" value="500" step="50">
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-label">Win Rate <span class="slider-val" id="vWinRate">25%</span></div>
+        <div class="slider-wrap">
+          <input type="range" id="winRate" min="10" max="60" value="25" step="1">
+        </div>
+        <div class="helper">% of qualified opps that close won</div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-label">Sales Cycle <span class="slider-val" id="vSalesCycle">3 mo</span></div>
+        <div class="slider-wrap">
+          <input type="range" id="salesCycle" min="1" max="18" value="3" step="1">
+        </div>
+        <div class="helper">Months from qualified opp to close</div>
+      </div>
+    </div>
+
+    <div class="input-section">
+      <div class="input-section-title">Pipeline Management</div>
+
+      <div class="input-row">
+        <div class="input-label">Coverage Multiple <span class="slider-val" id="vCoverage">3.0×</span></div>
+        <div class="slider-wrap">
+          <input type="range" id="coverageMultiple" min="1.5" max="6" value="3" step="0.5">
+        </div>
+        <div class="helper">$ of pipeline needed per $ of revenue target</div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-label">Slippage Buffer <span class="slider-val" id="vSlippage">20%</span></div>
+        <div class="slider-wrap">
+          <input type="range" id="slippageBuffer" min="0" max="50" value="20" step="5">
+        </div>
+        <div class="helper">Extra pipeline for deals that slip out of period</div>
+      </div>
+    </div>
+
+    <div class="input-section">
+      <div class="input-section-title">Channel Mix</div>
+
+      <div class="input-row">
+        <div class="input-label">Partner-sourced <span class="slider-val" id="vPartnerPct">30%</span></div>
+        <div class="slider-wrap">
+          <input type="range" id="partnerPct" min="0" max="80" value="30" step="5">
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-label">Marketing-generated <span class="slider-val" id="vMarketingPct">20%</span></div>
+        <div class="slider-wrap">
+          <input type="range" id="marketingPct" min="0" max="80" value="20" step="5">
+        </div>
+      </div>
+
+      <div class="channel-chips">
+        <div class="chip" style="border-color:var(--c-partner)">
+          <div class="chip-label" style="color:var(--c-partner)">Partner</div>
+          <div class="chip-val" id="chipPartner" style="color:var(--c-partner)">30%</div>
+        </div>
+        <div class="chip" style="border-color:var(--c-marketing)">
+          <div class="chip-label" style="color:var(--c-marketing)">Mktg</div>
+          <div class="chip-val" id="chipMarketing" style="color:var(--c-marketing)">20%</div>
+        </div>
+        <div class="chip" style="border-color:var(--c-self)">
+          <div class="chip-label" style="color:var(--c-self)">Self</div>
+          <div class="chip-val" id="chipSelf" style="color:var(--c-self)">50%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-section">
+      <div class="input-section-title">Conversion Rates</div>
+
+      <div class="input-row">
+        <div class="input-label">Account → Opportunity <span class="slider-val" id="vAccOppRate">15%</span></div>
+        <div class="slider-wrap">
+          <input type="range" id="accountOppRate" min="2" max="50" value="15" step="1">
+        </div>
+        <div class="helper">Of targeted accounts that become qualified opps (self-originated)</div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-label">Partner Session → Opp <span class="slider-val" id="vPartnerOppRate">30%</span></div>
+        <div class="slider-wrap">
+          <input type="range" id="partnerOppRate" min="5" max="70" value="30" step="5">
+        </div>
+        <div class="helper">Of co-sell sessions that produce a qualified opportunity</div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-label">Marketing Touch → Opp <span class="slider-val" id="vMktgOppRate">5%</span></div>
+        <div class="slider-wrap">
+          <input type="range" id="marketingOppRate" min="1" max="25" value="5" step="1">
+        </div>
+        <div class="helper">Of event/webinar attendees that become qualified opps</div>
+      </div>
+    </div>
+
+    <div class="input-section">
+      <div class="input-section-title">Team</div>
+      <div class="input-row">
+        <div class="input-label">Number of Sellers <span class="input-hint">excl. presales</span></div>
+        <input type="number" id="teamSize" value="5" min="1" max="100" step="1">
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ─── RESULTS ────────────────────────────── -->
+  <div class="results-panel">
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card accent">
+        <div class="kpi-eyebrow">Revenue to Generate</div>
+        <div class="kpi-value" id="kRevenue">$18M</div>
+        <div class="kpi-sub" id="kRevenueSub">after expansion offset</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-eyebrow">Deals to Close</div>
+        <div class="kpi-value" id="kDeals">36</div>
+        <div class="kpi-sub" id="kDealsSub">at $500K avg deal</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-eyebrow">Qualified Opps Needed</div>
+        <div class="kpi-value" id="kQualOpps">144</div>
+        <div class="kpi-sub" id="kQualOppsSub">at 25% win rate</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-eyebrow">Pipeline to Build</div>
+        <div class="kpi-value" id="kPipeline">$52M</div>
+        <div class="kpi-sub" id="kPipelineSub">3× coverage + slippage</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-eyebrow">Prospecting Window</div>
+        <div class="kpi-value" id="kWindow">15 mo</div>
+        <div class="kpi-sub" id="kWindowSub">18 mo − 3 mo cycle</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-eyebrow">Opps per Seller</div>
+        <div class="kpi-value" id="kPerSeller">29</div>
+        <div class="kpi-sub" id="kPerSellerSub">across 5 sellers</div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="card-title">Activity Funnel</div>
+        <canvas id="funnelCanvas" style="height:230px;width:100%;"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="card-title">Channel Split</div>
+        <canvas id="donutCanvas" style="height:230px;width:100%;"></canvas>
+      </div>
+    </div>
+
+    <!-- Monthly Activity Requirements -->
+    <div class="activity-card">
+      <div class="card-title">Monthly Activity Requirements
+        <span style="font-size:10px;font-weight:400;color:var(--text-3);margin-left:8px;">amber = high effort · red = likely unrealistic</span>
+      </div>
+      <div class="activity-cols">
+        <div class="act-block">
+          <div class="act-block-title" style="color:var(--c-self)">Self-originated</div>
+          <div class="act-row"><span class="act-lbl">Accounts to target (total)</span><span class="act-val" id="aAccTotal">–</span></div>
+          <div class="act-row"><span class="act-lbl">Per month</span><span class="act-val" id="aAccMonth">–</span></div>
+          <div class="act-row"><span class="act-lbl">Per seller / month</span><span class="act-val" id="aAccSeller">–</span></div>
+          <div class="act-row"><span class="act-lbl">Opps to generate</span><span class="act-val" id="aSelfOpps">–</span></div>
+        </div>
+        <div class="act-block">
+          <div class="act-block-title" style="color:var(--c-partner)">Partner-sourced</div>
+          <div class="act-row"><span class="act-lbl">Co-sell sessions (total)</span><span class="act-val" id="aPartTotal">–</span></div>
+          <div class="act-row"><span class="act-lbl">Per month</span><span class="act-val" id="aPartMonth">–</span></div>
+          <div class="act-row"><span class="act-lbl">Per seller / month</span><span class="act-val" id="aPartSeller">–</span></div>
+          <div class="act-row"><span class="act-lbl">Opps to generate</span><span class="act-val" id="aPartOpps">–</span></div>
+        </div>
+        <div class="act-block">
+          <div class="act-block-title" style="color:var(--c-marketing)">Marketing-generated</div>
+          <div class="act-row"><span class="act-lbl">Event/webinar touches (total)</span><span class="act-val" id="aMktgTotal">–</span></div>
+          <div class="act-row"><span class="act-lbl">Per month</span><span class="act-val" id="aMktgMonth">–</span></div>
+          <div class="act-row"><span class="act-lbl">Events needed (30 attendees)</span><span class="act-val" id="aMktgEvents">–</span></div>
+          <div class="act-row"><span class="act-lbl">Opps to generate</span><span class="act-val" id="aMktgOpps">–</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sensitivity -->
+    <div class="sens-card">
+      <div class="card-title">Deals Needed — Sensitivity (Deal Size × Win Rate) <span style="font-size:10px;font-weight:400;color:var(--text-3);margin-left:6px;">current inputs marked ▲</span></div>
+      <table class="sens-table" id="sensTable"></table>
+    </div>
+
+    <!-- Per seller -->
+    <div class="activity-card">
+      <div class="card-title" id="psTitle">Per Seller Targets — 5 Sellers</div>
+      <div class="ps-grid">
+        <div class="ps-block">
+          <div class="ps-val" id="psQualOpps">–</div>
+          <div class="ps-lbl">Qual. opps<br>to build</div>
+        </div>
+        <div class="ps-block">
+          <div class="ps-val" id="psDeals">–</div>
+          <div class="ps-lbl">Deals to<br>close</div>
+        </div>
+        <div class="ps-block">
+          <div class="ps-val" id="psAccMonth">–</div>
+          <div class="ps-lbl">Accounts/<br>month (self)</div>
+        </div>
+        <div class="ps-block">
+          <div class="ps-val" id="psPartMonth">–</div>
+          <div class="ps-lbl">Partner<br>sessions/mo</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── Format helpers ────────────────────────────────────────
+function fmtMoney(n) {
+  if (n >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return '$' + Math.round(n / 1e3) + 'K';
+  return '$' + Math.round(n);
+}
+function fmtN(n, decimals) {
+  if (n === undefined || isNaN(n)) return '–';
+  if (decimals !== undefined) return n.toFixed(decimals);
+  return Math.ceil(n).toLocaleString();
+}
+function cssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+// ── Read inputs ───────────────────────────────────────────
+function getVals() {
+  const partnerRaw = +document.getElementById('partnerPct').value;
+  const mktgRaw = +document.getElementById('marketingPct').value;
+  const partnerPct = partnerRaw / 100;
+  const marketingPct = Math.min(mktgRaw, 100 - partnerRaw) / 100;
+  const selfPct = Math.max(0, 1 - partnerPct - marketingPct);
+  return {
+    revenueTarget: +document.getElementById('revenueTarget').value * 1e6,
+    timeHorizon: +document.getElementById('timeHorizon').value,
+    expansionOffset: +document.getElementById('expansionOffset').value / 100,
+    dealSize: +document.getElementById('dealSize').value * 1e3,
+    winRate: +document.getElementById('winRate').value / 100,
+    salesCycle: +document.getElementById('salesCycle').value,
+    coverageMultiple: +document.getElementById('coverageMultiple').value,
+    slippageBuffer: +document.getElementById('slippageBuffer').value / 100,
+    partnerPct, marketingPct, selfPct,
+    accountOppRate: +document.getElementById('accountOppRate').value / 100,
+    partnerOppRate: +document.getElementById('partnerOppRate').value / 100,
+    marketingOppRate: +document.getElementById('marketingOppRate').value / 100,
+    teamSize: Math.max(1, +document.getElementById('teamSize').value),
+    partnerRaw, mktgRaw,
+  };
+}
+
+// ── Compute ───────────────────────────────────────────────
+function compute(v) {
+  const effectiveTarget = v.revenueTarget * (1 - v.expansionOffset);
+  const dealsNeeded = effectiveTarget / v.dealSize;
+  const qualOpps = dealsNeeded / v.winRate;
+  const pipelineNeeded = qualOpps * v.dealSize * v.coverageMultiple * (1 + v.slippageBuffer);
+  const activeMonths = Math.max(1, v.timeHorizon - v.salesCycle);
+  const selfOpps = qualOpps * v.selfPct;
+  const partnerOpps = qualOpps * v.partnerPct;
+  const marketingOpps = qualOpps * v.marketingPct;
+  const accTotal = v.accountOppRate > 0 ? selfOpps / v.accountOppRate : 0;
+  const partTotal = v.partnerOppRate > 0 ? partnerOpps / v.partnerOppRate : 0;
+  const mktgTotal = v.marketingOppRate > 0 ? marketingOpps / v.marketingOppRate : 0;
+  return {
+    effectiveTarget, dealsNeeded, qualOpps, pipelineNeeded, activeMonths,
+    selfOpps, partnerOpps, marketingOpps,
+    accTotal, partTotal, mktgTotal,
+    accMonth: accTotal / activeMonths,
+    partMonth: partTotal / activeMonths,
+    mktgMonth: mktgTotal / activeMonths,
+    psQualOpps: qualOpps / v.teamSize,
+    psDeals: dealsNeeded / v.teamSize,
+    psAccMonth: accTotal / activeMonths / v.teamSize,
+    psPartMonth: partTotal / activeMonths / v.teamSize,
+  };
+}
+
+// ── Flag helpers ──────────────────────────────────────────
+function setVal(id, val, lo, hi) {
+  const el = document.getElementById(id);
+  const n = Math.ceil(val);
+  el.textContent = n.toLocaleString();
+  el.className = 'act-val';
+  if (val > hi) el.classList.add('red');
+  else if (val > lo) el.classList.add('amber');
+}
+
+// ── Main update ───────────────────────────────────────────
+function update() {
+  const v = getVals();
+  const d = compute(v);
+
+  // Slider labels
+  document.getElementById('vTimeHorizon').textContent = v.timeHorizon + ' mo';
+  document.getElementById('vExpansion').textContent = Math.round(v.expansionOffset * 100) + '%';
+  document.getElementById('vDealSize').textContent = '$' + document.getElementById('dealSize').value + 'K';
+  document.getElementById('vWinRate').textContent = Math.round(v.winRate * 100) + '%';
+  document.getElementById('vSalesCycle').textContent = v.salesCycle + ' mo';
+  document.getElementById('vCoverage').textContent = (+document.getElementById('coverageMultiple').value).toFixed(1) + '×';
+  document.getElementById('vSlippage').textContent = Math.round(v.slippageBuffer * 100) + '%';
+  document.getElementById('vPartnerPct').textContent = v.partnerRaw + '%';
+  document.getElementById('vMarketingPct').textContent = v.mktgRaw + '%';
+  document.getElementById('vAccOppRate').textContent = document.getElementById('accountOppRate').value + '%';
+  document.getElementById('vPartnerOppRate').textContent = document.getElementById('partnerOppRate').value + '%';
+  document.getElementById('vMktgOppRate').textContent = document.getElementById('marketingOppRate').value + '%';
+
+  // Channel chips
+  document.getElementById('chipPartner').textContent = Math.round(v.partnerPct * 100) + '%';
+  document.getElementById('chipMarketing').textContent = Math.round(v.marketingPct * 100) + '%';
+  document.getElementById('chipSelf').textContent = Math.round(v.selfPct * 100) + '%';
+
+  // KPIs
+  document.getElementById('kRevenue').textContent = fmtMoney(d.effectiveTarget);
+  document.getElementById('kRevenueSub').textContent = Math.round(v.expansionOffset * 100) + '% expansion offset applied';
+  document.getElementById('kDeals').textContent = Math.ceil(d.dealsNeeded).toLocaleString();
+  document.getElementById('kDealsSub').textContent = 'at ' + fmtMoney(v.dealSize) + ' avg deal size';
+  document.getElementById('kQualOpps').textContent = Math.ceil(d.qualOpps).toLocaleString();
+  document.getElementById('kQualOppsSub').textContent = 'at ' + Math.round(v.winRate * 100) + '% win rate';
+  document.getElementById('kPipeline').textContent = fmtMoney(d.pipelineNeeded);
+  document.getElementById('kPipelineSub').textContent = (+document.getElementById('coverageMultiple').value).toFixed(1) + '× coverage + ' + Math.round(v.slippageBuffer * 100) + '% slippage';
+  document.getElementById('kWindow').textContent = d.activeMonths + ' mo';
+  document.getElementById('kWindowSub').textContent = v.timeHorizon + ' mo − ' + v.salesCycle + ' mo cycle';
+  document.getElementById('kPerSeller').textContent = Math.ceil(d.psQualOpps).toLocaleString();
+  document.getElementById('kPerSellerSub').textContent = 'across ' + v.teamSize + ' sellers';
+
+  // Activity
+  setVal('aAccTotal', d.accTotal, 200, 600);
+  setVal('aAccMonth', d.accMonth, 25, 60);
+  setVal('aAccSeller', d.psAccMonth, 8, 18);
+  document.getElementById('aSelfOpps').textContent = Math.ceil(d.selfOpps).toLocaleString();
+  setVal('aPartTotal', d.partTotal, 80, 250);
+  setVal('aPartMonth', d.partMonth, 8, 25);
+  setVal('aPartSeller', d.psPartMonth, 3, 8);
+  document.getElementById('aPartOpps').textContent = Math.ceil(d.partnerOpps).toLocaleString();
+  setVal('aMktgTotal', d.mktgTotal, 600, 2000);
+  setVal('aMktgMonth', d.mktgMonth, 60, 200);
+  document.getElementById('aMktgEvents').textContent = Math.ceil(d.mktgTotal / 30).toLocaleString();
+  document.getElementById('aMktgOpps').textContent = Math.ceil(d.marketingOpps).toLocaleString();
+
+  // Per seller
+  document.getElementById('psTitle').textContent = 'Per Seller Targets — ' + v.teamSize + ' Seller' + (v.teamSize > 1 ? 's' : '');
+  document.getElementById('psQualOpps').textContent = Math.ceil(d.psQualOpps).toLocaleString();
+  document.getElementById('psDeals').textContent = Math.ceil(d.psDeals).toLocaleString();
+  document.getElementById('psAccMonth').textContent = d.psAccMonth.toFixed(1);
+  document.getElementById('psPartMonth').textContent = d.psPartMonth.toFixed(1);
+
+  // Sensitivity
+  buildSensitivity(v, d);
+
+  // Charts
+  drawFunnel(v, d);
+  drawDonut(v, d);
+}
+
+// ── Sensitivity table ─────────────────────────────────────
+function buildSensitivity(v, d) {
+  const sizes = [250, 400, 500, 700, 1000];
+  const rates = [15, 20, 25, 30, 40];
+  const et = d.effectiveTarget;
+  const curSize = +document.getElementById('dealSize').value;
+  const curRate = Math.round(v.winRate * 100);
+
+  let html = '<thead><tr><th>Deal Size \\ Win Rate</th>';
+  rates.forEach(r => html += `<th>${r}%${r === curRate ? ' ▲' : ''}</th>`);
+  html += '</tr></thead><tbody>';
+
+  sizes.forEach(ds => {
+    html += `<tr><td class="row-hdr">$${ds}K${ds === curSize ? ' ▲' : ''}</td>`;
+    rates.forEach(wr => {
+      const n = Math.ceil(et / (ds * 1e3) / (wr / 100));
+      const isCur = ds === curSize && wr === curRate;
+      html += `<td class="${isCur ? 'cur' : ''}">${n}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  document.getElementById('sensTable').innerHTML = html;
+}
+
+// ── Funnel chart ──────────────────────────────────────────
+function drawFunnel(v, d) {
+  const canvas = document.getElementById('funnelCanvas');
+  const W = canvas.parentElement.clientWidth - 28;
+  const H = 230;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const totalActivities = Math.round(d.accTotal + d.partTotal + d.mktgTotal);
+  const steps = [
+    { label: 'Total Activities', sub: 'accounts + sessions + touches', value: totalActivities },
+    { label: 'Pipeline (with coverage)', sub: 'qualified opps × coverage multiple', value: Math.ceil(d.qualOpps * v.coverageMultiple) },
+    { label: 'Qualified Opportunities', sub: 'net opps to build this period', value: Math.ceil(d.qualOpps) },
+    { label: 'Deals to Close', sub: fmtMoney(d.effectiveTarget) + ' target', value: Math.ceil(d.dealsNeeded) },
+  ];
+
+  const colors = ['#3B82F6', '#2563EB', '#1D4ED8', '#1E3A8A'];
+  const text1 = cssVar('--text-1') || '#DCE8F5';
+  const text2 = cssVar('--text-2') || '#5E8AAF';
+  const maxVal = steps[0].value || 1;
+  const pad = { t: 14, b: 10, l: 12, r: 12 };
+  const innerW = W - pad.l - pad.r;
+  const rowH = (H - pad.t - pad.b) / steps.length;
+  const barH = rowH * 0.5;
+  const minBarW = 70;
+  const labelAreaW = Math.min(200, innerW * 0.45);
+
+  steps.forEach((step, i) => {
+    const barAreaW = innerW - labelAreaW - 12;
+    const barW = Math.max(minBarW, barAreaW * 0.12 + barAreaW * 0.88 * (step.value / maxVal));
+    const x = pad.l;
+    const y = pad.t + i * rowH + (rowH - barH) / 2;
+
+    // Bar
+    ctx.fillStyle = colors[i];
+    ctx.globalAlpha = 0.88;
+    ctx.beginPath();
+    const r = 4;
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + barW - r, y);
+    ctx.arcTo(x + barW, y, x + barW, y + r, r);
+    ctx.lineTo(x + barW, y + barH - r);
+    ctx.arcTo(x + barW, y + barH, x + barW - r, y + barH, r);
+    ctx.lineTo(x + r, y + barH);
+    ctx.arcTo(x, y + barH, x, y + barH - r, r);
+    ctx.lineTo(x, y + r);
+    ctx.arcTo(x, y, x + r, y, r);
+    ctx.closePath();
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Value inside bar
+    ctx.fillStyle = '#fff';
+    ctx.font = `600 ${Math.min(14, barH * 0.42)}px "JetBrains Mono", monospace`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(step.value.toLocaleString(), x + barW / 2, y + barH / 2);
+
+    // Label to right
+    const lx = x + barAreaW + 14;
+    ctx.fillStyle = text1;
+    ctx.font = '600 11.5px "Barlow Semi Condensed", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillText(step.label, lx, y + barH * 0.42);
+    ctx.fillStyle = text2;
+    ctx.font = '400 10px "Barlow", sans-serif';
+    ctx.fillText(step.sub, lx, y + barH * 0.78);
+
+    // Arrow
+    if (i < steps.length - 1) {
+      ctx.fillStyle = text2;
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('▼', x + barAreaW / 2, pad.t + (i + 1) * rowH - 5);
+    }
+  });
+}
+
+// ── Donut chart ───────────────────────────────────────────
+function drawDonut(v, d) {
+  const canvas = document.getElementById('donutCanvas');
+  const W = canvas.parentElement.clientWidth - 28;
+  const H = 230;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const slices = [
+    { label: 'Partner', pct: Math.round(v.partnerPct * 100), color: cssVar('--c-partner') || '#A78BFA' },
+    { label: 'Marketing', pct: Math.round(v.marketingPct * 100), color: cssVar('--c-marketing') || '#22D3EE' },
+    { label: 'Self-orig.', pct: Math.round(v.selfPct * 100), color: cssVar('--c-self') || '#34D399' },
+  ].filter(s => s.pct > 0);
+
+  const total = slices.reduce((sum, s) => sum + s.pct, 0);
+  if (total === 0) return;
+
+  const legendH = 36;
+  const cx = W / 2;
+  const cy = (H - legendH) / 2;
+  const outerR = Math.min(cx, cy) * 0.82;
+  const innerR = outerR * 0.58;
+
+  let angle = -Math.PI / 2;
+  const gap = 0.025;
+  slices.forEach(s => {
+    const sweep = (s.pct / total) * Math.PI * 2 - gap;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, outerR, angle, angle + sweep);
+    ctx.closePath();
+    ctx.fillStyle = s.color;
+    ctx.fill();
+    angle += sweep + gap;
+  });
+
+  // Hole
+  ctx.beginPath();
+  ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
+  ctx.fillStyle = cssVar('--surface') || '#0C1926';
+  ctx.fill();
+
+  // Center text
+  const text1 = cssVar('--text-1') || '#DCE8F5';
+  const text2 = cssVar('--text-2') || '#5E8AAF';
+  ctx.fillStyle = text1;
+  ctx.font = '600 20px "JetBrains Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(Math.ceil(d.qualOpps).toLocaleString(), cx, cy - 5);
+  ctx.fillStyle = text2;
+  ctx.font = '400 10px "Barlow", sans-serif';
+  ctx.fillText('qual. opps needed', cx, cy + 13);
+
+  // Legend
+  const legendY = H - legendH + 8;
+  const itemW = W / slices.length;
+  slices.forEach((s, i) => {
+    const lx = (i + 0.5) * itemW;
+    ctx.fillStyle = s.color;
+    ctx.fillRect(lx - 18, legendY, 9, 9);
+    ctx.fillStyle = text2;
+    ctx.font = '500 10.5px "Barlow", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(s.pct + '% ' + s.label, lx - 6, legendY + 4.5);
+  });
+}
+
+// ── Scenarios ─────────────────────────────────────────────
+const SCENARIOS = {
+  conservative: { revenueTarget: 20, timeHorizon: 18, expansionOffset: 5, dealSize: 300, winRate: 20, salesCycle: 4, coverageMultiple: 4, slippageBuffer: 25, partnerPct: 20, marketingPct: 15, accountOppRate: 10, partnerOppRate: 20, marketingOppRate: 3, teamSize: 5 },
+  base:         { revenueTarget: 20, timeHorizon: 18, expansionOffset: 10, dealSize: 500, winRate: 25, salesCycle: 3, coverageMultiple: 3, slippageBuffer: 20, partnerPct: 30, marketingPct: 20, accountOppRate: 15, partnerOppRate: 30, marketingOppRate: 5, teamSize: 5 },
+  aggressive:   { revenueTarget: 20, timeHorizon: 18, expansionOffset: 15, dealSize: 700, winRate: 35, salesCycle: 2, coverageMultiple: 2.5, slippageBuffer: 15, partnerPct: 40, marketingPct: 25, accountOppRate: 20, partnerOppRate: 40, marketingOppRate: 8, teamSize: 5 },
+};
+
+function applyScenario(name) {
+  const s = SCENARIOS[name];
+  if (!s) return;
+  Object.entries(s).forEach(([k, val]) => {
+    const el = document.getElementById(k);
+    if (el) el.value = val;
+  });
+  document.querySelectorAll('.scenario-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase().startsWith(name[0]));
+  });
+  update();
+}
+
+// ── Event wiring ──────────────────────────────────────────
+document.querySelectorAll('input[type="range"], input[type="number"]').forEach(el => {
+  el.addEventListener('input', update);
+});
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(update, 80);
+});
+setTimeout(update, 80);
+</script>
+</body>
+</html>
