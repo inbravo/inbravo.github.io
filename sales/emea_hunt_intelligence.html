@@ -219,6 +219,11 @@ a{color:var(--accent);text-decoration:none}
 :root[data-theme="dark"] .d-badge-snowflake ,:root:not([data-theme="light"]) .d-badge-snowflake {background:#083344;color:#67E8F9;border-color:#164E63}
 :root[data-theme="dark"] .d-badge-fabric    ,:root:not([data-theme="light"]) .d-badge-fabric    {background:#2E1065;color:#C4B5FD;border-color:#4C1D95}
 :root[data-theme="dark"] .d-contra,:root:not([data-theme="light"]) .d-contra{background:#1C1508;color:#FCD34D}
+/* ── PANELS C+D SIDE BY SIDE ── */
+.cd-row{display:flex;gap:1rem;align-items:flex-start}
+.cd-panel-c{flex:1 1 0;min-width:0}
+#panel-d{flex:0 0 400px;min-width:0}
+@media(max-width:900px){.cd-row{flex-direction:column}#panel-d{flex:none;width:100%}}
 </style>
 
 <!-- Tooltip -->
@@ -315,8 +320,10 @@ a{color:var(--accent);text-decoration:none}
     </div>
   </div>
 
+  <!-- Panels C + D — side by side when D is open -->
+  <div class="cd-row">
   <!-- Panel C: Company Profile Explorer -->
-  <div class="panel">
+  <div class="panel cd-panel-c">
     <div class="panel-hdr">
       <div>
         <div class="panel-title">Panel C — Company Profile Explorer</div>
@@ -373,6 +380,7 @@ a{color:var(--accent);text-decoration:none}
     </div>
     <div id="panel-d-body" class="panel-d-body"></div>
   </div>
+  </div><!-- /cd-row -->
 
 </div>
 </section>
@@ -1380,8 +1388,7 @@ function openPanelD(name){
   const d=CLOUD_INTEL[name];
   if(!d){
     body.innerHTML=`<div class="d-none">No verified public intelligence found for <strong>${name}</strong>.<br>Check company technology blog, annual report, or cloud provider case studies directly.</div>`;
-    pd.scrollIntoView({behavior:'smooth',block:'nearest'});
-    return;
+      return;
   }
   const clouds=d.clouds||[];
   const cloudHtml=clouds.length
@@ -1390,8 +1397,6 @@ function openPanelD(name){
   const platHtml=d.platform
     ?d.platform.split('+').map(p=>p.trim()).map(p=>`<span class="d-badge ${platformBadgeCls(p)}">${p}</span>`).join('')
     :'<span class="d-badge d-badge-priv">Not confirmed</span>';
-  const contraHtml=d.contra
-    ?`<div class="d-contra">⚠ <strong>Mapping contradiction:</strong> ${d.contraNote}</div>`:'';
   const legacyHtml=d.legacy
     ?`<div><div class="d-section-label">Legacy Platform Context</div><div class="d-notes">${d.legacy}</div></div>`:'';
   body.innerHTML=`
@@ -1401,9 +1406,8 @@ function openPanelD(name){
       <div class="d-col"><div class="d-section-label">Research Confidence</div><span class="d-conf d-conf-${d.conf}">${d.conf}</span></div>
     </div>
     ${legacyHtml}
-    ${contraHtml}
     <div><div class="d-section-label">Intel Notes</div><div class="d-notes">${d.notes}</div></div>`;
-  pd.scrollIntoView({behavior:'smooth',block:'nearest'});
+
 }
 function closePanelD(){
   document.getElementById('panel-d').style.display='none';
