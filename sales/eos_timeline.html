@@ -1,0 +1,474 @@
+<title>Legacy Stack EoS Timeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;--dim:#94A3B8;
+  --accent:#6366F1;--accent-dim:#EEF2FF;
+  --hdr:#0F172A;--hdr-text:#F1F5F9;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;--accent-dim:#1E1B4B;
+  --hdr:#0A0F1E;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+}}
+:root[data-theme="dark"]{
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;--accent-dim:#1E1B4B;
+  --hdr:#0A0F1E;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:13px;scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;min-height:100vh}
+h1,h2,h3{font-family:'Plus Jakarta Sans',system-ui,sans-serif;line-height:1.2}
+
+.hdr{background:var(--hdr);color:var(--hdr-text);padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:100}
+.hdr-brand{display:flex;align-items:center;gap:.75rem}
+.hdr-badge{background:#6366F1;color:#fff;font-size:.65rem;font-weight:700;padding:.15rem .45rem;border-radius:.25rem;letter-spacing:.05em;font-family:'Plus Jakarta Sans',sans-serif}
+.hdr-title{font-size:.95rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hdr-text)}
+.hdr-meta{display:flex;align-items:center;gap:.75rem;font-size:.72rem;color:#94A3B8}
+.theme-btn{background:none;border:1px solid #334155;color:#94A3B8;border-radius:.375rem;padding:.25rem .6rem;cursor:pointer;font-size:.8rem;transition:border-color .15s,color .15s;font-family:inherit}
+.theme-btn:hover{border-color:#6366F1;color:var(--hdr-text)}
+
+.stats-strip{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface)}
+.stat-card{flex:1;padding:1rem 1.25rem;border-right:1px solid var(--border)}
+.stat-card:last-child{border-right:none}
+.stat-n{font-size:1.65rem;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;line-height:1;margin-bottom:.25rem}
+.stat-n.red{color:#EF4444}
+.stat-n.orange{color:#F97316}
+.stat-n.indigo{color:#6366F1}
+.stat-l{font-size:.72rem;color:var(--muted);line-height:1.4}
+
+.canvas-section{padding:1.25rem;overflow-x:auto}
+.canvas-wrap{position:relative;min-width:640px}
+#eos-canvas{display:block;width:100%;cursor:crosshair}
+
+.tooltip{position:absolute;pointer-events:none;display:none;background:var(--surface);border:1px solid var(--border);border-radius:.5rem;padding:.65rem .85rem;font-size:.72rem;box-shadow:var(--shadow);max-width:260px;z-index:10;line-height:1.5}
+.tooltip-name{font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:.25rem;font-size:.78rem}
+.tooltip-date{font-size:.65rem;color:var(--muted);margin-bottom:.35rem}
+.tooltip-detail{color:var(--text);margin-bottom:.35rem}
+.tooltip-target{font-size:.65rem;color:var(--accent)}
+.tooltip-dora{display:inline-block;background:#EEF2FF;color:#4338CA;font-size:.6rem;font-weight:700;padding:.1rem .35rem;border-radius:.2rem;margin-top:.25rem;font-family:'Plus Jakarta Sans',sans-serif}
+:root[data-theme="dark"] .tooltip-dora{background:#1E1B4B;color:#A5B4FC}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tooltip-dora{background:#1E1B4B;color:#A5B4FC}}
+
+.legend{display:flex;flex-wrap:wrap;gap:.5rem 1rem;padding:.75rem 1.25rem;border-top:1px solid var(--border);font-size:.68rem;color:var(--muted)}
+.leg{display:flex;align-items:center;gap:.35rem}
+.leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.leg-dia{width:9px;height:9px;flex-shrink:0;transform:rotate(45deg)}
+.leg-dash{width:20px;height:2px;flex-shrink:0;border-top:2px dashed}
+
+.sources{padding:.75rem 1.25rem 1.5rem;font-size:.65rem;color:var(--dim);line-height:2;border-top:1px solid var(--border)}
+.sources a{color:var(--accent)}
+</style>
+
+<header class="hdr">
+  <div class="hdr-brand">
+    <span class="hdr-badge">IMPETUS</span>
+    <span class="hdr-title">Legacy Stack — End-of-Support Timeline</span>
+  </div>
+  <div class="hdr-meta">
+    <span>EU / UK · EMEA</span>
+    <span>Aug 2026</span>
+    <button class="theme-btn" id="theme-btn">🌙</button>
+  </div>
+</header>
+
+<div class="stats-strip">
+  <div class="stat-card">
+    <div class="stat-n red">8</div>
+    <div class="stat-l">platforms already past end-of-support today</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-n orange">4 mo</div>
+    <div class="stat-l">to SAP BO 4.3 — next hard deadline, Dec 2026</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-n indigo">19 mo</div>
+    <div class="stat-l">DORA in force — unpatched ICT is a reportable risk today</div>
+  </div>
+</div>
+
+<div class="canvas-section">
+  <div class="canvas-wrap" id="canvas-wrap">
+    <canvas id="eos-canvas"></canvas>
+    <div class="tooltip" id="eos-tooltip"></div>
+  </div>
+</div>
+
+<div class="legend">
+  <span class="leg"><span class="leg-dot" style="background:#EF4444"></span> Past EoS</span>
+  <span class="leg"><span class="leg-dot" style="background:#F97316"></span> Within 6 months</span>
+  <span class="leg"><span class="leg-dot" style="background:#3B82F6"></span> 6 – 24 months</span>
+  <span class="leg"><span class="leg-dia" style="background:#8B5CF6"></span> Acquisition / vendor disruption</span>
+  <span class="leg"><span class="leg-dash" style="border-color:#94A3B8"></span> Strategic pressure — no hard date</span>
+  <span class="leg"><span class="leg-dot" style="background:#6366F1"></span> Regulatory event</span>
+</div>
+
+<div class="sources">
+  Sources:
+  <a href="https://docs.cloudera.com/documentation/enterprise/release-notes/topics/cdh_eol.html" target="_blank" rel="noopener">Cloudera EoL policy</a> ·
+  <a href="https://www.ibm.com/support/pages/life-cycle-date-ibm-netezza-appliances" target="_blank" rel="noopener">IBM Netezza lifecycle</a> ·
+  <a href="https://support.sas.com/en/technical-support/maintenance-schedule.html" target="_blank" rel="noopener">SAS maintenance schedule</a> ·
+  <a href="https://network.informatica.com/docs/DOC-18055" target="_blank" rel="noopener">Informatica lifecycle</a> ·
+  <a href="https://apps.support.sap.com/sap/support/pam" target="_blank" rel="noopener">SAP Product Availability Matrix</a> ·
+  <a href="https://www.oracle.com/us/assets/lifetime-support-applications-069216.pdf" target="_blank" rel="noopener">Oracle lifetime support</a> ·
+  <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32022R2554" target="_blank" rel="noopener">DORA (EU 2022/2554)</a>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+const NOW = 2026 + 7/12;
+const X_MIN = 2020.6;
+const X_MAX = 2028.4;
+
+// type: 'eos' | 'acquisition' | 'soft' | 'strategic'
+const SWIMLANES = [
+  {
+    label:'DATA WAREHOUSE',
+    items:[
+      {name:'Hadoop HDP',      date:2021+5/12,  type:'eos',         dora:true,  detail:'Hortonworks EoS — running unpatched 5+ years. Every month accrues DORA ICT risk.',   target:'Databricks / Spark',         src:'Cloudera EoL', srcUrl:'https://docs.cloudera.com/documentation/enterprise/release-notes/topics/cdh_eol.html'},
+      {name:'Vertica',         date:2023+0/12,  type:'acquisition', dora:false, detail:'OpenText acquired Micro Focus (Vertica) Jan 2023 — roadmap opaque, enterprise confidence low.', target:'Databricks / Snowflake',      src:'OpenText acquisition', srcUrl:'https://www.opentext.com/'},
+      {name:'Greenplum',       date:2024+0/12,  type:'acquisition', dora:false, detail:'Broadcom VMware acquisition effectively abandoned commercial Greenplum support.',       target:'Databricks / BigQuery',       src:'Broadcom/VMware', srcUrl:'https://www.vmware.com/'},
+      {name:'Netezza',         date:2025+3/12,  type:'eos',         dora:true,  detail:'IBM Mako hardware EoS April 2025 — on-prem customers stranded with no upgrade path.',  target:'Databricks / Snowflake',      src:'IBM Netezza lifecycle', srcUrl:'https://www.ibm.com/support/pages/life-cycle-date-ibm-netezza-appliances'},
+      {name:'SAP Sybase IQ',   date:2025+11/12, type:'eos',         dora:true,  detail:'SAP IQ 16.x mainstream maintenance ended Dec 2025 — SAP directing to HANA Cloud.',    target:'Snowflake / Databricks',      src:'SAP PAM', srcUrl:'https://apps.support.sap.com/sap/support/pam'},
+      {name:'Cloudera CDP',    date:2026+5/12,  type:'eos',         dora:true,  detail:'CDP Private Cloud Base EoS June 2026 — 5× subscription pricing shock on renewal.',    target:'Databricks / Spark on Cloud', src:'Cloudera EoL', srcUrl:'https://www.cloudera.com/legal/product-and-technical-faq/cloudera-eol-policy.html'},
+      {name:'Teradata',        date:null,        type:'strategic',   dora:false, detail:'No hard EoS. $500K–$3M annual licence — CFO cost reviews are the trigger.',           target:'Databricks / Snowflake',      src:'Teradata', srcUrl:'https://www.teradata.com/'},
+    ]
+  },
+  {
+    label:'ETL / INTEGRATION',
+    items:[
+      {name:'Talend',                date:2023+0/12,  type:'acquisition', dora:false, detail:'Qlik acquisition Jan 2023 — integration roadmap and pricing highly uncertain.',          target:'ADF / IDMC / Databricks',  src:'Qlik/Talend', srcUrl:'https://www.qlik.com/'},
+      {name:'Informatica PowerCenter',date:2026+2/12, type:'eos',         dora:true,  detail:'Mainstream maintenance ended March 2026. DORA ICT risk active. IDMC migration non-trivial.', target:'IDMC / ADF / Databricks', src:'Informatica lifecycle', srcUrl:'https://network.informatica.com/docs/DOC-18055'},
+      {name:'Pentaho',               date:2026+5/12,  type:'soft',        dora:false, detail:'Hitachi Vantara support timeline unclear beyond mid-2026 — roadmap stalled post-acquisition.', target:'Databricks / ADF',       src:'Hitachi Vantara', srcUrl:'https://www.hitachivantara.com/en-us/products/pentaho-platform/'},
+      {name:'Ab Initio',             date:null,        type:'strategic',   dora:false, detail:'No cloud-native roadmap disclosed. Proprietary stack, high licence cost, no open exit path.', target:'Databricks / ADF',       src:'Ab Initio', srcUrl:'https://www.abinitio.com/'},
+      {name:'DataStage (IBM CP4D)',   date:null,        type:'strategic',   dora:false, detail:'IBM CP4D pricing 3× on renewal — same capability at 3× the cost.',                  target:'Databricks / ADF',         src:'IBM CP4D', srcUrl:'https://www.ibm.com/products/cloud-pak-for-data'},
+      {name:'SSIS',                  date:null,        type:'strategic',   dora:false, detail:'Microsoft\'s own direction: Azure Data Factory and Fabric Pipelines. SSIS is in maintenance mode.', target:'ADF / Fabric Pipelines', src:'Microsoft roadmap', srcUrl:'https://learn.microsoft.com/en-us/azure/data-factory/'},
+    ]
+  },
+  {
+    label:'BI / ANALYTICS',
+    items:[
+      {name:'Oracle OBIEE 12c',  date:2025+11/12, type:'eos',         dora:true,  detail:'Mainstream support ended Dec 2025 — Oracle pushing OAC cloud strongly to renewals.',    target:'Power BI / OAC / Tableau',       src:'Oracle lifetime support', srcUrl:'https://www.oracle.com/us/assets/lifetime-support-applications-069216.pdf'},
+      {name:'SAS 9.4',           date:2026+0/12,  type:'eos',         dora:true,  detail:'Standard maintenance ended Jan 2026. Viya migration is a full rewrite — major lever.',   target:'SAS Viya / Python / Databricks', src:'SAS maintenance schedule', srcUrl:'https://support.sas.com/en/technical-support/maintenance-schedule.html'},
+      {name:'SAP BO 4.3',        date:2026+11/12, type:'eos',         dora:true,  detail:'Mainstream maintenance ends Dec 2026. From Jan 2027 every unpatched instance is a DORA reportable event.', target:'Power BI / SAP Analytics Cloud', src:'SAP PAM', srcUrl:'https://apps.support.sap.com/sap/support/pam'},
+      {name:'SAP BW 7.5',        date:2027+11/12, type:'eos',         dora:false, detail:'Mainstream maintenance ends Dec 2027. Migration window is open now — 16 months to act.', target:'Databricks / Snowflake / BW4HANA', src:'SAP PAM', srcUrl:'https://apps.support.sap.com/sap/support/pam'},
+      {name:'IBM Cognos 11',     date:null,        type:'strategic',   dora:false, detail:'IBM cloud story for Cognos is weak. Huge EMEA BFSI install base with no clear migration incentive.', target:'Power BI / Tableau',           src:'IBM product lifecycle', srcUrl:'https://www.ibm.com/support/pages/ibm-software-lifecycle'},
+      {name:'MicroStrategy',     date:null,        type:'strategic',   dora:false, detail:'Active product but declining market share. Significant EMEA banking footprint.',         target:'Power BI / Tableau',             src:'MicroStrategy', srcUrl:'https://www.microstrategy.com/'},
+      {name:'TIBCO Spotfire',    date:null,        type:'strategic',   dora:false, detail:'Vista Equity portfolio — PE investment horizon creates vendor continuity uncertainty.',   target:'Power BI / Tableau',             src:'TIBCO/Vista Equity', srcUrl:'https://www.tibco.com/'},
+    ]
+  }
+];
+
+const REGULATORY = [
+  {name:'DORA + CRR3',  date:2025+0/12, color:'#6366F1', detail:'DORA (EU 2022/2554) and Basel IV / CRR3 effective Jan 2025. Unpatched ICT is a reportable risk event for regulated firms.', srcUrl:'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32022R2554'},
+];
+
+// ── CANVAS SETUP ──────────────────────────────────────
+const canvas = document.getElementById('eos-canvas');
+const ctx    = canvas.getContext('2d');
+const tip    = document.getElementById('eos-tooltip');
+
+const L_PAD = 182;  // width of name column
+const R_PAD = 20;
+const T_PAD = 52;   // space above rows for reg label + year axis
+const B_PAD = 32;
+const ROW_H  = 30;
+const HDR_H  = 34;
+
+function isDark(){
+  const t=document.documentElement.dataset.theme;
+  return t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches);
+}
+
+function C(){
+  const dk=isDark();
+  return {
+    bg:          dk?'#0F172A':'#FFFFFF',
+    surface2:    dk?'#162032':'#F8FAFC',
+    border:      dk?'#334155':'#E2E8F0',
+    text:        dk?'#F1F5F9':'#0F172A',
+    muted:       dk?'#94A3B8':'#64748B',
+    dim:         dk?'#475569':'#94A3B8',
+    laneHdr:     dk?'rgba(255,255,255,0.04)':'rgba(99,102,241,0.04)',
+    laneLabel:   dk?'#94A3B8':'#64748B',
+    baseline:    dk?'#2D3F55':'#E2E8F0',
+    dashCol:     dk?'#374B63':'#CBD5E1',
+    eosPast:     '#EF4444',
+    eosImminent: '#F97316',
+    eosUpcoming: '#3B82F6',
+    acquisition: '#8B5CF6',
+    strategic:   dk?'#3D5068':'#CBD5E1',
+    nowCol:      '#EF4444',
+    regCol:      '#6366F1',
+  };
+}
+
+function eosStatus(date){
+  if(!date) return 'strategic';
+  if(date<NOW) return 'past';
+  if(date<NOW+0.5) return 'imminent';
+  return 'upcoming';
+}
+
+function markerColor(item,c){
+  if(item.type==='acquisition') return c.acquisition;
+  if(item.type==='strategic')   return c.strategic;
+  const s=eosStatus(item.date);
+  if(s==='past')     return c.eosPast;
+  if(s==='imminent') return c.eosImminent;
+  return c.eosUpcoming;
+}
+
+function xPos(year,W){
+  return L_PAD+(year-X_MIN)/(X_MAX-X_MIN)*(W-L_PAD-R_PAD);
+}
+
+function fmtDate(d){
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const yr=Math.floor(d);
+  const mo=Math.round((d-yr)*12);
+  return months[mo]+' '+yr;
+}
+
+let hitAreas=[];
+
+function draw(){
+  const wrap=document.getElementById('canvas-wrap');
+  const W=wrap.clientWidth||800;
+  const dpr=window.devicePixelRatio||1;
+
+  // Compute height
+  let H=T_PAD+B_PAD;
+  SWIMLANES.forEach(sl=>{ H+=HDR_H+sl.items.length*ROW_H; });
+
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.scale(dpr,dpr);
+
+  const c=C();
+  hitAreas=[];
+
+  // Background
+  ctx.fillStyle=c.bg;
+  ctx.fillRect(0,0,W,H);
+
+  // Year gridlines + labels
+  const years=[2021,2022,2023,2024,2025,2026,2027,2028];
+  years.forEach(y=>{
+    const x=xPos(y,W);
+    ctx.strokeStyle=c.border;
+    ctx.lineWidth=0.5;
+    ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(x,T_PAD-10); ctx.lineTo(x,H-B_PAD); ctx.stroke();
+    ctx.fillStyle=c.dim;
+    ctx.font=`400 9px Inter,system-ui`;
+    ctx.textAlign='center';
+    ctx.fillText(y,x,H-B_PAD+14);
+  });
+
+  // Regulatory marker
+  REGULATORY.forEach(reg=>{
+    const x=xPos(reg.date,W);
+    ctx.strokeStyle=reg.color;
+    ctx.lineWidth=1;
+    ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(x,10); ctx.lineTo(x,H-B_PAD); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle=reg.color;
+    ctx.font=`600 8px "Plus Jakarta Sans",system-ui`;
+    ctx.textAlign='left';
+    ctx.fillText(reg.name,x+4,18);
+    hitAreas.push({x1:x-2,x2:x+70,y1:0,y2:28,item:{name:reg.name,date:reg.date,detail:reg.detail,target:'',dora:false,type:'reg',src:'DORA',srcUrl:reg.srcUrl}});
+  });
+
+  // NOW line
+  const nowX=xPos(NOW,W);
+  ctx.strokeStyle=c.nowCol;
+  ctx.lineWidth=1.5;
+  ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(nowX,10); ctx.lineTo(nowX,H-B_PAD); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle=c.nowCol;
+  ctx.font=`700 8px "Plus Jakarta Sans",system-ui`;
+  ctx.textAlign='center';
+  ctx.fillText('TODAY',nowX,30);
+
+  // Swimlanes + rows
+  let rowY=T_PAD;
+  SWIMLANES.forEach(sl=>{
+    // Lane header
+    ctx.fillStyle=c.laneHdr;
+    ctx.fillRect(0,rowY,W,HDR_H);
+    ctx.strokeStyle=c.border;
+    ctx.lineWidth=0.5; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(0,rowY); ctx.lineTo(W,rowY); ctx.stroke();
+
+    ctx.fillStyle=c.laneLabel;
+    ctx.font=`700 8.5px "Plus Jakarta Sans",system-ui`;
+    ctx.textAlign='left';
+    ctx.fillText(sl.label,10,rowY+HDR_H/2+3);
+
+    rowY+=HDR_H;
+
+    sl.items.forEach((item,idx)=>{
+      const midY=rowY+ROW_H/2;
+
+      // Subtle alternating bg
+      if(idx%2===0){
+        ctx.fillStyle=isDark()?'rgba(255,255,255,0.012)':'rgba(0,0,0,0.012)';
+        ctx.fillRect(0,rowY,W,ROW_H);
+      }
+
+      // Separator line
+      ctx.strokeStyle=c.border;
+      ctx.lineWidth=0.5; ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(0,rowY+ROW_H); ctx.lineTo(W,rowY+ROW_H); ctx.stroke();
+
+      // Platform name
+      ctx.fillStyle=c.text;
+      ctx.font=`500 10.5px Inter,system-ui`;
+      ctx.textAlign='left';
+      let nm=item.name;
+      while(ctx.measureText(nm).width>L_PAD-16 && nm.length>3) nm=nm.slice(0,-1);
+      ctx.fillText(nm,10,midY+4);
+
+      // DORA indicator dot
+      if(item.dora){
+        ctx.fillStyle='#6366F1';
+        ctx.beginPath(); ctx.arc(L_PAD-10,midY,3,0,Math.PI*2); ctx.fill();
+      }
+
+      // Vertical separator
+      ctx.strokeStyle=c.border;
+      ctx.lineWidth=0.5; ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(L_PAD,rowY); ctx.lineTo(L_PAD,rowY+ROW_H); ctx.stroke();
+
+      // Baseline
+      if(item.type==='strategic'){
+        ctx.strokeStyle=c.dashCol;
+        ctx.lineWidth=1;
+        ctx.setLineDash([5,4]);
+      } else {
+        ctx.strokeStyle=c.baseline;
+        ctx.lineWidth=1;
+        ctx.setLineDash([]);
+      }
+      ctx.beginPath();
+      ctx.moveTo(L_PAD+4,midY);
+      ctx.lineTo(W-R_PAD,midY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Marker
+      if(item.date){
+        const mx=xPos(item.date,W);
+        const mc=markerColor(item,c);
+        const r=5;
+
+        if(item.type==='acquisition'){
+          // Diamond
+          ctx.fillStyle=mc;
+          ctx.beginPath();
+          ctx.moveTo(mx,midY-r); ctx.lineTo(mx+r,midY);
+          ctx.lineTo(mx,midY+r); ctx.lineTo(mx-r,midY);
+          ctx.closePath(); ctx.fill();
+        } else if(item.type==='soft'){
+          // Hollow circle with fill
+          ctx.fillStyle=isDark()?c.bg:'#FFFFFF';
+          ctx.beginPath(); ctx.arc(mx,midY,r,0,Math.PI*2); ctx.fill();
+          ctx.strokeStyle=mc; ctx.lineWidth=1.5; ctx.setLineDash([]);
+          ctx.beginPath(); ctx.arc(mx,midY,r,0,Math.PI*2); ctx.stroke();
+        } else {
+          // Filled circle (eos)
+          ctx.fillStyle=mc;
+          ctx.beginPath(); ctx.arc(mx,midY,r,0,Math.PI*2); ctx.fill();
+        }
+
+        // Thin vertical drop line for past EoS
+        if(eosStatus(item.date)==='past' && item.type==='eos'){
+          ctx.strokeStyle=mc+'55';
+          ctx.lineWidth=1; ctx.setLineDash([]);
+          ctx.beginPath(); ctx.moveTo(mx,midY+r); ctx.lineTo(mx,midY+ROW_H/2-1); ctx.stroke();
+        }
+
+        // Hit area
+        hitAreas.push({
+          x1:mx-14,x2:mx+14,y1:rowY,y2:rowY+ROW_H,
+          item
+        });
+      } else {
+        // Strategic — hit area over name column
+        hitAreas.push({
+          x1:0,x2:L_PAD,y1:rowY,y2:rowY+ROW_H,
+          item
+        });
+      }
+
+      rowY+=ROW_H;
+    });
+  });
+}
+
+// ── TOOLTIP ───────────────────────────────────────────
+canvas.addEventListener('mousemove',e=>{
+  const rect=canvas.getBoundingClientRect();
+  const mx=e.clientX-rect.left, my=e.clientY-rect.top;
+  let hit=null;
+  for(const h of hitAreas){ if(mx>=h.x1&&mx<=h.x2&&my>=h.y1&&my<=h.y2){hit=h;break;} }
+  if(!hit){tip.style.display='none'; canvas.style.cursor='crosshair'; return;}
+  canvas.style.cursor='pointer';
+
+  const item=hit.item;
+  const statusLabel={past:'Past EoS',imminent:'EoS within 6 months',upcoming:'EoS in 6–24 months',strategic:'Strategic pressure',acquisition:'Vendor disruption',reg:'Regulatory event'}[
+    item.type==='eos'?eosStatus(item.date):item.type
+  ]||'';
+
+  tip.innerHTML=`
+    <div class="tooltip-name">${item.name}</div>
+    ${item.date?`<div class="tooltip-date">${item.type==='acquisition'?'Disruption':'EoS'}: ${fmtDate(item.date)} &nbsp;·&nbsp; ${statusLabel}</div>`:`<div class="tooltip-date">${statusLabel}</div>`}
+    <div class="tooltip-detail">${item.detail}</div>
+    ${item.target?`<div class="tooltip-target">→ ${item.target}</div>`:''}
+    ${item.dora?`<span class="tooltip-dora">DORA ICT Risk</span>`:''}
+    ${item.srcUrl?`<div style="margin-top:.35rem;font-size:.6rem"><a href="${item.srcUrl}" target="_blank" rel="noopener" style="color:var(--accent)">${item.src} ↗</a></div>`:''}
+  `;
+  tip.style.display='block';
+
+  const tw=tip.offsetWidth, th=tip.offsetHeight;
+  const wrapW=canvas.parentElement.clientWidth;
+  let tx=e.clientX-rect.left+14;
+  let ty=e.clientY-rect.top-th/2;
+  if(tx+tw>wrapW-8) tx=e.clientX-rect.left-tw-14;
+  if(ty<4) ty=4;
+  tip.style.left=tx+'px';
+  tip.style.top=ty+'px';
+});
+canvas.addEventListener('mouseleave',()=>{tip.style.display='none';});
+
+// ── THEME ─────────────────────────────────────────────
+const themeBtn=document.getElementById('theme-btn');
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+
+function setTheme(t){
+  document.documentElement.dataset.theme=t;
+  themeBtn.textContent=t==='dark'?'☀️':'🌙';
+  lsSet('impetus-theme',t);
+  draw();
+}
+themeBtn.addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
+
+// ── INIT ──────────────────────────────────────────────
+setTheme(lsGet('impetus-theme')||'light');
+
+document.fonts.ready.then(draw);
+
+let _rt;
+window.addEventListener('resize',()=>{clearTimeout(_rt);_rt=setTimeout(draw,80);});
+</script>
