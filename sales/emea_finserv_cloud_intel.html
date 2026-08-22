@@ -734,17 +734,17 @@
   <td class="legacy-cell">Teradata (transitioning), legacy on-prem data warehouse</td>
   <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
   <td class="notes-cell">68% of compute on internal private cloud (IPC) per 2025 annual report; hybrid/multi-cloud with Azure, GCP, Oracle, some AWS. Snowflake and Databricks both documented in tech stack (rfp.wiki). Kubernetes-native for nearly a decade.
-    <span class="contra-note">⚠ Current mapping: AWS+Databricks. Partially inaccurate — ING's private cloud dominates; both Snowflake AND Databricks are used; AWS is not the primary public cloud.</span>
+    <span class="contra-note">⚠ ING is private cloud-first (68% internal IPC per 2025 AR). Azure Databricks confirmed only for security workloads (cyber threat analytics). Databricks and Snowflake both appear in ING tech stack but neither is confirmed as the primary enterprise data platform.</span>
   </td>
 </tr>
 
-<tr data-clouds="?" data-platforms="?" data-conf="LOW" data-contra="false" data-name="Aegon">
+<tr data-clouds="AWS" data-platforms="?" data-conf="LOW" data-contra="false" data-name="Aegon">
   <td class="company-name">Aegon</td>
-  <td><div class="badges"><span class="badge badge-tbd">Not found</span></div></td>
-  <td><div class="badges"><span class="badge badge-tbd">Not found</span></div></td>
-  <td class="legacy-cell">Not confirmed from public sources</td>
+  <td><div class="badges"><span class="badge badge-aws">AWS</span></div></td>
+  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td class="legacy-cell">Informatica PowerCenter (EoS March 2026 — DORA ICT risk live)</td>
   <td><span class="conf conf-LOW">LOW</span></td>
-  <td class="notes-cell">No public cloud provider or data platform announcements found. Aegon has undergone significant restructuring (sold US operations). Recommend checking Aegon's Annual Report technology sections.</td>
+  <td class="notes-cell">AWS EC2 purchased (appsruntheworld); AWS identified as strategic deepen-relationship target. US job postings reference AWS + Snowflake data pipelines — but Aegon sold its US operations; Netherlands group-level platform unconfirmed. Significant restructuring underway. Recommend checking Aegon NL annual report directly.</td>
 </tr>
 
 <tr data-clouds="Azure" data-platforms="Databricks" data-conf="HIGH" data-contra="false" data-name="ABN AMRO">
@@ -842,13 +842,13 @@
   <td class="notes-cell">Anchor client for Microsoft Azure Switzerland (Cloud Wars confirmed). 50%+ of compute delivered in cloud; 600+ technology components on Azure with hundreds more in pipeline. Azure Switzerland regions (Zurich + Geneva) opened partly for UBS. No Databricks or Snowflake publicly confirmed.</td>
 </tr>
 
-<tr data-clouds="Azure" data-platforms="?" data-conf="HIGH" data-contra="false" data-name="Swiss Re">
+<tr data-clouds="Azure" data-platforms="Databricks" data-conf="HIGH" data-contra="false" data-name="Swiss Re">
   <td class="company-name">Swiss Re</td>
   <td><div class="badges"><span class="badge badge-azure">Azure</span></div></td>
-  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
+  <td><div class="badges"><span class="badge badge-dbr">Databricks</span></div></td>
   <td class="legacy-cell">Not confirmed from public sources</td>
   <td><span class="conf conf-HIGH">HIGH</span></td>
-  <td class="notes-cell">Strategic alliance with Microsoft announced (March 2020, ongoing); Microsoft chosen as "strategic partner and preferred public cloud provider." Digital Market Center on Azure: connected vehicles, natural catastrophe resilience, cyber risk platforms. Internal ops modernized to Azure.</td>
+  <td class="notes-cell">Azure confirmed as strategic partner and preferred public cloud provider (Microsoft strategic alliance, March 2020). Magnum AI SaaS underwriting platform on Azure (Synapse + App Service — Microsoft Customer Story). Azure Databricks confirmed via Senior Engineer — Data Platforms &amp; Applications job posting (ADB + ADF + Python + SQL explicitly listed). Data platform confidence: MEDIUM — job posting evidence, no public Databricks case study yet.</td>
 </tr>
 
 <tr data-clouds="AWS" data-platforms="?" data-conf="MEDIUM" data-contra="false" data-name="Swiss Life">
@@ -917,13 +917,13 @@
     <thead><tr><th>Company</th><th>Cloud Provider(s)</th><th>Target Data Platform</th><th>Legacy Platforms</th><th>Confidence</th><th>Source / Notes</th></tr></thead>
     <tbody>
 
-<tr data-clouds="?" data-platforms="?" data-conf="LOW" data-contra="false" data-name="Nordea">
+<tr data-clouds="Azure IBM" data-platforms="Snowflake" data-conf="MEDIUM" data-contra="false" data-name="Nordea">
   <td class="company-name">Nordea</td>
-  <td><div class="badges"><span class="badge badge-ibm">IBM</span><span class="badge badge-tbd">HPC not confirmed</span></div></td>
-  <td><div class="badges"><span class="badge badge-tbd">Not confirmed</span></div></td>
-  <td class="legacy-cell">IBM database infrastructure (confirmed for DB management)</td>
-  <td><span class="conf conf-LOW">LOW</span></td>
-  <td class="notes-cell">IBM confirmed for mission-critical database management and performance monitoring. No major hyperscaler partnership announcement found publicly. Nordea's AI Hub uses AI for Nordic banking services. HQ relocated Helsinki 2018.</td>
+  <td><div class="badges"><span class="badge badge-azure">Azure</span><span class="badge badge-ibm">IBM Cloud</span></div></td>
+  <td><div class="badges"><span class="badge badge-snow">Snowflake</span></div></td>
+  <td class="legacy-cell">IBM database infrastructure (mission-critical DB management confirmed)</td>
+  <td><span class="conf conf-MEDIUM">MEDIUM</span></td>
+  <td class="notes-cell">Azure confirmed as primary cloud (appsruntheworld; Microsoft partnership signals). IBM Cloud used for mission-critical workloads. Snowflake confirmed via multiple job postings across four cities: "Lead Data Engineer / Snowflake Lead Developer" (Copenhagen), "AI Data Engineer — Snowflake + AI" (Warsaw), "Snowflake Database Expert" (Stockholm). Zero Databricks postings found. Source: careers.nordea.com 2025.</td>
 </tr>
 
 <tr data-clouds="GCP Azure AWS" data-platforms="?" data-conf="MEDIUM" data-contra="false" data-name="SEB">

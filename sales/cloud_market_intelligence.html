@@ -288,7 +288,7 @@ const COUNTRIES=[
     clouds:{aws:3, azure:4, gcp:1},
     platforms:{databricks:3, snowflake:3, fabric:2},
     signals:[
-      {name:'Nordea',        cloud:'aws',   platform:'databricks'},
+      {name:'Nordea',        clouds:['azure','ibm'],   platform:'snowflake'},
       {name:'SEB',           cloud:'azure', platform:null},
       {name:'Handelsbanken', cloud:'azure', platform:null},
       {name:'Swedbank',      cloud:'aws',   platform:null},
@@ -310,7 +310,7 @@ const COUNTRIES=[
     platforms:{databricks:3, snowflake:1, fabric:2},
     signals:[
       {name:'Danske Bank', cloud:'aws',   platform:null},
-      {name:'Nordea',      cloud:'aws',   platform:'databricks'},
+      {name:'Nordea',      clouds:['azure','ibm'],   platform:'snowflake'},
       {name:'Jyske Bank',  cloud:'azure', platform:null},
     ]
   },
@@ -349,7 +349,7 @@ const COUNTRIES=[
     clouds:{aws:3, azure:3, gcp:1},
     platforms:{databricks:3, snowflake:2, fabric:2},
     signals:[
-      {name:'Nordea Finland', cloud:'aws',   platform:'databricks'},
+      {name:'Nordea Finland', clouds:['azure','ibm'],   platform:'snowflake'},
       {name:'OP Financial',   cloud:'azure', platform:null},
     ]
   },
