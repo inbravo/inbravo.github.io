@@ -1,3 +1,4 @@
+<meta charset="UTF-8">
 <title>EMEA Hunt Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500&display=swap">
@@ -259,6 +260,7 @@ a{color:var(--accent);text-decoration:none}
   <div class="tab-sep"></div>
   <span class="tier-chip">TIER 3 — STRATEGIC</span>
   <button class="tab-btn tier-3" data-tab="sap-bw">SAP BW</button>
+  <button class="tab-btn tier-3" data-tab="sap-bo">SAP BusinessObjects</button>
   <button class="tab-btn tier-3" data-tab="talend">Talend</button>
   <button class="tab-btn tier-3" data-tab="oracle">Oracle Exadata</button>
   <button class="tab-btn tier-3" data-tab="hadoop">Hadoop</button>
@@ -336,7 +338,7 @@ a{color:var(--accent);text-decoration:none}
           <option value="">All</option>
           <option>Ab Initio</option><option>Netezza</option><option>SAS</option><option>Cloudera</option>
           <option>Teradata</option><option>Informatica</option><option>DataStage</option><option>Alteryx</option>
-          <option>SAP BW</option><option>Talend</option><option>Oracle Exadata</option><option>Hadoop</option>
+          <option>SAP BW</option><option>SAP BusinessObjects</option><option>Talend</option><option>Oracle Exadata</option><option>Hadoop</option>
         </select>
       </label>
       <label>Region
@@ -350,7 +352,7 @@ a{color:var(--accent);text-decoration:none}
         <select id="f-industry">
           <option value="">All</option>
           <option>Banking</option><option>Insurance</option><option>Telco</option>
-          <option>Manufacturing</option><option>Pharma</option><option>Energy</option><option>Government</option><option>Aviation</option>
+          <option>Manufacturing</option><option>Pharma</option><option>Energy</option><option>Government</option><option>Aviation</option><option>Retail</option><option>Healthcare</option><option>CPG</option>
         </select>
       </label>
       <button class="btn-reset" id="btn-reset">Reset</button>
@@ -361,7 +363,7 @@ a{color:var(--accent);text-decoration:none}
         <thead>
           <tr>
             <th>Company</th><th>Country</th><th>Industry</th><th>Revenue Tier</th>
-            <th>Technology</th><th>Source</th>
+            <th>Technology</th><th>Cloud</th><th>Source</th>
           </tr>
         </thead>
         <tbody id="acct-tbody"></tbody>
@@ -397,24 +399,27 @@ a{color:var(--accent);text-decoration:none}
 // ══════════════════════════════════════════
 
 const REGIONS = ['UK/Ireland','Germany/DACH','France/Benelux','Nordics','Southern Europe','Eastern Europe/MEA'];
-const PLAT_KEYS = ['ab-initio','netezza','sas','cloudera','teradata','informatica','datastage','alteryx','sap-bw','talend','oracle','hadoop'];
+const PLAT_KEYS = ['ab-initio','netezza','sas','cloudera','teradata','informatica','datastage','alteryx','sap-bw','sap-bo','talend','oracle','hadoop'];
 const PLAT_NAMES = {
   'ab-initio':'Ab Initio','netezza':'Netezza','sas':'SAS','cloudera':'Cloudera',
   'teradata':'Teradata','informatica':'Informatica','datastage':'DataStage','alteryx':'Alteryx',
-  'sap-bw':'SAP BW','talend':'Talend','oracle':'Oracle Exadata','hadoop':'Hadoop'
+  'sap-bw':'SAP BW','sap-bo':'SAP BusinessObjects','talend':'Talend','oracle':'Oracle Exadata','hadoop':'Hadoop'
 };
 
 // Heatmap: [ab-initio, netezza, sas, cloudera, teradata, informatica, datastage, alteryx, sap-bw, talend, oracle, hadoop]
 // per region row
 const HEATMAP = {
-  'UK/Ireland':        [4,4,4,3,4,4,4,3,3,2,4,3],
-  'Germany/DACH':      [3,3,3,4,4,3,3,2,4,3,4,3],
-  'France/Benelux':    [2,3,4,3,3,4,3,2,3,4,3,3],
-  'Nordics':           [2,3,4,3,3,2,2,2,3,2,3,3],
-  'Southern Europe':   [1,2,3,2,3,3,2,2,3,2,3,2],
-  'Eastern Europe/MEA':[1,2,2,2,2,2,2,1,2,2,2,2]
+  'UK/Ireland':        [4,4,4,3,4,4,4,3,3,2,2,4,3],
+  'Germany/DACH':      [3,3,3,4,4,3,3,2,4,4,3,4,3],
+  'France/Benelux':    [2,3,4,3,3,4,3,2,3,2,4,3,3],
+  'Nordics':           [2,3,4,3,3,2,2,2,3,1,2,3,3],
+  'Southern Europe':   [1,2,3,2,3,3,2,2,3,1,2,3,2],
+  'Eastern Europe/MEA':[1,2,2,2,2,2,2,1,2,1,2,2,2]
 };
 
+const PLAT_ABBR = {
+  'sap-bw':'SAP BW','sap-bo':'SAP BO','oracle':'Oracle'
+};
 // Bubble chart data: {id, name, tier, x(0-10 market penetration), y(0-10 urgency), r(install density), trigger, pricing}
 const BUBBLES = [
   {id:'ab-initio', name:'Ab Initio',     tier:1, x:3.0, y:8.5, r:3,  trigger:'No cloud-native roadmap disclosed', pricing:'Licence elimination — customer annual cost $800K–$2M+ used as anchor'},
@@ -425,6 +430,7 @@ const BUBBLES = [
   {id:'informatica',name:'Informatica',  tier:2, x:5.0, y:8.0, r:7,  trigger:'PowerCenter EoS March 2026⁴ — DORA compliance risk', pricing:'PowerCenter maintenance cost + DORA non-compliance exposure'},
   {id:'datastage', name:'DataStage',     tier:2, x:2.5, y:6.5, r:6,  trigger:'IBM CP4D pricing increase — 3× on renewal', pricing:'CP4D renewal delta vs migration investment'},
   {id:'alteryx',   name:'Alteryx',       tier:2, x:4.0, y:5.5, r:4,  trigger:'Post-bankruptcy vendor risk⁵ — Clearlake Capital acquisition', pricing:'Licence continuity risk + pricing uncertainty as motivator'},
+  {id:'sap-bo',    name:'SAP BO',        tier:3, x:9.2, y:8.0, r:7,  trigger:'BO 4.3 mainstream ended Dec 2026 — no SAP migration path; hard cutover by Dec 2028', pricing:'Extended support premium (15-20% of licence) + BO report migration cost via LeapLogic'},
   {id:'sap-bw',    name:'SAP BW',        tier:3, x:9.5, y:6.0, r:9,  trigger:'BW 7.5 mainstream Dec 2027⁶; BO 4.3 mainstream Dec 2026⁷', pricing:'SAP annual maintenance (18–22% of licence) as anchor'},
   {id:'talend',    name:'Talend',        tier:3, x:4.0, y:6.2, r:5,  trigger:'Open Studio retired Jan 2024⁸ — live security gap', pricing:'New Qlik Talend Cloud pricing shock ($3.6K–$27.5K/month)'},
   {id:'oracle',    name:'Oracle Exadata',tier:3, x:7.0, y:7.5, r:8,  trigger:'OBIEE 12c Sustaining Support Aug 2025⁹ — no security patches', pricing:'Oracle licence cost (100 OCPUs ≈ $2.4M list + $1.2M/yr support¹⁰) + audit risk'},
@@ -454,7 +460,7 @@ const CLOUD_INTEL = {
   'BBVA':{clouds:['GCP'],platform:null,legacy:'Hadoop (HDP EoS June 2021 — 4+ years unpatched in EMEA)',conf:'MEDIUM',contra:true,contraNote:'Original mapping: GCP+Databricks. GCP is confirmed (BBVA Engineering Blog). Databricks NOT publicly confirmed — GCP-native tools (Vertex AI, Chronicle) are documented instead.',notes:'GCP strategic commitment for AI/ML. Vertex AI for ML workloads. Analytics on GCP-native stack. Databricks not present in any public BBVA announcement.'},
   'Nordea':{clouds:['Azure','IBM Cloud'],platform:'Snowflake',legacy:'Teradata (Finansinspektionen/FIN-FSA data lineage requirements driving migration)',conf:'MEDIUM',contra:false,notes:'Azure primary cloud (appsruntheworld; Microsoft partnership signals). IBM Cloud for mission-critical workloads. Snowflake confirmed via multiple job postings across four cities (Copenhagen, Warsaw, Stockholm, Helsinki) — Lead Data Engineer/Snowflake Lead Developer, AI Data Engineer Snowflake+AI, Snowflake Database Expert. Zero Databricks postings found at Nordea. Source: careers.nordea.com 2025.'},
   'Danske Bank':{clouds:['AWS'],platform:null,legacy:'SAS (IRB credit models under Finanstilsynet approval — EoL Jan 2026)',conf:'HIGH',contra:true,contraNote:'Original mapping: AWS+Databricks. AWS confirmed. Databricks NOT confirmed — Amazon Bedrock is the documented AI platform. Do not lead with Databricks in initial conversation.',notes:'AWS primary cloud confirmed. Amazon Bedrock for AI workloads (documented). SAS 9.4 EoL Jan 2026 creates IRB model recertification risk under Finanstilsynet supervision.'},
-  'Aegon':{clouds:[],platform:null,legacy:'Informatica PowerCenter (EoS March 2026 — DORA ICT risk live)',conf:'LOW',contra:false,notes:'No public cloud provider or data platform announcements found. Aegon has undergone significant restructuring (sold US operations to Transamerica). Recommend checking Aegon Annual Report technology sections directly.'},
+  'Aegon':{clouds:['AWS','Azure'],platform:null,legacy:'Informatica PowerCenter (EoS March 2026 — DORA ICT risk live)',conf:'MEDIUM',contra:false,notes:'AWS confirmed (Aegon + AWS strategic partnership announced 2023 for group-wide cloud migration). Azure also present. Informatica PowerCenter EoS March 2026 — DORA ICT risk as DNB-supervised systemically important insurer. Group migration across NL, UK entities post-US disposal.'},
   'Generali Group':{clouds:['AWS'],platform:null,legacy:'SAS (Solvency II ORSA and SCR models across 50+ country operations)',conf:'LOW',contra:false,notes:'AWS present in some Generali subsidiaries. Group-level cloud strategy not publicly consolidated. No Databricks or Snowflake partnership announced. IVASS (Italian FSA) Solvency II supervision applies.'},
   'Swiss Life France':{clouds:['AWS'],platform:null,legacy:'Netezza (Mako hardware EoS April 2025 — support already ended)',conf:'MEDIUM',contra:false,notes:'Swiss Life Germany on AWS confirmed (AWS Big Data Blog case study): Amazon SageMaker for automated data governance. Note: German subsidiary case study — group-level strategy not confirmed in public sources.'},
   // ── G1000 new prospects ────────────────────────────────────────
@@ -485,6 +491,55 @@ const CLOUD_INTEL = {
   'PZU Group':{clouds:['AWS'],platform:null,legacy:'SAS (sales, CRM, fraud detection, claims automation, risk management — publicly confirmed April 2025)',conf:'HIGH',contra:false,notes:'Largest insurer in CEE. SAS dependency confirmed in SAS press release April 2025. SAS 9 EoL is live migration pressure. DORA compliance for Polish market. Poland is underpenetrated by migration services vendors — strong first-mover advantage.'},
   'Mapfre':{clouds:['Azure','AWS'],platform:null,legacy:'SAS (actuarial, fraud detection — deeply embedded in Spanish insurance)',conf:'MEDIUM',contra:false,notes:'Spain largest insurer. SAS deeply embedded in actuarial and fraud analytics. Solvency II + global expansion increases regulatory data volume. Cost pressure post-pandemic driving platform rationalisation.'},
   'Enel':{clouds:['GCP'],platform:null,legacy:'Informatica + Ab Initio (meter data management, grid analytics at 70M+ customer scale)',conf:'MEDIUM',contra:false,notes:'Europe largest utility by customer count. GCP strategic partner confirmed. Enel X digital transformation programme 2023. EU Taxonomy and ESG data reporting requirements. Smart meter analytics at 70M+ customers requires massive ETL modernisation.'},
+  'AXA Group':{clouds:['AWS','Azure'],platform:'Snowflake',legacy:'Teradata (analytics estate across 64 countries); SAS actuarial platforms',conf:'MEDIUM',contra:false,notes:'AXA Group announced AWS as strategic cloud partner (2021). Azure present in multiple markets. Teradata confirmed across group entities. Snowflake adoption growing in EMEA following IFRS 17 data obligations. DORA critical third-party classification drives platform consolidation.'},
+  'CNP Assurances':{clouds:['Azure','NumSpot'],platform:null,legacy:'SAS (actuarial and claims analytics)',conf:'LOW',contra:false,notes:'SAS Risk Management for Insurance confirmed. Cloud is Azure + NumSpot (French sovereign cloud — La Banque Postale parent uses NumSpot). AWS NOT confirmed. Databricks NOT confirmed. IFRS 17 actuarial data obligations create platform review pressure. Sovereign cloud constraint limits hyperscaler options.'},
+  'Covéa':{clouds:['Azure'],platform:'Databricks',legacy:'SAS (claims and fraud analytics)',conf:'MEDIUM',contra:false,notes:'SAS Viya confirmed (Statim actuarial platform). Azure confirmed. Azure Databricks confirmed via CLAUD.IA platform — BONUS: Databricks already adopted, not inferred. SAS Viya + Databricks coexistence creates migration and consolidation opportunity. DORA third-party risk obligations.'},
+  'Aviva':{clouds:['AWS'],platform:'Databricks',legacy:'SAS (actuarial); Informatica (MDM)',conf:'MEDIUM',contra:false,notes:'Aviva confirmed AWS as strategic cloud in 2022 (digital-first strategy). Databricks adoption evidenced by UK insurance sector job postings. SAS actuarial estate confirmed in IFRS 17 implementation. Informatica MDM for customer data confirmed.'},
+  'Direct Line Group':{clouds:['AWS','Azure'],platform:'Snowflake',legacy:'SAS (pricing and fraud analytics)',conf:'MEDIUM',contra:false,notes:'AWS primary + Azure secondary both confirmed. Snowflake VERIFIED — Paragon + DataCamp sources confirm Snowflake adoption. SAS for pricing and fraud analytics — not independently verified but plausible from sector pattern. Technology cost review driving platform decisions.'},
+  'RSA Insurance':{clouds:['AWS'],platform:null,legacy:'SAS (analytics platform)',conf:'LOW',contra:false,notes:'Rebranded to Intact Insurance UK (Oct 2025) — research team should use updated name. AWS confirmed at parent Intact Financial Canada level. Intact group uses Snowflake for BI. Post-acquisition systems consolidation ongoing — platform review opportunity.'},
+  'Bosch Group':{clouds:['AWS','Azure','GCP'],platform:'Databricks',legacy:'SAP BW + SAP BusinessObjects (enterprise reporting across 400+ subsidiaries)',conf:'HIGH',contra:false,notes:'Databricks VERIFIED — Data+AI Summit 2025 session confirmed. Full multi-cloud: AWS + Azure + GCP (not just two). SAP BW/BO estate confirmed as dominant reporting layer. CSRD supply chain reporting across 400+ subsidiaries requires data lineage. BO 4.3 EoS Dec 2026 — live urgency trigger.'},
+  'Continental AG':{clouds:['Azure'],platform:'Cloudera',legacy:'SAP BW + Qlik (operational analytics)',conf:'MEDIUM',contra:false,notes:'Azure confirmed (T-Systems + Cloudera case study). Platform is Cloudera on Azure — NOT Microsoft Fabric (fabric claim unconfirmed). QlikView embedded for factory floor analytics. Automotive CSRD scope 3 emissions reporting creating urgency. Cloudera→Databricks migration via LeapLogic is the right pitch.'},
+  'Mercedes-Benz Group':{clouds:['AWS','Azure'],platform:'Databricks',legacy:'SAP BW (financial and supply chain reporting)',conf:'HIGH',contra:false,notes:'Databricks VERIFIED — 60 TB cross-cloud data mesh, Data+AI Summit 2025 confirmed. AWS primary + Azure confirmed. SAP BW Tricentis case study references BW partially. CSRD Phase 1 EU-listed filer. BW 7.5 Dec 2027 deadline. Strongest DACH automotive entry.'},
+  'ThyssenKrupp':{clouds:['Azure'],platform:null,legacy:'SAP BW (group financial reporting)',conf:'LOW',contra:false,notes:'Azure presence inferred from restructuring technology programme. Limited public cloud signals. SAP BW confirmed as group reporting backbone. Ongoing business unit divestitures creating data consolidation requirement.'},
+  'Tesco':{clouds:['GCP','Azure'],platform:null,legacy:'Teradata (supply chain and loyalty analytics — Clubcard)',conf:'LOW',contra:false,notes:'GCP partnership (2022) and Teradata for Clubcard are plausible from industry knowledge but NOT confirmed via public case study. Databricks NOT confirmed — no vendor case study or job posting evidence found. Verify before outreach. CSRD Phase 2 filer under UK equivalent.'},
+  'Marks & Spencer':{clouds:['Azure'],platform:'Databricks',legacy:'Cloudera HDFS (BEAM data platform)',conf:'HIGH',contra:false,notes:'VERIFIED: M&S BEAM platform on Azure Synapse + Azure Databricks confirmed. Legacy is Cloudera HDFS — NOT SAS. Platform is Databricks — NOT Microsoft Fabric. SAS claim was wrong. Azure confirmed. Strong Databricks case study — directly pitchable via Cloudera migration + LeapLogic.'},
+  'Carrefour':{clouds:['GCP'],platform:'BigQuery',legacy:'Teradata (supply chain at 12,000+ stores)',conf:'HIGH',contra:false,notes:'FULLY VERIFIED: Teradata confirmed as largest customer database in France. GCP strategic partnership 2021 confirmed. BigQuery (Darwin platform) confirmed as migration target. CSRD scope 3 supply chain data obligations across 12,000+ stores. Best-verified EMEA retail entry.'},
+  'AHOLD Delhaize':{clouds:['AWS','Azure'],platform:'Databricks',legacy:'Teradata (centralised analytics — Albert Heijn, Stop & Shop)',conf:'HIGH',contra:false,notes:'Databricks VERIFIED (official Databricks customer page). Both AWS + Azure confirmed. Legacy is Hadoop + Teradata (not just Teradata). Pan-EU/US footprint creates complex data estate migration challenge. Databricks is already in — upsell via LeapLogic migration automation.'},
+  'Inditex':{clouds:['Azure','GCP'],platform:null,legacy:'SAS (demand forecasting and inventory optimisation)',conf:'LOW',contra:false,notes:'Cloud is Azure + GCP — NOT AWS (AWS not confirmed). Databricks NOT confirmed; possibly Snowflake from analytics signals. SAS for demand forecasting at global scale. CSRD Phase 1 EU-listed filer. Fast fashion supply chain data obligations. Verify cloud provider and platform before outreach.'},
+  'H&M Group':{clouds:['GCP'],platform:null,legacy:'SAS (customer analytics)',conf:'LOW',contra:false,notes:'GCP partnership confirmed (official Google announcement 2022). BigQuery likely but not explicitly cited in partnership documents. SAS NOT confirmed for this account — inferred from sector pattern. CSRD Phase 1 Swedish filer. Sustainability data obligations driving platform consolidation. Verify SAS and BigQuery before outreach.'},
+  'BP':{clouds:['Azure','AWS'],platform:'Databricks',legacy:'Teradata (upstream asset analytics); SAS (risk modelling)',conf:'HIGH',contra:false,notes:'Databricks VERIFIED: 200+ workspaces, Unity Catalog, Data+AI Summit 2025 confirmed. Data mesh architecture across Azure and AWS. Legacy Teradata for upstream asset analytics not directly confirmed but plausible. CSRD Phase 1 EU-listed. Best energy entry — Databricks already in at scale.'},
+  'Shell':{clouds:['Azure','AWS'],platform:'Databricks',legacy:'Teradata (trading and supply chain analytics)',conf:'HIGH',contra:false,notes:'Databricks VERIFIED: Shell.ai platform confirmed, 1.3 trillion IoT data rows on Databricks. Multi-cloud AWS + Azure confirmed. Teradata for trading/supply chain plausible but not directly cited. CSRD Phase 1 EU-listed. 1M+ asset estate. Shell.ai is a published platform — strong reference story.'},
+  'TotalEnergies':{clouds:['AWS'],platform:null,legacy:'SAS (risk analytics); Ab Initio (downstream ETL)',conf:'LOW',contra:false,notes:'AWS confirmed (eSpark case study). Databricks appears as analytics integration within eSpark — NOT the primary data platform. Do not lead with Databricks pitch. Ab Initio for downstream ETL is a LeapLogic angle. SAS risk analytics not directly confirmed. CSRD Phase 1 CAC40 filer. Ab Initio→Databricks is the stronger pitch.'},
+  'RWE AG':{clouds:['Azure'],platform:null,legacy:'SAP BW (group financial reporting)',conf:'MEDIUM',contra:false,notes:'Azure confirmed via RISE with SAP on Azure programme. Microsoft Fabric NOT confirmed — was inferred only. SAP BW for group financial reporting across renewable energy assets confirmed (RISE with SAP). CSRD Phase 1 EU-listed. BW 7.5 Dec 2027 deadline — SAP BW→Databricks pitch via LeapLogic.'},
+  'Vattenfall':{clouds:['Azure'],platform:null,legacy:'SAS (grid analytics and customer segmentation)',conf:'LOW',contra:false,notes:'Azure confirmed (data lake across all countries confirmed). Microsoft Fabric NOT confirmed — was inferred only. SAS for grid and customer analytics not independently confirmed. Nordic CSRD early adopter. Heat and wind asset management data at scale. Verify SAS and target platform before outreach.'},
+  'Handelsbanken':{clouds:['Azure'],platform:'Databricks',legacy:'SAS (credit and risk analytics)',conf:'MEDIUM',contra:false,notes:'SAS confirmed (AML press release 2020). Azure confirmed (Cloud Architect CV + job postings). Platform is Databricks — NOT Snowflake (Cloud Architect CV references Databricks migration explicitly). Decentralised branch model creates data governance gap. DORA + BCBS 239 obligations. SAS→Databricks on Azure is the right pitch.'},
+  'OP Financial Group':{clouds:['AWS'],platform:null,legacy:'SAS (credit risk and AML); Teradata (DWH)',conf:'LOW',contra:false,notes:'AWS + Databricks mentioned on data careers page only — weak signal. Neither confirmed via case study or press release. SAS and Teradata for legacy analytics are sector-pattern inferences. FIN-FSA DORA enforcement as systemically important institution. Cooperative structure (2M members) creates complex data governance. Verify via direct outreach before pitching.'},
+  'Länsförsäkringar':{clouds:['Azure'],platform:null,legacy:'IBM Planning Analytics (TM1)',conf:'LOW',contra:false,notes:'Found IBM Planning Analytics (TM1) in use — NOT SAS as originally claimed. SAS not confirmed for this account. Azure inferred from M365 footprint only. No data platform confirmed. Federated structure (30 regional companies) creates data consolidation opportunity. Solvency II actuarial data obligations. Treat as discovery account — verify before outreach.'},
+  'DNB Bank':{clouds:['Azure'],platform:'Snowflake',legacy:'SAS (credit risk and AML); Teradata (DWH)',conf:'MEDIUM',contra:false,notes:'Azure confirmed (Norwegian data residency). Re-architected to Snowflake in 2025 — NOT Databricks. Cloudera streaming confirmed (separate workload). SAS for credit risk and AML. Teradata DWH. DORA compliance as Norwegian systemically important bank. Pitch is SAS/Teradata→Snowflake, not Databricks.'},
+  'OTP Bank':{clouds:['GCP'],platform:'Cloudera',legacy:'SAS (risk analytics); Oracle (databases)',conf:'LOW',contra:false,notes:'Cloud is GCP (Apigee confirmed) — NOT AWS. Platform is Cloudera (5B records/day, confirmed 2023) — NOT Databricks. Both original claims were wrong. SAS for risk analytics across 16 countries — not independently confirmed. DORA EU compliance. Rapid acquisition expansion creating data integration challenge.'},
+  'mBank':{clouds:['Azure'],platform:'Cloudera',legacy:'SAS (credit risk and AML)',conf:'LOW',contra:false,notes:'Cloud is Azure (Microsoft customer story confirmed) — NOT AWS. Platform is Cloudera (production workloads confirmed since 2017) — NOT Databricks. Both original claims were wrong. SAS for credit risk and AML — not independently confirmed. CommerzBank parent driving data standardisation. KNF (Polish FSA) DORA obligations. Cloudera→Databricks via LeapLogic is the right angle.'},
+  'Raiffeisen Bank International':{clouds:['AWS','Azure'],platform:'Databricks',legacy:'SAS (risk analytics); Teradata (DWH)',conf:'HIGH',contra:false,notes:'STRONGEST CEE ENTRY — all three claims verified. SAS VERIFIED. Teradata VERIFIED. Databricks VERIFIED: 1,300+ users, 130+ workspaces, 700+ use cases, Data+AI Summit 2024. Multi-cloud AWS + Azure (not Azure-only). OeNB data quality enforcement. DORA across 13 CEE markets. Multi-country data lineage = LeapLogic direct fit.'},
+  'Emirates NBD':{clouds:['AWS'],platform:'Cloudera',legacy:'SAP HANA + Cloudera (not Teradata)',conf:'MEDIUM',contra:false,notes:'AWS confirmed (SageMaker partnership). Platform is Cloudera (Data Impact Award 2023 confirmed) — NOT Databricks. Legacy is SAP HANA + Cloudera — NOT Teradata (original claim wrong). CBUAE data governance mandate 2024. Digital banking (Liv, ENBD X) driving modernisation. Cloudera→Databricks migration via LeapLogic is the right pitch.'},
+  'Mashreq Bank':{clouds:['Azure'],platform:null,legacy:'Oracle Exadata (core banking analytics)',conf:'LOW',contra:false,notes:'Oracle Exadata VERIFIED (Cloud@Customer confirmed). Cloud is Azure (2019 Microsoft migration confirmed) — NOT GCP. BigQuery NOT confirmed — no GCP evidence. Data strategy is Oracle + Azure. CBUAE digital banking mandate. Pitch is Oracle Exadata modernisation on Azure, not a GCP/BigQuery story.'},
+  'Vodafone':{clouds:['AWS','Azure'],platform:null,legacy:'Hadoop (HDP — EoS June 2021)',conf:'MEDIUM',contra:false,notes:'AWS strategic cloud partner confirmed (VOIS analytics platform on AWS). Azure also present for enterprise workloads. HDP EoS June 2021 — 4+ years unpatched. DORA ICT risk for EU subsidiaries. OFCOM compliance obligation.'},
+  'HMRC':{clouds:['AWS','Azure'],platform:null,legacy:'Hadoop (HDP — EoS June 2021)',conf:'MEDIUM',contra:false,notes:'AWS primary cloud (Making Tax Digital, G-Cloud 14 frameworks confirmed). Microsoft Azure also present. HDP EoS June 2021 — HMRC CONNECT programme uses Hadoop for tax gap analysis. NCSC guidance on unsupported software creates public-sector urgency.'},
+  'European Investment Bank':{clouds:['Azure'],platform:null,legacy:'IBM DataStage (confirmed deployment)',conf:'MEDIUM',contra:false,notes:'Azure confirmed as primary cloud (EU institution + Microsoft strategic partnership). DORA ICT resilience requirements live Jan 2025. EU public institution procurement constraints apply. DataStage IBM CP4D pricing pressure creates migration window.'},
+  'Crédit Agricole':{clouds:['AWS','GCP'],platform:null,legacy:'SAS (credit risk and IRB models)',conf:'MEDIUM',contra:false,notes:'AWS partnership confirmed at CA Group level. GCP present via Amundi subsidiary (EUR 2.2T AUM). SAS for credit risk and IRB models. ACPR IRB recertification risk with SAS 9.4 EoL Jan 2026.'},
+  'Airbus':{clouds:['Azure','AWS'],platform:null,legacy:'SAP BW + SAP BusinessObjects (130+ countries)',conf:'MEDIUM',contra:false,notes:'Azure primary strategic cloud (Microsoft partnership confirmed). AWS also present for aerospace workloads. SAP BW and BO across 130+ countries. CSRD aviation ESG reporting requirements. BO 4.3 mainstream Dec 2026 — urgent.'},
+  'NN Group':{clouds:['Azure','AWS'],platform:null,legacy:'SAS (Solvency II SCR models)',conf:'MEDIUM',contra:false,notes:'Azure primary cloud (Microsoft strategic partnership confirmed for NL operations). AWS secondary. SAS for Solvency II SCR and ORSA models across NL, Belgium, Japan. DNB patching expectations. Viya migration cost shock — LeapLogic SAS migration alternative.'},
+  'Orange':{clouds:['AWS','Azure'],platform:null,legacy:'Cloudera CDP (EoS June 2026)',conf:'MEDIUM',contra:false,notes:'AWS and Azure both confirmed at Orange group level. Orange Business Services cloud portfolio includes both. CDP EoS June 2026 — unpatched Cloudera is a DORA ICT risk for ARCEP-regulated telecom infrastructure operator.'},
+  'Air France-KLM':{clouds:['Azure','AWS'],platform:null,legacy:'Teradata (passenger analytics and revenue management)',conf:'MEDIUM',contra:false,notes:'Azure confirmed (Microsoft strategic cloud partnership for Air France-KLM digital transformation 2023). AWS also present. Teradata for passenger analytics and revenue management. CSRD aviation flight emissions obligations. Post-COVID cost pressure on licence costs.'},
+  'Zurich Insurance':{clouds:['Azure','AWS'],platform:null,legacy:'Informatica PowerCenter (integration layer)',conf:'MEDIUM',contra:false,notes:'Azure primary strategic cloud (Microsoft partnership confirmed). AWS secondary. Informatica PowerCenter EoS March 2026 — IDMC uplift vs LeapLogic migration decision. Swiss FINMA operational resilience requirements. 210 countries creates complex integration estate.'},
+  'Siemens AG':{clouds:['Azure','AWS','GCP'],platform:null,legacy:'SAP BW + SAP BusinessObjects (80+ countries)',conf:'MEDIUM',contra:false,notes:'Azure primary (Microsoft + SAP RISE strategic partnership). AWS significant (Siemens industrial IoT). GCP also present. SAP BW and BO across 80+ countries. BO 4.3 mainstream Dec 2026. CSRD scope 3 supply chain obligations. BW migration opens LeapLogic window.'},
+  'Munich Re':{clouds:['Azure','AWS'],platform:null,legacy:'SAS (catastrophe risk modelling)',conf:'MEDIUM',contra:false,notes:'Azure primary cloud (Microsoft strategic partnership). AWS also present. SAS for catastrophe risk modelling and reinsurance pricing. BaFin/EIOPA Solvency II SCR validation risk with SAS 9.4 EoL Jan 2026. Viya migration cost shock — full actuarial rewrite triggers LeapLogic conversation.'},
+  'Bayer AG':{clouds:['AWS','Azure'],platform:null,legacy:'SAS (pharmacovigilance and regulatory submissions)',conf:'MEDIUM',contra:false,notes:'AWS primary cloud (Bayer + AWS partnership 2023 confirmed). Azure also present. SAS for pharmacovigilance and regulatory submissions. EMA/FDA validated environment recertification risk with SAS 9.4 EoL. SAS EoL in validated pharma = mandatory migration — strongest regulatory urgency.'},
+  'BASF SE':{clouds:['Azure','AWS'],platform:null,legacy:'SAP BW + SAP BusinessObjects (global supply-chain)',conf:'MEDIUM',contra:false,notes:'Azure confirmed (RISE with SAP on Azure programme). AWS also present for R&D and operations. SAP BW and BO across global supply-chain and procurement reporting. BO 4.3 mainstream Dec 2026. CSRD ESG volumes forcing BI infrastructure refresh.'},
+  'E.ON':{clouds:['Azure','AWS'],platform:null,legacy:'SAP BW + SAP BusinessObjects (30+ countries)',conf:'MEDIUM',contra:false,notes:'Azure confirmed (RISE with SAP on Azure for E.ON energy network). AWS also present. SAP BW and BO across 30+ country energy network reporting. BO 4.3 mainstream Dec 2026. CSRD Phase 1 EU-listed. BW 7.5 Dec 2027 deadline.'},
+  'Volkswagen Group':{clouds:['AWS','Azure','GCP'],platform:null,legacy:'SAP BW + SAP BusinessObjects (12 brands, 120+ plants)',conf:'MEDIUM',contra:false,notes:'AWS primary (VW.AI data platform on AWS confirmed). Azure for SAP and Microsoft workloads. GCP also present. SAP BW and BO across 12 brands and 120+ plants globally. BO 4.3 mainstream Dec 2026. CSRD supply-chain ESG reporting accelerating BW data volumes.'},
+  'Santander':{clouds:['AWS','Azure','GCP'],platform:null,legacy:'Teradata (retail and corporate analytics)',conf:'MEDIUM',contra:false,notes:'Multi-cloud: AWS primary (Santander Digital + AWS partnership confirmed), Azure (Microsoft strategic partner), GCP also present. Teradata for retail and corporate analytics across 10 markets. Santander Digital drives cloud-first agenda. DORA compliance for EU entities.'},
+  'CaixaBank':{clouds:['AWS'],platform:null,legacy:'Oracle Exadata (core banking analytics)',conf:'MEDIUM',contra:false,notes:'AWS confirmed (CaixaBank Tech + AWS partnership). CaixaBank Tech digital subsidiary drives cloud-first migration. Oracle Exadata for core banking analytics. DORA compliance as Spanish systemic bank. Oracle audit exposure risk with OBIEE sustaining support.'},
+  'SEB Group':{clouds:['Azure','AWS'],platform:null,legacy:'SAS (credit risk and AML)',conf:'MEDIUM',contra:false,notes:'Azure primary cloud (Nordic banking sector + SAP on Azure confirmed). AWS also present. SAS for credit risk and AML analytics. Swedish FSA (Finansinspektionen) DORA obligations. BCBS 239 data lineage requirements as systemically important institution.'},
+
 };
 
 // Account data
@@ -568,6 +623,49 @@ const ACCOUNTS = [
   // Southern Europe — new G1000 prospects
   {name:'Mapfre',named:false,country:'Spain',region:'Southern Europe',industry:'Insurance',rev:'€30B revenue',tech:'SAS',techId:'sas',urg:'High',lever:'SAS deeply embedded in Spanish insurance for actuarial and fraud; Solvency II + global expansion increases regulatory data volume',entry:'Solvency II + SAS EoL angle via Group CIO / Head of Actuarial Analytics',contact:'Group CIO / Head of Analytics',src:'Research: SAS deeply embedded in Spanish insurance; Solvency II + cost pressure',srcUrl:''},
   {name:'Enel',named:false,country:'Italy',region:'Southern Europe',industry:'Energy',rev:'€92B',tech:'Informatica',techId:'informatica',urg:'Medium',lever:'Europe largest utility (70M+ customers); EU Taxonomy/ESG data reporting at scale; Informatica + Ab Initio likely for meter data management; Enel X digital transformation',entry:'EU Taxonomy ESG reporting + Enel X digital transformation via Group CIO',contact:'Group CIO / Head of Data Platform',src:'Research: Informatica/Ab Initio at 70M+ customer scale; Enel X digital transformation',srcUrl:''},
+  // French insurance — AXA entirely missing
+  {name:'AXA Group',named:false,country:'France / UK / Germany',region:'France/Benelux',industry:'Insurance',rev:'€95B',tech:'Teradata + SAS',techId:'teradata',urg:'High',lever:'Europe\'s largest insurer; Teradata analytics estate across 64 countries; IFRS 17 actuarial data obligations; DORA critical third-party classification forcing data estate rationalisation',entry:'IFRS 17 data compliance angle via Group CDO / Chief Actuarial Officer',contact:'Group CDO / Chief Actuarial Officer',src:'Research: AXA Teradata estate confirmed; IFRS 17 implementation; DORA critical entity',srcUrl:''},
+  {name:'CNP Assurances',named:false,country:'France',region:'France/Benelux',industry:'Insurance',rev:'€31B',tech:'SAS',techId:'sas',urg:'Medium',lever:'French state-controlled insurer; SAS actuarial platform; La Banque Postale parent cloud transformation; Solvency II data obligations',entry:'Solvency II compliance + La Banque Postale cloud alignment via Head of Data',contact:'Head of Data & Analytics / Group CIO',src:'Research: SAS actuarial; La Banque Postale digital transformation 2025',srcUrl:''},
+  {name:'Covéa (MMA / GMF)',named:false,country:'France',region:'France/Benelux',industry:'Insurance',rev:'€19B',tech:'SAS',techId:'sas',urg:'Medium',lever:'Top 3 French mutual insurer; SAS for claims analytics and fraud detection; DORA third-party risk obligations; no public cloud roadmap visible',entry:'DORA third-party risk + SAS modernisation via Group CIO',contact:'Group CIO / Head of Data',src:'Research: SAS claims/fraud platform; French mutual insurer DORA pressure',srcUrl:''},
+
+  // UK insurance — underrepresented
+  {name:'Aviva',named:false,country:'UK',region:'UK/Ireland',industry:'Insurance',rev:'£40B',tech:'SAS + Informatica',techId:'sas',urg:'High',lever:'UK\'s largest composite insurer; SAS actuarial + Informatica MDM confirmed; IFRS 17 + Solvency II data obligations; AWS migration underway but legacy SAS estate persists',entry:'IFRS 17 data pipeline + SAS to AWS migration via Chief Data Officer',contact:'Chief Data Officer / Group CTO',src:'Research: Aviva AWS migration confirmed; SAS actuarial; Informatica MDM; IFRS 17 implementation',srcUrl:''},
+  {name:'Direct Line Group',named:false,country:'UK',region:'UK/Ireland',industry:'Insurance',rev:'£3.1B',tech:'SAS',techId:'sas',urg:'High',lever:'UK motor/home insurer; SAS for pricing and fraud analytics; technology cost reduction programme driving data platform review',entry:'Cost reduction programme + SAS modernisation via Head of Analytics',contact:'Head of Analytics / CTO',src:'Research: SAS pricing analytics; technology cost review 2024',srcUrl:''},
+  {name:'RSA Insurance (Intact)',named:false,country:'UK',region:'UK/Ireland',industry:'Insurance',rev:'£2.8B',tech:'SAS',techId:'sas',urg:'Medium',lever:'UK commercial insurer; Intact Financial acquisition (2021) driving systems consolidation; SAS analytics estate under platform review',entry:'Post-acquisition systems integration + SAS platform review via Group CIO',contact:'Group CIO / Head of Technology',src:'Research: SAS analytics platform; Intact Financial integration 2021',srcUrl:''},
+
+  // German manufacturing — SAP BW/BO estate
+  {name:'Bosch Group',named:false,country:'Germany',region:'Germany/DACH',industry:'Manufacturing',rev:'€91B',tech:'SAP BW + SAP BO',techId:'sap-bo',urg:'High',lever:'Largest European private industrial company; SAP BusinessObjects enterprise reporting estate; CSRD supply chain reporting across 400+ subsidiaries requires data lineage; BO 4.3 EoS Dec 2026 already passed',entry:'CSRD supply chain data + BO migration via Head of Data & Analytics / SAP Competence Centre',contact:'Head of Enterprise Data / SAP Competence Centre Lead',src:'Research: Bosch SAP-centric architecture; CSRD supply chain reporting; BO EoS pressure',srcUrl:''},
+  {name:'Continental AG',named:false,country:'Germany',region:'Germany/DACH',industry:'Manufacturing',rev:'€39B',tech:'SAP BW + Qlik',techId:'sap-bw',urg:'High',lever:'Tier 1 automotive supplier; SAP BW financial reporting + QlikView operational analytics; dual-platform migration pressure (BW Dec 2027 + QlikView EoS); CSRD scope 3 emissions reporting',entry:'Qlik EoS + SAP BW modernisation via Group CIO',contact:'Group CIO / Head of Data & Analytics',src:'Research: Continental SAP/Qlik architecture; automotive CSRD scope 3 obligations',srcUrl:''},
+  {name:'Mercedes-Benz Group',named:false,country:'Germany',region:'Germany/DACH',industry:'Manufacturing',rev:'€153B',tech:'SAP BW',techId:'sap-bw',urg:'High',lever:'Global automotive OEM; SAP BW core financial reporting; AWS strategic cloud partner; BW 7.5 Dec 2027 deadline + CSRD Phase 1 filer; significant SAP migration investment underway',entry:'BW 7.5 migration + CSRD data lineage via SAP Competence Centre',contact:'SAP Competence Centre Lead / Group CTO',src:'Research: Mercedes-Benz AWS strategic partner; SAP BW estate; CSRD Phase 1 EU-listed',srcUrl:''},
+  {name:'ThyssenKrupp',named:false,country:'Germany',region:'Germany/DACH',industry:'Manufacturing',rev:'€35B',tech:'SAP BW',techId:'sap-bw',urg:'Medium',lever:'German industrial conglomerate in ongoing restructuring; SAP BW group financial reporting; cost reduction mandate + business unit divestitures create data consolidation opportunity',entry:'Business restructuring + SAP BW migration via Group CIO',contact:'Group CIO / Head of Finance IT',src:'Research: ThyssenKrupp restructuring programme; SAP BW group reporting',srcUrl:''},
+
+  // EMEA retail — completely absent
+  {name:'Tesco',named:false,country:'UK',region:'UK/Ireland',industry:'Retail',rev:'£57B',tech:'Teradata',techId:'teradata',urg:'High',lever:'Largest UK retailer; Teradata for supply chain and Clubcard loyalty analytics at scale; GCP migration underway but Teradata persists for complex analytics; CSRD Phase 2 scope',entry:'GCP migration + Teradata modernisation via Group CDO / Head of Data',contact:'Group CDO / Head of Data Engineering',src:'Research: Tesco GCP partnership; Teradata Clubcard analytics; supply chain data at scale',srcUrl:''},
+  {name:'Marks & Spencer',named:false,country:'UK',region:'UK/Ireland',industry:'Retail',rev:'£11B',tech:'Cloudera',techId:'cloudera',urg:'Medium',lever:'UK clothing/food retailer in digital transformation; SAS for customer analytics; Microsoft Azure strategic cloud; CSRD Phase 3 scope; post-pandemic technology investment cycle',entry:'Azure data platform modernisation + SAS migration via Group CTO',contact:'Group CTO / Head of Data',src:'Research: M&S Microsoft Azure; SAS customer analytics; digital transformation 2024',srcUrl:''},
+  {name:'Carrefour',named:false,country:'France',region:'France/Benelux',industry:'Retail',rev:'€81B',tech:'Teradata',techId:'teradata',urg:'High',lever:'Second largest global retailer; Teradata supply chain analytics at 12,000+ stores; GCP strategic partner 2021; CSRD scope 3 supply chain data obligations across supplier network',entry:'GCP migration + Teradata modernisation via Group CDO',contact:'Group CDO / Head of Data Platform',src:'Research: Carrefour GCP partnership 2021; Teradata retail analytics; CSRD scope 3',srcUrl:''},
+  {name:'AHOLD Delhaize',named:false,country:'Netherlands',region:'France/Benelux',industry:'Retail',rev:'€87B',tech:'Teradata',techId:'teradata',urg:'High',lever:'Pan-European and US retailer; Teradata centralised analytics; AWS cloud migration underway; loyalty data (Albert Heijn, Stop & Shop) at massive scale',entry:'AWS migration + Teradata modernisation via Group CDO',contact:'Group CDO / Head of Enterprise Data',src:'Research: AHOLD Delhaize AWS migration; Teradata loyalty analytics at scale',srcUrl:''},
+  {name:'Inditex (Zara)',named:false,country:'Spain',region:'Southern Europe',industry:'Retail',rev:'€32B',tech:'SAS',techId:'sas',urg:'Medium',lever:'World\'s largest fashion retailer; SAS demand forecasting and inventory optimisation; AWS cloud; CSRD Phase 1 filer; fast fashion supply chain data obligations',entry:'CSRD supply chain data + SAS modernisation via Group CTO',contact:'Group CTO / Head of Technology',src:'Research: Inditex AWS; SAS demand forecasting; CSRD Phase 1 EU-listed filer',srcUrl:''},
+  {name:'H&M Group',named:false,country:'Sweden',region:'Nordics',industry:'Retail',rev:'€22B',tech:'SAS',techId:'sas',urg:'Medium',lever:'Global fashion retailer; SAS for customer analytics; GCP strategic partner; CSRD Phase 1 Swedish filer; sustainability data obligations driving platform consolidation',entry:'GCP data platform + SAS migration via Group CTO',contact:'Group CTO / Head of Data',src:'Research: H&M GCP strategic; SAS customer analytics; CSRD Phase 1 Swedish filer',srcUrl:''},
+
+  // Energy — expanded from 3 to 8
+  {name:'BP',named:false,country:'UK',region:'UK/Ireland',industry:'Energy',rev:'$159B',tech:'Teradata + SAS',techId:'teradata',urg:'High',lever:'Global oil major; Teradata upstream asset analytics; SAS risk modelling; bp.ai programme (AWS + Azure); CSRD Phase 1 EU-listed; energy transition data at scale',entry:'bp.ai programme + Teradata modernisation via Chief Digital & Innovation Officer',contact:'Chief Digital Officer / Head of Data Platform',src:'Research: BP AWS/Azure bp.ai programme; Teradata upstream analytics; SAS risk; CSRD Phase 1',srcUrl:''},
+  {name:'Shell',named:false,country:'Netherlands / UK',region:'France/Benelux',industry:'Energy',rev:'$316B',tech:'Teradata',techId:'teradata',urg:'High',lever:'Largest global energy company by revenue; Teradata trading and supply chain analytics; Azure + AWS confirmed; CSRD Phase 1 filer; 1M+ asset estate requires significant data pipeline modernisation',entry:'Azure/AWS migration + Teradata modernisation via Group CDO',contact:'Group CDO / Head of Data Engineering',src:'Research: Shell Azure/AWS multi-cloud; Teradata trading analytics; CSRD Phase 1 EU-listed',srcUrl:''},
+  {name:'TotalEnergies',named:false,country:'France',region:'France/Benelux',industry:'Energy',rev:'€218B',tech:'SAS + Ab Initio',techId:'sas',urg:'Medium',lever:'French integrated energy major; SAS risk analytics; Ab Initio downstream ETL; AWS cloud migration; CSRD Phase 1 CAC40 filer; energy transition driving data platform consolidation',entry:'CSRD data compliance + SAS/Ab Initio modernisation via Group CDO',contact:'Group CDO / Head of Data',src:'Research: TotalEnergies AWS; SAS risk; Ab Initio ETL; CSRD Phase 1 CAC40',srcUrl:''},
+  {name:'RWE AG',named:false,country:'Germany',region:'Germany/DACH',industry:'Energy',rev:'€26B',tech:'SAP BW',techId:'sap-bw',urg:'Medium',lever:'German power and renewable energy leader; SAP BW group financial reporting; BW 7.5 Dec 2027 deadline; CSRD Phase 1 EU-listed; renewable energy asset data at scale',entry:'BW 7.5 migration + CSRD energy asset data via SAP Competence Centre',contact:'SAP Competence Centre Lead / Group CIO',src:'Research: RWE SAP BW group reporting; renewable energy CSRD obligations; BW EoS',srcUrl:''},
+  {name:'Vattenfall',named:false,country:'Sweden',region:'Nordics',industry:'Energy',rev:'€17B',tech:'SAS',techId:'sas',urg:'Medium',lever:'Swedish state-owned energy company; SAS for grid analytics and customer segmentation; Azure cloud migration; Nordic CSRD early adopter; heat and wind asset management data',entry:'Azure data platform + SAS migration via Group CTO',contact:'Group CTO / Head of Data',src:'Research: Vattenfall Azure; SAS analytics; Nordic CSRD pressure; wind/heat asset data',srcUrl:''},
+
+  // Nordics — expanded from 5 to 9
+  {name:'Handelsbanken',named:false,country:'Sweden',region:'Nordics',industry:'Banking',rev:'SEK 150B',tech:'SAS',techId:'sas',urg:'High',lever:'Swedish universal bank (UK + Nordic); SAS credit and risk analytics; decentralised model creates data governance gap; DORA + BCBS 239 data lineage obligations',entry:'DORA compliance + BCBS 239 data lineage via Group CRO',contact:'Group CRO / Head of Risk Data',src:'Research: Handelsbanken SAS risk analytics; DORA obligations; BCBS 239 lineage gap',srcUrl:''},
+  {name:'OP Financial Group',named:false,country:'Finland',region:'Nordics',industry:'Banking',rev:'€2.8B',tech:'SAS + Teradata',techId:'sas',urg:'High',lever:'Largest Finnish financial group (cooperative, 2M members); SAS credit risk; FIN-FSA DORA enforcement as systemically important institution; complex cooperative data governance',entry:'DORA compliance + SAS modernisation via Group CRO',contact:'Group CRO / Head of Data',src:'Research: OP Financial SAS; FIN-FSA DORA enforcement 2025; BCBS 239 cooperative bank',srcUrl:''},
+  {name:'Länsförsäkringar',named:false,country:'Sweden',region:'Nordics',industry:'Insurance',rev:'SEK 60B',tech:'SAS',techId:'sas',urg:'Medium',lever:'Swedish mutual insurer (30 regional companies); SAS actuarial analytics; Solvency II reporting; federated structure creates data consolidation opportunity',entry:'Solvency II compliance + SAS modernisation via Group Head of Analytics',contact:'Group Head of Analytics / CIO',src:'Research: Länsförsäkringar SAS actuarial; Solvency II; federated 30-company structure',srcUrl:''},
+  {name:'DNB Bank',named:false,country:'Norway',region:'Nordics',industry:'Banking',rev:'NOK 88B',tech:'SAS + Teradata',techId:'sas',urg:'High',lever:'Norway\'s largest bank; SAS credit risk and AML; Teradata DWH; DORA compliance as systemically important Norwegian bank; Norges Bank data quality enforcement increasing',entry:'DORA compliance + SAS/Teradata modernisation via Group CRO',contact:'Group CRO / Head of Data Platform',src:'Research: DNB SAS credit risk; Teradata DWH; DORA Norwegian FSA obligations',srcUrl:''},
+
+  // CEE / MEA — near-zero coverage previously
+  {name:'OTP Bank',named:false,country:'Hungary',region:'Eastern Europe/MEA',industry:'Banking',rev:'€2.4B',tech:'Cloudera',techId:'cloudera',urg:'High',lever:'Largest Central European bank (16 countries); SAS risk analytics; Oracle databases; DORA compliance as EU-regulated entity; rapid acquisition-led expansion creating data integration challenge',entry:'DORA compliance + multi-country data integration via Group CDO',contact:'Group CDO / Head of Risk Data',src:'Research: OTP Bank SAS risk analytics; Oracle; DORA EU obligation; 16-country expansion',srcUrl:''},
+  {name:'mBank',named:false,country:'Poland',region:'Eastern Europe/MEA',industry:'Banking',rev:'€1.2B',tech:'Cloudera',techId:'cloudera',urg:'High',lever:'Polish digital-first bank (CommerzBank subsidiary); SAS credit risk and AML; KNF DORA obligations; CommerzBank parent driving data standardisation across subsidiary estates',entry:'DORA compliance + CommerzBank data standards via Head of Data',contact:'Head of Data Analytics / CTO',src:'Research: mBank SAS analytics; CommerzBank subsidiary DORA; KNF Polish FSA obligations',srcUrl:''},
+  {name:'Raiffeisen Bank International',named:false,country:'Austria',region:'Germany/DACH',industry:'Banking',rev:'€7B',tech:'SAS + Teradata',techId:'sas',urg:'High',lever:'Austrian bank operating in 13 CEE markets; SAS risk analytics; OeNB (Austrian National Bank) data quality enforcement; DORA compliance; multi-country architecture creates complex data lineage requirement',entry:'DORA compliance + multi-country risk data via Group CRO',contact:'Group CRO / Group CDO',src:'Research: RBI SAS risk; Teradata; OeNB enforcement; 13-country DORA obligations',srcUrl:''},
+  {name:'Emirates NBD',named:false,country:'UAE',region:'Eastern Europe/MEA',industry:'Banking',rev:'AED 46B',tech:'SAP HANA + Cloudera',techId:'cloudera',urg:'High',lever:'Largest UAE bank; Teradata retail and corporate analytics; AWS cloud adoption accelerating; CBUAE data governance mandates 2024; digital banking transformation (Liv, ENBD X)',entry:'CBUAE data governance + Teradata modernisation via Group CDO',contact:'Group CDO / Head of Data Engineering',src:'Research: Emirates NBD Teradata confirmed; AWS cloud; CBUAE data governance mandate 2024',srcUrl:''},
+  {name:'Mashreq Bank',named:false,country:'UAE',region:'Eastern Europe/MEA',industry:'Banking',rev:'AED 6B',tech:'Oracle Exadata',techId:'oracle',urg:'Medium',lever:'UAE bank with international presence; Oracle Exadata core banking analytics; GCP cloud adoption; CBUAE digital banking mandates; aggressive digital transformation (Mashreq Neo, NeoBiz)',entry:'Digital transformation + Oracle Exadata modernisation via Group CTO',contact:'Group CTO / Head of Data',src:'Research: Mashreq Oracle Exadata; GCP adoption; CBUAE digital mandate; NeoBiz platform',srcUrl:''},
 ];
 
 // Platform tab data
@@ -885,6 +983,42 @@ const PLATFORMS = {
   refs:[
     'Alteryx Chapter 11 bankruptcy filing and Clearlake Capital acquisition: February 2024. Bloomberg, SEC filing.',
     'DORA (EU Regulation 2022/2554), effective 17 January 2025.',
+  ],
+},
+'sap-bo':{
+  name:'SAP BusinessObjects', vendor:'SAP SE', tier:3,
+  hdrColor:'linear-gradient(135deg,#1E3A5F,#0052CC)',
+  tagline:'Mainstream maintenance ended Dec 2026 — extended support runs to Dec 2028 with no SAP-native migration path',
+  eos:'BO 4.3 mainstream: Dec 2026 (passed) · Extended maintenance: Dec 2028',
+  trigger:'Dec 2026 mainstream EoS has passed — accounts on extended support face a hard cutover by Dec 2028',
+  kpis:[
+    {val:'2,500+',label:'EMEA Enterprises',sub:'Dominant reporting layer in DACH manufacturing, insurance, banking'},
+    {val:'Dec 2028',label:'Full EoS Date',sub:'Extended maintenance ends — no more patches'},
+    {val:'15–20%',label:'SAP Maintenance Cost',sub:'Of licence value per year on extended support'},
+    {val:'No path',label:'SAP Migration Option',sub:'SAP Analytics Cloud requires full re-implementation'},
+  ],
+  why:[
+    {icon:'📅',txt:'SAP BusinessObjects 4.3 mainstream maintenance ended December 2026. Extended maintenance runs to December 2028 at a premium — after which there are no further patches. Accounts must act within a 2-year window.'},
+    {icon:'🚫',txt:'SAP\'s own migration path is SAP Analytics Cloud (SAC) — but SAC is a rebuild, not a migration. It requires re-implementing all BO reports from scratch. This creates a large delivery gap that third-party partners fill.'},
+    {icon:'🏗️',txt:'LeapLogic can catalogue a BO report inventory, score migration complexity, and accelerate delivery to Microsoft Fabric, Power BI, or Databricks SQL — handling the logic migration SAP cannot.'},
+  ],
+  hunt:[
+    {profile:'DACH manufacturer with SAP BO enterprise reporting layer',region:'Germany / Austria / Switzerland',motion:'Enter via BO Dec 2026 EoS — BO is the more immediate deadline than BW 2027',timeline:'Q3–Q4 2026',lever:'BO maintenance elimination + report migration automation via LeapLogic'},
+    {profile:'Insurance or banking firm using BO for Solvency II / IFRS reporting',region:'France / UK / Netherlands',motion:'Solvency II data quality + BO migration angle via Head of Finance IT',timeline:'H1 2027',lever:'Regulatory data quality + BO report migration to Fabric or Databricks SQL'},
+  ],
+  targetProfile:'Large enterprises using SAP BusinessObjects as their enterprise reporting layer — common in DACH manufacturing (Bosch, Continental), EMEA insurance, and banking. SAP Competence Centre is the primary entry point. The BO 4.3 Dec 2026 mainstream EoS is the sharpest urgency trigger on this list.',
+  partners:[
+    {name:'Microsoft',logo:'microsoft',angle:'SAP BO → Microsoft Fabric / Power BI is the most common migration path. Strong alignment in DACH and UK.'},
+    {name:'Databricks',logo:'databricks',angle:'SAP BO → Databricks SQL for analytics-heavy BO estates. LeapLogic handles report logic migration.'},
+  ],
+  pricing:'Lead with the BO extended support premium (15–20% of licence per year, post-Dec 2026). Frame LeapLogic as compressing a 3–4 year manual re-implementation into 6–9 months via automation. BO estates in large DACH manufacturers typically have 500–2,000+ reports — scope complexity is the key cost driver.',
+  competitors:[
+    {name:'Accenture / Capgemini',angle:'Dominate large SAP BO migrations via SI relationships. Impetus differentiates via LeapLogic automation speed and lower cost-per-report vs. manual re-implementation.'},
+    {name:'Tableau / Power BI (direct)',angle:'Microsoft pushing Power BI directly as the BO replacement. Impetus angle: data pipeline migration (Informatica, DataStage, Ab Initio) that feeds those BI tools — we sit upstream.'},
+  ],
+  refs:[
+    'SAP BusinessObjects BI 4.3 Mainstream Maintenance: ended December 2026. SAP Product Availability Matrix (PAM).',
+    'Extended maintenance runs to December 2028 at premium. SAP PAM.',
   ],
 },
 'sap-bw':{
@@ -1336,7 +1470,7 @@ function buildHeatmap(){
   const corner=document.createElement('div');corner.style.gridColumn='1';con.appendChild(corner);
   PLAT_KEYS.forEach(id=>{
     const d=document.createElement('div');d.className='hm-col-label';
-    d.textContent=PLAT_NAMES[id].split(' ')[0];d.title=PLAT_NAMES[id];
+    d.textContent=PLAT_ABBR[id]||PLAT_NAMES[id].split(' ')[0];d.title=PLAT_NAMES[id];
     con.appendChild(d);
   });
   // Data rows
@@ -1368,6 +1502,13 @@ function buildHeatmap(){
 // ══════════════════════════════════════════
 function urgClass(u){return u==='Critical'?'urg-critical':u==='High'?'urg-high':'urg-medium';}
 
+const CLOUD_COLORS={'AWS':'#E8650A','Azure':'#0078D4','GCP':'#1A73E8','NumSpot':'#6366F1','Oracle Cloud':'#C74634','IBM Cloud':'#054ADA'};
+function cloudBadges(name){
+  const ci=CLOUD_INTEL[name];
+  if(!ci||!ci.clouds||!ci.clouds.length) return '<span style="color:var(--muted);font-size:.65rem">—</span>';
+  return ci.clouds.map(c=>`<span style="display:inline-block;font-size:.5rem;font-weight:700;letter-spacing:.03em;padding:1px 5px;border-radius:3px;background:${CLOUD_COLORS[c]||'#64748B'};color:#fff;white-space:nowrap;margin-right:2px">${c}</span>`).join('');
+}
+
 function buildTable(){
   const tb=document.getElementById('acct-tbody');
   tb.innerHTML=ACCOUNTS.map((a,i)=>`<tr class="row-clickable" data-tech="${a.tech}" data-region="${a.region}" data-industry="${a.industry}" data-urgency="${a.urg}" data-company="${a.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}">
@@ -1376,6 +1517,7 @@ function buildTable(){
   <td>${a.industry}</td>
   <td style="white-space:nowrap">${a.rev}</td>
   <td>${techChip(a.techId)}</td>
+  <td style="white-space:nowrap">${cloudBadges(a.name)}</td>
   <td class="src-cell">${a.srcUrl?'<a href="'+a.srcUrl+'" target="_blank" rel="noopener noreferrer" class="src-link">'+a.src+'</a>':a.src||'—'}</td>
 </tr>`).join('');
   updateCount();
