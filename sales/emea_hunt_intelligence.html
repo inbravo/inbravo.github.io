@@ -356,6 +356,7 @@ a{color:var(--accent);text-decoration:none}
         </select>
       </label>
       <button class="btn-reset" id="btn-reset">Reset</button>
+      <button class="btn-reset" id="btn-export" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="exportCSV()">Export CSV</button>
       <span class="match-count" id="match-count"></span>
     </div>
     <div class="tbl-wrap">
@@ -1521,6 +1522,29 @@ function buildTable(){
   <td class="src-cell">${a.srcUrl?'<a href="'+a.srcUrl+'" target="_blank" rel="noopener noreferrer" class="src-link">'+a.src+'</a>':a.src||'—'}</td>
 </tr>`).join('');
   updateCount();
+}
+
+function exportCSV(){
+  const tech=document.getElementById('f-tech').value;
+  const region=document.getElementById('f-region').value;
+  const industry=document.getElementById('f-industry').value;
+  const rows=ACCOUNTS.filter(a=>
+    (!tech||a.tech===tech)&&
+    (!region||a.region===region)&&
+    (!industry||a.industry===industry)
+  );
+  const esc=v=>`"${String(v||'').replace(/"/g,'""')}"`;
+  const clouds=a=>{const ci=CLOUD_INTEL[a.name];return ci&&ci.clouds?ci.clouds.join('; '):''};
+  const header=['Company','Country','Region','Industry','Revenue Tier','Technology','Cloud','Urgency','Source URL'];
+  const csv=[header.map(esc).join(','),...rows.map(a=>[
+    esc(a.name),esc(a.country),esc(a.region),esc(a.industry),esc(a.rev),
+    esc(a.tech),esc(clouds(a)),esc(a.urg),esc(a.srcUrl||a.src||'')
+  ].join(','))].join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('a');
+  link.href=url; link.download='emea_hunt_accounts.csv'; link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
 function applyFilters(){

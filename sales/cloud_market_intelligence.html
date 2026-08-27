@@ -1,3 +1,4 @@
+<meta charset="UTF-8">
 <title>EMEA Cloud & Platform Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500&display=swap">
@@ -227,7 +228,11 @@ const COUNTRIES=[
       {name:'Lloyds',       clouds:['gcp','azure'],          platform:'databricks'},
       {name:'HSBC',         clouds:['gcp','aws','azure'],    platform:'databricks'},
       {name:'BT Group',     cloud:'aws',                     platform:null},
-      {name:'Aviva',        clouds:['aws'],                  platform:'snowflake'},
+      {name:'Aviva',        cloud:'aws',                     platform:'snowflake'},
+      {name:'BP',           clouds:['aws','azure'],           platform:'databricks'},
+      {name:'NatWest Group',cloud:'aws',                     platform:null},
+      {name:'M&S',          cloud:'azure',                   platform:'databricks'},
+      {name:'Direct Line',  clouds:['aws','azure'],           platform:'snowflake'},
     ]
   },
   {
@@ -239,6 +244,10 @@ const COUNTRIES=[
       {name:'Allianz',          cloud:'aws',              platform:'databricks'},
       {name:'Commerzbank',      clouds:['gcp','azure'],   platform:null},
       {name:'Deutsche Telekom', cloud:'gcp',              platform:null},
+      {name:'Mercedes-Benz',    clouds:['aws','azure'],   platform:'databricks'},
+      {name:'Bosch',            clouds:['aws','azure'],   platform:'databricks'},
+      {name:'VW Group',         clouds:['aws','azure'],   platform:null},
+      {name:'Siemens',          clouds:['azure','aws'],   platform:null},
     ]
   },
   {
@@ -247,7 +256,7 @@ const COUNTRIES=[
     platforms:{databricks:4, snowflake:2, fabric:2},
     signals:[
       {name:'ING Group',  clouds:['azure','gcp'],   platform:'databricks'},
-      {name:'Aegon',      cloud:'aws',              platform:'databricks'},
+      {name:'Aegon',      clouds:['aws','azure'],   platform:null},
       {name:'ABN AMRO',   cloud:'azure',            platform:'databricks'},
       {name:'Rabobank',   cloud:'azure',            platform:'databricks'},
     ]
@@ -259,8 +268,10 @@ const COUNTRIES=[
     signals:[
       {name:'BNP Paribas',      cloud:'aws',              platform:null},
       {name:'Société Générale', clouds:['aws','azure'],    platform:null},
-      {name:'AXA',              cloud:'azure',            platform:'snowflake'},
-      {name:'Orange',           cloud:'aws',              platform:null},
+      {name:'AXA',              clouds:['aws','azure'],   platform:'snowflake'},
+      {name:'Orange',           clouds:['aws','azure'],   platform:null},
+      {name:'Carrefour',        cloud:'gcp',              platform:null},
+      {name:'Air France-KLM',   clouds:['azure','aws'],   platform:null},
     ]
   },
   {
@@ -290,8 +301,10 @@ const COUNTRIES=[
     signals:[
       {name:'Nordea',        clouds:['azure','ibm'],   platform:'snowflake'},
       {name:'SEB',           cloud:'azure', platform:null},
-      {name:'Handelsbanken', cloud:'azure', platform:null},
+      {name:'Handelsbanken', cloud:'azure', platform:'databricks'},
       {name:'Swedbank',      cloud:'aws',   platform:null},
+      {name:'H&M Group',    cloud:'gcp',   platform:null},
+      {name:'Vattenfall',   cloud:'azure', platform:null},
     ]
   },
   {
@@ -320,9 +333,10 @@ const COUNTRIES=[
     platforms:{databricks:2, snowflake:2, fabric:3},
     signals:[
       {name:'BBVA',       cloud:'gcp',   platform:null},
-      {name:'Santander',  cloud:'azure', platform:null},
+      {name:'Santander',  clouds:['aws','azure','gcp'], platform:null},
       {name:'Telefónica', cloud:'aws',   platform:null},
-      {name:'CaixaBank',  cloud:'azure', platform:'fabric'},
+      {name:'CaixaBank',  cloud:'aws',   platform:null},
+      {name:'Inditex',    clouds:['azure','gcp'], platform:null},
     ]
   },
   {
@@ -340,7 +354,7 @@ const COUNTRIES=[
     clouds:{aws:1, azure:4, gcp:1},
     platforms:{databricks:4, snowflake:2, fabric:2},
     signals:[
-      {name:'DNB',        cloud:'azure', platform:'databricks'},
+      {name:'DNB',        cloud:'azure', platform:'snowflake'},
       {name:'Storebrand', cloud:'azure', platform:'databricks'},
     ]
   },
@@ -350,7 +364,7 @@ const COUNTRIES=[
     platforms:{databricks:3, snowflake:2, fabric:2},
     signals:[
       {name:'Nordea Finland', clouds:['azure','ibm'],   platform:'snowflake'},
-      {name:'OP Financial',   cloud:'azure', platform:null},
+      {name:'OP Financial',   cloud:'aws',   platform:null},
     ]
   },
   {
@@ -368,7 +382,7 @@ const COUNTRIES=[
     platforms:{databricks:2, snowflake:2, fabric:3},
     signals:[
       {name:'PKO Bank Polski', cloud:'azure', platform:null},
-      {name:'mBank',           cloud:'aws',   platform:null},
+      {name:'mBank',           cloud:'azure', platform:null},
     ]
   },
   {
