@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Life Sciences Platform Logos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500&display=swap">
+<style>
+/* ── TOKENS ──────────────────────────────────────────────────── */
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;--dim:#94A3B8;
+  --accent:#6366F1;--accent-dim:#EEF2FF;
+  --hdr:#0F172A;--hdr-text:#F1F5F9;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.1),0 12px 32px rgba(0,0,0,.08);
+  /* platform */
+  --dbr:#FF3621; --dbr-bg:#FFF0EE; --dbr-border:#FFCEC8;
+  --snow:#1A8FBF; --snow-bg:#EAF6FB; --snow-border:#B3DFF0;
+  /* tiers */
+  --t-cs:#15803D; --t-cs-bg:#DCFCE7;
+  --t-hp:#B45309; --t-hp-bg:#FEF3C7;
+  --t-sec:#64748B; --t-sec-bg:#F1F5F9;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;
+  --accent-dim:#1E1B4B;
+  --hdr:#0A0F1E;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
+  --dbr:#FF6B5B; --dbr-bg:#1C0600; --dbr-border:#4A1008;
+  --snow:#4BBFE8; --snow-bg:#001C28; --snow-border:#0A3A4A;
+  --t-cs:#4ADE80; --t-cs-bg:#052E16;
+  --t-hp:#FCD34D; --t-hp-bg:#292003;
+  --t-sec:#94A3B8; --t-sec-bg:#1E293B;
+}}
+:root[data-theme="dark"]{
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;
+  --accent-dim:#1E1B4B;
+  --hdr:#0A0F1E;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
+  --dbr:#FF6B5B; --dbr-bg:#1C0600; --dbr-border:#4A1008;
+  --snow:#4BBFE8; --snow-bg:#001C28; --snow-border:#0A3A4A;
+  --t-cs:#4ADE80; --t-cs-bg:#052E16;
+  --t-hp:#FCD34D; --t-hp-bg:#292003;
+  --t-sec:#94A3B8; --t-sec-bg:#1E293B;
+}
+
+/* ── RESET & BASE ─────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:13px;scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;min-height:100vh}
+h1,h2,h3{font-family:'Plus Jakarta Sans',system-ui,sans-serif;line-height:1.2}
+
+/* ── HEADER ──────────────────────────────────────────────────── */
+.hdr{background:var(--hdr);color:var(--hdr-text);padding:.65rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:100}
+.hdr-brand{display:flex;align-items:center;gap:.75rem}
+.hdr-back{display:flex;align-items:center;gap:.35rem;color:#94A3B8;font-size:.72rem;font-weight:500;text-decoration:none;padding:.25rem .55rem;border:1px solid #334155;border-radius:.3rem;transition:color .15s,border-color .15s}
+.hdr-back:hover{color:var(--hdr-text);border-color:#6366F1}
+.hdr-back svg{width:10px;height:10px}
+.hdr-sep{width:1px;height:16px;background:#334155}
+.hdr-badge{background:#059669;color:#fff;font-size:.62rem;font-weight:700;padding:.15rem .45rem;border-radius:.25rem;letter-spacing:.05em;font-family:'Plus Jakarta Sans',sans-serif}
+.hdr-title{font-size:.9rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hdr-text)}
+.hdr-right{display:flex;align-items:center;gap:.75rem}
+.hdr-meta{font-size:.7rem;color:#64748B}
+.theme-btn{background:none;border:1px solid #334155;color:#94A3B8;border-radius:.375rem;padding:.25rem .6rem;cursor:pointer;font-size:.8rem;transition:border-color .15s,color .15s;font-family:inherit}
+.theme-btn:hover{border-color:#6366F1;color:var(--hdr-text)}
+
+/* ── STAT BAR ────────────────────────────────────────────────── */
+.stat-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:.6rem 1.25rem;display:flex;gap:1.25rem;align-items:center;flex-wrap:wrap}
+.stat{display:flex;flex-direction:column;gap:.1rem;padding:.35rem .75rem;border-radius:.5rem;border:1px solid var(--border);min-width:80px;background:var(--surface2)}
+.stat-n{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.4rem;font-weight:800;line-height:1}
+.stat-l{font-size:.63rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.stat-total .stat-n{color:var(--text)}
+.stat-dbr .stat-n{color:var(--dbr)}
+.stat-snow .stat-n{color:var(--snow)}
+.stat-both .stat-n{background:linear-gradient(90deg,var(--dbr),var(--snow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-bar-note{margin-left:auto;font-size:.7rem;color:var(--muted);font-style:italic}
+
+/* ── TOOLBAR ─────────────────────────────────────────────────── */
+.toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:.55rem 1.25rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.plat-btns{display:flex;gap:.3rem}
+.plat-btn{padding:.3rem .75rem;font-size:.72rem;font-weight:600;border-radius:2rem;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;white-space:nowrap}
+.plat-btn:hover{border-color:var(--accent);color:var(--text)}
+.plat-btn.active-all{background:var(--accent);border-color:var(--accent);color:#fff}
+.plat-btn.active-dbr{background:var(--dbr);border-color:var(--dbr);color:#fff}
+.plat-btn.active-snow{background:var(--snow);border-color:var(--snow);color:#fff}
+.plat-btn.active-both{background:linear-gradient(90deg,var(--dbr),var(--snow));border-color:transparent;color:#fff}
+.toolbar-sep{width:1px;height:20px;background:var(--border)}
+.f-sel{padding:.32rem .6rem;font-size:.72rem;border:1px solid var(--border);border-radius:.375rem;background:var(--surface2);color:var(--text);font-family:inherit;cursor:pointer}
+.f-sel:focus{outline:none;border-color:var(--accent)}
+.match-count{font-size:.72rem;color:var(--muted);margin-left:.25rem}
+.view-btns{display:flex;gap:.25rem;margin-left:auto}
+.view-btn{padding:.3rem .65rem;font-size:.7rem;font-weight:600;border:1px solid var(--border);border-radius:.3rem;background:var(--surface2);color:var(--muted);cursor:pointer;font-family:inherit;transition:all .15s}
+.view-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-export{padding:.3rem .75rem;font-size:.72rem;font-weight:600;background:var(--accent);color:#fff;border:none;border-radius:.3rem;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.btn-export:hover{opacity:.85}
+
+/* ── CARD GRID ───────────────────────────────────────────────── */
+.grid{padding:1.25rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1rem}
+@media(max-width:640px){.grid{grid-template-columns:1fr;padding:.75rem}}
+
+/* ── CARD ────────────────────────────────────────────────────── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:.625rem;display:flex;flex-direction:column;box-shadow:var(--shadow);transition:box-shadow .15s,transform .15s;overflow:hidden;position:relative}
+.card:hover{box-shadow:var(--shadow-hover);transform:translateY(-1px)}
+.card-stripe{width:4px;position:absolute;left:0;top:0;bottom:0;border-radius:.625rem 0 0 .625rem}
+.card-stripe.cs{background:var(--t-cs)}
+.card-stripe.hp{background:var(--t-hp)}
+.card-stripe.sec{background:var(--t-sec)}
+.card-inner{padding:.85rem .9rem .85rem 1.1rem;display:flex;flex-direction:column;gap:.5rem;flex:1}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem}
+.card-hq{font-size:.68rem;color:var(--muted);display:flex;align-items:center;gap:.3rem}
+.card-flag{font-size:.85rem;line-height:1}
+.tier-badge{font-size:.6rem;font-weight:700;padding:.18rem .45rem;border-radius:.25rem;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
+.tier-badge.cs{background:var(--t-cs-bg);color:var(--t-cs)}
+.tier-badge.hp{background:var(--t-hp-bg);color:var(--t-hp)}
+.tier-badge.sec{background:var(--t-sec-bg);color:var(--t-sec)}
+.card-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.15rem;font-weight:800;color:var(--text);line-height:1.15}
+.card-sector{display:inline-flex;align-items:center;font-size:.62rem;font-weight:600;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:.25rem;padding:.1rem .35rem;text-transform:uppercase;letter-spacing:.04em}
+.card-plats{display:flex;gap:.35rem;flex-wrap:wrap}
+.plat-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.68rem;font-weight:700;padding:.22rem .55rem;border-radius:2rem;border:1.5px solid}
+.plat-badge.dbr{background:var(--dbr-bg);color:var(--dbr);border-color:var(--dbr-border)}
+.plat-badge.snow{background:var(--snow-bg);color:var(--snow);border-color:var(--snow-border)}
+.plat-badge svg{width:9px;height:9px;flex-shrink:0}
+.card-use{font-size:.72rem;color:var(--muted);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-foot{margin-top:auto;padding-top:.5rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.card-src-link{font-size:.68rem;font-weight:600;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:.2rem;transition:opacity .15s}
+.card-src-link:hover{opacity:.75}
+.card-src-link svg{width:10px;height:10px}
+.card.hidden{display:none}
+
+/* ── TABLE VIEW ──────────────────────────────────────────────── */
+.tbl-wrap{padding:1.25rem;overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:.75rem}
+.tbl th{text-align:left;padding:.5rem .75rem;border-bottom:2px solid var(--border);font-family:'Plus Jakarta Sans',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);white-space:nowrap}
+.tbl td{padding:.55rem .75rem;border-bottom:1px solid var(--border);vertical-align:top}
+.tbl tr:hover td{background:var(--surface2)}
+.tbl tr.hidden{display:none}
+.tbl-name{font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);font-size:.8rem}
+.tbl-hq{color:var(--muted);font-size:.68rem;margin-top:.1rem}
+.tbl-use{color:var(--muted);max-width:320px;line-height:1.5}
+.tbl-src{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:.2rem}
+.tbl-src:hover{opacity:.75}
+
+/* ── EMPTY STATE ─────────────────────────────────────────────── */
+.empty{padding:3rem 1.25rem;text-align:center;color:var(--muted);display:none}
+.empty.show{display:block}
+
+/* ── FOOTER ──────────────────────────────────────────────────── */
+.page-footer{text-align:center;padding:.75rem;font-size:.68rem;color:var(--dim);border-top:1px solid var(--border);background:var(--surface)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-brand">
+    <a href="index.html" class="hdr-back">
+      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6H2M4 2L0 6l4 4"/></svg>
+      All Tools
+    </a>
+    <div class="hdr-sep"></div>
+    <span class="hdr-badge">LOGOS</span>
+    <span class="hdr-title">Life Sciences — Databricks &amp; Snowflake Logos</span>
+  </div>
+  <div class="hdr-right">
+    <span class="hdr-meta">EU / UK · Research verified</span>
+    <button class="theme-btn" id="themeBtn">🌙</button>
+  </div>
+</header>
+
+<!-- STAT BAR -->
+<div class="stat-bar" id="statBar">
+  <div class="stat stat-total"><span class="stat-n" id="s-total">18</span><span class="stat-l">Total</span></div>
+  <div class="stat stat-dbr"><span class="stat-n" id="s-dbr">11</span><span class="stat-l">Databricks</span></div>
+  <div class="stat stat-snow"><span class="stat-n" id="s-snow">12</span><span class="stat-l">Snowflake</span></div>
+  <div class="stat stat-both"><span class="stat-n" id="s-both">5</span><span class="stat-l">Both</span></div>
+  <span class="stat-bar-note">Based on public case studies, press releases &amp; vendor HCLS references · Aug 2026</span>
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="plat-btns" id="platBtns">
+    <button class="plat-btn active-all" data-plat="all">All</button>
+    <button class="plat-btn" data-plat="databricks">Databricks</button>
+    <button class="plat-btn" data-plat="snowflake">Snowflake</button>
+    <button class="plat-btn" data-plat="both">Both</button>
+  </div>
+  <div class="toolbar-sep"></div>
+  <select class="f-sel" id="f-tier">
+    <option value="">All Tiers</option>
+    <option value="case-study">Case Study / PR</option>
+    <option value="hcls-page">Named Reference</option>
+    <option value="secondary">Secondary Source</option>
+  </select>
+  <select class="f-sel" id="f-sector">
+    <option value="">All Sectors</option>
+    <option value="Pharma">Pharma</option>
+    <option value="MedTech">MedTech</option>
+    <option value="CRO">CRO</option>
+    <option value="CDMO">CDMO</option>
+  </select>
+  <select class="f-sel" id="f-region">
+    <option value="">All Regions</option>
+    <option value="UK/Ireland">UK / Ireland</option>
+    <option value="Germany/DACH">Germany / DACH</option>
+    <option value="France/Benelux">France / Benelux</option>
+    <option value="Nordics">Nordics</option>
+  </select>
+  <span class="match-count" id="matchCount">18 of 18</span>
+  <div class="view-btns">
+    <button class="view-btn active" id="btnCards">Cards</button>
+    <button class="view-btn" id="btnTable">Table</button>
+  </div>
+  <button class="btn-export" onclick="exportCSV()">Export CSV</button>
+</div>
+
+<!-- CARD GRID -->
+<div class="grid" id="cardGrid"></div>
+
+<!-- TABLE VIEW -->
+<div class="tbl-wrap" id="tblWrap" style="display:none">
+  <table class="tbl">
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Platform</th>
+        <th>Tier</th>
+        <th>Sector</th>
+        <th>Region</th>
+        <th>Use Case</th>
+        <th>Source</th>
+      </tr>
+    </thead>
+    <tbody id="tblBody"></tbody>
+  </table>
+</div>
+
+<div class="empty" id="emptyMsg">No companies match the current filters.</div>
+
+<footer class="page-footer">Impetus Technologies · Sales Intelligence · Confidential · Not for distribution</footer>
+
+<script>
+/* ── DATA ─────────────────────────────────────────────────────── */
+const COMPANIES = [
+  // ── Databricks only ───────────────────────────────────────────
+  {
+    name:'AstraZeneca', hq:'Cambridge, UK', flag:'🇬🇧', region:'UK/Ireland', sector:'Pharma',
+    platforms:['databricks'], tier:'case-study',
+    useCase:'Biological knowledge graph; NLP over scientific literature; Agent Bricks in-workflow analytics — 90% faster time-to-insight; 3–4× more questions per session.',
+    src:'Databricks customer page',
+    srcUrl:'https://www.databricks.com/customers/astrazeneca'
+  },
+  {
+    name:'GSK', hq:'London, UK', flag:'🇬🇧', region:'UK/Ireland', sector:'Pharma',
+    platforms:['databricks'], tier:'case-study',
+    useCase:'"Code Orange" enterprise-wide data platform: 6,000+ pipelines, 350+ use cases, 400+ ML models. GxP-ready. Spans R&D, manufacturing, and commercial.',
+    src:'Databricks customer page',
+    srcUrl:'https://databricks.com/customer/glaxosmithkline'
+  },
+  {
+    name:'Bayer Consumer Health', hq:'Leverkusen, DE', flag:'🇩🇪', region:'Germany/DACH', sector:'Pharma',
+    platforms:['databricks'], tier:'case-study',
+    useCase:'Single governed data platform via Unity Catalog — 7 business domains, global self-service analytics, scalable shared core data assets.',
+    src:'Databricks blog case study',
+    srcUrl:'https://www.databricks.com/blog/bayer-consumer-health-scales-global-self-service-analytics-unity-catalog'
+  },
+  {
+    name:'Biogen', hq:'Zug, CH (EU HQ)', flag:'🇨🇭', region:'Germany/DACH', sector:'Pharma',
+    platforms:['databricks'], tier:'case-study',
+    useCase:'UK Biobank genomics — identified 2 new drug targets (Alzheimer\'s / Parkinson\'s); petabyte-scale variant annotation in 15 min; ML models linking variants to drug viability.',
+    src:'Databricks customer page',
+    srcUrl:'https://www.databricks.com/customers/biogen'
+  },
+  {
+    name:'Takeda', hq:'Dublin, IE (EU HQ)', flag:'🇮🇪', region:'UK/Ireland', sector:'Pharma',
+    platforms:['databricks'], tier:'hcls-page',
+    useCase:'AI/GenAI across R&D, commercial, manufacturing — RAG patterns, reusable vectorisation pipelines, responsible AI guardrails, AI asset registry. Featured at DAIS 2025.',
+    src:'Databricks DAIS 2025 (EY session)',
+    srcUrl:'https://www.databricks.com/dataaisummit/session/sponsored-ey-unlocking-value-through-ai-takeda-pharmaceuticals'
+  },
+  {
+    name:'Lonza', hq:'Basel, CH', flag:'🇨🇭', region:'Germany/DACH', sector:'CDMO',
+    platforms:['databricks'], tier:'secondary',
+    useCase:'Azure Databricks in confirmed tech stack — digital manufacturing: batch release, predictive maintenance, process optimisation across CDMO operations.',
+    src:'Tech stack reference (LeadIQ)',
+    srcUrl:'https://leadiq.com/c/lonza/5a1d82b024000024005d4d43'
+  },
+  // ── Snowflake only ────────────────────────────────────────────
+  {
+    name:'Sanofi', hq:'Paris, FR', flag:'🇫🇷', region:'France/Benelux', sector:'Pharma',
+    platforms:['snowflake'], tier:'case-study',
+    useCase:'"Concierge for Field" AI agent via Snowflake Cortex AI. Agents deployed across R&D, procurement, HR, field sales. Snowpark: 50% perf improvement over managed Spark. Strategic platform choice Jun 2026.',
+    src:'Snowflake PR + case study (Jun 2026)',
+    srcUrl:'https://www.snowflake.com/en/customers/all-customers/case-study/sanofi/'
+  },
+  {
+    name:'Pfizer', hq:'Cork, IE (EU mfg)', flag:'🇮🇪', region:'UK/Ireland', sector:'Pharma',
+    platforms:['snowflake'], tier:'case-study',
+    useCase:'"One Pfizer" data unification — Snowpark: 4× faster processing, 19,000+ hours saved; sales reports cut from 1 hr to 40 sec. Virtual Analytics Workspace for data scientists and business users.',
+    src:'Snowflake Snowpark case study',
+    srcUrl:'https://www.snowflake.com/en/customers/all-customers/case-study/pfizer/'
+  },
+  {
+    name:'Novartis', hq:'Basel, CH', flag:'🇨🇭', region:'Germany/DACH', sector:'Pharma',
+    platforms:['snowflake'], tier:'case-study',
+    useCase:'Federated AI model with semantic intelligence layer — conversational AI + text-to-SQL for scientists. AI partnership featured at BioTechx Europe 2025.',
+    src:'Snowflake BioTechx Europe 2025',
+    srcUrl:'https://www.snowflake.com/snowflake-at-biotechx-2025/'
+  },
+  {
+    name:'Roche Diagnostics', hq:'Basel, CH', flag:'🇨🇭', region:'Germany/DACH', sector:'Pharma',
+    platforms:['snowflake'], tier:'case-study',
+    useCase:'Full on-prem to Snowflake migration — data mesh across manufacturing, quality/regulatory, and supply chain. Orchestrates Talend + Collibra via Snowflake.',
+    src:'Snowflake blog',
+    srcUrl:'https://www.snowflake.com/en/blog/how-roche-diagnostics-uses-the-data-cloud-to-empower-its-data-lifecycle-teams/'
+  },
+  {
+    name:'IQVIA', hq:'London, UK', flag:'🇬🇧', region:'UK/Ireland', sector:'CRO',
+    platforms:['snowflake'], tier:'case-study',
+    useCase:'OneKey DaaS on Snowflake Marketplace — data loads in hours vs days; HCLS Marketplace Partner of the Year 2022; global healthcare intelligence foundation for AI.',
+    src:'Snowflake case study + HCLS Partner of the Year',
+    srcUrl:'https://www.snowflake.com/en/customers/all-customers/case-study/iqvia/'
+  },
+  {
+    name:'Medtronic', hq:'Dublin, IE', flag:'🇮🇪', region:'UK/Ireland', sector:'MedTech',
+    platforms:['snowflake'], tier:'case-study',
+    useCase:'IoT telemetry from StealthStation surgical devices in Snowflake; digital transformation enabling AI and automation for clinical and operational insights.',
+    src:'Snowflake digital transformation blog',
+    srcUrl:'https://www.snowflake.com/en/blog/medtronic-using-snowflake-for-digital-transformation/'
+  },
+  {
+    name:'Siemens Healthineers', hq:'Erlangen, DE', flag:'🇩🇪', region:'Germany/DACH', sector:'MedTech',
+    platforms:['snowflake'], tier:'case-study',
+    useCase:'Azure + Confluent real-time streaming into Snowflake — factory equipment, SAP, and SQL pipelines unified; IT operations optimised globally.',
+    src:'Snowflake / FeaturedCustomers case study',
+    srcUrl:'https://cdn.featuredcustomers.com/CustomerCaseStudy.document/snowflake-enables-siemens-healthineers-it-to-optimize-business-operations-around-the-globe.pdf'
+  },
+  // ── Both platforms ────────────────────────────────────────────
+  {
+    name:'Novo Nordisk', hq:'Bagsværd, DK', flag:'🇩🇰', region:'Nordics', sector:'Pharma',
+    platforms:['databricks','snowflake'], tier:'case-study',
+    useCase:'Databricks: FounData clinical trial platform. Snowflake: Common Data Platform for commercial analytics. Both in enterprise AI framework (AWS + Databricks + Snowflake + Azure).',
+    src:'Data Mesh Learning case study',
+    srcUrl:'https://datameshlearning.com/blog/novo-nordisk-10-insights-into-maturing-data-mesh-platform/'
+  },
+  {
+    name:'J&J / Janssen', hq:'Beerse, BE', flag:'🇧🇪', region:'France/Benelux', sector:'Pharma',
+    platforms:['databricks','snowflake'], tier:'case-study',
+    useCase:'Databricks: supply chain data democratisation on Azure. Snowflake: Janssen EMEA analytics architecture presented at Snowflake Summit 2023 by Janssen EMEA IT Director.',
+    src:'Databricks blog + Snowflake Summit 2023',
+    srcUrl:'https://www.databricks.com/blog/2022/04/25/democratizing-data-for-supply-chain-optimization.html'
+  },
+  {
+    name:'Boehringer Ingelheim', hq:'Ingelheim, DE', flag:'🇩🇪', region:'Germany/DACH', sector:'Pharma',
+    platforms:['databricks','snowflake'], tier:'case-study',
+    useCase:'Snowflake selected as corporate data warehouse after exhaustive evaluation; dbt + Snowflake analytics layer. Databricks also confirmed for ML/engineering workloads.',
+    src:'CIO interview',
+    srcUrl:'https://www.cio.com/article/4043753/boehringer-ingelheim-a-digital-journey-with-a-focus-on-data.html'
+  },
+  {
+    name:'Eli Lilly', hq:'Cork, IE (EU mfg)', flag:'🇮🇪', region:'UK/Ireland', sector:'Pharma',
+    platforms:['databricks','snowflake'], tier:'secondary',
+    useCase:'Global Manufacturing Data Fabric on Databricks (batch release, predictive maintenance). Snowflake and Databricks both confirmed in Clinical Insights Lakehouse architecture. Major Ireland manufacturing.',
+    src:'Databricks 100 use cases blog + job architecture refs',
+    srcUrl:'https://www.databricks.com/blog/data-intelligence-action-100-data-and-ai-use-cases-databricks-customers'
+  },
+  {
+    name:'MSD (Merck)', hq:'Brussels, BE (EU HQ)', flag:'🇧🇪', region:'France/Benelux', sector:'Pharma',
+    platforms:['databricks','snowflake'], tier:'secondary',
+    useCase:'Enterprise data marketplace: Snowflake + Databricks + AWS + Starburst federated stack. ML workloads on Databricks; governed analytics on Snowflake. 35+ European countries.',
+    src:'CDO Magazine data marketplace article',
+    srcUrl:'https://www.cdomagazine.tech/data-management/data-for-all-valuable-lessons-from-merck-msds-data-marketplace-implementation'
+  },
+];
+
+/* ── ICONS ────────────────────────────────────────────────────── */
+const DBR_ICON = `<svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1L1 4.5v4L8 12l7-3.5v-4L8 1zm0 1.4l5.5 2.6L8 8 2.5 5.6 8 2.4zM2 6l5.5 2.6v4.5L2 10.5V6zm7 7.1V8.6L14 6v4.5L9 13.1z"/></svg>`;
+const SNW_ICON = `<svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 1.4a5.6 5.6 0 110 11.2A5.6 5.6 0 018 2.4zM8 4L6.5 7H5l1.75 1.75L5.5 11 8 9.5l2.5 1.5-1.25-2.25L11 7H9.5L8 4z"/></svg>`;
+
+const TIER_LABELS = {'case-study':'Case Study','hcls-page':'Named Ref','secondary':'Secondary'};
+const TIER_CLS   = {'case-study':'cs','hcls-page':'hp','secondary':'sec'};
+
+/* ── STATE ────────────────────────────────────────────────────── */
+let activePlat = 'all';
+let view = 'table';
+
+/* ── RENDER CARDS ─────────────────────────────────────────────── */
+function buildCards(){
+  const grid = document.getElementById('cardGrid');
+  grid.innerHTML = COMPANIES.map((c,i)=>{
+    const tc = TIER_CLS[c.tier];
+    const platBadges = c.platforms.map(p=>
+      p==='databricks'
+        ? `<span class="plat-badge dbr">${DBR_ICON}Databricks</span>`
+        : `<span class="plat-badge snow">${SNW_ICON}Snowflake</span>`
+    ).join('');
+    return `<div class="card" data-plat="${c.platforms.join(',')}" data-tier="${c.tier}" data-sector="${c.sector}" data-region="${c.region}" id="card-${i}">
+      <div class="card-stripe ${tc}"></div>
+      <div class="card-inner">
+        <div class="card-top">
+          <div class="card-hq"><span class="card-flag">${c.flag}</span>${c.hq}</div>
+          <span class="tier-badge ${tc}">${TIER_LABELS[c.tier]}</span>
+        </div>
+        <div>
+          <div class="card-name">${c.name}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+          <span class="card-sector">${c.sector}</span>
+          <span style="font-size:.63rem;color:var(--muted)">${c.region}</span>
+        </div>
+        <div class="card-plats">${platBadges}</div>
+        <p class="card-use">${c.useCase}</p>
+        <div class="card-foot">
+          <a class="card-src-link" href="${c.srcUrl}" target="_blank" rel="noopener">
+            ${c.src}
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── RENDER TABLE ─────────────────────────────────────────────── */
+function buildTable(){
+  const tb = document.getElementById('tblBody');
+  tb.innerHTML = COMPANIES.map((c,i)=>{
+    const platBadges = c.platforms.map(p=>
+      p==='databricks'
+        ? `<span class="plat-badge dbr" style="font-size:.62rem">${DBR_ICON}Databricks</span>`
+        : `<span class="plat-badge snow" style="font-size:.62rem">${SNW_ICON}Snowflake</span>`
+    ).join(' ');
+    const tc = TIER_CLS[c.tier];
+    return `<tr data-plat="${c.platforms.join(',')}" data-tier="${c.tier}" data-sector="${c.sector}" data-region="${c.region}" id="row-${i}">
+      <td>
+        <div class="tbl-name">${c.flag} ${c.name}</div>
+        <div class="tbl-hq">${c.hq}</div>
+      </td>
+      <td><div style="display:flex;gap:.3rem;flex-wrap:wrap">${platBadges}</div></td>
+      <td><span class="tier-badge ${tc}">${TIER_LABELS[c.tier]}</span></td>
+      <td><span class="card-sector">${c.sector}</span></td>
+      <td style="color:var(--muted);font-size:.7rem">${c.region}</td>
+      <td class="tbl-use">${c.useCase}</td>
+      <td><a class="tbl-src" href="${c.srcUrl}" target="_blank" rel="noopener">${c.src} <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg></a></td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── FILTER ───────────────────────────────────────────────────── */
+function applyFilters(){
+  const tier   = document.getElementById('f-tier').value;
+  const sector = document.getElementById('f-sector').value;
+  const region = document.getElementById('f-region').value;
+
+  let shown=0;
+  COMPANIES.forEach((_,i)=>{
+    const card = document.getElementById('card-'+i);
+    const row  = document.getElementById('row-'+i);
+    const el   = view==='cards' ? card : row;
+    if(!el) return;
+
+    const c = COMPANIES[i];
+    const platMatch = activePlat==='all'
+      ? true
+      : activePlat==='both'
+        ? c.platforms.length>1
+        : c.platforms.includes(activePlat);
+
+    const match = platMatch
+      && (!tier   || c.tier===tier)
+      && (!sector || c.sector===sector)
+      && (!region || c.region===region);
+
+    el.classList.toggle('hidden', !match);
+    if(match) shown++;
+  });
+
+  document.getElementById('matchCount').textContent = `${shown} of ${COMPANIES.length}`;
+  document.getElementById('emptyMsg').classList.toggle('show', shown===0);
+
+  // update stats for filtered set
+  const visible = COMPANIES.filter((c,i)=>{
+    const platMatch = activePlat==='all'
+      ? true
+      : activePlat==='both'
+        ? c.platforms.length>1
+        : c.platforms.includes(activePlat);
+    const t = !tier   || c.tier===tier;
+    const s = !sector || c.sector===sector;
+    const r = !region || c.region===region;
+    return platMatch && t && s && r;
+  });
+  document.getElementById('s-total').textContent = visible.length;
+  document.getElementById('s-dbr').textContent   = visible.filter(c=>c.platforms.includes('databricks')).length;
+  document.getElementById('s-snow').textContent  = visible.filter(c=>c.platforms.includes('snowflake')).length;
+  document.getElementById('s-both').textContent  = visible.filter(c=>c.platforms.length>1).length;
+}
+
+/* ── PLATFORM BUTTON ACTIVE CLASS ─────────────────────────────── */
+function setPlatBtn(val){
+  activePlat = val;
+  document.querySelectorAll('.plat-btn').forEach(b=>{
+    b.className='plat-btn';
+    if(b.dataset.plat===val){
+      if(val==='all')  b.classList.add('active-all');
+      else if(val==='databricks') b.classList.add('active-dbr');
+      else if(val==='snowflake')  b.classList.add('active-snow');
+      else if(val==='both')       b.classList.add('active-both');
+    }
+  });
+}
+
+/* ── EXPORT CSV ───────────────────────────────────────────────── */
+function exportCSV(){
+  const tier   = document.getElementById('f-tier').value;
+  const sector = document.getElementById('f-sector').value;
+  const region = document.getElementById('f-region').value;
+  const rows = COMPANIES.filter(c=>{
+    const platMatch = activePlat==='all' ? true
+      : activePlat==='both' ? c.platforms.length>1
+      : c.platforms.includes(activePlat);
+    return platMatch
+      && (!tier   || c.tier===tier)
+      && (!sector || c.sector===sector)
+      && (!region || c.region===region);
+  });
+  const esc=v=>`"${String(v||'').replace(/"/g,'""')}"`;
+  const header=['Company','HQ','Region','Sector','Platforms','Tier','Use Case','Source','Source URL'];
+  const csv=[header.map(esc).join(','),...rows.map(r=>[
+    esc(r.name),esc(r.hq),esc(r.region),esc(r.sector),
+    esc(r.platforms.join(', ')),esc(TIER_LABELS[r.tier]),
+    esc(r.useCase),esc(r.src),esc(r.srcUrl)
+  ].join(','))].join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='lifesciences_logos.csv'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+/* ── INIT ─────────────────────────────────────────────────────── */
+buildCards();
+buildTable();
+
+// Default to table view
+document.getElementById('cardGrid').style.display='none';
+document.getElementById('tblWrap').style.display='';
+document.getElementById('btnCards').classList.remove('active');
+document.getElementById('btnTable').classList.add('active');
+
+document.querySelectorAll('.plat-btn').forEach(b=>{
+  b.addEventListener('click',()=>{ setPlatBtn(b.dataset.plat); applyFilters(); });
+});
+['f-tier','f-sector','f-region'].forEach(id=>{
+  document.getElementById(id).addEventListener('change', applyFilters);
+});
+
+document.getElementById('btnCards').addEventListener('click',()=>{
+  view='cards';
+  document.getElementById('cardGrid').style.display='';
+  document.getElementById('tblWrap').style.display='none';
+  document.getElementById('btnCards').classList.add('active');
+  document.getElementById('btnTable').classList.remove('active');
+  applyFilters();
+});
+document.getElementById('btnTable').addEventListener('click',()=>{
+  view='table';
+  document.getElementById('cardGrid').style.display='none';
+  document.getElementById('tblWrap').style.display='';
+  document.getElementById('btnCards').classList.remove('active');
+  document.getElementById('btnTable').classList.add('active');
+  applyFilters();
+});
+
+const themeBtn=document.getElementById('themeBtn');
+const root=document.documentElement;
+function applyTheme(t){root.dataset.theme=t;themeBtn.textContent=t==='dark'?'☀️':'🌙';localStorage.setItem('ls-logos-theme',t);}
+themeBtn.addEventListener('click',()=>applyTheme(root.dataset.theme==='dark'?'light':'dark'));
+applyTheme(localStorage.getItem('ls-logos-theme')||'light');
+</script>
+</body>
+</html>
