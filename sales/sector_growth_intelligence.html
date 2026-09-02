@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sector Growth Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500&display=swap">
+<style>
+/* ── TOKENS ─────────────────────────────────────────────────────── */
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;--dim:#94A3B8;
+  --accent:#6366F1;
+  --hdr:#0F172A;--hdr-text:#F1F5F9;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.1),0 12px 32px rgba(0,0,0,.08);
+  /* tiers */
+  --ex:#15803D;--ex-bg:#DCFCE7;--ex-border:#86EFAC;
+  --str:#1D4ED8;--str-bg:#DBEAFE;--str-border:#93C5FD;
+  --sol:#B45309;--sol-bg:#FEF3C7;--sol-border:#FCD34D;
+  --bel:#64748B;--bel-bg:#F1F5F9;--bel-border:#CBD5E1;
+  /* sectors */
+  --bfsi:#6366F1;--bfsi-bg:#EEF2FF;
+  --hcmi:#059669;--hcmi-bg:#DCFCE7;
+  --mfg:#D97706;--mfg-bg:#FEF3C7;
+  --enrg:#0284C7;--enrg-bg:#E0F2FE;
+  --retl:#DB2777;--retl-bg:#FCE7F3;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;
+  --hdr:#0A0F1E;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
+  --ex:#4ADE80;--ex-bg:#052E16;--ex-border:#166534;
+  --str:#60A5FA;--str-bg:#1E3A5F;--str-border:#1E40AF;
+  --sol:#FCD34D;--sol-bg:#292003;--sol-border:#92400E;
+  --bel:#94A3B8;--bel-bg:#1E293B;--bel-border:#334155;
+  --bfsi-bg:#1E1B4B;--hcmi-bg:#052E16;--mfg-bg:#292003;--enrg-bg:#0C2340;--retl-bg:#4A0020;
+}}
+:root[data-theme="dark"]{
+  --bg:#0F172A;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;
+  --hdr:#0A0F1E;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
+  --ex:#4ADE80;--ex-bg:#052E16;--ex-border:#166534;
+  --str:#60A5FA;--str-bg:#1E3A5F;--str-border:#1E40AF;
+  --sol:#FCD34D;--sol-bg:#292003;--sol-border:#92400E;
+  --bel:#94A3B8;--bel-bg:#1E293B;--bel-border:#334155;
+  --bfsi-bg:#1E1B4B;--hcmi-bg:#052E16;--mfg-bg:#292003;--enrg-bg:#0C2340;--retl-bg:#4A0020;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:13px;scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;min-height:100vh}
+h1,h2,h3{font-family:'Plus Jakarta Sans',system-ui,sans-serif;line-height:1.2}
+
+/* ── HEADER ─────────────────────────────────────────────────────── */
+.hdr{background:var(--hdr);color:var(--hdr-text);padding:.65rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:100}
+.hdr-brand{display:flex;align-items:center;gap:.75rem}
+.hdr-back{display:flex;align-items:center;gap:.35rem;color:#94A3B8;font-size:.72rem;font-weight:500;text-decoration:none;padding:.25rem .55rem;border:1px solid #334155;border-radius:.3rem;transition:color .15s,border-color .15s}
+.hdr-back:hover{color:var(--hdr-text);border-color:#6366F1}
+.hdr-back svg{width:10px;height:10px}
+.hdr-sep{width:1px;height:16px;background:#334155}
+.hdr-badge{background:linear-gradient(90deg,#6366F1,#8B5CF6);color:#fff;font-size:.62rem;font-weight:700;padding:.15rem .45rem;border-radius:.25rem;letter-spacing:.05em;font-family:'Plus Jakarta Sans',sans-serif}
+.hdr-title{font-size:.9rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hdr-text)}
+.hdr-right{display:flex;align-items:center;gap:.75rem}
+.hdr-meta{font-size:.7rem;color:#64748B}
+.theme-btn{background:none;border:1px solid #334155;color:#94A3B8;border-radius:.375rem;padding:.25rem .6rem;cursor:pointer;font-size:.8rem;transition:border-color .15s,color .15s;font-family:inherit}
+.theme-btn:hover{border-color:#6366F1;color:var(--hdr-text)}
+
+/* ── STAT BAR ───────────────────────────────────────────────────── */
+.stat-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:.55rem 1.25rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+.stat{display:flex;flex-direction:column;gap:.08rem;padding:.3rem .65rem;border-radius:.45rem;border:1px solid var(--border);background:var(--surface2)}
+.stat-n{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.25rem;font-weight:800;line-height:1}
+.stat-l{font-size:.61rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.stat-note{margin-left:auto;font-size:.68rem;color:var(--muted);font-style:italic}
+.baseline-pill{background:var(--surface2);border:1px solid var(--border);border-radius:2rem;padding:.2rem .65rem;font-size:.65rem;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:.3rem}
+.baseline-dot{width:7px;height:7px;border-radius:50%;background:#94A3B8}
+
+/* ── SECTOR CARDS ───────────────────────────────────────────────── */
+.sector-strip{padding:.85rem 1.25rem;display:grid;grid-template-columns:repeat(5,1fr);gap:.65rem}
+@media(max-width:900px){.sector-strip{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.sector-strip{grid-template-columns:1fr 1fr}}
+.sc{background:var(--surface);border:1.5px solid var(--border);border-radius:.55rem;padding:.65rem .8rem;cursor:pointer;transition:border-color .15s,box-shadow .15s;position:relative;overflow:hidden}
+.sc:hover{box-shadow:var(--shadow-hover)}
+.sc.active{border-color:var(--sc-color)}
+.sc-tag{width:100%;height:3px;border-radius:2px;margin-bottom:.5rem}
+.sc-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:.75rem;font-weight:700;color:var(--text);margin-bottom:.25rem}
+.sc-row{display:flex;justify-content:space-between;align-items:baseline;gap:.25rem}
+.sc-peak{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.2rem;font-weight:800}
+.sc-floor{font-size:.63rem;color:var(--muted)}
+.sc-region{font-size:.62rem;color:var(--muted);margin-top:.2rem}
+
+/* ── TOOLBAR ────────────────────────────────────────────────────── */
+.toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:.5rem 1.25rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.sec-btns{display:flex;gap:.3rem;flex-wrap:wrap}
+.sec-btn{padding:.27rem .65rem;font-size:.7rem;font-weight:700;border-radius:2rem;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;white-space:nowrap}
+.sec-btn.active{color:#fff}
+.sec-btn[data-s="all"].active{background:var(--accent);border-color:var(--accent)}
+.sec-btn[data-s="BFSI"].active{background:var(--bfsi);border-color:var(--bfsi)}
+.sec-btn[data-s="HCMI"].active{background:var(--hcmi);border-color:var(--hcmi)}
+.sec-btn[data-s="Manufacturing"].active{background:var(--mfg);border-color:var(--mfg)}
+.sec-btn[data-s="Energy"].active{background:var(--enrg);border-color:var(--enrg)}
+.sec-btn[data-s="Retail"].active{background:var(--retl);border-color:var(--retl)}
+.toolbar-sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
+.f-sel{padding:.28rem .55rem;font-size:.7rem;border:1px solid var(--border);border-radius:.375rem;background:var(--surface2);color:var(--text);font-family:inherit;cursor:pointer}
+.f-sel:focus{outline:none;border-color:var(--accent)}
+.baseline-toggle{display:flex;align-items:center;gap:.35rem;font-size:.7rem;color:var(--muted);cursor:pointer;white-space:nowrap;user-select:none}
+.baseline-toggle input{cursor:pointer;accent-color:var(--accent)}
+.match-count{font-size:.7rem;color:var(--muted);margin-left:auto}
+.btn-export{padding:.28rem .7rem;font-size:.7rem;font-weight:600;background:var(--accent);color:#fff;border:none;border-radius:.3rem;cursor:pointer;font-family:inherit;transition:opacity .15s;flex-shrink:0}
+.btn-export:hover{opacity:.85}
+
+/* ── TABLE ──────────────────────────────────────────────────────── */
+.tbl-wrap{padding:1rem 1.25rem;overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:.75rem}
+.tbl th{text-align:left;padding:.45rem .7rem;border-bottom:2px solid var(--border);font-family:'Plus Jakarta Sans',sans-serif;font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s}
+.tbl th:hover{color:var(--text)}
+.tbl th .sort-icon{font-size:.6rem;opacity:.5;margin-left:.2rem}
+.tbl th.sorted{color:var(--accent)}
+.tbl th.sorted .sort-icon{opacity:1}
+.tbl td{padding:.5rem .7rem;border-bottom:1px solid var(--border);vertical-align:middle}
+.tbl tr:hover td{background:var(--surface2)}
+.tbl tr.hidden{display:none}
+.rank-cell{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.78rem;color:var(--dim);width:32px;text-align:center}
+.name-cell{font-weight:600;color:var(--text);line-height:1.4;max-width:280px}
+.name-note{font-size:.63rem;color:var(--muted);font-weight:400;margin-top:.1rem;font-style:italic}
+.sec-badge{display:inline-flex;align-items:center;gap:.2rem;font-size:.62rem;font-weight:700;padding:.18rem .45rem;border-radius:.25rem;white-space:nowrap;border:1px solid transparent;font-family:'Plus Jakarta Sans',sans-serif}
+.sec-badge.BFSI{background:var(--bfsi-bg);color:var(--bfsi);border-color:var(--bfsi)}
+.sec-badge.HCMI{background:var(--hcmi-bg);color:var(--hcmi);border-color:var(--hcmi)}
+.sec-badge.Manufacturing{background:var(--mfg-bg);color:var(--mfg);border-color:var(--mfg)}
+.sec-badge.Energy{background:var(--enrg-bg);color:var(--enrg);border-color:var(--enrg)}
+.sec-badge.Retail{background:var(--retl-bg);color:var(--retl);border-color:var(--retl)}
+.region-cell{font-size:.68rem;color:var(--muted);white-space:nowrap}
+.cagr-cell{white-space:nowrap;min-width:110px}
+.cagr-num{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.85rem}
+.cagr-num.tier-ex{color:var(--ex)}
+.cagr-num.tier-str{color:var(--str)}
+.cagr-num.tier-sol{color:var(--sol)}
+.cagr-num.tier-bel{color:var(--bel)}
+.cagr-bar-wrap{margin-top:.22rem;position:relative;height:5px;background:var(--border);border-radius:3px;width:100%;max-width:140px}
+.cagr-bar{height:100%;border-radius:3px;position:absolute;left:0;top:0}
+.cagr-bar.tier-ex{background:var(--ex)}
+.cagr-bar.tier-str{background:var(--str)}
+.cagr-bar.tier-sol{background:var(--sol)}
+.cagr-bar.tier-bel{background:var(--bel)}
+.baseline-marker{position:absolute;top:-1px;bottom:-1px;width:1.5px;background:#94A3B8;opacity:.7}
+.tier-badge{display:inline-block;font-size:.58rem;font-weight:700;padding:.12rem .38rem;border-radius:.2rem;text-transform:uppercase;letter-spacing:.04em;border:1px solid transparent}
+.tier-badge.tier-ex{background:var(--ex-bg);color:var(--ex);border-color:var(--ex-border)}
+.tier-badge.tier-str{background:var(--str-bg);color:var(--str);border-color:var(--str-border)}
+.tier-badge.tier-sol{background:var(--sol-bg);color:var(--sol);border-color:var(--sol-border)}
+.tier-badge.tier-bel{background:var(--bel-bg);color:var(--bel);border-color:var(--bel-border)}
+.driver-cell{font-size:.67rem;color:var(--muted);max-width:220px;line-height:1.5}
+
+/* ── EMPTY ──────────────────────────────────────────────────────── */
+.empty{padding:3rem;text-align:center;color:var(--muted);display:none}
+.empty.show{display:block}
+
+/* ── FOOTER ─────────────────────────────────────────────────────── */
+.page-footer{text-align:center;padding:.7rem;font-size:.67rem;color:var(--dim);border-top:1px solid var(--border);background:var(--surface)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-brand">
+    <a href="index.html" class="hdr-back">
+      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6H2M4 2L0 6l4 4"/></svg>
+      All Tools
+    </a>
+    <div class="hdr-sep"></div>
+    <span class="hdr-badge">RESEARCH</span>
+    <span class="hdr-title">Sector Growth Intelligence — Americas &amp; Europe</span>
+  </div>
+  <div class="hdr-right">
+    <span class="hdr-meta">5 sectors · 51 sub-segments · Sep 2026</span>
+    <button class="theme-btn" id="themeBtn">🌙</button>
+  </div>
+</header>
+
+<!-- STAT BAR -->
+<div class="stat-bar">
+  <div class="stat"><span class="stat-n" id="s-total" style="color:var(--accent)">51</span><span class="stat-l">Sub-segments</span></div>
+  <div class="stat"><span class="stat-n" style="color:var(--ex)" id="s-ex">—</span><span class="stat-l">Exceptional &gt;25%</span></div>
+  <div class="stat"><span class="stat-n" style="color:var(--str)" id="s-str">—</span><span class="stat-l">Strong 15–25%</span></div>
+  <div class="stat"><span class="stat-n" style="color:var(--sol)" id="s-sol">—</span><span class="stat-l">Solid 10–15%</span></div>
+  <div class="stat"><span class="stat-n" style="color:var(--bel)" id="s-bel">—</span><span class="stat-l">Below baseline</span></div>
+  <span class="baseline-pill"><span class="baseline-dot"></span>IT baseline 10.8% (Gartner 2026)</span>
+  <span class="stat-note">Sources: Gartner · GVR · Fortune BI · IMARC · SNS Insider · S&amp;P Global · MarketsandMarkets</span>
+</div>
+
+<!-- SECTOR CARDS -->
+<div class="sector-strip" id="sectorStrip"></div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="sec-btns" id="secBtns">
+    <button class="sec-btn active" data-s="all">All Sectors</button>
+    <button class="sec-btn" data-s="BFSI">BFSI</button>
+    <button class="sec-btn" data-s="HCMI">HCMI</button>
+    <button class="sec-btn" data-s="Manufacturing">Manufacturing</button>
+    <button class="sec-btn" data-s="Energy">Energy &amp; Utilities</button>
+    <button class="sec-btn" data-s="Retail">Retail / CPG</button>
+  </div>
+  <div class="toolbar-sep"></div>
+  <select class="f-sel" id="f-region">
+    <option value="">All Regions</option>
+    <option value="Americas">Americas</option>
+    <option value="Europe">Europe</option>
+    <option value="Global">Global</option>
+    <option value="LatAm">Latin America</option>
+  </select>
+  <select class="f-sel" id="f-tier">
+    <option value="">All Tiers</option>
+    <option value="ex">Exceptional (&gt;25%)</option>
+    <option value="str">Strong (15–25%)</option>
+    <option value="sol">Solid (10–15%)</option>
+    <option value="bel">Below Baseline</option>
+  </select>
+  <label class="baseline-toggle">
+    <input type="checkbox" id="aboveBaseline"> Above IT baseline only
+  </label>
+  <span class="match-count" id="matchCount"></span>
+  <button class="btn-export" onclick="exportCSV()">Export CSV</button>
+</div>
+
+<!-- TABLE -->
+<div class="tbl-wrap">
+  <table class="tbl" id="mainTbl">
+    <thead>
+      <tr>
+        <th data-col="rank" class="sorted"># <span class="sort-icon">↓</span></th>
+        <th data-col="name">Sub-segment <span class="sort-icon"></span></th>
+        <th data-col="sector">Sector <span class="sort-icon"></span></th>
+        <th data-col="region">Region <span class="sort-icon"></span></th>
+        <th data-col="cagr">CAGR <span class="sort-icon">↓</span></th>
+        <th>Tier</th>
+        <th>Key Driver</th>
+      </tr>
+    </thead>
+    <tbody id="tblBody"></tbody>
+  </table>
+</div>
+<div class="empty" id="emptyMsg">No sub-segments match the current filters.</div>
+
+<footer class="page-footer">Independent market research · Sources: Gartner, Grand View Research, Fortune Business Insights, IMARC, SNS Insider, S&amp;P Global, Mordor Intelligence, MarketsandMarkets, Precedence Research · Sep 2026</footer>
+
+<script>
+/* ── DATA ──────────────────────────────────────────────────────── */
+const BASELINE = 10.8;
+const BAR_MAX  = 65; // cagr value that fills the bar 100%
+
+const SECTORS = {
+  BFSI:           {color:'#6366F1', peak:'35–47%', floor:'4.6%', region:'Europe (RegTech, Open Banking)'},
+  HCMI:           {color:'#059669', peak:'41.5%',  floor:'4.7%', region:'Europe (HC analytics 23.9%)'},
+  Manufacturing:  {color:'#D97706', peak:'~63%',   floor:'8.7%', region:'Europe (DX 21.3%) + LatAm'},
+  Energy:         {color:'#0284C7', peak:'29.2%',  floor:'7.2%', region:'Europe (DX in energy 29.2%)'},
+  Retail:         {color:'#DB2777', peak:'26.1%',  floor:'4.2%', region:'Americas (AI in retail)'},
+};
+
+const DATA = [
+  // ── Manufacturing ──────────────────────────────────────────────
+  {name:'Digital twin — manufacturing-specific', note:'1-yr analyst est; multi-yr GVR = 31%', sector:'Manufacturing', region:'Global',   cagr:63,   tier:'ex',  driver:'Industrial IoT + smart factory adoption; simulation-driven product design'},
+  {name:'Digital twin — broader market (2026–33)',note:'',                                      sector:'Manufacturing', region:'Global',   cagr:31.1, tier:'ex',  driver:'Product lifecycle, factory simulation, digital thread across supply chain'},
+  {name:'Manufacturing analytics',               note:'North America 39% share',              sector:'Manufacturing', region:'Americas', cagr:19.2, tier:'str', driver:'Industry 4.0, AI-driven quality control, OEE optimisation'},
+  {name:'Smart manufacturing platform',          note:'N. America 40% of deployments',         sector:'Manufacturing', region:'Americas', cagr:18.3, tier:'str', driver:'Greenfield factory builds (reshoring + nearshoring), OT/IT convergence'},
+  {name:'Industrial IoT in manufacturing',       note:'Leading sub-segment share 34.4%',       sector:'Manufacturing', region:'Europe',   cagr:18.3, tier:'str', driver:'EU AI Act + CSRD Scope 3 emissions data; Mittelstand catch-up'},
+  {name:'Smart manufacturing — overall',         note:'',                                      sector:'Manufacturing', region:'Global',   cagr:12.1, tier:'sol', driver:'Automation, robotics, ERP integration'},
+  {name:'Europe factory automation',             note:'',                                      sector:'Manufacturing', region:'Europe',   cagr:8.7,  tier:'bel', driver:'Steady: labour cost pressure, not AI-driven yet'},
+  // ── HCMI ───────────────────────────────────────────────────────
+  {name:'AI in pharma',                          note:'N. America 41.5% global share',         sector:'HCMI', region:'Americas', cagr:41.5, tier:'ex',  driver:'Drug discovery acceleration, regulatory AI (FDA/EMA), GLP-1 / oncology R&D boom'},
+  {name:'AI in clinical trials',                 note:'$10.1B → $14.1B (2025→2026)',          sector:'HCMI', region:'Global',   cagr:39.6, tier:'ex',  driver:'Trial failure reduction, RWE analytics, FDA acceptance of AI-generated evidence'},
+  {name:'Europe healthcare analytics',           note:'$17.47B · 2024–2030 outlook',          sector:'HCMI', region:'Europe',   cagr:23.9, tier:'ex',  driver:'EHDS mandate, KHZG hospital digitisation fund, NHS data strategy'},
+  {name:'Healthcare technology',                 note:'$587B → $707B (2025→2026)',            sector:'HCMI', region:'Global',   cagr:20.3, tier:'str', driver:'AI diagnostics, genomics pipelines, telehealth, clinical informatics'},
+  {name:'Life science analytics — N. America',   note:'43.3% of global market',               sector:'HCMI', region:'Americas', cagr:15.6, tier:'str', driver:'Real-world evidence, post-trial surveillance, FDA PDUFA VII'},
+  {name:'N. America HC cloud analytics',         note:'',                                      sector:'HCMI', region:'Americas', cagr:14.9, tier:'sol', driver:'Cloud EHR migration, predictive analytics, interoperability rules'},
+  {name:'N. America healthcare big data',        note:'$24.7B in 2025',                       sector:'HCMI', region:'Americas', cagr:10.9, tier:'sol', driver:'Value-based care, population health management'},
+  {name:'HC cloud analytics — global',           note:'$52.2B → $56.9B',                     sector:'HCMI', region:'Global',   cagr:8.9,  tier:'bel', driver:'Steady adoption; large installed base moderates growth rate'},
+  {name:'Healthcare CRO',                        note:'$61.7B in 2026',                       sector:'HCMI', region:'Americas', cagr:7.0,  tier:'bel', driver:'Outsourced R&D demand, but contract pricing pressure limiting growth'},
+  {name:'EU life science analytics',             note:'$2.96B in 2025',                       sector:'HCMI', region:'Europe',   cagr:6.5,  tier:'bel', driver:'Pharma analytics spend, but smaller base and slower enterprise rollout'},
+  {name:'MedTech / medical devices',             note:'$678.9B global; N. Am. 40% share',     sector:'HCMI', region:'Global',   cagr:5.9,  tier:'bel', driver:'Chronic disease + aging population; hardware-limited CAGR'},
+  {name:'US hospital services',                  note:'$2.64T in 2025',                       sector:'HCMI', region:'Americas', cagr:4.7,  tier:'bel', driver:'Reimbursement pressure, staffing costs; delivery layer grows slowly'},
+  // ── BFSI ───────────────────────────────────────────────────────
+  {name:'Neobanking — Europe dominant (37.2%)',  note:'$214–261B range (2025); 35–47% range', sector:'BFSI', region:'Europe',   cagr:47,   tier:'ex',  driver:'Digital-only challenger banks, financial inclusion, SME banking modernisation'},
+  {name:'InsurTech — N. America dominant (48%)', note:'$19.1B (2025); 24–44% range',         sector:'BFSI', region:'Americas', cagr:44,   tier:'ex',  driver:'Embedded insurance, usage-based models, AI underwriting automation'},
+  {name:'RegTech — Europe 48% global share',     note:'$24.3B (2025)',                        sector:'BFSI', region:'Europe',   cagr:21.1, tier:'ex',  driver:'DORA (live Jan 2025), Basel IV/CRR3, BCBS 239 — non-discretionary spend'},
+  {name:'Open Banking — Europe 36% share',       note:'$35.7B (2025)',                        sector:'BFSI', region:'Europe',   cagr:21.0, tier:'ex',  driver:'PSD2 → PSD3 pipeline, API economy, data-sharing mandates'},
+  {name:'BFSI contact center analytics',         note:'$0.53B → $0.62B',                     sector:'BFSI', region:'Global',   cagr:20.0, tier:'str', driver:'AI voice analytics, fraud detection, NPS automation'},
+  {name:'BFSI digital transformation',           note:'$196B in 2025 globally',               sector:'BFSI', region:'Global',   cagr:16.7, tier:'str', driver:'Core banking replacement, cloud-native architecture, AI-driven operations'},
+  {name:'Europe cloud services / BFSI-led',      note:'$219.1M → $253.3M (2025→2026)',       sector:'BFSI', region:'Europe',   cagr:15.6, tier:'str', driver:'Cloud data platform adoption; DORA resilience requirements'},
+  {name:'BFSI BI / analytics',                   note:'$24B in 2025',                        sector:'BFSI', region:'Global',   cagr:12.2, tier:'sol', driver:'Risk analytics, regulatory reporting, customer 360'},
+  {name:'BFSI security',                         note:'$73.8B → $82.6B (2025→2026)',         sector:'BFSI', region:'Global',   cagr:12.0, tier:'sol', driver:'Cyber threats, fraud, regulatory compliance — steady growth'},
+  {name:'Europe financial services — traditional',note:'$10.7B (2025)',                       sector:'BFSI', region:'Europe',   cagr:6.4,  tier:'bel', driver:'Mature market; growth in fintech layer, not core delivery'},
+  {name:'Europe bancassurance — traditional',    note:'€685.8B gross written premiums',       sector:'BFSI', region:'Europe',   cagr:4.6,  tier:'bel', driver:'Non-life insurance growth; structural, not tech-driven'},
+  // ── Energy & Utilities ─────────────────────────────────────────
+  {name:'EU digital transformation in energy',   note:'$13.6B (2023 base); fastest region',  sector:'Energy', region:'Europe',   cagr:29.2, tier:'ex',  driver:'EU Green Deal, Fit for 55, carbon border adjustment — twin transition mandate'},
+  {name:'Carbon analytics AI — global',          note:'$2.66B → $3.42B (2025→2026)',         sector:'Energy', region:'Global',   cagr:28.3, tier:'ex',  driver:'CSRD mandatory ESG/carbon reporting (EU 2025), SEC climate rules (US)'},
+  {name:'AI in renewable energy',                note:'$1.06B (2025)',                        sector:'Energy', region:'Global',   cagr:24.3, tier:'ex',  driver:'Grid load forecasting, wind/solar output prediction, curtailment reduction'},
+  {name:'AI in energy — global',                 note:'$22.8B → $27.9B (2025→2026)',         sector:'Energy', region:'Global',   cagr:22.2, tier:'ex',  driver:'Demand forecasting, outage prediction, smart meter analytics, virtual power plants'},
+  {name:'N. America smart grid',                 note:'$19.8B (2025); US capex $1.3T (2026–30)',sector:'Energy',region:'Americas', cagr:10.6, tier:'sol', driver:'Grid modernisation for EV charging, AI data centres, climate resilience'},
+  {name:'Grid modernization — global',           note:'',                                     sector:'Energy', region:'Global',   cagr:10.5, tier:'sol', driver:'Renewables integration, bidirectional flow, cybersecurity'},
+  {name:'Energy & utilities analytics',          note:'$6.1B in 2026',                       sector:'Energy', region:'Global',   cagr:10.6, tier:'sol', driver:'Operational efficiency, predictive maintenance of grid assets'},
+  {name:'Utility renewable energy analytics',    note:'$1.55B in 2026',                      sector:'Energy', region:'Global',   cagr:7.8,  tier:'bel', driver:'Growing but niche; larger AI in energy market absorbs it'},
+  {name:'Europe smart grid',                     note:'$23.1B (2024)',                        sector:'Energy', region:'Europe',   cagr:7.2,  tier:'bel', driver:'Smart meter rollout; infrastructure-paced, not AI-paced'},
+  // ── Retail & CPG ──────────────────────────────────────────────
+  {name:'AI in retail — global',                 note:'$12.4B → $16.5B (2025→2026)',         sector:'Retail', region:'Global',   cagr:26.1, tier:'ex',  driver:'Personalisation, dynamic pricing, computer vision loss-prevention, GenAI search'},
+  {name:'AI in FMCG & Retail — global',          note:'$190B → $238B (2025→2026)',           sector:'Retail', region:'Global',   cagr:25.0, tier:'ex',  driver:'Demand sensing, promo optimisation, hyper-personalised promotions at scale'},
+  {name:'LatAm supply chain analytics',          note:'Fastest-growing region globally 24.8%',sector:'Retail', region:'LatAm',   cagr:24.8, tier:'ex',  driver:'Nearshoring boom, e-commerce infrastructure build-out, last-mile logistics'},
+  {name:'AI-powered demand forecasting',         note:'$5.64B → $6.95B (2025→2026)',         sector:'Retail', region:'Global',   cagr:23.4, tier:'ex',  driver:'SKU proliferation, real-time signals (weather, social), out-of-stock elimination'},
+  {name:'EU supply chain & fulfillment analytics',note:'Fastest EU retail sub-segment',       sector:'Retail', region:'Europe',   cagr:18.0, tier:'str', driver:'CSRD supply chain disclosure, ESG traceability, EU Packaging Regulation'},
+  {name:'Supply chain analytics — global',       note:'$9.37B → $10.97B (2025→2026)',        sector:'Retail', region:'Global',   cagr:17.1, tier:'str', driver:'Resilience post-COVID, tariff volatility, real-time visibility mandates'},
+  {name:'Europe retail analytics',               note:'$3.23B → $3.76B (2025→2026)',         sector:'Retail', region:'Europe',   cagr:16.0, tier:'str', driver:'Lower prior penetration base; omnichannel catch-up investment'},
+  {name:'AI-enabled e-commerce analytics',       note:'$8.65B in 2025',                      sector:'Retail', region:'Global',   cagr:14.6, tier:'sol', driver:'Conversion optimisation, customer lifetime value, return fraud detection'},
+  {name:'Retail analytics — global',             note:'$11.31B in 2026',                     sector:'Retail', region:'Global',   cagr:12.8, tier:'sol', driver:'In-store footfall, loyalty programmes, price elasticity modelling'},
+  {name:'E-commerce market — total',             note:'$5.9T growth 2025–2030',              sector:'Retail', region:'Global',   cagr:13.1, tier:'sol', driver:'Mobile commerce, social commerce, marketplace expansion in EM'},
+  {name:'CPG market — total delivery',           note:'$3.45T in 2025',                      sector:'Retail', region:'Global',   cagr:4.2,  tier:'bel', driver:'Volume-led; innovation in analytics layer, not core market'},
+];
+
+/* Sort by CAGR desc initially, assign rank */
+DATA.sort((a,b)=>b.cagr-a.cagr);
+DATA.forEach((d,i)=>d.rank=i+1);
+
+/* ── SECTOR CARDS ──────────────────────────────────────────────── */
+function buildSectorCards(){
+  const strip=document.getElementById('sectorStrip');
+  strip.innerHTML=Object.entries(SECTORS).map(([name,s])=>`
+    <div class="sc" data-s="${name}" onclick="filterSector('${name}')" style="--sc-color:${s.color}">
+      <div class="sc-tag" style="background:${s.color}"></div>
+      <div class="sc-name">${name==='Energy'?'Energy &amp; Utilities':name==='Retail'?'Retail / CPG':name}</div>
+      <div class="sc-row">
+        <span class="sc-peak" style="color:${s.color}">${s.peak}</span>
+        <span class="sc-floor">floor ${s.floor}</span>
+      </div>
+      <div class="sc-region">${s.region}</div>
+    </div>`).join('');
+}
+
+/* ── TIER LABELS ───────────────────────────────────────────────── */
+const TIER_LABEL = {ex:'Exceptional',str:'Strong',sol:'Solid',bel:'Below baseline'};
+
+/* ── RENDER TABLE ──────────────────────────────────────────────── */
+function buildTable(){
+  const tb=document.getElementById('tblBody');
+  tb.innerHTML=DATA.map((d,i)=>{
+    const pct=Math.min(d.cagr/BAR_MAX*100,100).toFixed(1);
+    const blPct=(BASELINE/BAR_MAX*100).toFixed(1);
+    return `<tr data-i="${i}" data-sector="${d.sector}" data-region="${d.region}" data-tier="${d.tier}" data-cagr="${d.cagr}">
+      <td class="rank-cell">${d.rank}</td>
+      <td class="name-cell">${d.name}${d.note?`<div class="name-note">${d.note}</div>`:''}</td>
+      <td><span class="sec-badge ${d.sector}">${d.sector==='Energy'?'Energy':d.sector==='Retail'?'Retail/CPG':d.sector}</span></td>
+      <td class="region-cell">${d.region}</td>
+      <td class="cagr-cell">
+        <div class="cagr-num tier-${d.tier}">${d.cagr >= 35 && d.note && d.note.includes('range') ? '~' : ''}${d.cagr}%</div>
+        <div class="cagr-bar-wrap">
+          <div class="cagr-bar tier-${d.tier}" style="width:${pct}%"></div>
+          <div class="baseline-marker" style="left:${blPct}%"></div>
+        </div>
+      </td>
+      <td><span class="tier-badge tier-${d.tier}">${TIER_LABEL[d.tier]}</span></td>
+      <td class="driver-cell">${d.driver}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── FILTER & SORT STATE ───────────────────────────────────────── */
+let activeSec='all', sortCol='rank', sortAsc=true;
+
+function filterSector(s){
+  activeSec = activeSec===s ? 'all' : s;
+  // sync toolbar buttons
+  document.querySelectorAll('.sec-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.s===activeSec || (activeSec==='all' && b.dataset.s==='all'));
+  });
+  // sync sector cards
+  document.querySelectorAll('.sc').forEach(c=>{
+    c.classList.toggle('active', c.dataset.s===activeSec);
+  });
+  applyFilters();
+}
+
+function applyFilters(){
+  const region=document.getElementById('f-region').value;
+  const tier=document.getElementById('f-tier').value;
+  const aboveOnly=document.getElementById('aboveBaseline').checked;
+  let shown=0;
+  document.querySelectorAll('#tblBody tr').forEach(tr=>{
+    const s=tr.dataset.sector, r=tr.dataset.region,
+          t=tr.dataset.tier,   c=parseFloat(tr.dataset.cagr);
+    const match=(activeSec==='all'||s===activeSec)
+      &&(!region||r===region)
+      &&(!tier||t===tier)
+      &&(!aboveOnly||c>BASELINE);
+    tr.classList.toggle('hidden',!match);
+    if(match) shown++;
+  });
+  document.getElementById('matchCount').textContent=`${shown} of ${DATA.length} sub-segments`;
+  document.getElementById('emptyMsg').classList.toggle('show',shown===0);
+  updateStats(shown);
+}
+
+function updateStats(shown){
+  const visible=DATA.filter((_,i)=>{
+    const tr=document.querySelector(`#tblBody tr[data-i="${i}"]`);
+    return tr && !tr.classList.contains('hidden');
+  });
+  document.getElementById('s-total').textContent=shown;
+  document.getElementById('s-ex').textContent=visible.filter(d=>d.tier==='ex').length;
+  document.getElementById('s-str').textContent=visible.filter(d=>d.tier==='str').length;
+  document.getElementById('s-sol').textContent=visible.filter(d=>d.tier==='sol').length;
+  document.getElementById('s-bel').textContent=visible.filter(d=>d.tier==='bel').length;
+}
+
+/* ── SORT ──────────────────────────────────────────────────────── */
+const SORT_FNS={
+  rank:(a,b)=>a.rank-b.rank,
+  cagr:(a,b)=>a.cagr-b.cagr,
+  name:(a,b)=>a.name.localeCompare(b.name),
+  sector:(a,b)=>a.sector.localeCompare(b.sector),
+  region:(a,b)=>a.region.localeCompare(b.region),
+};
+function sortBy(col){
+  if(sortCol===col){sortAsc=!sortAsc;}else{sortCol=col;sortAsc=col!=='cagr';}
+  DATA.sort((a,b)=>{
+    const v=SORT_FNS[col](a,b);
+    return sortAsc?v:-v;
+  });
+  document.querySelectorAll('.tbl th').forEach(th=>{
+    const c=th.dataset.col;
+    th.classList.toggle('sorted',c===col);
+    const icon=th.querySelector('.sort-icon');
+    if(!icon) return;
+    icon.textContent=c!==col?'':sortAsc?'↑':'↓';
+  });
+  buildTable();
+  applyFilters();
+}
+
+/* ── EXPORT CSV ────────────────────────────────────────────────── */
+function exportCSV(){
+  const region=document.getElementById('f-region').value;
+  const tier=document.getElementById('f-tier').value;
+  const aboveOnly=document.getElementById('aboveBaseline').checked;
+  const rows=DATA.filter(d=>{
+    return(activeSec==='all'||d.sector===activeSec)
+      &&(!region||d.region===region)
+      &&(!tier||d.tier===tier)
+      &&(!aboveOnly||d.cagr>BASELINE);
+  });
+  const esc=v=>`"${String(v||'').replace(/"/g,'""')}"`;
+  const hdr=['Rank','Sub-segment','Notes','Sector','Region','CAGR %','Tier','Key Driver'];
+  const csv=[hdr.map(esc).join(','),...rows.map(r=>[
+    esc(r.rank),esc(r.name),esc(r.note),esc(r.sector),esc(r.region),
+    esc(r.cagr),esc(TIER_LABEL[r.tier]),esc(r.driver)
+  ].join(','))].join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='sector_growth_intelligence.csv';a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+/* ── INIT ──────────────────────────────────────────────────────── */
+buildSectorCards();
+buildTable();
+applyFilters();
+
+document.querySelectorAll('.sec-btn').forEach(b=>{
+  b.addEventListener('click',()=>filterSector(b.dataset.s));
+});
+['f-region','f-tier'].forEach(id=>{
+  document.getElementById(id).addEventListener('change',applyFilters);
+});
+document.getElementById('aboveBaseline').addEventListener('change',applyFilters);
+document.querySelectorAll('.tbl th[data-col]').forEach(th=>{
+  th.addEventListener('click',()=>sortBy(th.dataset.col));
+});
+
+/* ── THEME ─────────────────────────────────────────────────────── */
+const themeBtn=document.getElementById('themeBtn');
+const root=document.documentElement;
+function applyTheme(t){root.dataset.theme=t;themeBtn.textContent=t==='dark'?'☀️':'🌙';localStorage.setItem('sgi-theme',t);}
+themeBtn.addEventListener('click',()=>applyTheme(root.dataset.theme==='dark'?'light':'dark'));
+applyTheme(localStorage.getItem('sgi-theme')||'light');
+</script>
+</body>
+</html>
