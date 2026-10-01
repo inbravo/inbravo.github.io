@@ -1,0 +1,974 @@
+<!doctype html><html data-theme="light"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Enterprise AI Decision Platforms</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+  /* === LAYOUT: single-column research report, tables in overflow containers === */
+  :root {
+    --bg: #f5f6f8;
+    --bg-card: #ffffff;
+    --bg-subtle: #eef0f4;
+    --fg: #1a1d24;
+    --fg-muted: #5a6072;
+    --fg-dim: #8b92a4;
+    --accent: #2460c8;
+    --accent-light: #d6e4ff;
+    --border: #d4d8e2;
+    --border-strong: #a8b0c2;
+    --rating-full: #1a6b3c;
+    --rating-half: #b45309;
+    --rating-low: #9c3414;
+    --rating-none: #6b7280;
+    --mono: 'IBM Plex Mono', 'Cascadia Code', 'Consolas', monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    --serif: 'IBM Plex Serif', Georgia, serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e1118;
+      --bg-card: #171b25;
+      --bg-subtle: #1c2030;
+      --fg: #e4e7f0;
+      --fg-muted: #8b92a8;
+      --fg-dim: #5a6078;
+      --accent: #4d86f5;
+      --accent-light: #1a2d52;
+      --border: #2a2f3e;
+      --border-strong: #404660;
+      --rating-full: #34d373;
+      --rating-half: #f59e0b;
+      --rating-low: #f87171;
+      --rating-none: #6b7280;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1118;
+    --bg-card: #171b25;
+    --bg-subtle: #1c2030;
+    --fg: #e4e7f0;
+    --fg-muted: #8b92a8;
+    --fg-dim: #5a6078;
+    --accent: #4d86f5;
+    --accent-light: #1a2d52;
+    --border: #2a2f3e;
+    --border-strong: #404660;
+    --rating-full: #34d373;
+    --rating-half: #f59e0b;
+    --rating-low: #f87171;
+    --rating-none: #6b7280;
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding-inline: 24px;
+    padding-block: 32px 48px;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 1100px;
+    margin-inline: auto;
+  }
+
+  /* === HEADER === */
+  .report-header {
+    border-bottom: 2px solid var(--border-strong);
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+  }
+  .report-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+  .report-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--fg);
+    margin: 0 0 8px;
+    text-wrap: balance;
+  }
+  .report-subtitle {
+    font-size: 14px;
+    color: var(--fg-muted);
+    margin: 0 0 16px;
+  }
+  .report-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--fg-dim);
+    font-family: var(--mono);
+  }
+
+  /* === LEGEND === */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 32px;
+    font-size: 13px;
+  }
+  .legend-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--fg-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .r-full { color: var(--rating-full); font-size: 16px; }
+  .r-half { color: var(--rating-half); font-size: 16px; }
+  .r-low  { color: var(--rating-low);  font-size: 16px; }
+  .r-none { color: var(--rating-none); font-size: 16px; }
+
+  /* === PLATFORM SECTIONS === */
+  .platform-section {
+    margin-bottom: 48px;
+  }
+  .platform-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .platform-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--accent-light);
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .platform-name {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .platform-scope {
+    font-size: 12px;
+    color: var(--fg-dim);
+    margin: 0 0 12px;
+    font-family: var(--mono);
+  }
+
+  /* === TABLE === */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 700px;
+  }
+  thead tr {
+    background: var(--bg-subtle);
+  }
+  th {
+    text-align: left;
+    padding: 8px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 9px 12px;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg-subtle); }
+
+  .plane-name {
+    font-weight: 600;
+    font-size: 12px;
+    white-space: nowrap;
+    color: var(--fg);
+  }
+  .plane-sub {
+    display: block;
+    font-size: 11px;
+    color: var(--fg-dim);
+    font-weight: 400;
+  }
+
+  .product-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .product-detail {
+    font-size: 12px;
+    color: var(--fg-muted);
+  }
+
+  .gap-text {
+    font-size: 12px;
+    color: var(--fg-muted);
+    font-style: italic;
+  }
+
+  .rating-cell {
+    text-align: center;
+    font-size: 18px;
+    white-space: nowrap;
+  }
+  .rate-full { color: var(--rating-full); }
+  .rate-half { color: var(--rating-half); }
+  .rate-low  { color: var(--rating-low); }
+  .rate-none { color: var(--rating-none); }
+
+  /* === VERDICT === */
+  .verdict {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--fg-muted);
+    margin-bottom: 4px;
+  }
+  .verdict strong { color: var(--fg); font-weight: 600; }
+
+  /* === CROSS-PLATFORM GAP === */
+  .gap-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px 24px 20px;
+    margin-top: 48px;
+  }
+  .gap-section-title {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+  .gap-section-sub {
+    font-size: 12px;
+    color: var(--fg-muted);
+    margin: 0 0 20px;
+    font-family: var(--mono);
+  }
+  .gap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .gap-card {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 14px 16px;
+  }
+  .gap-card-plane {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 4px;
+  }
+  .gap-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    color: var(--fg);
+  }
+  .gap-card-body {
+    font-size: 12px;
+    color: var(--fg-muted);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* === DIVIDER === */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 36px 0;
+  }
+
+  /* === FOOTNOTE === */
+  .footnote {
+    font-size: 11px;
+    color: var(--fg-dim);
+    font-family: var(--mono);
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 600px) {
+    body { padding-inline: 16px; }
+    .platform-header { flex-wrap: wrap; gap: 6px; }
+    .gap-grid { grid-template-columns: 1fr; }
+    .legend { gap: 12px; }
+    .meta-decision-grid { grid-template-columns: 1fr; }
+    .meta-decision-signal { grid-template-columns: 1fr; }
+  }
+
+  /* === META-DECISION LAYER === */
+  .meta-decision-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 28px 20px;
+    margin-bottom: 40px;
+    border-top: 3px solid var(--accent);
+  }
+  .meta-decision-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+  }
+  .meta-decision-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 10px;
+    color: var(--fg);
+  }
+  .meta-decision-lead {
+    font-size: 13px;
+    color: var(--fg-muted);
+    line-height: 1.65;
+    margin: 0 0 24px;
+    max-width: 820px;
+  }
+  .meta-decision-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .dm-card {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 14px 16px;
+  }
+  .dm-maker {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+    margin-bottom: 2px;
+  }
+  .dm-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg);
+    margin-bottom: 2px;
+  }
+  .dm-handle {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .dm-desc {
+    font-size: 12px;
+    color: var(--fg-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .meta-decision-signal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .meta-signal-block {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .meta-signal-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fg);
+    margin: 0 0 8px;
+  }
+  .meta-signal-body {
+    font-size: 12px;
+    color: var(--fg-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .meta-decision-integration {
+    font-size: 12px;
+    color: var(--fg-dim);
+    font-family: var(--mono);
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    margin: 0;
+    line-height: 1.6;
+  }
+</style>
+
+<div class="report-header">
+  <p class="report-eyebrow">Technology Strategy Research — October 2026</p>
+  <h1 class="report-title">Enterprise AI Decision Platforms: Six-Plane Capability Assessment</h1>
+  <p class="report-subtitle">AWS · Databricks · Snowflake · Microsoft Fabric · Open Source Ecosystem — rated across Fact, Policy, Authority, Experience, Intent, and Decision Contract planes</p>
+  <div class="report-meta">
+    <span>Depth: 20+ searches across 5 platforms</span>
+    <span>Scope: 2025–2026 GA + Beta features</span>
+    <span>Focus: Enterprise agentic decision infrastructure</span>
+  </div>
+</div>
+
+<div class="legend">
+  <span class="legend-label">Rating</span>
+  <div class="legend-item"><span class="r-full">●</span> Strong — production-ready, native capability</div>
+  <div class="legend-item"><span class="r-half">◑</span> Partial — present but incomplete or Beta</div>
+  <div class="legend-item"><span class="r-low">○</span> Weak — foundational only, significant gaps</div>
+  <div class="legend-item"><span class="r-none">✗</span> Absent — no meaningful native capability</div>
+</div>
+
+
+<!-- ============================================================ META-DECISION LAYER ============================================================ -->
+<div class="meta-decision-section">
+  <div class="meta-decision-header">
+    <p class="meta-decision-eyebrow">Emerging Category · October 2026</p>
+    <h2 class="meta-decision-title">The Meta-Decision Layer: Decision Models</h2>
+    <p class="meta-decision-lead">A new class of small, specialized models has emerged in 2026 — not to answer questions, but to decide <em>how</em> questions should be answered. These decision models sit above all six Decision Fabric planes, making typed per-turn judgments about context visibility, model routing, tool selection, and permission before the frontier model is ever called.</p>
+  </div>
+
+  <div class="meta-decision-grid">
+
+    <div class="dm-card">
+      <div class="dm-maker">TypeSafe</div>
+      <div class="dm-name">Jev 1.13</div>
+      <div class="dm-handle">typesafe/jev-1.13</div>
+      <p class="dm-desc">The original decision model. Makes typed visibility decisions (hidden / short / long / full) per context chunk per query, routes to cheap or frontier models, selects tool schemas in tiers. State is explicit, addressable chunks — not an append-only transcript.</p>
+    </div>
+
+    <div class="dm-card">
+      <div class="dm-maker">Jared Palmer</div>
+      <div class="dm-name">Kev 4B</div>
+      <div class="dm-handle">jaredpalmer/kev-4b</div>
+      <p class="dm-desc">Open-weights 4B decision model. Implements the Jev pattern as an independently deployable model artifact — runs on-premise or in any cloud. No TypeSafe dependency.</p>
+    </div>
+
+    <div class="dm-card">
+      <div class="dm-maker">Respan</div>
+      <div class="dm-name">Span-01 / Span-01 Lite</div>
+      <div class="dm-handle">respan/span-01</div>
+      <p class="dm-desc">Decision and routing model with a Lite variant for cost-sensitive deployments. Free tier available. Targets latency-sensitive agentic pipelines where per-turn decision overhead must stay under 50ms.</p>
+    </div>
+
+    <div class="dm-card">
+      <div class="dm-maker">Upstage</div>
+      <div class="dm-name">Solar Decide</div>
+      <div class="dm-handle">upstage/solar-decide</div>
+      <p class="dm-desc">Built on Upstage's Solar model family. Specialises in classification, scoring, and routing decisions — positioning it closer to Databricks ai_decide() and OpenAI Decisions API than to pure context-visibility use cases.</p>
+    </div>
+
+    <div class="dm-card">
+      <div class="dm-maker">Inception</div>
+      <div class="dm-name">Mercury Decide</div>
+      <div class="dm-handle">inception/mercury-decide</div>
+      <p class="dm-desc">Free tier available. Mercury Decide is Inception's entry into the decision model space, designed to pair with their Mercury diffusion-based generation models for ultra-low-latency agent pipelines.</p>
+    </div>
+
+    <div class="dm-card">
+      <div class="dm-maker">Together AI</div>
+      <div class="dm-name">Tev1 4B Experimental</div>
+      <div class="dm-handle">togethercomputer/tev1-4b-experimental</div>
+      <p class="dm-desc">Experimental release from Together. 4B parameter class. Available via Together's inference API alongside open-weights model hosting — targets teams that want to fine-tune the decision model on their own routing patterns.</p>
+    </div>
+
+  </div>
+
+  <div class="meta-decision-signal">
+    <div class="meta-signal-block">
+      <h3 class="meta-signal-title">Where decision models sit relative to the six planes</h3>
+      <p class="meta-signal-body">Decision models are not infrastructure for any single plane — they are the orchestration layer <em>above</em> all six. Per turn, a decision model answers: which context chunks does the frontier model need to see (Fact Plane visibility)? Which policies apply to this request (Policy Plane routing)? Does the calling agent have the right to invoke this tool (Authority Plane gate)? Which precedents are relevant (Experience Plane retrieval)? What is the declared objective (Intent Plane activation)? These are meta-decisions over the planes, not decisions within them. The frontier model receives only what the decision model permits — context assembled on purpose, not accumulated by accident.</p>
+    </div>
+    <div class="meta-signal-block">
+      <h3 class="meta-signal-title">The market signal: commodity layer, institutional moat</h3>
+      <p class="meta-signal-body">Six competing decision models shipped within 90 days of Jev's release. When a pattern commoditises that fast, the model itself is not the moat. Differentiation moves <strong>up</strong> — to the institutional knowledge each plane encodes: the policies, authority schema, precedent store, and intent library the decision model reasons over. And it moves <strong>down</strong> — to the Decision Contract, the machine-readable evidence package that proves the judgment was made correctly under the right authority against the right policy. None of the five platforms assessed below, and none of the six decision models above, address either layer. That is the build opportunity.</p>
+    </div>
+  </div>
+
+  <p class="meta-decision-integration">Platform integration note — all five platforms assessed below can host a decision model via their agent frameworks (AgentCore Gateway, Databricks Agent Bricks, Azure AI Foundry, Snowflake Cortex AI Gateway, open-source LangGraph). The model tier is not where the platforms differentiate; the institutional knowledge planes are.</p>
+</div>
+
+<hr class="section-divider">
+
+<!-- ============================================================ PLATFORM A: AWS ============================================================ -->
+<section class="platform-section">
+  <div class="platform-header">
+    <span class="platform-id">A</span>
+    <h2 class="platform-name">AWS</h2>
+  </div>
+  <p class="platform-scope">Amazon Bedrock AgentCore · SageMaker Unified Studio · Bedrock Guardrails · Cedar · Lake Formation · DataZone · Entity Resolution · Step Functions · CloudTrail · Verified Permissions</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:14%">Plane</th>
+          <th style="width:24%">Product / Feature</th>
+          <th style="width:36%">What it actually does</th>
+          <th style="width:20%">Key gap</th>
+          <th style="width:6%">Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="plane-name">Fact<span class="plane-sub">Grounded state</span></span></td>
+          <td><span class="product-name">SageMaker Unified Studio + Amazon DataZone + Glue Data Catalog</span><span class="product-detail"><strong>SageMaker Unified Studio:</strong> unified IDE that surfaces DataZone, SageMaker, Bedrock, Redshift, Glue, and EMR under one portal with shared DataZone catalog governance — AWS's primary Context Engineering bet. Agents built in the studio inherit catalog-governed context discovery at development time. <strong>AgentCore Gateway integration:</strong> tools registered in AgentCore Gateway can be decorated with DataZone catalog metadata (lineage, quality SLA, ownership) — the closest any managed platform comes to wiring Fact Plane governance into agent tool registration at runtime. <strong>DataZone:</strong> OpenLineage-compatible lineage API (GA Jul 2026), cross-account subscriptions, custom asset types. Lake Formation: column/row/cell-level security with trusted identity propagation.</span></td>
+          <td class="product-detail">SageMaker Unified Studio makes DataZone catalog the semantic index for agent context assembly — agents query it to discover what governed data assets exist, their quality scores, lineage, and access rights before retrieving. Catalogs assets with lineage visualization from S3, Glue, Redshift. AWS Entity Resolution handles probabilistic/rule-based record matching across datasets. This is the strongest catalog-to-agent-runtime integration of any managed platform.</td>
+          <td class="gap-text">Unified Studio improves developer ergonomics and catalog accessibility but does not close the core gaps: no native semantic/ontology layer, entity resolution remains a separate standalone service with no catalog integration, real-time freshness requires custom pipelines. The catalog governs what data agents can <em>see</em> — not what judgments they can <em>make</em>.</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Policy<span class="plane-sub">Enforceable rules</span></span></td>
+          <td><span class="product-name">Bedrock AgentCore Policy + Amazon Verified Permissions</span><span class="product-detail">AgentCore Policy (GA Mar 2026): Cedar-based, evaluates every tool call automatically. AVP: Cedar 4.5 (Aug 2025), Cedar JSON entity format (Feb 2025). Cedar accepted into CNCF Sandbox Oct 2025. Bedrock Guardrails: automated reasoning checks, 99% accuracy on content validation.</span></td>
+          <td class="product-detail">Cedar policies intercept every AgentCore Gateway tool call, with temporal policies (Dogwood) requiring prior approved action within a session before sensitive operations. Guardrails block harmful content, PII, prompt injection. Every hop logged with full delegation chain.</td>
+          <td class="gap-text">No regulatory rule ingestion (e.g., Basel III → Cedar). Exception/precedence handling in Cedar is manual. Policy versioning is via CloudFormation/IAM, not a purpose-built policy lifecycle UI. Guardrails are content policies, not judgment policies.</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Authority<span class="plane-sub">Agent identity &amp; rights</span></span></td>
+          <td><span class="product-name">Bedrock AgentCore Identity + AgentCore Gateway + Step Functions</span><span class="product-detail">AgentCore Identity (GA Oct 2025): OAuth authorization-code grant, per-user token vault, Consent Portal (Sep 2026) for end-user delegation approval, session binding, scoped delegation. Step Functions: exactly-once execution, wait states, durable approval workflows.</span></td>
+          <td class="product-detail">Agents propagate end-user identity to downstream tools. Cedar policies filter tool lists per agent. Every delegation hop logged. Step Functions provide deterministic orchestration for approval gates with nightly memory lifecycle management.</td>
+          <td class="gap-text">No formal delegated decision-rights schema (no native "agent X may approve credit ≤ $50k" construct). Threshold-based enforcement must be hand-coded as Cedar conditions + Step Functions states. No unified agent identity object model (agents use IAM roles + OAuth tokens, not purpose-built agent identity objects).</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Experience<span class="plane-sub">Decision memory</span></span></td>
+          <td><span class="product-name">Bedrock AgentCore Memory + Session Storage + Amazon Context (pre-GA)</span><span class="product-detail">AgentCore Memory: short-term (session context, in-turn reasoning) + long-term (semantic knowledge, user preferences, cross-session). Lifecycle policies managed via Step Functions nightly workflow (scoring, consolidating, pruning). Managed session filesystem state across stop/resume (preview Mar 2026). <strong>Amazon Context (approaching GA, Oct 2026):</strong> dedicated context management service for agentic workloads — persistent, queryable context store separate from AgentCore Memory, designed for structured multi-agent context sharing across sessions and agent chains. Expected to add cross-agent context propagation and context-aware routing that Memory's conversational model does not currently support.</span></td>
+          <td class="product-detail">Persistent conversational context across sessions via runtimeSessionId. Memory stores preferences and knowledge, not structured decision records. Long-term memory supports semantic retrieval but is optimized for conversational coherence, not compliance audit. Amazon Context, when GA, is expected to raise the ceiling on structured cross-agent state sharing — potentially the most significant Experience Plane improvement in the AWS roadmap.</td>
+          <td class="gap-text">Memory and Context are operational/conversational — no structured decision record capture with outcome linkage to business results. No comparable-case retrieval optimized for past governance decisions. No bias/quality filtering. Amazon Context GA details and exact capability scope not yet confirmed.</td>
+          <td class="rating-cell"><span class="rate-low">○</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Intent<span class="plane-sub">Goals &amp; trade-offs</span></span></td>
+          <td><span class="product-name">No native construct</span><span class="product-detail">Bedrock Guardrails defines negative constraints (what NOT to do). Step Functions workflows encode process flow. No structured objective schema, trade-off declaration, or reusable intent library.</span></td>
+          <td class="product-detail">Positive objectives must be embedded in agent system prompts or Step Functions Choice states. No platform primitive for declaring "maximize X subject to constraints Y, Z" in a machine-readable, versioned form.</td>
+          <td class="gap-text">Entire plane absent as a native construct. Intent lives in free-text system prompts, invisible to governance tooling. Trade-off surface is unstructured and unversioned.</td>
+          <td class="rating-cell"><span class="rate-none">✗</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Decision Contract<span class="plane-sub">Evidence package</span></span></td>
+          <td><span class="product-name">CloudTrail + AgentCore Identity audit + Guardrails traces</span><span class="product-detail">CloudTrail records all AgentCore, AVP, Lake Formation API calls (GrantPermissions, GetDataAccess, etc.) with timestamps and principal. Guardrails traces include reasoning path in API response. Cedar audit trail captures full delegation chain. AgentCore Gateway logs every tool call with policy evaluation result.</span></td>
+          <td class="product-detail">Produces per-API-call audit records across the stack. Delegation chain is captured end-to-end. Guardrail reasoning is attached to each evaluation. Compliance reporting can reconstruct what happened.</td>
+          <td class="gap-text">No packaged decision provenance API. CloudTrail + guardrail traces + Cedar logs must be stitched manually across three services. No single machine-readable evidence package assembling all five planes for a specific judgment. No inference-time cryptographic signing.</td>
+          <td class="rating-cell"><span class="rate-low">○</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="verdict">
+    <strong>Verdict.</strong> AWS has the strongest Authority Plane of any vendor — AgentCore Identity's OAuth delegation model with Consent Portal and Cedar-based tool-call interception is purpose-built for agentic governance and is production-ready as of 2026. SageMaker Unified Studio + DataZone is the most deliberate Fact Plane investment of any platform vendor: a unified development workspace where catalog governance, agent tool registration, and Bedrock model access share a single governed substrate — the clearest architectural expression of the "context engineering" thesis. The Policy Plane (Cedar + AVP + Guardrails) is genuinely differentiated, though it enforces content and access rules rather than business judgment policies. The critical gaps are the complete absence of an Intent Plane and a Decision Contract that requires manual stitching across CloudTrail, GuardRail traces, and Cedar logs — the evidentiary package for a high-stakes automated decision does not exist as a native artifact.
+  </div>
+</section>
+
+<hr class="section-divider">
+
+
+<!-- ============================================================ PLATFORM B: DATABRICKS ============================================================ -->
+<section class="platform-section">
+  <div class="platform-header">
+    <span class="platform-id">B</span>
+    <h2 class="platform-name">Databricks</h2>
+  </div>
+  <p class="platform-scope">Unity Catalog · Unity AI Gateway · MLflow 3.0 · Mosaic AI Agent Framework · Agent Bricks · LakeFlow · Genie One · Delta Live Tables · system.access tables</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:14%">Plane</th>
+          <th style="width:24%">Product / Feature</th>
+          <th style="width:36%">What it actually does</th>
+          <th style="width:20%">Key gap</th>
+          <th style="width:6%">Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="plane-name">Fact<span class="plane-sub">Grounded state</span></span></td>
+          <td><span class="product-name">Unity Catalog + Delta Live Tables + LakeFlow</span><span class="product-detail">Unity Catalog: three-level namespace (catalog.schema.table), automatic column-level lineage, ABAC, cross-workspace governance, Glossary + Domains (DAIS 2026). Delta Live Tables: pipeline data quality metrics, error logs, lifecycle events. LakeFlow system table pipeline_events captures quality metrics + lineage.</span></td>
+          <td class="product-detail">Unified lineage from data assets to ML models to agent skills registered as first-class Unity Catalog securables. Genie ZeroOps (background AI agent) monitors data/AI assets and runs root-cause analysis using data quality metrics + Unity Catalog lineage. Automatic lineage tracks transformations without instrumentation.</td>
+          <td class="gap-text">Business Glossary/Domains is newly announced at DAIS 2026 — not yet fully mature as a semantic layer for AI grounding. Entity resolution not native (requires external tools like splink). Real-time freshness for streaming fact state requires additional Lakeflow or DLT pipeline setup.</td>
+          <td class="rating-cell"><span class="rate-full">●</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Policy<span class="plane-sub">Enforceable rules</span></span></td>
+          <td><span class="product-name">Unity AI Gateway (GA Aug 2026) + Unity Catalog ABAC</span><span class="product-detail">Unity AI Gateway: service policies as code attached to MCP services or model services — versioned, code-reviewed, tested. Policies apply per user, agent, model, MCP service, tool, or request/response content. Hard spend caps, smart routing (Beta), PII/prompt-injection guardrails. Unity Catalog: column masking, row-level security, ABAC.</span></td>
+          <td class="product-detail">Financial services example: flag responses referencing specific regulatory thresholds. Healthcare example: block diagnosis codes in certain contexts. Policies are functions in code, reviewed alongside application code in CI/CD. MCP payload logging captures every request/response for compliance audit.</td>
+          <td class="gap-text">No regulatory rule ingestion module (Basel/GDPR text → policy function). Exception/precedence handling requires custom logic. Smart routing and contextual service policies remain in Beta. Policy applicability engine evaluates rules at runtime but does not have a native "applicability decision" trace.</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Authority<span class="plane-sub">Agent identity &amp; rights</span></span></td>
+          <td><span class="product-name">Unity Catalog Skills (Beta) + Agent Bricks + system.access</span><span class="product-detail">Unity Catalog Skills (Beta Aug 2026): publish, govern, and share agent skills as first-class UC securables with permissions, tags, and audit controls. Agent Bricks: multi-framework support (LangGraph, CrewAI, Claude Agent SDK, OpenAI Agent SDK), managed memory via Lakebase, isolated sandboxes. system.access: every read, grant, job run captured.</span></td>
+          <td class="product-detail">Agent skills are governed objects with the same access control model as data assets. Agents identified via service principals in Unity Catalog. MCP payload logging records every tool call. Agent Bricks isolate agent execution for safe testing and deployment. Unity Gateway enforces spend caps and routing rules per agent identity.</span></td>
+          <td class="gap-text">No dedicated agent identity object model comparable to Entra Agent ID (agents use UC service principals). No formal delegated decision-rights schema with approval thresholds native to the platform. Human-in-the-loop approval requires custom orchestration — no built-in approval workflow primitive equivalent to AgentCore + Step Functions.</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Experience<span class="plane-sub">Decision memory</span></span></td>
+          <td><span class="product-name">MLflow 3.0 Tracing + Agent Bricks Memory (Lakebase) + Unified Trace Table</span><span class="product-detail">MLflow 3.0: records every step of agent reasoning (inputs, outputs, metadata per intermediate step), tracks evaluation results, links traces to human feedback. Mosaic AI Agent Evaluation: human feedback loops, cost/latency trade-offs, quality metrics. Agent Bricks managed memory via Lakebase: persistent cross-session memory. Unified trace table (Beta Aug 21 2026): monitoring AI activity across all agent workloads.</span></td>
+          <td class="product-detail">The deepest trace capture of any vendor: every prompt, model response, and tool call stored. When an agent gives a bad answer, the trace reveals which retrieval step pulled wrong context, which tool call failed, where reasoning went wrong. Human feedback attached to traces closes the quality loop.</td>
+          <td class="gap-text">Memory is conversational/operational — not structured decision records with outcome linkage to downstream business results (e.g., "this credit decision → loan defaulted 6 months later"). No comparable-case retrieval optimized for precedent governance. Unified trace table still in Beta.</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Intent<span class="plane-sub">Goals &amp; trade-offs</span></span></td>
+          <td><span class="product-name">Unity Catalog Glossary + Domains + Genie One</span><span class="product-detail">Glossary + Domains (DAIS 2026): shared, governed source of meaning for people and agents; domains encode organizational context and data ownership. Genie One: agentic coworker that creates documents, runs scheduled tasks, takes action via MCP tools — can spin up agents from a conversation. Agent Bricks: build agents with structured tool definitions.</span></td>
+          <td class="product-detail">Glossary/Domains provide semantic intent at the data layer. Agents can use glossary terms as grounding. No structured goal/intent schema exists as a platform primitive for declaring agent objectives and trade-offs.</td>
+          <td class="gap-text">No structured intent schema or trade-off declaration surface at the decision level. Objectives live in agent system prompts (unversioned, ungovernered). No reusable intent library. Glossary/Domains are data semantics, not decision objectives.</td>
+          <td class="rating-cell"><span class="rate-low">○</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Decision Contract<span class="plane-sub">Evidence package</span></span></td>
+          <td><span class="product-name">MLflow traces + Unity Gateway unified tracing + system.access + MCP payload logs</span><span class="product-detail">MLflow captures step-by-step agent reasoning chains. Unity AI Gateway unified tracing covers all agent activity across MCP services and model services. MCP payload logging stores every request/response in Unity Catalog system tables for compliance. system.access records every data access with identity context.</span></td>
+          <td class="product-detail">The most complete raw audit trail of any vendor — from data access (system.access) through tool calls (MCP logs) to reasoning steps (MLflow traces) with human evaluation attached. Multiple layers of evidence available for reconstruction.</td>
+          <td class="gap-text">Traces scattered across MLflow + system tables + Unity Gateway logs — no single packaged decision provenance API. Must be stitched manually across services. No machine-readable evidence package assembling all five planes for a specific judgment event. No inference-time cryptographic signing.</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="verdict">
+    <strong>Verdict.</strong> Databricks has the strongest Fact Plane and the deepest Experience/trace infrastructure of any platform — Unity Catalog's automatic lineage combined with MLflow 3.0 tracing and MCP payload logging gives a genuinely auditable record of what data an agent used and every reasoning step it took. Unity AI Gateway (GA Aug 2026) is the most mature policy-as-code runtime for AI agent governance, with versioned service policies and contextual enforcement. The weak points are the Authority Plane — no purpose-built agent identity model, no native approval workflow primitive — and the complete absence of an Intent Plane as a governed construct.
+  </div>
+</section>
+
+<hr class="section-divider">
+
+
+<!-- ============================================================ PLATFORM C: SNOWFLAKE ============================================================ -->
+<section class="platform-section">
+  <div class="platform-header">
+    <span class="platform-id">C</span>
+    <h2 class="platform-name">Snowflake</h2>
+  </div>
+  <p class="platform-scope">Cortex AI · Cortex Analyst · Cortex Search · Cortex AI Gateway · Horizon Catalog · Row Access Policies · Column Masking · Trust Center · Data Metric Functions · Arctic</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:14%">Plane</th>
+          <th style="width:24%">Product / Feature</th>
+          <th style="width:36%">What it actually does</th>
+          <th style="width:20%">Key gap</th>
+          <th style="width:6%">Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="plane-name">Fact<span class="plane-sub">Grounded state</span></span></td>
+          <td><span class="product-name">Cortex Analyst + Horizon Catalog + Data Metric Functions</span><span class="product-detail">Cortex Analyst: semantic model (YAML-based) + semantic views encoding business logic (metric definitions, joins, rules); ~86% accuracy on structured data questions (Cortex Sense benchmark). Horizon Catalog: cross-engine discovery (Iceberg, Spark, external DBs, dashboards); Polaris APIs. DMFs: custom + system data quality metrics on tables.</span></td>
+          <td class="product-detail">Best-in-class semantic layer: Cortex Analyst lets business users ask plain-English questions grounded in versioned YAML semantic models. Data stays entirely within Snowflake's governance boundary — no data, metadata, or prompts leave. Horizon enforces fine-grained access even for external Spark engines querying shared data.</td>
+          <td class="gap-text">Business Glossary is H2 2026 roadmap — not yet GA. LLM in Cortex Analyst has no persistent memory (processes each request from scratch). Entity resolution not native. The semantic layer is strong for structured analytical decisions but lacks ontology for unstructured/entity-rich domains.</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Policy<span class="plane-sub">Enforceable rules</span></span></td>
+          <td><span class="product-name">Horizon Row/Column Policies + Cortex AI Gateway + Trust Center</span><span class="product-detail">Row Access Policies + Column Masking Policies: respected by Cortex AI agents — if rows are filtered for a session, they are invisible to the agent. Cortex AI Gateway (announced 2025): centralized access policies, authentication, and permissions for Snowflake-native and third-party agents; end-to-end visibility. Trust Center: AI-driven anomaly detection, real-time monitoring, continuous risk posture. Cortex Code governance skills: classification, access control, monitoring via natural language.</span></td>
+          <td class="product-detail">Same RBAC applied to AI agents as to human users — governance is configured once at account level and enforced everywhere. Cortex AI Gateway centralizes policy across all agent interactions. Trust Center surfaces misconfigurations and suspicious access in real time.</td>
+          <td class="gap-text">No policy-as-code framework for AI judgment rules — Row/Column policies are data access policies, not AI decision policies. No regulatory rule ingestion. No versioned AI policy history. Cortex Code governance skills are natural-language, not machine-readable code, and therefore unverifiable in CI/CD.</td>
+          <td class="rating-cell"><span class="rate-low">○</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Authority<span class="plane-sub">Agent identity &amp; rights</span></span></td>
+          <td><span class="product-name">Cortex AI Gateway + Horizon RBAC (agents as service roles)</span><span class="product-detail">Cortex AI Gateway supports both Snowflake-native agents and third-party agents, applying centralized access policies and authentication. Agents governed through Horizon alongside data assets. Same RBAC + row access policies applied to agents as to humans — agent identity is a service account or role.</span></td>
+          <td class="product-detail">Agent access is governed through the existing RBAC model. Cortex AI Gateway provides a single control point for agent permissions and authentication. Every agent invocation logged to governance tables.</td>
+          <td class="gap-text">No dedicated agent identity object model — agents are service accounts, not purpose-built agent identity constructs. No delegated decision-rights schema. No approval threshold enforcement native to the platform. No agent-level audit trail beyond standard access logs. No built-in approval workflow primitive for human-in-the-loop decisions.</td>
+          <td class="rating-cell"><span class="rate-low">○</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Experience<span class="plane-sub">Decision memory</span></span></td>
+          <td><span class="product-name">No native construct</span><span class="product-detail">Cortex Analyst LLM has no persistent memory — processes each multi-turn request from scratch, only seeing whatever history is included in the current message. No decision record store. No comparable-case retrieval. Audit logs record what was accessed, not decision outcomes.</span></td>
+          <td class="product-detail">No institutional memory of decisions with outcomes exists natively on the platform. Historical decisions could be stored in Snowflake tables and retrieved via Cortex Search, but this requires custom build.</td>
+          <td class="gap-text">This plane is entirely absent. The most significant architectural gap in Snowflake's AI decision infrastructure. Building an experience plane requires custom tables, retrieval pipelines, and outcome-linkage logic on top of the platform.</td>
+          <td class="rating-cell"><span class="rate-none">✗</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Intent<span class="plane-sub">Goals &amp; trade-offs</span></span></td>
+          <td><span class="product-name">Cortex Sense semantic models (partial)</span><span class="product-detail">Semantic models (YAML) encode business logic — metric definitions, joins, business rules — which implicitly encode analytical intent. Arctic model trained with explicit efficiency/accuracy trade-off decisions (MoE architecture, cost-constrained training). Business Glossary (H2 2026 roadmap) will encode domain intent for agents.</span></td>
+          <td class="product-detail">Semantic models are the closest Snowflake comes to a structured intent layer — they declare what "active customer" or "net revenue" means, constraining how agents interpret data. Not a general decision-objective schema.</td>
+          <td class="gap-text">No structured goal/intent schema at the decision level. No trade-off declaration surface. Business Glossary not yet GA. Intent lives in semantic model YAML and system prompts, not in a governed, versioned intent library. No reusable objective templates.</td>
+          <td class="rating-cell"><span class="rate-none">✗</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Decision Contract<span class="plane-sub">Evidence package</span></span></td>
+          <td><span class="product-name">Horizon Catalog runtime tracking + Snowflake access history</span><span class="product-detail">Horizon Catalog (2026): "actively participates in agentic workflows — enforcing policies at runtime, tracking agent actions, and ensuring every AI decision is auditable." Every agent invocation logged to governance tables. Snowflake access history provides per-query audit with user/role context. Cortex AI Gateway provides end-to-end visibility into agent activity.</span></td>
+          <td class="product-detail">Access-layer audit trail is complete. Horizon's 2026 evolution claims agent action tracking. But the audit is data-access-centric, not decision-centric — it records what data was accessed, not what judgment was made or why.</td>
+          <td class="gap-text">No packaged decision provenance API. No machine-readable evidence package assembling all five planes. Audit is compliance-oriented (what happened) not decision-oriented (what was the judgment, under whose authority, against which policy, with what outcome). No inference-time explainability record.</td>
+          <td class="rating-cell"><span class="rate-low">○</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="verdict">
+    <strong>Verdict.</strong> Snowflake's strongest plane is Fact — the Cortex Analyst semantic model (YAML-based, versioned, grounded, within-perimeter) is the most production-ready natural-language-to-grounded-data layer of any platform, and Horizon's enforced RBAC across all engines including Cortex agents is a genuine architectural strength. However, two full planes are absent (Experience, Intent), the Policy Plane covers data access but not AI judgment rules, and the Authority Plane lacks a purpose-built agent identity model. Snowflake is strong as an AI-accessible data substrate but immature as a decision governance platform.
+  </div>
+</section>
+
+<hr class="section-divider">
+
+
+<!-- ============================================================ PLATFORM D: MICROSOFT FABRIC ============================================================ -->
+<section class="platform-section">
+  <div class="platform-header">
+    <span class="platform-id">D</span>
+    <h2 class="platform-name">Microsoft Fabric</h2>
+  </div>
+  <p class="platform-scope">Fabric IQ · Fabric Ontology (Preview) · Graph in Fabric · Fabric Data Agents · OneLake Catalog · Real-Time Intelligence · Data Activator · Purview Unified Catalog · Copilot Studio · Azure AI Foundry · Microsoft Entra Agent ID · Agent 365 · Defender Agent SPM</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:14%">Plane</th>
+          <th style="width:24%">Product / Feature</th>
+          <th style="width:36%">What it actually does</th>
+          <th style="width:20%">Key gap</th>
+          <th style="width:6%">Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="plane-name">Fact<span class="plane-sub">Grounded state</span></span></td>
+          <td><span class="product-name">Fabric IQ (GA) + Ontology (Preview) + Graph in Fabric + OneLake Catalog + Real-Time Intelligence</span><span class="product-detail"><strong>Fabric IQ (GA, Build 2026):</strong> shared context and semantic intelligence layer between OneLake and AI agents — extends Power BI semantic models (certified measures, hierarchies, business definitions) to agents; acts as a unified context retrieval endpoint so Azure AI Foundry agents pull from Fabric IQ alongside Azure SQL and MCP sources through one interface; eliminates bespoke RAG pipelines over raw tables. <strong>Graph in Fabric (GA):</strong> GQL-standard relationship traversal engine over OneLake data — agents can traverse entity relationships, not just query tables. <strong>Fabric Ontology (Preview, no confirmed GA):</strong> defines enterprise entities, their relationships, constraints, and permitted actions, bound to OneLake data; supports automated ontology generation from existing semantic models; architecturally more ambitious than Snowflake's YAML semantic views (full entity-relationship-action model vs. metric/dimension definitions) but not yet production-ready. <strong>OneLake Catalog (Sep 2026 update):</strong> MCP-enabled, returns tables and semantic model tables in a single relevance-ranked API; included as a built-in tool in the Fabric Core MCP server — agents can locate the right Fabric asset within any workflow. <strong>Fabric Data Agents (GA):</strong> exposed as MCP tools in Azure AI Foundry and Copilot Studio; source permissions retained through the integration. Real-Time Intelligence: Eventhouse (KQL), Business Events (GA Sep 2026), Data Activator for event-driven triggers.</span></td>
+          <td class="product-detail">Fabric IQ is the strongest architectural response to the context engineering challenge of any platform — a purpose-built semantic layer that makes enterprise data addressable by agents using business concepts, not raw schema. Graph in Fabric adds relationship traversal that no other platform offers natively at this scale. OneLake Catalog's MCP integration means agents can discover governed data assets without bespoke connectors. Real-Time Intelligence provides the strongest real-time fact refresh of any platform.</td>
+          <td class="gap-text">Fabric Ontology — the piece that closes the gap with Snowflake's semantic views — remains in Preview with no confirmed GA date (Microsoft said "coming months" at Build 2026, May). Production decision platforms cannot take a Preview dependency. Snowflake Semantic Views (GA March 2026) still hold the edge on semantic layer maturity for production NL-grounded query. Entity resolution not native. Purview lineage for multi-cloud requires custom connectors.</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Policy<span class="plane-sub">Enforceable rules</span></span></td>
+          <td><span class="product-name">Microsoft Purview DLP + Defender Agent SPM + Entra Conditional Access</span><span class="product-detail">Purview: sensitivity labels, DLP policies on Copilot prompts (preview), risk discovery in prompts/responses. Defender Agent SPM: agent security posture management. Entra Conditional Access for agents: apply conditional access policies to agent identities. Purview classifier propagation. Agent 365 at 5+ agents makes Purview governance operationally required.</span></td>
+          <td class="product-detail">Purview's AI audit covers what data agents access and what they say. DLP enforces information barriers on agent outputs. Sensitivity labels propagate from data through agent responses. The policy surface is the broadest of any platform in terms of data classification coverage.</td>
+          <td class="gap-text">No policy-as-code for AI judgment rules — DLP is content-centric (what data agents can see/share), not decision-centric (what judgments agents can make). No regulatory rule ingestion. No versioned AI policy history comparable to Unity AI Gateway. Policy versioning is through M365 compliance center, not designed for AI decision policies.</td>
+          <td class="rating-cell"><span class="rate-low">○</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Authority<span class="plane-sub">Agent identity &amp; rights</span></span></td>
+          <td><span class="product-name">Microsoft Entra Agent ID (GA May 2026) + Azure AI Foundry Blueprints + Agent 365</span><span class="product-detail">Entra Agent ID: four object types (blueprint, blueprint principal, agent identity, agent user). Sponsor attribute names the accountable human. Delegated tokens carry both the user and agent identity. Every agent in AI Foundry + Copilot Studio automatically visible in Entra admin center. Agent blueprints: reusable Entra resources defining credentials, permission scopes, accountable owner. Each agent identity individually auditable.</span></td>
+          <td class="product-detail">Most mature agent identity model of any vendor — purpose-built agent identity objects with a formal sponsor/accountability chain, four-object hierarchy, and automatic enrollment into Entra governance. Human identity always present in the delegation token, enabling true delegated authority tracing.</td>
+          <td class="gap-text">No approval threshold enforcement native to the platform — thresholds require Power Automate or Logic App orchestration. No formal decision-rights schema (who can approve what value/type of decision) as a native Entra construct. Human-in-the-loop approval is not a native Fabric workflow primitive.</td>
+          <td class="rating-cell"><span class="rate-full">●</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Experience<span class="plane-sub">Decision memory</span></span></td>
+          <td><span class="product-name">Purview Unified Audit Log + AI Copilot Governance</span><span class="product-detail">Purview unified audit log: captures prompts, responses, file access references for every AI interaction. AI Copilot Fabric governance: risk discovery in prompts/responses, sensitive data detection in AI-generated content. Retention and eDiscovery applicable to AI-generated content. Events include how/when users interact and references to M365 files accessed.</span></td>
+          <td class="product-detail">The audit captures the conversational record — what was said, what files were accessed — with retention and eDiscovery. This is compliance memory, not decision memory. There is no outcome linkage, precedent retrieval, or quality filtering.</td>
+          <td class="gap-text">No dedicated decision-outcome linkage store. Audit captures inputs/outputs but not downstream business results (outcome of the decision). No comparable-case retrieval layer. No bias/quality filtering of precedents. The Experience Plane is essentially a compliance log, not a learning system.</td>
+          <td class="rating-cell"><span class="rate-low">○</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Intent<span class="plane-sub">Goals &amp; trade-offs</span></span></td>
+          <td><span class="product-name">Copilot Studio knowledge sources (partial)</span><span class="product-detail">Copilot Studio: low-code agent builder with knowledge sources (SharePoint, Dataverse, 1,400+ connectors, MCP support). Agents can be given topics, instructions, and knowledge bases encoding domain context. Fabric AI Skill: natural language interface for Fabric data.</span></td>
+          <td class="product-detail">Copilot Studio's knowledge sources and topics encode domain intent at the instruction level. Agents can be given structured instructions that approximate goal declarations. Not a formal intent schema.</td>
+          <td class="gap-text">No structured goal/intent schema at the decision level. No trade-off declaration surface. Copilot Studio instructions are natural-language prompt fragments, not machine-readable versioned objectives. No reusable intent libraries for decision-making. Intent is ungovernered by Purview or Entra.</td>
+          <td class="rating-cell"><span class="rate-low">○</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Decision Contract<span class="plane-sub">Evidence package</span></span></td>
+          <td><span class="product-name">Purview Unified Audit Log + Entra Agent ID audit + DSPM</span><span class="product-detail">Purview unified audit log: AI interactions logged with identity context (user + agent sponsor), file access references, timestamps. Entra Agent ID: each agent instance audited like a person. DSPM (Data Security Posture Management): AI observability layer. DLP inline block (preview): enforcement events logged. Risk discovery: sensitive data in prompts/responses flagged.</span></td>
+          <td class="product-detail">The combination of Purview audit + Entra Agent ID creates the most human-identity-anchored audit trail of any platform. Every AI interaction is associated with a named accountable human via the sponsor attribute. This is valuable for regulated industries requiring a human accountability chain.</td>
+          <td class="gap-text">No packaged decision provenance API. No machine-readable evidence package assembling all five planes. Audit is compliance-oriented (who did what, to what data) not decision-oriented (what was the judgment, under what policy, with what outcome). The Policy and Intent planes are absent from the audit record.</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="verdict">
+    <strong>Verdict.</strong> Microsoft Fabric has the most mature Authority Plane of any platform — Entra Agent ID (GA May 2026) is the only vendor with a purpose-built agent identity object hierarchy, a formal sponsor/accountability chain, and automatic enrollment of every AI Foundry and Copilot Studio agent into governed identity management. Fabric IQ (GA, Build 2026) is the most architecturally ambitious context layer of any platform — a semantic intelligence workload that makes enterprise data addressable by agents using business ontology, not raw schema, with Graph in Fabric adding relationship traversal and OneLake Catalog providing MCP-native asset discovery. The caveat: Fabric Ontology, the piece that would make this the strongest Fact Plane of any vendor, remains in Preview with no confirmed GA date — Snowflake's semantic views are in production while Fabric's are still maturing. The critical weakness is the Policy Plane: Purview DLP governs what data agents can access but not what judgments they can make — there is no policy-as-code layer for AI decision rules. The Intent Plane is absent, and the Experience Plane is a compliance audit log rather than a decision-learning system.
+  </div>
+</section>
+
+<hr class="section-divider">
+
+
+<!-- ============================================================ PLATFORM E: OPEN SOURCE ============================================================ -->
+<section class="platform-section">
+  <div class="platform-header">
+    <span class="platform-id">E</span>
+    <h2 class="platform-name">Open Source Ecosystem</h2>
+  </div>
+  <p class="platform-scope">OPA · LangGraph · Temporal · Keycloak · Langfuse · OpenLineage · Bitol (ODCS) · ODPS · dbt Contracts · Soda Core · Apache Ranger · spLink · Weaviate · pgvector · RAGAS · OpenTelemetry · DataHub · W3C PROV</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:14%">Plane</th>
+          <th style="width:24%">Product / Feature</th>
+          <th style="width:36%">What it actually does</th>
+          <th style="width:20%">Key gap</th>
+          <th style="width:6%">Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="plane-name">Fact<span class="plane-sub">Grounded state</span></span></td>
+          <td><span class="product-name">OpenLineage + Bitol/ODCS + ODPS + dbt Contracts + Soda Core + spLink + Weaviate/pgvector + DataHub</span><span class="product-detail">OpenLineage: standardized lineage events (RunEvent + custom facets), integrates with Airflow, dbt, Spark, Flink. <strong>Bitol (ODCS v3, Linux Foundation):</strong> open data contract standard — schema, quality SLAs, ownership, data sharing agreements between producers and consumers; the most mature cross-vendor data trust standard; active discussion (2026) on extending toward AI inference service contracts. <strong>ODPS (Open Data Product Specification):</strong> packaging, versioning, and discovery of data products in a mesh. <strong>dbt Contracts:</strong> schema enforcement and model-level contracts at transformation time, CI-verified. <strong>Soda Core:</strong> data quality assertions as YAML checks run at pipeline or agent-query time. spLink: probabilistic entity resolution (Fellegi-Sunter, 100M+ records). Weaviate/pgvector: hybrid vector search. DataHub / Apache Atlas: cross-platform metadata catalog with lineage.</span></td>
+          <td class="product-detail">The richest ecosystem of open data contract standards — Bitol/ODCS defines the trust contract between data producers and AI consumers; ODPS packages that contract for mesh distribution; dbt Contracts enforces it at transformation time; Soda Core validates it at runtime. OpenLineage is already adopted by every major platform vendor. spLink provides entity resolution that no cloud platform offers natively. These standards are tailwinds: a Decision Contract referencing ODCS-compliant data products gains auditability of its grounding facts in a regulator-recognized format.</td>
+          <td class="gap-text">No unified integration — these are separate tools requiring custom pipelines. ODCS and ODPS govern data trust, not AI judgment trust — the Decision Contract layer (what judgment was made, under what authority, against which policy) is explicitly out of scope for both standards. Bitol's 2026 roadmap discussion on "AI inference service contracts" has not yet shipped. Operational burden remains high for the full stack.</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Policy<span class="plane-sub">Enforceable rules</span></span></td>
+          <td><span class="product-name">OPA (Open Policy Agent) + Cedar (CNCF Sandbox) + Apache Ranger</span><span class="product-detail">OPA (CNCF graduated): policy-as-code in Rego language; @ai-sdk/policy-opa library moves agent tool approval rules into .rego files. Agentic governance pattern: Bedrock + LangGraph + OPA + ABAC + DynamoDB for multi-agent approval workflows with full auditability. Cedar: open-source policy language (CNCF Sandbox Oct 2025), same language as AWS AVP. Apache Ranger: fine-grained data access policies for Hadoop/Spark/Hive ecosystem.</span></td>
+          <td class="product-detail">OPA is the most flexible policy-as-code engine available — Rego can express arbitrary policy logic including tool-call approval rules, multi-agent authorization, and ABAC conditions. Cedar provides a simpler, safer policy language with formal verification properties. Both can be integrated into any agent framework via gateway middleware.</td>
+          <td class="gap-text">No managed regulatory rule ingestion from legal text to Rego. Exception/precedence handling requires custom Rego authoring. Policy versioning is DIY via Git. No managed policy lifecycle service — deploying policy updates to production requires custom CI/CD. OPA has no native agent identity model.</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Authority<span class="plane-sub">Agent identity &amp; rights</span></span></td>
+          <td><span class="product-name">Keycloak + LangGraph + Temporal</span><span class="product-detail">Keycloak: open-source IAM supporting OAuth 2.0 token exchange delegation (OpenID Foundation whitepaper Oct 2025 identifies this as foundational for AI agent ecosystems). Token exchange produces tokens carrying both user-who-granted-authority and agent-performing-action. LangGraph: graph-based agent orchestration with human-in-the-loop interrupt nodes, conditional edges, subgraph isolation. Temporal: durable workflows with human approval signals, wait states (hours/days), exactly-once execution, failure recovery — human approval implemented as a Temporal signal that blocks the workflow until received.</span></td>
+          <td class="product-detail">The combination of Keycloak token exchange + LangGraph interrupt + Temporal approval signals provides a fully composable authority model. Temporal's durable execution guarantees that approval workflows survive failures, network partitions, and long waits — no other platform offers this durability for approval gates. The LangGraph + Temporal integration pattern is documented and production-tested.</td>
+          <td class="gap-text">No unified agent identity model — Keycloak + LangGraph + Temporal must be assembled manually with significant integration effort. No formal delegated decision-rights schema as a managed primitive. No native threshold-enforcement construct. High operational burden: three separate systems to deploy, monitor, and upgrade.</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Experience<span class="plane-sub">Decision memory</span></span></td>
+          <td><span class="product-name">Langfuse v4 + MLflow (OSS) + RAGAS + Weaviate/pgvector (custom build)</span><span class="product-detail">Langfuse v4: self-hosted OTel-based trace analytics, captures every prompt/response/tool call, session grouping, cost tracking, human annotation; OTel-compatible so any agent framework emitting traces sends data automatically. MLflow (open source core): experiment tracking, evaluation results, model registry. RAGAS: RAG pipeline evaluation (faithfulness, relevance, context recall, answer correctness). Weaviate/pgvector: can store past decision vectors for semantic retrieval if custom-built. TrajectoryDB (arXiv Sep 2026): proposed database for agent trajectories (research, not production).</span></td>
+          <td class="product-detail">Langfuse is the most capable self-hosted trace store for AI agent decisions — every step is captured with metadata, human feedback can be attached, and cost/quality metrics are tracked per trace. Custom vector store (Weaviate/pgvector) can provide comparable-case retrieval if decision records are structured and embedded.</td>
+          <td class="gap-text">No native decision-outcome linkage — outcomes must be manually written back to Langfuse or a custom store. Comparable-case retrieval is entirely custom-built. Bias/quality filtering of precedents requires custom scoring. TrajectoryDB is research. RAGAS evaluates RAG pipelines, not governance decisions.</td>
+          <td class="rating-cell"><span class="rate-half">◑</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Intent<span class="plane-sub">Goals &amp; trade-offs</span></span></td>
+          <td><span class="product-name">No production-ready native construct</span><span class="product-detail">LangGraph state graphs can encode objectives and transitions as typed graph nodes. OPA Rego can express what NOT to do (negative constraints). No purpose-built structured intent schema or reusable intent library exists as a production OSS primitive. Intent is embedded in agent system prompts or LangGraph node logic.</span></td>
+          <td class="product-detail">The flexibility of OSS means intent CAN be encoded — LangGraph typed state + OPA policies + custom trade-off scoring logic. But there is no shared standard, no reusable library, and no governance tooling that can version or audit intent declarations.</td>
+          <td class="gap-text">Entire plane absent as a production primitive. The MIGT taxonomy (arXiv Apr 2026) and KYA framework (arXiv May 2026) describe what this plane should look like but neither is a production implementation. No reusable intent schema is in active production use.</td>
+          <td class="rating-cell"><span class="rate-none">✗</span></td>
+        </tr>
+        <tr>
+          <td><span class="plane-name">Decision Contract<span class="plane-sub">Evidence package</span></span></td>
+          <td><span class="product-name">Langfuse + OpenLineage + W3C PROV + OpenTelemetry + Bitol (ODCS) + NovaFabric (research)</span><span class="product-detail">Langfuse: full trace capture per decision event. OpenLineage: RunEvent with custom facets attaches execution references to data lineage. <strong>W3C PROV ontology:</strong> formal provenance graph standard (Entity / Activity / Agent) — the most widely recognized vocabulary for "what produced this output"; PROV-AGENT (2025) extends it for AI agent interactions. <strong>Bitol/ODCS:</strong> when input data products are ODCS-compliant, their schema version and quality SLA can be embedded in the decision contract as verifiable fact evidence — the data trust layer of the evidence package. OpenTelemetry: standardized spans across all agent frameworks. NovaFabric (arXiv Sep 2026): tamper-evident, replayable evidence with cryptographic signing — research, not yet production.</span></td>
+          <td class="product-detail">The combination of W3C PROV (provenance graph) + Bitol/ODCS (fact evidence anchor) + OpenLineage (data lineage) + Langfuse (reasoning trace) + OTel (execution spans) + Keycloak (identity context) provides the most standards-grounded raw material for a Decision Contract of any platform. Each layer maps to a recognized open standard, making the resulting evidence package more defensible with regulators than proprietary audit logs. NovaFabric, if productized, would add cryptographic signing.</td>
+          <td class="gap-text">No production-ready packaged Decision Contract schema that wires these standards together. W3C PROV covers provenance but not judgment authority or policy evaluation. Bitol covers data trust, not AI judgment trust. NovaFabric is research. Assembling a complete evidence package still requires four-plus systems and significant custom glue. No inference-time cryptographic signing in production.</td>
+          <td class="rating-cell"><span class="rate-low">○</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="verdict">
+    <strong>Verdict.</strong> The open source ecosystem offers the most flexibility and the deepest individual components — OPA for policy-as-code, Temporal for durable approval workflows, Langfuse for trace capture, spLink for entity resolution — but no platform integration means every enterprise must assemble and operate these separately, incurring significant engineering overhead. The Authority Plane combination of Keycloak + Temporal is the most durable approval-workflow architecture available. Critically, the open data standards layer (Bitol/ODCS, ODPS, dbt Contracts, Soda Core, W3C PROV, OpenLineage) operates at the <em>data trust</em> layer, not the <em>judgment trust</em> layer — they are the right building blocks for a Decision Contract's Fact evidence, but they stop short of the judgment plane. This is precisely the whitespace the Decision Fabric addresses: assembling ODCS-compliant data facts, OPA-evaluated policies, Keycloak-issued authority, Langfuse-captured experience, and declared intent into a single machine-readable evidence package at judgment time. Two planes (Intent, packaged Decision Contract) remain absent even combining every available tool.
+  </div>
+</section>
+
+<hr class="section-divider">
+
+
+<!-- ============================================================ CROSS-PLATFORM GAP SUMMARY ============================================================ -->
+<div class="gap-section">
+  <h2 class="gap-section-title">Cross-Platform Gap Summary</h2>
+  <p class="gap-section-sub">Capabilities absent on ALL five platforms — genuine build opportunities as of October 2026</p>
+
+  <div class="gap-grid">
+
+    <div class="gap-card">
+      <p class="gap-card-plane">Intent Plane</p>
+      <h3 class="gap-card-title">Structured Decision Objective Schema</h3>
+      <p class="gap-card-body">No platform offers a machine-readable, versioned schema for declaring agent objectives, priorities, and trade-off surfaces. Intent lives in free-text system prompts on every platform. MIGT taxonomy and KYA framework (arXiv 2026) describe the requirement but no vendor or OSS project has shipped a production implementation. This is the largest gap in enterprise AI decision governance.</p>
+    </div>
+
+    <div class="gap-card">
+      <p class="gap-card-plane">Intent Plane</p>
+      <h3 class="gap-card-title">Reusable Intent Library</h3>
+      <p class="gap-card-body">No platform offers reusable, versioned intent templates that can be applied across agents and decisions. Every agent team hand-writes objectives from scratch. No shared primitives for common decision patterns (maximize return subject to risk constraint, minimize cost subject to service-level constraint) exist in any vendor catalog or open standard.</p>
+    </div>
+
+    <div class="gap-card">
+      <p class="gap-card-plane">Experience Plane</p>
+      <h3 class="gap-card-title">Decision Record with Outcome Linkage</h3>
+      <p class="gap-card-body">All five platforms store conversational context or raw traces, but none link a specific decision record to its downstream business outcome (e.g., "this credit approval → loan performance 180 days later"). Without outcome linkage, there is no feedback loop for improving agent decision quality or auditing systematic bias over time. TrajectoryDB (arXiv Sep 2026) proposes the data structure but is not yet production software.</p>
+    </div>
+
+    <div class="gap-card">
+      <p class="gap-card-plane">Experience Plane</p>
+      <h3 class="gap-card-title">Precedent Retrieval with Bias Filtering</h3>
+      <p class="gap-card-body">No platform offers comparable-case retrieval optimized for governance decisions with quality and bias filtering. Vector stores (Weaviate, pgvector, Cortex Search) can retrieve similar records, but no platform provides the scoring layer that filters out low-quality, stale, or demographically biased precedents before they are used to ground a new decision.</p>
+    </div>
+
+    <div class="gap-card">
+      <p class="gap-card-plane">Policy Plane</p>
+      <h3 class="gap-card-title">Regulatory Rule Ingestion</h3>
+      <p class="gap-card-body">No platform can ingest regulatory text (Basel III, GDPR, EU AI Act articles) and produce versioned, executable policy rules. Every platform requires manual translation from legal/regulatory text into Cedar, Rego, or service policy functions. This is a significant compliance engineering cost in financial services and healthcare, and a source of translation errors with regulatory risk.</p>
+    </div>
+
+    <div class="gap-card">
+      <p class="gap-card-plane">Authority Plane</p>
+      <h3 class="gap-card-title">Delegated Decision-Rights Schema</h3>
+      <p class="gap-card-body">No platform offers a native construct for declaring "agent X may approve decisions of type Y up to threshold Z, subject to conditions W." AWS Cedar + Step Functions comes closest but requires hand-coding. The absence of this primitive means approval threshold enforcement is always custom-built, untested as a governance primitive, and invisible to audit tooling.</p>
+    </div>
+
+    <div class="gap-card">
+      <p class="gap-card-plane">Decision Contract</p>
+      <h3 class="gap-card-title">Packaged Machine-Readable Evidence Package</h3>
+      <p class="gap-card-body">No platform produces a single machine-readable evidence package for a specific judgment event that assembles the grounding facts used, the policy version evaluated against, the agent authority and delegation chain, the comparable precedents consulted, and the declared objectives. The W3C CG AI Agent Protocol issue #34 (2026) names this the "auditability gap." NovaFabric (arXiv) describes the cryptographic architecture but has not shipped as a product on any platform.</p>
+    </div>
+
+    <div class="gap-card">
+      <p class="gap-card-plane">Decision Contract</p>
+      <h3 class="gap-card-title">Inference-Time Cryptographic Signing</h3>
+      <p class="gap-card-body">No production platform cryptographically signs the inference event at the moment of judgment — capturing what the agent was given, what authority it operated under, and what it concluded, in a tamper-evident record. CloudTrail, Purview, and MLflow all create post-hoc records that could theoretically be reconstructed, but none provide a forward-signed cryptographic proof of the inference-time state. This is the evidentiary standard required for high-stakes regulated decisions under full EU AI Act enforcement (Aug 2026).</p>
+    </div>
+
+  </div>
+</div>
+
+<p class="footnote">Research conducted October 2026. Ratings reflect production-ready or GA capabilities; Beta/Preview features rated at most ◑. Sources: AWS documentation (AgentCore GA Oct 2025, AgentCore Policy GA Mar 2026; Amazon Context approaching GA Oct 2026; SageMaker Unified Studio), Databricks DAIS 2026 announcements (Unity AI Gateway GA Aug 4 2026), Snowflake Semantic Views GA March 2026, Microsoft Entra Agent ID GA May 2026, Fabric IQ GA Build 2026, Graph in Fabric GA Build 2026, Fabric Ontology Preview (learn.microsoft.com/fabric/iq/ontology/overview), OneLake Catalog MCP Sep 2026, FabCon Barcelona Sep 2026, community.fabric.microsoft.com "Fabric IQ Is GA. Your Ontology Isn't." (Jul 2026), W3C CG AI Agent Protocol issue #34, arXiv papers on NovaFabric (Sep 2026), TrajectoryDB (Sep 2026), MIGT (Apr 2026). Open standards: Bitol/ODCS v3 (Linux Foundation 2025), Open Data Product Specification, W3C PROV ontology, dbt Contracts, Soda Core.</p>
+
+</body></html>
