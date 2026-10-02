@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vedic Astrology — Career & Financial Transformation 2026–2029</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  /* ── THEME VARIABLES ──────────────────────────────────────────── */
+  :root {
+    --bg:              #0a0c14;
+    --text-primary:    #e2e8f0;
+    --text-secondary:  #a0aec0;
+    --text-muted:      #718096;
+    --text-dim:        #4a5568;
+    --text-accent:     #c4a25a;
+    --surface:         #111827;
+    --surface-alt:     #0d1520;
+    --surface-row:     #141b2d;
+    --border:          #1e2840;
+    --border-strong:   #2a3050;
+    --header-g1:       #1a1f35;
+    --header-g2:       #0f1525;
+    --dasha-bg:        #2d1f5e;
+    --dasha-text:      #b39ddb;
+    --dasha-border:    #4a3880;
+    --chart-grid:      rgba(30,40,64,0.8);
+    --chart-ticks:     #4a5568;
+    --month-tick:      #3a4a6a;
+    --row-label:       #4a5568;
+    --job-label:       #c4a25a;
+    --section-line:    #1e2840;
+    --score-hover:     #131c30;
+    --score-th:        #4a5568;
+    --score-th-bg:     #0d1520;
+    --score-num:       #7c8db5;
+    --ph-prep-bg:      #0d1520;
+    --ph-prep-bd:      #1e2840;
+    --ph-peak-bg:      #0a1a14;
+    --ph-peak-bd:      #065f46;
+    --ph-con-bg:       #0e1225;
+    --ph-con-bd:       #1e2840;
+    --ph-brk-bg:       #12082a;
+    --ph-brk-bd:       #4c1d95;
+    --ph-period:       #7c8db5;
+    --ph-title:        #f0e6c8;
+    --ph-desc:         #718096;
+    --ev-bg:           #111827;
+    --ev-border:       #1e2840;
+    --ev-title:        #e2e8f0;
+    --ev-desc:         #718096;
+    --bg-green:        #052e1a;   --txt-green:  #34d399;
+    --bg-purple:       #1e0a4c;   --txt-purple: #a78bfa;
+    --bg-amber:        #2d1a05;   --txt-amber:  #f59e0b;
+    --bg-red:          #2d0505;   --txt-red:    #f87171;
+    --ritual-hdr:      #0d1520;
+    --ritual-td1:      #c4a25a;
+    --ritual-td2:      #e2e8f0;
+    --ritual-td3:      #718096;
+    --footer-text:     #2d3748;
+    --legend-text:     #7c8db5;
+    --chart-title-c:   #7c8db5;
+    --hmap-div:        #1e2840;
+    --hmap-note:       #4a5568;
+    --toggle-bg:       #1e2840;
+    --toggle-text:     #a0aec0;
+    --toggle-hover:    #2a3a5e;
+  }
+
+  body.light {
+    --bg:              #f3ede0;
+    --text-primary:    #1a1a2e;
+    --text-secondary:  #374151;
+    --text-muted:      #4b5563;
+    --text-dim:        #6b7280;
+    --text-accent:     #9b6f2a;
+    --surface:         #ffffff;
+    --surface-alt:     #faf7f0;
+    --surface-row:     #f0ece2;
+    --border:          #e0d5bc;
+    --border-strong:   #d4c8a0;
+    --header-g1:       #fdf8ee;
+    --header-g2:       #f5ead4;
+    --dasha-bg:        #ede8f5;
+    --dasha-text:      #5b3d8a;
+    --dasha-border:    #c0a8e0;
+    --chart-grid:      rgba(200,188,160,0.5);
+    --chart-ticks:     #9ca3af;
+    --month-tick:      #b0a898;
+    --row-label:       #a09880;
+    --job-label:       #9b6f2a;
+    --section-line:    #e0d5bc;
+    --score-hover:     #faf7f0;
+    --score-th:        #9ca3af;
+    --score-th-bg:     #faf7f0;
+    --score-num:       #9ca3af;
+    --ph-prep-bg:      #faf7f0;
+    --ph-prep-bd:      #e0d5bc;
+    --ph-peak-bg:      #edfaf5;
+    --ph-peak-bd:      #6ee7b7;
+    --ph-con-bg:       #f5f0fa;
+    --ph-con-bd:       #d8b8f0;
+    --ph-brk-bg:       #eeeafa;
+    --ph-brk-bd:       #a78bfa;
+    --ph-period:       #6b7280;
+    --ph-title:        #1a1a2e;
+    --ph-desc:         #4b5563;
+    --ev-bg:           #ffffff;
+    --ev-border:       #e0d5bc;
+    --ev-title:        #1a1a2e;
+    --ev-desc:         #4b5563;
+    --bg-green:        #d1fae5;   --txt-green:  #065f46;
+    --bg-purple:       #ede9fe;   --txt-purple: #4c1d95;
+    --bg-amber:        #fef3c7;   --txt-amber:  #92400e;
+    --bg-red:          #fee2e2;   --txt-red:    #7f1d1d;
+    --ritual-hdr:      #faf7f0;
+    --ritual-td1:      #9b6f2a;
+    --ritual-td2:      #1a1a2e;
+    --ritual-td3:      #4b5563;
+    --footer-text:     #b0a898;
+    --legend-text:     #6b7280;
+    --chart-title-c:   #6b7280;
+    --hmap-div:        #e0d5bc;
+    --hmap-note:       #a09880;
+    --toggle-bg:       #e8e0cc;
+    --toggle-text:     #4b5563;
+    --toggle-hover:    #d8ceb0;
+  }
+
+  /* ── BASE ─────────────────────────────────────────────────────── */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2rem;
+    transition: background 0.3s, color 0.3s;
+  }
+  .page { max-width: 1100px; margin: 0 auto; }
+
+  /* ── THEME TOGGLE ─────────────────────────────────────────────── */
+  .theme-toggle {
+    position: fixed;
+    top: 1.2rem;
+    right: 1.2rem;
+    z-index: 100;
+    background: var(--toggle-bg);
+    color: var(--toggle-text);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .theme-toggle:hover { background: var(--toggle-hover); }
+  .theme-toggle .icon { font-size: 14px; }
+
+  /* ── HEADER ───────────────────────────────────────────────────── */
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--header-g1) 0%, var(--header-g2) 100%);
+    border-radius: 20px;
+    border: 1px solid var(--border-strong);
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .header .subtitle {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-accent);
+    margin-bottom: 0.75rem;
+  }
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--ph-title);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .header .birth-info { font-size: 12px; color: var(--text-muted); margin-top: 0.5rem; }
+  .header .dasha-tag {
+    display: inline-block;
+    margin-top: 1rem;
+    background: var(--dasha-bg);
+    color: var(--dasha-text);
+    font-size: 11px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--dasha-border);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── CARDS ────────────────────────────────────────────────────── */
+  .chart-card {
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .chart-title {
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--chart-title-c); margin-bottom: 1.2rem;
+  }
+  .chart-wrap { position: relative; height: 260px; }
+
+  /* ── LEGEND ───────────────────────────────────────────────────── */
+  .legend {
+    display: flex; gap: 1.5rem; flex-wrap: wrap;
+    margin-top: 1rem; padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .leg-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--legend-text); }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── HEATMAP ──────────────────────────────────────────────────── */
+  .heatmap-section { margin-bottom: 1.5rem; }
+  .hmap-outer { display: flex; align-items: center; gap: 8px; }
+  .hmap-row-label { font-size: 11px; color: var(--row-label); min-width: 56px; }
+  .hmap-row-label.job { color: var(--job-label); font-weight: 600; }
+  .hmap-cells { display: flex; gap: 2px; flex: 1; }
+  .hmap-cell {
+    height: 28px; border-radius: 3px; flex: 1;
+    position: relative; cursor: default;
+    transition: opacity 0.15s;
+  }
+  .hmap-cell:hover { opacity: 0.75; }
+  .hmap-cell .tooltip {
+    display: none; position: absolute;
+    bottom: calc(100% + 6px); left: 50%;
+    transform: translateX(-50%);
+    background: #1e2840; color: #e2e8f0;
+    font-size: 11px; padding: 5px 10px;
+    border-radius: 6px; white-space: nowrap;
+    z-index: 10; border: 1px solid #2a3a5e;
+    pointer-events: none;
+  }
+  .hmap-cell:hover .tooltip { display: block; }
+  .month-axis { display: flex; padding-left: 66px; margin-bottom: 2px; }
+  .month-tick { flex: 1; font-size: 9px; color: var(--month-tick); text-align: center; }
+
+  /* ── YEAR / QUARTER RULERS ────────────────────────────────────── */
+  .ruler-row { display: flex; align-items: stretch; margin-top: 6px; padding-left: 64px; gap: 2px; }
+  .ruler-spacer { min-width: 0; }
+  .ruler-year {
+    display: flex; gap: 2px; flex: 1;
+  }
+  .ruler-yr-blk {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+    color: var(--text-primary); background: var(--surface-alt);
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 3px 4px; text-align: center;
+  }
+  .ruler-qtr-row { display: flex; gap: 2px; flex: 1; margin-top: 2px; }
+  .ruler-qtr-blk {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 500;
+    color: var(--text-dim); border-top: 2px solid;
+    padding: 2px 2px 0; text-align: center; letter-spacing: 0.03em;
+  }
+  .qtr-q1 { border-color: #3b82f6; color: #3b82f6; }
+  .qtr-q2 { border-color: #10b981; color: #10b981; }
+  .qtr-q3 { border-color: #f59e0b; color: #f59e0b; }
+  .qtr-q4 { border-color: #8b5cf6; color: #8b5cf6; }
+
+  /* ── EVENTS ───────────────────────────────────────────────────── */
+  .events-grid { display: grid; gap: 10px; margin-bottom: 1.5rem; }
+  .event-card {
+    display: flex; gap: 14px; padding: 14px 16px;
+    background: var(--ev-bg);
+    border-radius: 12px;
+    border: 1px solid var(--ev-border);
+    border-left: 3px solid;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .event-card.red    { border-left-color: #7f1d1d; }
+  .event-card.amber  { border-left-color: #854F0B; }
+  .event-card.blue   { border-left-color: #1e40af; }
+  .event-card.green  { border-left-color: #065f46; }
+  .event-card.purple { border-left-color: #4c1d95; }
+  .ev-icon { font-size: 18px; flex-shrink: 0; }
+  .ev-body { flex: 1; }
+  .ev-date  { font-size: 11px; font-weight: 600; color: var(--text-accent); margin-bottom: 3px; }
+  .ev-title { font-size: 14px; font-weight: 500; color: var(--ev-title); margin-bottom: 4px; }
+  .ev-desc  { font-size: 12px; color: var(--ev-desc); line-height: 1.6; }
+  .ev-badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+  .badge-green  { background: var(--bg-green);  color: var(--txt-green);  }
+  .badge-purple { background: var(--bg-purple); color: var(--txt-purple); }
+  .badge-amber  { background: var(--bg-amber);  color: var(--txt-amber);  }
+  .badge-red    { background: var(--bg-red);    color: var(--txt-red);    }
+
+  /* ── PHASE SUMMARY CARDS ──────────────────────────────────────── */
+  .phases-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px; margin-bottom: 1.5rem;
+  }
+  .phase-card { padding: 1.2rem; border-radius: 12px; border: 1px solid; transition: background 0.3s, border-color 0.3s; }
+  .phase-card.prep   { background: var(--ph-prep-bg); border-color: var(--ph-prep-bd); }
+  .phase-card.peak   { background: var(--ph-peak-bg); border-color: var(--ph-peak-bd); }
+  .phase-card.consol { background: var(--ph-con-bg);  border-color: var(--ph-con-bd);  }
+  .phase-card.break  { background: var(--ph-brk-bg);  border-color: var(--ph-brk-bd);  }
+  .ph-period { font-size: 10px; color: var(--ph-period); margin-bottom: 6px; letter-spacing: 0.06em; }
+  .ph-title  { font-size: 16px; font-weight: 500; color: var(--ph-title); margin-bottom: 6px; }
+  .ph-desc   { font-size: 12px; color: var(--ph-desc); line-height: 1.5; }
+  .ph-stars  { font-size: 14px; margin-top: 8px; }
+
+  /* ── RITUAL TABLE ─────────────────────────────────────────────── */
+  .ritual-card {
+    background: var(--surface);
+    border-radius: 16px; border: 1px solid var(--border);
+    overflow: hidden; margin-bottom: 1.5rem;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .ritual-header {
+    padding: 1rem 1.5rem;
+    background: var(--ritual-hdr);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--chart-title-c);
+  }
+  .ritual-table { width: 100%; border-collapse: collapse; }
+  .ritual-table th {
+    text-align: left; padding: 10px 16px;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--score-th); border-bottom: 1px solid var(--border); font-weight: 500;
+  }
+  .ritual-table td { padding: 10px 16px; font-size: 12px; border-bottom: 1px solid var(--surface-row); vertical-align: top; color: var(--text-muted); }
+  .ritual-table tr:last-child td { border-bottom: none; }
+  .ritual-table td:first-child { color: var(--ritual-td1); font-weight: 500; white-space: nowrap; }
+  .ritual-table td:nth-child(2) { color: var(--ritual-td2); }
+  .ritual-table td:nth-child(3) { color: var(--ritual-td3); }
+
+  /* ── FOOTER / SECTION TITLE ───────────────────────────────────── */
+  .footer {
+    text-align: center; padding: 1.5rem; font-size: 11px;
+    color: var(--footer-text);
+    border-top: 1px solid var(--border); margin-top: 1.5rem;
+  }
+  .section-title {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::after {
+    content: ''; flex: 1; height: 1px; background: var(--section-line);
+  }
+
+  /* ── SCORE TABLE ─────────────────────────────────────────────── */
+  .score-table-wrap {
+    background: var(--surface);
+    border-radius: 16px; border: 1px solid var(--border);
+    overflow: hidden; margin-bottom: 1.5rem;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .score-table { width: 100%; border-collapse: collapse; }
+  .score-table thead th {
+    padding: 10px 12px;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--score-th); background: var(--score-th-bg);
+    border-bottom: 1px solid var(--border); font-weight: 500; text-align: left;
+  }
+  .score-table tbody td {
+    padding: 8px 12px; font-size: 12px;
+    border-bottom: 1px solid var(--surface-alt); vertical-align: middle;
+    color: var(--text-secondary);
+  }
+  .score-table tbody tr:last-child td { border-bottom: none; }
+  .score-table tbody tr:hover td { background: var(--score-hover); }
+  .score-bar { display: flex; align-items: center; gap: 6px; }
+  .score-pip { height: 6px; border-radius: 3px; transition: width 0.3s; }
+  .score-num { font-size: 11px; color: var(--score-num); min-width: 20px; }
+  td.qtr  { color: var(--text-dim); }
+  td.prat { color: #a78bfa; font-size: 11px; }
+  td.tran { color: #60a5fa; font-size: 11px; }
+</style>
+</head>
+<body>
+
+<!-- THEME TOGGLE -->
+<button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+  <span class="icon" id="themeIcon">☀️</span>
+  <span id="themeLabel">Light mode</span>
+</button>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="subtitle">Jyotish (Vedic Astrology) — Personal Analysis</div>
+    <h1>Career &amp; Financial Transformation<br>October 2026 — December 2029</h1>
+    <div class="birth-info">
+      Born: 30 October 1980 · 9:10 AM · Pilkhuwa, Ghaziabad, India &nbsp;|&nbsp;
+      Lagna: Scorpio · Moon: Cancer · Mars (Ruchaka Yoga) in 1st · Navamsa Vargottama
+    </div>
+    <div class="dasha-tag">Venus Mahadasha (2018–2038) &nbsp;|&nbsp; Current: Venus–Rahu Antardasha (Oct 2025–Oct 2028)</div>
+  </div>
+
+  <!-- CHART -->
+  <div class="chart-card">
+    <div class="chart-title">Career &amp; Financial Opportunity Score — Monthly (1–10 scale)</div>
+    <div class="chart-wrap">
+      <canvas id="mainChart"></canvas>
+    </div>
+    <div class="legend">
+      <div class="leg-item"><span class="leg-dot" style="background:#c4a25a"></span>Career Score</div>
+      <div class="leg-item"><span class="leg-dot" style="background:#818cf8"></span>Financial Score</div>
+      <div class="leg-item"><span style="display:inline-block;width:22px;height:2px;background:#f59e0b;border-top:2px dashed #f59e0b;margin-right:4px;vertical-align:middle"></span>Job Switch Window</div>
+      <div class="leg-item"><span class="leg-dot" style="background:#10b981;opacity:.4;border-radius:0;width:14px;height:10px;"></span>Peak band</div>
+    </div>
+  </div>
+
+  <!-- HEATMAP -->
+  <div class="chart-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:8px;">
+      <div class="chart-title" style="margin-bottom:0">Month-by-Month Opportunity Heatmap</div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; font-size:11px; color:var(--text-dim);">
+        <span>Scale:</span>
+        <span style="color:#b91c1c">■ Avoid <span style="opacity:0.6">(1–3)</span></span>
+        <span style="color:#b45309">■ Caution <span style="opacity:0.6">(4)</span></span>
+        <span style="color:#0e7490">■ Active <span style="opacity:0.6">(5–6)</span></span>
+        <span style="color:#047857">■ Good <span style="opacity:0.6">(7)</span></span>
+        <span style="color:#84cc16">■ Peak <span style="opacity:0.6">(8)</span></span>
+        <span style="color:#6d28d9">■ Breakthrough <span style="opacity:0.6">(9–10)</span></span>
+      </div>
+    </div>
+    <div id="hmapGrid"></div>
+    <div style="margin-top:8px; display:flex; gap:16px; flex-wrap:wrap; align-items:center; font-size:11px; color:var(--text-dim);">
+      <span style="opacity:0.7">Dasha row:</span>
+      <span style="display:flex;align-items:center;gap:4px;">
+        <span style="display:inline-block;width:18px;height:10px;border-radius:2px;background:rgba(14,116,144,0.5);"></span>
+        <span>Venus–Rahu AD (Oct 2025–Oct 2028)</span>
+      </span>
+      <span style="display:flex;align-items:center;gap:4px;">
+        <span style="display:inline-block;width:18px;height:10px;border-radius:2px;background:rgba(109,40,217,0.85);"></span>
+        <span>Venus–Jupiter AD (Oct 2028–Jul 2031)</span>
+      </span>
+    </div>
+    <div style="margin-top:6px; font-size:10px; color:var(--hmap-note); font-style:italic;">
+      ★ Dec 10 (Thu), Dec 11 (Fri), Dec 14 (Mon) 2026 — earliest auspicious Muhurat dates &nbsp;|&nbsp; ★★ Jul 2027 = peak career window
+    </div>
+  </div>
+
+  <!-- QUARTERLY SCORE TABLE -->
+  <div class="section-title">Quarterly Score Reference</div>
+  <div class="score-table-wrap">
+    <table class="score-table">
+      <thead>
+        <tr>
+          <th>Quarter</th>
+          <th>Career (1–10)</th>
+          <th>Finance (1–10)</th>
+          <th>Pratyantara</th>
+          <th>Key Transit</th>
+          <th>How to Navigate</th>
+        </tr>
+      </thead>
+      <tbody id="scoreTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- PHASE SUMMARY -->
+  <div class="section-title">Four-Act Transformation Arc</div>
+  <div class="phases-summary">
+    <div class="phase-card prep">
+      <div class="ph-period">Oct 2026 – May 2027</div>
+      <div class="ph-title">Act I — Preparation</div>
+      <div class="ph-desc">Position yourself. Navigate family challenges. Build your pipeline. Venus–Rahu with Saturn pratyantara demands patience, not action. The first clean window opens Dec 6, 2026 when Ketu exits the career house.</div>
+      <div class="ph-stars">⭐⭐</div>
+    </div>
+    <div class="phase-card peak">
+      <div class="ph-period">Jun – Nov 2027</div>
+      <div class="ph-title">Act II — Career Peak</div>
+      <div class="ph-desc">Make your move. Sign the offer. Launch the new role. Greatest career impact in this entire 3-year window. July 2027 is the single best month: Jupiter in 10th + Mercury pratyantara both active simultaneously.</div>
+      <div class="ph-stars">⭐⭐⭐⭐⭐</div>
+    </div>
+    <div class="phase-card consol">
+      <div class="ph-period">Dec 2027 – Sep 2028</div>
+      <div class="ph-title">Act III — Consolidation</div>
+      <div class="ph-desc">Deliver results. Build relationships. Jupiter moves to income house (11th) from Nov 27, 2027 — career effort converts to financial reward. Rahu moves to wealth house (2nd) Jun 25, 2028 — unconventional income opens.</div>
+      <div class="ph-stars">⭐⭐⭐⭐</div>
+    </div>
+    <div class="phase-card break">
+      <div class="ph-period">Oct 2028 – Dec 2029+</div>
+      <div class="ph-title">Act IV — Breakthrough</div>
+      <div class="ph-desc">Venus–Jupiter Antardasha begins Oct 24, 2028. Jupiter rules your 2nd (wealth) and 5th (intelligence/investments) for Scorpio lagna. The most sustained financial growth period of your entire 20-year Venus Mahadasha. Runs to July 2031.</div>
+      <div class="ph-stars">⭐⭐⭐⭐⭐ ★</div>
+    </div>
+  </div>
+
+  <!-- KEY EVENTS -->
+  <div class="section-title">Key Planetary Events &amp; Transformation Triggers</div>
+  <div class="events-grid">
+
+    <div class="event-card blue">
+      <div class="ev-icon">🪐</div>
+      <div class="ev-body">
+        <div class="ev-date">November 1, 2026</div>
+        <div class="ev-title">Jupiter Enters 10th House (Leo)</div>
+        <div class="ev-desc">Career house activates. Jupiter hasn't held this position since 2015. Visibility, authority, and recognition begin switching on. This is the first signal that the long preparation period is ending — but Ketu is still present, so results are partial until Dec.</div>
+      </div>
+    </div>
+
+    <div class="event-card green">
+      <div class="ev-icon">🌟</div>
+      <div class="ev-body">
+        <div class="ev-date">December 6, 2026</div>
+        <div class="ev-title">Rahu–Ketu Axis Shifts — First Clean Career Window <span class="ev-badge badge-green">Green ✓</span></div>
+        <div class="ev-desc">Ketu finally exits your 10th house (career). Jupiter + Mars now hold the 10th unobstructed. Simultaneously, Rahu moves to your 3rd house (communication, effort, courage) — powerful for a sales/growth role. First genuinely clean window to have serious career conversations. Dasha: Venus–Rahu–Saturn (still heavy). Window lasts until Jupiter leaves Jan 25.</div>
+      </div>
+    </div>
+
+    <div class="event-card red">
+      <div class="ev-icon">⛔</div>
+      <div class="ev-body">
+        <div class="ev-date">January 25 – February 19, 2027</div>
+        <div class="ev-title">Jupiter Retreats — Brief Trough <span class="ev-badge badge-red">Avoid</span></div>
+        <div class="ev-desc">Jupiter retrogrades back into Cancer (9th house). Saturn pratyantara still active. Brief but real low point. Do not sign agreements, join new companies, or force decisions during this 3-week window. Use this time to review, not act.</div>
+      </div>
+    </div>
+
+    <div class="event-card blue">
+      <div class="ev-icon">☿</div>
+      <div class="ev-body">
+        <div class="ev-date">February 19, 2027</div>
+        <div class="ev-title">Mercury Pratyantara Begins — Deal &amp; Communication Phase <span class="ev-badge badge-green">Build</span></div>
+        <div class="ev-desc">Mercury pratyantara activates within Venus–Rahu AD. Mercury governs deals, communication, intelligence, and negotiations — a natural fit for a Data &amp; AI Growth Director role. This opens the active pipeline-building phase. Start conversations, draft proposals, advance introductions. Runs until Jul 24, 2027.</div>
+      </div>
+    </div>
+
+    <div class="event-card purple">
+      <div class="ev-icon">🔥</div>
+      <div class="ev-body">
+        <div class="ev-date">June 26 – July 24, 2027</div>
+        <div class="ev-title">PEAK CAREER WINDOW — Jupiter 10th + Mercury Pratyantara <span class="ev-badge badge-purple">★★ Peak</span></div>
+        <div class="ev-desc">The single most powerful career month in the entire 2026–2029 arc. Jupiter re-enters your 10th house (career) on Jun 26 while Mercury pratyantara is still active — both factors peak simultaneously for just one month. This is the ideal window to: sign an offer, make the job switch, launch a new initiative, or negotiate a major contract. If you are going to make a career move, make it here. The window closes when Mercury pratyantara ends Jul 24.</div>
+      </div>
+    </div>
+
+    <div class="event-card green">
+      <div class="ev-icon">♀</div>
+      <div class="ev-body">
+        <div class="ev-date">September 25 – November 27, 2027</div>
+        <div class="ev-title">Venus Pratyantara + Jupiter in 10th — Contracts &amp; Partnerships <span class="ev-badge badge-green">★ Strong</span></div>
+        <div class="ev-desc">Venus pratyantara begins within Venus Mahadasha — double Venus energy. Exceptionally powerful for contracts, partnerships, and financial agreements. Jupiter is still in your 10th throughout this period. Second-best window of the arc. If you missed the July peak, this is your backup. Particularly strong for revenue deals, client contracts, and leadership visibility.</div>
+      </div>
+    </div>
+
+    <div class="event-card blue">
+      <div class="ev-icon">💰</div>
+      <div class="ev-body">
+        <div class="ev-date">November 27, 2027</div>
+        <div class="ev-title">Jupiter Enters 11th House — Income &amp; Gains Phase Begins</div>
+        <div class="ev-desc">Jupiter moves to your 11th house (Virgo — income, gains, networks, fulfillment of desires). Career-house activity now converts into financial reward. This is when the deals you signed in 2027 start generating meaningful income. Jupiter's presence in the 11th for Scorpio lagna is classically one of the strongest positions for sustained earnings growth.</div>
+      </div>
+    </div>
+
+    <div class="event-card blue">
+      <div class="ev-icon">🔄</div>
+      <div class="ev-body">
+        <div class="ev-date">March 1 – July 25, 2028</div>
+        <div class="ev-title">Jupiter Retrogrades Back into Leo (10th) — Second Career Pass</div>
+        <div class="ev-desc">Jupiter briefly retrogrades back into your career house, offering a consolidation window. Authority, reputation, and recognition solidify. Promotions, expanded scope, or public recognition from work done in 2027 are favoured. This is not a new-start energy — it's recognition of what already exists.</div>
+      </div>
+    </div>
+
+    <div class="event-card green">
+      <div class="ev-icon">💎</div>
+      <div class="ev-body">
+        <div class="ev-date">June 25, 2028</div>
+        <div class="ev-title">Rahu Moves to 2nd House — Wealth House Activation <span class="ev-badge badge-green">Finance</span></div>
+        <div class="ev-desc">Rahu transits into Capricorn, your 2nd house (wealth, accumulated assets, speech, family finances). Rahu in the 2nd house classically brings unconventional income streams, multiple revenue sources, and financial ambition. Pairs powerfully with the Venus–Jupiter AD that begins in October.</div>
+      </div>
+    </div>
+
+    <div class="event-card purple">
+      <div class="ev-icon">🌠</div>
+      <div class="ev-body">
+        <div class="ev-date">October 24, 2028</div>
+        <div class="ev-title">VENUS–JUPITER ANTARDASHA BEGINS — The Great Shift <span class="ev-badge badge-purple">★★★ Breakthrough</span></div>
+        <div class="ev-desc">The single biggest dasha shift in this entire window. Jupiter rules your 2nd house (wealth, assets) and 5th house (intelligence, investments, creativity) for Scorpio lagna. Venus–Jupiter AD within Venus Mahadasha = the most sustained financial growth phase of the entire 20-year Venus period. This Antardasha runs until July 2031. 2029 begins the full harvest — all three major indicators aligned: Venus–Jupiter AD, Rahu in wealth house, and Jupiter in income house. Expect significant and lasting financial elevation.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RITUALS -->
+  <div class="section-title">Upayas — Recommended Rituals by Period</div>
+  <div class="ritual-card">
+    <div class="ritual-header">Ritual &amp; Upaya Calendar</div>
+    <table class="ritual-table">
+      <thead>
+        <tr>
+          <th>Period</th>
+          <th>Upaya</th>
+          <th>Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Now – Feb 2027<br><small style="color:#4a5568">Saturn Prat</small></td>
+          <td>
+            · Saturday: light sesame-oil lamp at Shani temple<br>
+            · Recite Shani Chalisa or Hanuman Chalisa daily<br>
+            · Donate black sesame, mustard oil, black cloth on Saturdays<br>
+            · Keep a piece of iron in your pocket or wear an iron ring (right hand middle finger)
+          </td>
+          <td>Ease Saturn pratyantara. Reduce delays, obstacles, and heaviness in decisions. Build patience and discipline.</td>
+        </tr>
+        <tr>
+          <td>Feb – Jul 2027<br><small style="color:#4a5568">Mercury Prat</small></td>
+          <td>
+            · Wednesday: light green candle or incense, donate green vegetables<br>
+            · Recite Budh Beej Mantra: <em>Om Bram Brim Braum Sah Budhaya Namaha</em> (108×)<br>
+            · Wear emerald or green tourmaline on little finger (right hand) after consulting jeweller<br>
+            · Read or write something meaningful each morning
+          </td>
+          <td>Sharpen Mercury energy for negotiations, deals, communication, and client presentations.</td>
+        </tr>
+        <tr>
+          <td>Jun – Jul 2027<br><small style="color:#065f46">PEAK WINDOW</small></td>
+          <td>
+            · Muhurat: Choose joining date/offer acceptance on Thursday (Guruvaar)<br>
+            · Avoid Rahu Kaal (roughly 7:30–9 AM in summer, vary by city)<br>
+            · Abhijit Muhurat (12:00–12:48 PM local time) is ideal for signings<br>
+            · Offer coconut to Ganesh puja before signing any new agreement<br>
+            · Write your goals for the next 3 years on paper and place at your altar on the joining day
+          </td>
+          <td>Maximise the peak window energy. Sankalp (intention-setting) during auspicious muhurat magnifies results.</td>
+        </tr>
+        <tr>
+          <td>Sep – Nov 2027<br><small style="color:#4a5568">Venus Prat</small></td>
+          <td>
+            · Friday: offer white flowers to Lakshmi/Durga<br>
+            · Recite Shri Suktam weekly<br>
+            · Donate white sweets or rice on Fridays<br>
+            · Wear white or cream on Fridays
+          </td>
+          <td>Amplify Venus pratyantara for contracts, partnerships, and financial agreements.</td>
+        </tr>
+        <tr>
+          <td>Ongoing<br><small style="color:#4a5568">Rahu (current AD)</small></td>
+          <td>
+            · Wednesday and Saturday: Durga Saptashati path or recite Rahu beej mantra: <em>Om Bhram Bhrim Bhraum Sah Rahave Namaha</em><br>
+            · Donate coconut, blue/dark cloth, or coal on Saturdays<br>
+            · Avoid major decisions during eclipses (solar/lunar) — rest and reflect instead
+          </td>
+          <td>Keep Rahu's disruptive energy channelled constructively. Rahu in Antardasha can bring sudden leaps but also sudden reversals — grounding rituals help stabilise.</td>
+        </tr>
+        <tr>
+          <td>Oct 2028+<br><small style="color:#4c1d95">Jupiter AD</small></td>
+          <td>
+            · Thursday: offer yellow flowers, chana dal, turmeric to Vishnu/Brihaspati<br>
+            · Recite Guru Beej Mantra: <em>Om Gram Grim Graum Sah Gurave Namaha</em> (108×)<br>
+            · Donate yellow cloth or books to students<br>
+            · Wear yellow sapphire or citrine on index finger after pandit consultation
+          </td>
+          <td>Activate Venus–Jupiter AD fully. Jupiter as 2nd and 5th lord for Scorpio lagna is exceptionally powerful for wealth and wisdom during this phase.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    Vedic (Jyotish) analysis · Lahiri Ayanamsa · Vimshottari Dasha system · Scorpio lagna · Cancer moon<br>
+    Generated for personal reference only. Astrology is a guide, not a deterministic prediction. All life outcomes are shaped by action, karma, and will.
+  </div>
+
+</div>
+
+<script>
+// ── DATA ────────────────────────────────────────────────────────────────────
+const months = [
+  'Oct 26','Nov 26','Dec 26',
+  'Jan 27','Feb 27','Mar 27','Apr 27','May 27','Jun 27','Jul 27','Aug 27','Sep 27','Oct 27','Nov 27','Dec 27',
+  'Jan 28','Feb 28','Mar 28','Apr 28','May 28','Jun 28','Jul 28','Aug 28','Sep 28','Oct 28','Nov 28','Dec 28',
+  'Jan 29','Feb 29','Mar 29','Apr 29','May 29','Jun 29','Jul 29','Aug 29','Sep 29','Oct 29','Nov 29','Dec 29'
+];
+
+const careerScores = [
+  5, 6, 7,
+  7, 3, 6, 7, 7, 8, 9, 7, 7, 8, 8, 7,
+  7, 7, 7, 7, 7, 6, 6, 5, 5, 7, 8, 8,
+  8, 8, 8, 8, 9, 8, 8, 8, 8, 8, 8, 8
+];
+
+const finScores = [
+  4, 5, 6,
+  6, 4, 6, 6, 7, 7, 8, 8, 8, 8, 8, 8,
+  8, 8, 7, 7, 7, 8, 8, 7, 7, 8, 9, 9,
+  9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9
+];
+
+const pratyantaras = [
+  'V–Ra–Saturn','V–Ra–Saturn','V–Ra–Saturn',
+  'V–Ra–Saturn','V–Ra–Saturn','V–Ra–Mercury','V–Ra–Mercury','V–Ra–Mercury','V–Ra–Mercury','V–Ra–Mercury','V–Ra–Ketu','V–Ra–Ketu',
+  'V–Ra–Venus','V–Ra–Venus','V–Ra–Venus',
+  'V–Ra–Venus','V–Ra–Venus','V–Ra–Sun','V–Ra–Sun','V–Ra–Moon','V–Ra–Moon','V–Ra–Moon','V–Ra–Mars','V–Ra–Mars',
+  'V–Ra–Mars','Venus–Jupiter AD','Venus–Jupiter AD',
+  'Venus–Jupiter AD','Venus–Jupiter AD','Venus–Jupiter AD','Venus–Jupiter AD','Venus–Jupiter AD','Venus–Jupiter AD','Venus–Jupiter AD','Venus–Jupiter AD','Venus–Jupiter AD','Venus–Jupiter AD','Venus–Jupiter AD','Venus–Jupiter AD'
+];
+
+// Job-switch suitability (1–10): specifically about leaving current role and joining a new company
+// Considers: dasha prat, Jupiter position, Ketu in 10th, avoid trough windows
+const jobChangeScores = [
+  // Oct–Dec 2026
+  3,  // Oct: Ketu in 10th, Saturn prat — avoid
+  4,  // Nov: Jupiter enters 10th but Ketu still there — wait
+  7,  // Dec: Ketu exits Dec 6 | Dec 10/11/14 are green muhurat dates ★
+  // 2027 Q1
+  5,  // Jan: Good early (Jan 1–24), bad after Jan 25 (Jupiter leaves) — marginal avg
+  2,  // Feb: Jupiter gone + Saturn prat still — AVOID joining
+  5,  // Mar: Mercury prat active, build conversations — OK but not ideal for joining
+  // 2027 Q2
+  5,  // Apr: Mercury prat continues, pipeline building
+  6,  // May: Active pipeline, Mars strengthens 10th
+  8,  // Jun: Jupiter re-enters 10th Jun 26 — window opens ★
+  // 2027 Q3
+  10, // Jul: PEAK — Jupiter 10th + Mercury prat overlap — best month to join ★★
+  6,  // Aug: Ketu prat dampens — good but not peak
+  8,  // Sep: Venus prat begins Sep 25 + Jupiter still 10th ★
+  // 2027 Q4
+  8,  // Oct: Venus prat + Jupiter 10th — strong
+  7,  // Nov: Venus prat + Jupiter enters 11th Nov 27 — slightly weaker for new start
+  6,  // Dec: Jupiter in income house — good for growth, less for new start energy
+  // 2028 Q1
+  6,  // Jan: Stable, Venus→Sun pratyantara
+  6,  // Feb: Sun pratyantara
+  7,  // Mar: Jupiter retrogrades back to 10th Mar 1 — consolidation window
+  // 2028 Q2
+  6,  // Apr: Jupiter 10th (retrograde)
+  6,  // May: Moon prat
+  5,  // Jun: Rahu shifts, transition
+  // 2028 Q3
+  5,  // Jul: Jupiter leaves 10th Jul 26 — weakening
+  4,  // Aug: Mars prat, Saturn moves — transition
+  4,  // Sep: Pre-AD transition, cautious
+  // 2028 Q4
+  5,  // Oct: Building toward new AD
+  7,  // Nov: Venus–Jupiter AD begins — new chapter, major opportunities ★
+  6,  // Dec: Venus–Jupiter AD in force
+  // 2029 — by now would be established in new role; scores reflect role-expansion, not company-change
+  6,6,6,6,6,6,6,6,6,6,6,6
+];
+
+const jobChangeLabels = [
+  'AVOID: Ketu 10th + Saturn prat',
+  'WAIT: Jupiter enters but Ketu present',
+  'DEC 10/11/14 ★ Muhurat dates — first green window',
+  'Jan 1–24 ok; AVOID after Jan 25 (Jupiter leaves)',
+  'AVOID: Jupiter gone + Saturn prat',
+  'BUILD: Mercury prat — conversations ok, not joining yet',
+  'BUILD: Mercury prat continues',
+  'ACTIVE: Mars in 10th, pipeline ready',
+  'GOOD: Jupiter enters 10th Jun 26 ★',
+  '★★ PEAK: Jupiter 10th + Mercury prat — BEST month to join',
+  'GOOD: Ketu prat dampens slightly',
+  'STRONG: Venus prat + Jupiter 10th ★',
+  'STRONG: Venus prat + Jupiter 10th',
+  'GOOD: Venus prat + Jupiter entering 11th',
+  'ACTIVE: Jupiter income house',
+  'ACTIVE: Sun pratyantara',
+  'ACTIVE: Sun/Moon prat',
+  'GOOD: Jupiter retrogrades to 10th Mar 1 ★',
+  'ACTIVE: Jupiter 10th (retro)',
+  'ACTIVE: Moon prat',
+  'TRANSITION: Rahu shifts to wealth house',
+  'FADING: Jupiter leaving 10th Jul 26',
+  'TRANSITION: Pre-Antardasha shift',
+  'TRANSITION: Final Venus–Rahu prat',
+  'BUILDING: Toward new Antardasha',
+  'OPPORTUNITY: Venus–Jupiter AD begins ★',
+  'GROWTH: Venus–Jupiter AD in force',
+  'GROWTH','GROWTH','GROWTH','GROWTH','GROWTH','GROWTH','GROWTH','GROWTH','GROWTH','GROWTH','GROWTH','GROWTH'
+];
+
+const transits = [
+  'Ketu 10th','Jup enters 10th','Ketu exits 10th',
+  'Jup+Mars in 10th','Jup leaves 10th','Jup Cancer 9th','Mars 10th','Active','Jup re-enters 10th','PEAK: Jup 10th+Merc','Jup 10th, Ketu prat','Jup 10th, Venus prat',
+  'Jup 10th, Venus prat','Jup → 11th Nov 27','Jup 11th',
+  'Jup 11th','Jup 11th','Jup back 10th Mar','Jup 10th','Jup 10th','Rahu → 2nd (wealth)','Jup leaves 10th','Transition','Transition',
+  'Building','Ven–Jup AD begins!','Ven–Jup AD full',
+  'Ven–Jup AD','Ven–Jup AD','Ven–Jup AD','Ven–Jup AD','Ven–Jup AD','Jup Virgo 11th','Jup 11th','Jup 11th','Jup 11th','Jup 11th','Ven–Jup AD','Ven–Jup AD'
+];
+
+// ── HEATMAP COLOR ────────────────────────────────────────────────────────────
+function scoreColor(s, alpha) {
+  alpha = alpha || 1;
+  if (s <= 3) return `rgba(127, 29, 29, ${alpha})`;
+  if (s <= 4) return `rgba(133, 79, 11, ${alpha})`;
+  if (s <= 6) return `rgba(8, 145, 178, ${alpha})`;   /* teal-cyan  — Active  */
+  if (s <= 7) return `rgba(6, 95, 70, ${alpha})`;    /* dark green — Good    */
+  if (s <= 8) return `rgba(4, 140, 80, ${alpha})`;   /* vivid green — Peak   */
+  return `rgba(109, 40, 217, ${alpha})`;              /* bright purple — Breakthrough */
+}
+
+// ── HEATMAP GRID (clean rebuild) ─────────────────────────────────────────────
+function buildHeatmapGrid() {
+  const grid = document.getElementById('hmapGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  const LW  = '72px';   // label column width
+  const GAP = '2px';
+  const CELL_H = '30px';
+
+  // Score → colour
+  function cellColor(s) {
+    if (s <= 3) return '#9b1c1c';
+    if (s <= 4) return '#92400e';
+    if (s <= 6) return '#0e7490';
+    if (s <= 7) return '#047857';
+    if (s <= 8) return '#84cc16';
+    return '#6d28d9';
+  }
+
+  // Generic flex row helper
+  function row(label, cells, extraLabelStyle) {
+    const r = document.createElement('div');
+    r.style.cssText = `display:flex;align-items:stretch;gap:${GAP};margin-bottom:${GAP};`;
+    const lbl = document.createElement('div');
+    lbl.style.cssText = `min-width:${LW};flex-shrink:0;font-size:11px;color:var(--row-label);display:flex;align-items:center;${extraLabelStyle||''}`;
+    lbl.textContent = label;
+    r.appendChild(lbl);
+    const wrap = document.createElement('div');
+    wrap.style.cssText = `display:flex;gap:${GAP};flex:1;`;
+    cells.forEach(c => wrap.appendChild(c));
+    r.appendChild(wrap);
+    return r;
+  }
+
+  // Thin separator line
+  function sep() {
+    const r = document.createElement('div');
+    r.style.cssText = `display:flex;gap:${GAP};margin:4px 0;`;
+    const sp = document.createElement('div');
+    sp.style.cssText = `min-width:${LW};flex-shrink:0;`;
+    const ln = document.createElement('div');
+    ln.style.cssText = `flex:1;height:1px;background:var(--hmap-div);`;
+    r.appendChild(sp); r.appendChild(ln);
+    return r;
+  }
+
+  // ── Year blocks ───────────────────────────────────────────────
+  const yearData = [{y:'2026',f:3},{y:'2027',f:12},{y:'2028',f:12},{y:'2029',f:12}];
+  const yearCells = yearData.map(({y,f}) => {
+    const d = document.createElement('div');
+    d.style.cssText = `flex:${f};background:var(--surface-alt);border:1px solid var(--border);border-radius:4px;text-align:center;font-size:10px;font-weight:700;color:var(--text-primary);padding:3px 2px;letter-spacing:0.06em;`;
+    d.textContent = y;
+    return d;
+  });
+
+  // ── Quarter blocks ────────────────────────────────────────────
+  const QCOL = {Q1:'#3b82f6',Q2:'#10b981',Q3:'#f59e0b',Q4:'#8b5cf6'};
+  const qData = [
+    {q:'Q4',f:3}, {q:'Q1',f:3},{q:'Q2',f:3},{q:'Q3',f:3},{q:'Q4',f:3},
+    {q:'Q1',f:3},{q:'Q2',f:3},{q:'Q3',f:3},{q:'Q4',f:3},
+    {q:'Q1',f:3},{q:'Q2',f:3},{q:'Q3',f:3},{q:'Q4',f:3},
+  ];
+  const qtrCells = qData.map(({q,f}) => {
+    const d = document.createElement('div');
+    const c = QCOL[q];
+    d.style.cssText = `flex:${f};border-top:3px solid ${c};text-align:center;font-size:9px;font-weight:600;color:${c};padding:3px 1px 1px;`;
+    d.textContent = q;
+    return d;
+  });
+
+  // ── Month letters ─────────────────────────────────────────────
+  const monthCells = months.map(m => {
+    const d = document.createElement('div');
+    d.style.cssText = `flex:1;text-align:center;font-size:9px;color:var(--month-tick);padding:2px 0;`;
+    d.textContent = m[0];
+    return d;
+  });
+
+  // ── Heatmap cells for a data array ───────────────────────────
+  function hmapCells(scores, tips) {
+    return scores.map((s, i) => {
+      const d = document.createElement('div');
+      d.style.cssText = `flex:1;height:${CELL_H};border-radius:3px;background:${cellColor(s)};cursor:default;`;
+      d.title = `${months[i]}\n${tips[i]}\nScore: ${s}/10`;
+      return d;
+    });
+  }
+
+  // ── Dasha cells ───────────────────────────────────────────────
+  const dashaCells = pratyantaras.map((p, i) => {
+    const d = document.createElement('div');
+    const isJup = p.includes('Jupiter AD');
+    d.style.cssText = `flex:1;height:${CELL_H};border-radius:3px;background:${isJup?'rgba(109,40,217,0.8)':'rgba(14,116,144,0.35)'};cursor:default;`;
+    d.title = `${months[i]}: ${p}`;
+    return d;
+  });
+
+  // ── Assemble ──────────────────────────────────────────────────
+  grid.appendChild(row('', yearCells));
+  grid.appendChild(row('', qtrCells));
+  grid.appendChild(sep());
+  grid.appendChild(row('', monthCells));
+  grid.appendChild(row('Career',     hmapCells(careerScores,    transits)));
+  grid.appendChild(row('Finance',    hmapCells(finScores,       transits)));
+  grid.appendChild(row('Job Switch', hmapCells(jobChangeScores, jobChangeLabels), 'color:var(--job-label);font-weight:600;'));
+  grid.appendChild(row('Dasha',      dashaCells));
+}
+buildHeatmapGrid();
+
+// ── CHART ─────────────────────────────────────────────────────────────────────
+// Background highlight rectangles for peak windows (Chart.js 4 compatible)
+const peakPlugin = {
+  id: 'peakBands',
+  beforeDraw(chart) {
+    const { ctx, chartArea } = chart;
+    if (!chartArea) return;
+    const meta = chart.getDatasetMeta(0);
+    if (!meta || !meta.data || meta.data.length === 0) return;
+    const windows = [
+      { start: 2,  end: 3,  color: 'rgba(4,120,87,0.09)' },
+      { start: 8,  end: 9,  color: 'rgba(76,29,149,0.16)' },
+      { start: 12, end: 14, color: 'rgba(4,120,87,0.09)' },
+      { start: 24, end: 38, color: 'rgba(76,29,149,0.09)' },
+    ];
+    ctx.save();
+    windows.forEach(w => {
+      const s = Math.min(w.start, meta.data.length - 1);
+      const e = Math.min(w.end, meta.data.length - 1);
+      if (!meta.data[s] || !meta.data[e]) return;
+      const x1 = meta.data[s].x;
+      const x2 = meta.data[e].x;
+      ctx.fillStyle = w.color;
+      ctx.fillRect(x1, chartArea.top, x2 - x1, chartArea.height);
+    });
+    ctx.restore();
+  }
+};
+
+const ctx = document.getElementById('mainChart').getContext('2d');
+let mainChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: months,
+    datasets: [
+      {
+        label: 'Career Score',
+        data: careerScores,
+        borderColor: '#c4a25a',
+        backgroundColor: 'rgba(196,162,90,0.08)',
+        borderWidth: 2.5,
+        pointRadius: 3,
+        pointBackgroundColor: '#c4a25a',
+        pointHoverRadius: 5,
+        tension: 0.4,
+        fill: false,
+      },
+      {
+        label: 'Financial Score',
+        data: finScores,
+        borderColor: '#818cf8',
+        backgroundColor: 'rgba(129,140,248,0.08)',
+        borderWidth: 2.5,
+        pointRadius: 3,
+        pointBackgroundColor: '#818cf8',
+        pointHoverRadius: 5,
+        tension: 0.4,
+        fill: false,
+      },
+      {
+        label: 'Job Switch Window',
+        data: jobChangeScores,
+        borderColor: '#f59e0b',
+        backgroundColor: 'rgba(245,158,11,0.06)',
+        borderWidth: 2,
+        borderDash: [5, 3],
+        pointRadius: 3,
+        pointBackgroundColor: '#f59e0b',
+        pointHoverRadius: 5,
+        tension: 0.4,
+        fill: false,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1e2840',
+        titleColor: '#c4a25a',
+        bodyColor: '#a0aec0',
+        borderColor: '#2a3a5e',
+        borderWidth: 1,
+        padding: 10,
+        callbacks: {
+          afterBody: (items) => {
+            const i = items[0].dataIndex;
+            return [
+              `Prat: ${pratyantaras[i]}`,
+              `Transit: ${transits[i]}`,
+              `Switch: ${jobChangeLabels[i]}`
+            ];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: '#4a5568',
+          font: { size: 10 },
+          maxRotation: 45,
+          autoSkip: true,
+          maxTicksLimit: 20
+        },
+        grid: { color: '#1e2840' }
+      },
+      y: {
+        min: 1, max: 10,
+        ticks: { color: '#4a5568', font: { size: 10 }, stepSize: 1 },
+        grid: { color: '#1a2236' }
+      }
+    }
+  },
+  plugins: [peakPlugin]
+});
+
+// ── QUARTERLY SCORE TABLE ─────────────────────────────────────────────────────
+const quarters = [
+  ['Q4 2026', 0, 2],
+  ['Q1 2027', 3, 5],
+  ['Q2 2027', 6, 8],
+  ['Q3 2027', 9, 11],
+  ['Q4 2027', 12, 14],
+  ['Q1 2028', 15, 17],
+  ['Q2 2028', 18, 20],
+  ['Q3 2028', 21, 23],
+  ['Q4 2028', 24, 26],
+  ['Q1 2029', 27, 29],
+  ['Q2 2029', 30, 32],
+  ['Q3 2029', 33, 35],
+  ['Q4 2029', 36, 38],
+];
+
+const quarterGuide = [
+  // Q4 2026
+  'Ketu exits 10th Dec 6 — first clean window. Use Dec 10–14 muhurat dates for any career conversations or offer discussions. Avoid signing before Dec 6. Be patient with Saturn pratyantara delays.',
+  // Q1 2027
+  'Jupiter leaves 10th Jan 25 — act before it goes. Saturn pratyantara still heavy in Jan; picks up Feb when Mercury prat begins. Avoid joining a new company in Feb (Jupiter gone + Saturn still active). Build pipeline, not commitments.',
+  // Q2 2027
+  'Mercury pratyantara fully active — best quarter for negotiations, proposals, and client conversations. Push hard on deals and visibility. Jun 26: Jupiter re-enters 10th — prepare for the peak. Avoid rushing to sign before late June.',
+  // Q3 2027
+  'PEAK WINDOW. Jul is the single best month — sign, join, negotiate major contracts. Act decisively in Jul. After Jul 24 Mercury prat ends; pace slows slightly but Ketu prat (Aug–Sep) still keeps some momentum. Watch for overconfidence — peak energy can also mean competition.',
+  // Q4 2027
+  'Jupiter still in 10th through Nov 27. Venus pratyantara (Sep–Mar) — excellent for contracts, partnerships, leadership visibility. Sign agreements, close revenue deals. Avoid major personal financial risks; focus on career gains.',
+  // Q1 2028
+  'Jupiter back in 10th Mar 1. Venus pratyantara continues — strong for deal closure and partnerships. Rahu AD still running. Good sustained momentum; avoid impulsive financial decisions outside your core role.',
+  // Q2 2028
+  'Jupiter in 10th until Jul 25 — last window of Jupiter 10th transit for years. Push for final career anchoring before Jupiter leaves. Rahu entering 2nd house Jun 25 brings unconventional income opportunities — stay alert but cautious of get-rich-quick schemes.',
+  // Q3 2028
+  'Transition quarter. Jupiter exits 10th, Venus–Rahu AD wrapping up (ends Oct). Energy shifts. Avoid new major commitments mid-quarter. Consolidate gains from the 2027 peak. Sun/Mars pratyantara — maintain discipline, avoid ego conflicts at work.',
+  // Q4 2028
+  'Venus–Jupiter AD begins Oct 24 — a major new chapter. Most sustained financial growth period of your entire Venus Mahadasha. Rahu in 2nd house (wealth). Start positioning for wealth-building: investments, salary renegotiation, new revenue streams.',
+  // Q1 2029
+  'Venus–Jupiter AD in full force. Jupiter as 2nd and 5th lord is classically the best antardasha for wealth and wisdom. Actively pursue financial growth, not just career growth. Be careful of overextension — Jupiter can create optimism that outpaces reality.',
+  // Q2 2029
+  'Sustained financial expansion continues. Good for long-term investments, property considerations, or equity conversations. Avoid lifestyle inflation outpacing income growth. Keep rituals consistent — this period rewards discipline.',
+  // Q3 2029
+  'Strong and stable. Focus on consolidating financial position and building legacy projects or IP. Rahu in 2nd still active — multiple income streams possible. Watch for distractions from core focus.',
+  // Q4 2029
+  'Excellent close to the arc. Venus–Jupiter AD running strong. Ideal for year-end financial reviews, setting 2030 strategy, and locking in longer-term agreements. End the period with clarity on your next 3-year plan.',
+];
+
+const tbody = document.getElementById('scoreTableBody');
+quarters.forEach(([label, from, to], qi) => {
+  const cSlice = careerScores.slice(from, to+1);
+  const fSlice = finScores.slice(from, to+1);
+  const cAvg = Math.round(cSlice.reduce((a,b)=>a+b,0)/cSlice.length * 10)/10;
+  const fAvg = Math.round(fSlice.reduce((a,b)=>a+b,0)/fSlice.length * 10)/10;
+  const prat = pratyantaras[from];
+  const trans = transits[from];
+
+  function barColor(v) {
+    if (v <= 3) return '#9b1c1c';   // Avoid
+    if (v <= 4) return '#92400e';   // Caution
+    if (v <= 6) return '#0e7490';   // Active (teal)
+    if (v <= 7) return '#047857';   // Good (dark green)
+    if (v <= 8) return '#84cc16';   // Peak (lime)
+    return '#6d28d9';               // Breakthrough (purple)
+  }
+
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="qtr">${label}</td>
+    <td>
+      <div class="score-bar">
+        <div class="score-pip" style="width:${cAvg*10}px;background:${barColor(cAvg)}"></div>
+        <span class="score-num">${cAvg}</span>
+      </div>
+    </td>
+    <td>
+      <div class="score-bar">
+        <div class="score-pip" style="width:${fAvg*10}px;background:${barColor(fAvg)}"></div>
+        <span class="score-num">${fAvg}</span>
+      </div>
+    </td>
+    <td class="prat">${prat}</td>
+    <td class="tran">${trans}</td>
+    <td style="font-size:11px;color:var(--text-secondary);line-height:1.5;max-width:280px;">${quarterGuide[qi]}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
+// ── THEME TOGGLE ─────────────────────────────────────────────────────────────
+let isLight = false;
+
+function getComputedVar(name) {
+  return getComputedStyle(document.body).getPropertyValue(name).trim();
+}
+
+function updateChartTheme() {
+  if (!mainChart) return;
+  const gridColor  = isLight ? 'rgba(200,188,160,0.4)' : 'rgba(30,40,64,0.8)';
+  const tickColor  = isLight ? '#9ca3af' : '#4a5568';
+  mainChart.options.scales.x.grid.color  = gridColor;
+  mainChart.options.scales.y.grid.color  = gridColor;
+  mainChart.options.scales.x.ticks.color = tickColor;
+  mainChart.options.scales.y.ticks.color = tickColor;
+  mainChart.update();
+}
+
+function toggleTheme() {
+  isLight = !isLight;
+  document.body.classList.toggle('light', isLight);
+  document.getElementById('themeIcon').textContent  = isLight ? '🌙' : '☀️';
+  document.getElementById('themeLabel').textContent = isLight ? 'Dark mode' : 'Light mode';
+  updateChartTheme();
+  buildHeatmapGrid();
+}
+</script>
+</body>
+</html>
