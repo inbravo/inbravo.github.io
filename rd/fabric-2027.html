@@ -148,7 +148,7 @@
   .metric-pill .mp-label { font-size: 11px; color: var(--fg2); margin-top: 2px; }
 
   /* ── ROADMAP TIMELINE ── */
-  .timeline { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; margin: 24px 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .timeline { display: grid; grid-template-columns: repeat(5,1fr); gap: 0; margin: 24px 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
   @media (max-width: 700px) { .timeline { grid-template-columns: 1fr; } }
   .timeline-q { border-right: 1px solid var(--border); padding: 20px; }
   .timeline-q:last-child { border-right: none; }
@@ -157,6 +157,9 @@
   .q2 .q-label { background: #E8F5FF; color: #1E6FA0; }
   .q3 .q-label { background: #F0E8FF; color: #7C3AED; }
   .q4 .q-label { background: var(--ga-bg); color: var(--ga); }
+  .q5 .q-label { background: #FFF1F2; color: #9F1239; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .q5 .q-label { background: #2D0A12; color: #FDA4AF; } }
+  :root[data-theme="dark"] .q5 .q-label { background: #2D0A12; color: #FDA4AF; }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) .q2 .q-label { background: #0D2A40; color: #5BB8F0; }
     :root:not([data-theme="light"]) .q3 .q-label { background: #160D2B; color: #C4B5FD; }
@@ -792,8 +795,8 @@
     </div>
 
     <div class="section-label">Delivery Planning</div>
-    <h2>What the delivery team does in the next 12 months</h2>
-    <p>Four quarters, four modes: <strong>Foundation → Operationalise → Expand → Scale.</strong> Each quarter has a forcing function, a forcing deadline, and specific deliverables. This is not aspirational — it is the minimum viable plan to be credible in this space by Q3 2027.</p>
+    <h2>What the delivery team does in the next 15 months</h2>
+    <p>Five quarters, five modes: <strong>Foundation → Operationalise → Expand → Scale → Mature.</strong> Each quarter has a forcing function, a forcing deadline, and specific deliverables. This is not aspirational — it is the minimum viable plan to be credible in this space by end of 2027.</p>
 
     <div class="callout" style="border-left-color: var(--ret);">
       <strong>Burning deadline right now:</strong> Fabric IQ Ontology old experience retires <strong>January 31, 2027.</strong> Any client on the old experience needs a migration conversation started this week. This is a sales trigger and a delivery commitment simultaneously.
@@ -802,7 +805,7 @@
     <!-- Gate structure connector -->
     <div style="margin-bottom:20px;">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--fg2);margin-bottom:10px;">How each quarter maps to the commercial gate structure — see Market tab for the full flow</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">
         <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;border-top:3px solid var(--accent);">
           <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg2);margin-bottom:3px;">Q4 2026 · Foundation</div>
           <div style="font-size:11px;font-weight:700;color:var(--fg);margin-bottom:5px;">Sprint Ready</div>
@@ -822,6 +825,11 @@
           <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg2);margin-bottom:3px;">Q3 2027 · Scale</div>
           <div style="font-size:11px;font-weight:700;color:var(--fg);margin-bottom:5px;">Gate 3 → Live</div>
           <span style="font-size:10px;background:rgba(21,128,61,.09);color:var(--ga);padding:2px 7px;border-radius:4px;font-weight:600;">Agent Accepted</span>
+        </div>
+        <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;border-top:3px solid #9F1239;">
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg2);margin-bottom:3px;">Q4 2027 · Mature</div>
+          <div style="font-size:11px;font-weight:700;color:var(--fg);margin-bottom:5px;">Recurring Revenue</div>
+          <span style="font-size:10px;background:rgba(159,18,57,.08);color:#9F1239;padding:2px 7px;border-radius:4px;font-weight:600;">CLaaS / Managed</span>
         </div>
       </div>
     </div>
@@ -868,6 +876,17 @@
         <div class="q-item"><strong>Domain entity type libraries:</strong> reusable ontology templates across BFSI (IRB, LCR/NSFR, trade lifecycle), Healthcare (clinical pathways, patient journey), Manufacturing (asset hierarchies, OEE), Energy & Utilities (grid topology, consumption forecasting) — commercial IP, not custom re-build per client</div>
         <div class="q-item"><strong>Data Engineering Agent (Osmosis):</strong> position the oversight/governance model — humans approve, monitor, audit; your firm makes agentic engineering trustworthy</div>
         <div class="q-item"><strong>Target:</strong> multiple active ontology engagements across domains; first managed services contract live; domain accelerators generating repeatable revenue</div>
+      </div>
+      <div class="timeline-q q5">
+        <div class="q-label">Q4 2027</div>
+        <div class="q-title">Mature</div>
+        <div class="q-period">Oct – Dec 2027</div>
+        <div class="q-item"><strong>Context Layer as a Service (CLaaS):</strong> first vertical context layer subscription signed — BCBS 239, clinical pathways, or OEE; recurring revenue, not project billing</div>
+        <div class="q-item"><strong>Cross-domain ontology reuse:</strong> entity types and business rules built in one engagement applied across two or more clients in the same vertical — proof the IP model works</div>
+        <div class="q-item"><strong>Agent fleet governance:</strong> Entra Agent ID policies, token budget governance, and audit-trail stack operational across all live client agents — not per-deployment, practice-wide</div>
+        <div class="q-item"><strong>Expand into multi-agent orchestration:</strong> at least one engagement delivering an orchestrator + sub-agent topology with documented A2A handoff contracts</div>
+        <div class="q-item"><strong>Practice P&amp;L:</strong> measure and report context engineering revenue separately from classic data engineering — the two are no longer the same practice</div>
+        <div class="q-deadline">🏁 End of 2027 — credible, recurring, scalable</div>
       </div>
     </div>
 
