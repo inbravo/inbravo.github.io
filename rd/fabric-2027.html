@@ -1996,156 +1996,121 @@
     <div class="section-label">Investment Thesis</div>
     <h2>The 3-year trajectory — what to invest and what to expect</h2>
 
-    <!-- AI CAPABILITY TRAJECTORY CHART -->
+    <!-- DE AUTOMATION TIMELINE — replaces LLM capability chart -->
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px 22px 18px;margin:20px 0 28px;">
-      <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px;">
-        <div>
-          <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;">AI capability trajectory · 2023 → 2027</div>
-          <div style="font-size:12px;color:var(--fg2);max-width:560px;line-height:1.5;">Model quality converging toward human parity by 2026. Task duration doubling roughly every quarter — from 5 minutes in 2023 to days-long autonomous execution by 2026–27. The window to build the semantic layer closes as the capability ceiling arrives.</div>
+
+      <div style="margin-bottom:14px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;">DE automation timeline · 2024 → 2027</div>
+        <div style="font-size:12px;color:var(--fg2);max-width:600px;line-height:1.5;">AI task complexity is doubling roughly every 3–4 months (METR, 2026). Microsoft absorbed that trajectory directly into the Fabric platform — from limited Copilot previews in 2024 to the Data Engineering Agent (Project Osmos) in 2026. The window to position ahead of GA is open now.</div>
+      </div>
+
+      <div style="background:rgba(180,149,12,0.10);border:1px solid rgba(180,149,12,0.28);border-radius:7px;padding:8px 12px;font-size:11px;color:var(--fg2);margin-bottom:14px;line-height:1.5;">
+        <strong style="color:var(--fg);">Capability metric note (METR):</strong> "Task horizon" = human-hours of task difficulty an AI completes at 50% success rate — <em>not</em> continuous uninterrupted runtime. METR explicitly warns against that reading. Their measurement suite ceiling is ~16 h; values above that are extrapolated.
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:5px 8px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fg2);white-space:nowrap;min-width:64px;">Period</th>
+              <th style="text-align:left;padding:5px 8px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fg2);min-width:120px;">Task horizon (METR)</th>
+              <th style="text-align:left;padding:5px 8px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fg2);">Impact on data engineering</th>
+              <th style="text-align:left;padding:5px 8px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fg2);min-width:170px;">Fabric / Microsoft signal</th>
+              <th style="text-align:left;padding:5px 8px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fg2);min-width:72px;">Visibility</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:8px 8px;white-space:nowrap;font-weight:600;color:var(--fg);vertical-align:top;">2024 H1</td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;">~4–10 min<br><span style="font-size:10px;opacity:.7;">GPT-4o mid-2024 · METR May 2026 fit</span></td>
+              <td style="padding:8px 8px;color:var(--fg);vertical-align:top;line-height:1.5;">Typing accelerator only. SQL completion, DAX drafts, docstring generation — all human-reviewed before use. No role impact.</td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;">Power BI Copilot preview Nov 2023. Limited GA announced May 2024 (Build). Only narrative-generation truly GA June 3 2024. Data Engineering, Warehouse, Data Science workloads remain preview. F64+ SKU requirement limits reach.</td>
+              <td style="padding:8px 8px;vertical-align:top;"><span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(100,100,90,.12);color:var(--fg2);">Low</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:8px 8px;white-space:nowrap;font-weight:600;color:var(--fg);vertical-align:top;">2024 H2</td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;">~15–30 min<br><span style="font-size:10px;opacity:.7;">o1-preview Sep · o1 full Dec 5 2024 · 48.9% SWE-bench Verified</span></td>
+              <td style="padding:8px 8px;color:var(--fg);vertical-align:top;line-height:1.5;">First delegatable subtasks: unit test generation, dbt scaffolding, simple schema migration scripts. Still human-approved before deployment. Entry-level DE hiring begins to slow.</td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;">Fabric Copilot billing starts March 2024. Data Engineering, Warehouse, Data Science Copilot remain in preview. F64 SKU requirement remains a reach barrier for most customers.</td>
+              <td style="padding:8px 8px;vertical-align:top;"><span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(180,110,0,.12);color:#92400E;">Emerging</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);border-top:2px solid var(--accent);">
+              <td style="padding:8px 8px;white-space:nowrap;vertical-align:top;">
+                <span style="font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--accent);display:block;margin-bottom:2px;">⚡ INFLECTION 1</span>
+                <span style="font-weight:600;color:var(--fg);">2025 H1</span>
+              </td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;">~50 min–2 h<br><span style="font-size:10px;opacity:.7;">Claude 3.7 Sonnet Feb 2025 · 62.3% SWE-bench Verified · Int'l AI Safety Report 2025</span></td>
+              <td style="padding:8px 8px;color:var(--fg);vertical-align:top;line-height:1.5;"><strong>Fabric AI becomes broadly accessible.</strong> End-to-end pipeline drafting from requirements, AI-generated data contracts, automated test suites. Junior-level coding tasks fully delegatable. Entry-level DE openings shrink to ~2% of total DE postings.</td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;"><strong style="color:var(--fg);">April 2025: Copilot expands from F64 to F2+.</strong> The real adoption gate opens. AI Functions in preview. Data Science AI Skill conversational. Copilot on mobile (iOS/Android).</td>
+              <td style="padding:8px 8px;vertical-align:top;"><span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(0,120,60,.12);color:#065F46;">Moderate</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:8px 8px;white-space:nowrap;font-weight:600;color:var(--fg);vertical-align:top;">2025 H2</td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;">~2–8 h estimated<br><span style="font-size:10px;opacity:.7;">Extrapolated from METR ~105-day doubling rate · no confirmed datapoint for this window</span></td>
+              <td style="padding:8px 8px;color:var(--fg);vertical-align:top;line-height:1.5;">First unattended pipeline runs for narrow tasks. AI-driven data quality monitoring, schema-change impact analysis run overnight. Headcount freezes on junior DE roles reported across industry.</td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;"><strong style="color:var(--fg);">Nov 2025: AI Functions GA.</strong> Pipeline expression Copilot in preview. Advanced LLM settings (reasoning effort, verbosity) added to Fabric AI workloads. Dataflow Gen2 AI Functions integration in preview.</td>
+              <td style="padding:8px 8px;vertical-align:top;"><span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(0,140,150,.12);color:#155E75;">Visible</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);border-top:2px solid var(--accent);">
+              <td style="padding:8px 8px;white-space:nowrap;vertical-align:top;">
+                <span style="font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--accent);display:block;margin-bottom:2px;">⚡ INFLECTION 2</span>
+                <span style="font-weight:600;color:var(--fg);">2026 H1</span>
+              </td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;">~16 h equivalent<br><span style="font-size:10px;opacity:.7;">METR TH1.1: Claude Mythos Preview, Mar/Apr 2026 · 95% CI: 8.5–55 h · current suite ceiling</span></td>
+              <td style="padding:8px 8px;color:var(--fg);vertical-align:top;line-height:1.5;"><strong>First DE-specific agentic tool lands in Fabric.</strong> Osmos acquired Jan 5 2026. Data Engineering Agent (Project Osmos) in Preview. Interprets requirements, writes ETL, validates, deploys — <em>pending human approval</em>. Supervised pipeline, not fully autonomous.</td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;"><strong style="color:var(--fg);">Jan 2026: Osmos acquired.</strong> Data Engineering Agent Preview announced at FabCon Europe. Steerable from VS Code, GitHub Copilot, Claude Code. <strong style="color:var(--fg);">April 2026: Copilot Studio A2A multi-agent</strong> live for eligible customers.</td>
+              <td style="padding:8px 8px;vertical-align:top;"><span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(21,83,199,.12);color:#1E40AF;">Strong</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);background:rgba(21,83,199,0.04);">
+              <td style="padding:8px 8px;white-space:nowrap;vertical-align:top;">
+                <span style="font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--accent);display:block;margin-bottom:2px;">← NOW</span>
+                <span style="font-weight:600;color:var(--fg);">2026 H2</span>
+              </td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;">~16–24 h estimated<br><span style="font-size:10px;opacity:.7;">Above METR suite ceiling · no confirmed benchmark · extrapolated from trend</span></td>
+              <td style="padding:8px 8px;color:var(--fg);vertical-align:top;line-height:1.5;">Data Engineering Agent still in Preview — no GA date confirmed as of Sep/Oct 2026. Power BI Agentic Apps GA. Routine migration coding under cost pressure. ~47% of Q1 2026 tech layoffs publicly attributed to AI; DE roles show more resilience than software generalists.</td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;"><strong style="color:var(--fg);">Power BI Agentic Apps GA · per-semantic-model access control GA.</strong> Copilot Studio enterprise agents in production. Data Engineering Agent remains Preview — no GA date announced.</td>
+              <td style="padding:8px 8px;vertical-align:top;"><span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(90,40,180,.12);color:#4C1D95;">High</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);opacity:.82;">
+              <td style="padding:8px 8px;white-space:nowrap;vertical-align:top;">
+                <span style="font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--fg2);display:block;margin-bottom:2px;">PROJECTED</span>
+                <span style="font-weight:600;color:var(--fg);">2027 H1</span>
+              </td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;">Beyond METR ceiling<br><span style="font-size:10px;opacity:.7;">New task suite required to measure above 16 h</span></td>
+              <td style="padding:8px 8px;color:var(--fg);vertical-align:top;line-height:1.5;"><strong>Practice bifurcation becomes structural.</strong> If Data Engineering Agent reaches GA, justification for manual greenfield ETL disappears. Governance, ontology, and context engineering become the defensible DE roles.</td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;">Fabric IQ Ontology GA target Q1 2027 (Microsoft roadmap). Data Engineering Agent → GA pathway (no confirmed date). A2A agent contracts expected standard.</td>
+              <td style="padding:8px 8px;vertical-align:top;"><span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(160,0,80,.10);color:#831843;">Transformative</span><div style="font-size:10px;color:var(--fg2);margin-top:3px;">⚠ Conditional on GA</div></td>
+            </tr>
+            <tr style="opacity:.82;">
+              <td style="padding:8px 8px;white-space:nowrap;vertical-align:top;">
+                <span style="font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--fg2);display:block;margin-bottom:2px;">PROJECTED</span>
+                <span style="font-weight:600;color:var(--fg);">2027 H2</span>
+              </td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;">Aspirational<br><span style="font-size:10px;opacity:.7;">No benchmark data</span></td>
+              <td style="padding:8px 8px;color:var(--fg);vertical-align:top;line-height:1.5;"><strong>Context engineering separates from classic DE P&amp;L.</strong> CLaaS subscriptions plausible if ontology IP proves portable across clients. Human value = domain fluency, governance, client trust — not code volume.</td>
+              <td style="padding:8px 8px;color:var(--fg2);vertical-align:top;font-size:11px;line-height:1.5;">Agent fleet governance standard. Multi-agent A2A orchestration expected production-grade. Vertical CLaaS subscriptions possible.</td>
+              <td style="padding:8px 8px;vertical-align:top;"><span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(160,0,80,.10);color:#831843;">Platform-native</span><div style="font-size:10px;color:var(--fg2);margin-top:3px;">⚠ Aspirational</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="border-top:1px solid var(--border);margin-top:14px;padding-top:12px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fg2);margin-bottom:6px;">Sources</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px 14px;font-size:11px;color:var(--fg2);line-height:1.7;">
+          <span>· <a href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/" style="color:var(--accent);" target="_blank" rel="noopener">METR: Measuring AI Ability to Complete Long Tasks (Mar 2025)</a></span>
+          <span>· <a href="https://metr.org/blog/2026-1-29-time-horizon-1-1/" style="color:var(--accent);" target="_blank" rel="noopener">METR Time Horizon 1.1 (Jan 2026)</a></span>
+          <span>· <a href="https://arxiv.org/pdf/2510.13653" style="color:var(--accent);" target="_blank" rel="noopener">International AI Safety Report 2025</a></span>
+          <span>· <a href="https://rcpmag.com/articles/2026/01/06/microsoft-acquires-osmos.aspx" style="color:var(--accent);" target="_blank" rel="noopener">Microsoft acquires Osmos — Redmond Channel Partner (Jan 2026)</a></span>
+          <span>· <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/data-engineering-agent-overview" style="color:var(--accent);" target="_blank" rel="noopener">Fabric Data Engineering Agent overview — Microsoft Learn</a></span>
+          <span>· <a href="https://blog.fabric.microsoft.com/en-US/blog/copilot-and-ai-capabilities-now-accessible-to-all-paid-skus-in-microsoft-fabric/" style="color:var(--accent);" target="_blank" rel="noopener">Fabric Copilot expands to all paid SKUs (Apr 2025) — Microsoft</a></span>
+          <span>· <a href="https://solv-systems.com/resources/fabcon-europe-2026-recap" style="color:var(--accent);" target="_blank" rel="noopener">FabCon Europe 2026 recap — Solv Systems</a></span>
+          <span>· <a href="https://dev.to/datadriven/78k-tech-layoffs-47-ai-blamed-is-data-engineering-safe-4en0" style="color:var(--accent);" target="_blank" rel="noopener">78K tech layoffs, 47% AI-blamed: is DE safe? — DEV Community</a></span>
+          <span>· <a href="https://datadriven.io/blog/is-data-engineering-dead-the-2026-job-market-reality" style="color:var(--accent);" target="_blank" rel="noopener">Is data engineering dead? — 2026 job market reality</a></span>
         </div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--fg2);align-items:center;">
-          <span style="display:flex;align-items:center;gap:5px;"><span style="width:18px;height:2.5px;background:#1553C7;border-radius:1px;display:inline-block;"></span>Anthropic</span>
-          <span style="display:flex;align-items:center;gap:5px;"><span style="width:18px;height:2.5px;background:#C2440A;border-radius:1px;display:inline-block;"></span>OpenAI</span>
-          <span style="display:flex;align-items:center;gap:5px;"><span style="width:18px;height:2.5px;background:#166534;border-radius:1px;display:inline-block;"></span>Google</span>
-          <span style="display:flex;align-items:center;gap:5px;"><span style="width:18px;height:2.5px;background:#7C3AED;border-radius:1px;display:inline-block;"></span>Duration</span>
-          <span style="display:flex;align-items:center;gap:5px;"><span style="width:16px;display:inline-block;border-top:1.5px dashed #B8C4D8;"></span>human parity</span>
-          <span style="display:flex;align-items:center;gap:5px;font-style:italic;color:var(--fg2);opacity:.7;">· · · projected</span>
-        </div>
       </div>
 
-      <div style="font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--fg2);margin-bottom:4px;">Task quality — SWE-bench Verified resolve rate</div>
-      <div style="position:relative;width:100%;height:210px;margin-bottom:14px;">
-        <canvas id="llm-perf-c" role="img" aria-label="Line chart: Claude, OpenAI, Google resolve rates rising from under 5% in Q4 2023 to ~70% by Q3 2025, projected near 90% by Q4 2027">Performance rises sharply in Q2 2024 and converges toward human parity by 2026-2027.</canvas>
-      </div>
-
-      <div style="font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--fg2);margin-bottom:4px;">Task duration frontier — max sustained autonomous execution (log scale)</div>
-      <div style="position:relative;width:100%;height:180px;margin-bottom:16px;">
-        <canvas id="llm-dur-c" role="img" aria-label="Log scale chart: max task duration rising from 5 min in Q4 2023 to 16 hours by Q3 2025, projected to reach 2 weeks by Q4 2027">Duration roughly doubles each quarter, from minutes in 2023 to multi-day tasks by 2026-2027.</canvas>
-      </div>
-
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
-        <span style="font-size:10.5px;padding:3px 9px;border-radius:6px;border:1px solid var(--border);color:var(--fg2);background:var(--surface);"><span style="color:#1553C7;font-weight:700;">Q2'24</span> — Claude 3.5 Sonnet: 27% · 30 min tasks</span>
-        <span style="font-size:10.5px;padding:3px 9px;border-radius:6px;border:1px solid var(--border);color:var(--fg2);background:var(--surface);"><span style="color:#C2440A;font-weight:700;">Q4'24</span> — o1 series: 38% · 2 hr coherent execution</span>
-        <span style="font-size:10.5px;padding:3px 9px;border-radius:6px;border:1px solid var(--border);color:var(--fg2);background:var(--surface);"><span style="color:#1553C7;font-weight:700;">Q1'25</span> — Claude 3.7 Sonnet: 62% · 4 hr tasks</span>
-        <span style="font-size:10.5px;padding:3px 9px;border-radius:6px;border:1px solid var(--border);color:var(--fg2);background:var(--surface);"><span style="color:#7C3AED;font-weight:700;">Q3'25</span> — Osmos-class pipelines: 16 hr autonomous</span>
-        <span style="font-size:10.5px;padding:3px 9px;border-radius:6px;background:var(--accent-light);border:1px solid var(--accent);color:var(--accent);font-weight:700;">Q4'25 → days to weeks of unattended AI work</span>
-      </div>
-
-      <div style="font-size:10.5px;color:var(--fg2);border-top:1px solid var(--border);padding-top:10px;line-height:1.5;">Benchmark: SWE-bench Verified (GitHub issue resolve rate, industry-standard long-horizon proxy). Actual data Q4 2023 – Q3 2025. Projections assume logistic quality saturation and continued log-linear duration growth. As SWE-bench saturates ~2026, new harder benchmarks redefine the frontier — making the semantic + governance layer the only lasting differentiator.</div>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-    <script>
-    (function() {
-      var labels = ["Q4'23","Q1'24","Q2'24","Q3'24","Q4'24","Q1'25","Q2'25","Q3'25","Q4'25","Q1'26","Q2'26","Q3'26","Q4'26","Q1'27","Q2'27","Q3'27","Q4'27"];
-      var SPLIT = 7;
-      var GRID  = '#D4DCE8';
-      var TICK  = '#52647A';
-      var ZONE  = 'rgba(21,83,199,0.025)';
-      var DIV   = 'rgba(21,83,199,0.18)';
-
-      var fzPlugin = {
-        id: 'fzL',
-        beforeDraw: function(chart) {
-          var ca = chart.chartArea; if (!ca) return;
-          var ctx = chart.ctx;
-          var x = chart.scales.x.getPixelForValue(SPLIT);
-          ctx.save();
-          ctx.fillStyle = ZONE;
-          ctx.fillRect(x, ca.top, ca.right - x, ca.height);
-          ctx.strokeStyle = DIV;
-          ctx.setLineDash([4,3]);
-          ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.moveTo(x, ca.top); ctx.lineTo(x, ca.bottom); ctx.stroke();
-          ctx.setLineDash([]);
-          ctx.font = '9px system-ui,-apple-system,sans-serif';
-          ctx.fillStyle = TICK;
-          ctx.textAlign = 'right'; ctx.fillText('actual ◀', x - 5, ca.top + 12);
-          ctx.textAlign = 'left';  ctx.fillText('▶ projected', x + 5, ca.top + 12);
-          ctx.restore();
-        }
-      };
-
-      var mkSeg = function(col) {
-        return {
-          borderDash:  function(ctx) { return ctx.p0DataIndex >= SPLIT ? [5,4] : []; },
-          borderColor: function(ctx) { return ctx.p0DataIndex >= SPLIT ? col + '70' : col; }
-        };
-      };
-
-      var ptR = function(ctx) { return ctx.dataIndex === SPLIT ? 4.5 : (ctx.dataIndex < SPLIT ? 3 : 1.5); };
-
-      var anthropic = [1.5,3.0,27.0,35.0,49.0,62.3,68.0,72.0,77,80,83,85,86.5,87.5,88.3,89.0,89.6];
-      var openai    = [1.7,4.0,15.0,28.0,38.0,50.0,62.0,68.0,73,77,81,84,86.0,87.2,88.2,88.9,89.4];
-      var google    = [0.5,2.0, 8.0,20.0,32.0,55.0,63.0,67.0,72,76,80,83,85.0,87.0,88.0,88.7,89.2];
-      var human     = new Array(17).fill(86);
-
-      var xAxis = function(showLabels) {
-        return { grid:{color:GRID}, ticks:{color:TICK,font:{size:9.5},maxRotation:45,autoSkip:false,display:showLabels} };
-      };
-
-      new Chart(document.getElementById('llm-perf-c'), {
-        type: 'line',
-        data: { labels: labels, datasets: [
-          {label:'Anthropic', data:anthropic, borderColor:'#1553C7', borderWidth:2.5, pointRadius:ptR, pointHoverRadius:5, pointBackgroundColor:'#1553C7', tension:0.32, fill:false, segment:mkSeg('#1553C7')},
-          {label:'OpenAI',    data:openai,    borderColor:'#C2440A', borderWidth:2.5, pointRadius:ptR, pointHoverRadius:5, pointBackgroundColor:'#C2440A', tension:0.32, fill:false, segment:mkSeg('#C2440A')},
-          {label:'Google',    data:google,    borderColor:'#166534', borderWidth:2.5, pointRadius:ptR, pointHoverRadius:5, pointBackgroundColor:'#166534', tension:0.32, fill:false, segment:mkSeg('#166534')},
-          {label:'parity', data:human, borderColor:'#B8C4D8', borderWidth:1.5, borderDash:[3,3], pointRadius:0, fill:false, tension:0}
-        ]},
-        options: {
-          responsive:true, maintainAspectRatio:false,
-          plugins:{legend:{display:false}, tooltip:{callbacks:{label:function(ctx){
-            if(ctx.dataset.label==='parity') return ' Human parity: ~86%';
-            return ' '+ctx.dataset.label+': '+ctx.parsed.y.toFixed(1)+'%'+(ctx.dataIndex>SPLIT?' (proj)':'');
-          }}}},
-          scales:{ x:xAxis(false), y:{min:0,max:95,grid:{color:GRID},ticks:{color:TICK,font:{size:9.5},callback:function(v){return v+'%';},stepSize:20}} }
-        },
-        plugins:[fzPlugin]
-      });
-
-      var dur = [0.08,0.17,0.5,1.0,2.0,4.0,8.0,16.0,24,36,60,96,150,200,260,310,360];
-      var fmtD = function(v) {
-        if(v<1)   return Math.round(v*60)+'m';
-        if(v<24)  return v+'h';
-        if(v<168) return Math.round(v/24)+'d';
-        return Math.round(v/168)+'wk';
-      };
-
-      new Chart(document.getElementById('llm-dur-c'), {
-        type:'line',
-        data:{ labels:labels, datasets:[{
-          label:'Duration frontier', data:dur,
-          borderColor:'#7C3AED', backgroundColor:'rgba(124,58,237,0.07)',
-          borderWidth:2.5, pointRadius:ptR, pointHoverRadius:5, pointBackgroundColor:'#7C3AED',
-          tension:0.3, fill:true,
-          segment:{
-            borderDash:  function(ctx){return ctx.p0DataIndex>=SPLIT?[5,4]:[];},
-            borderColor: function(ctx){return ctx.p0DataIndex>=SPLIT?'#7C3AED70':'#7C3AED';},
-            backgroundColor:function(ctx){return ctx.p0DataIndex>=SPLIT?'rgba(124,58,237,0.03)':'rgba(124,58,237,0.07)';}
-          }
-        }]},
-        options:{
-          responsive:true, maintainAspectRatio:false,
-          plugins:{legend:{display:false}, tooltip:{callbacks:{label:function(ctx){
-            return ' Frontier: '+fmtD(ctx.parsed.y)+(ctx.dataIndex>SPLIT?' (proj)':'');
-          }}}},
-          scales:{
-            x:xAxis(true),
-            y:{
-              type:'logarithmic', min:0.04, max:720,
-              grid:{color:GRID},
-              ticks:{color:TICK,font:{size:9.5},callback:function(v){
-                var snaps=[0.083,0.25,0.5,1,2,4,8,16,24,48,96,168,336,720];
-                return snaps.some(function(s){return Math.abs(s-v)/s<0.05;}) ? fmtD(v) : '';
-              }},
-              title:{display:true,text:'Max execution',color:TICK,font:{size:9.5}}
-            }
-          }
-        },
-        plugins:[fzPlugin]
-      });
-    })();
-    </script>
 
     <div class="grid-3-stack" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0 28px;">
 
