@@ -24,6 +24,150 @@
 
 	<div align="center">
 
+		<!-- ── LLM Comparison Table ─────────────────────────────── -->
+		<p style="font-size:0.75rem;color:#888;margin:8px 0 4px;">Frontier model comparison · Prices per million tokens · Oct 2026</p>
+		<div style="overflow-x:auto;max-width:960px;width:100%;">
+		<table style="font-size:0.72rem;border-collapse:collapse;white-space:nowrap;width:100%;color:var(--text-primary,#e0e0e0);">
+			<thead>
+				<tr style="background:var(--bg-secondary,#2a2a2a);text-align:left;color:var(--text-secondary,#aaa);">
+					<th style="padding:5px 8px;border:1px solid var(--border,#444);font-weight:600;">Model</th>
+					<th style="padding:5px 8px;border:1px solid var(--border,#444);text-align:center;font-weight:600;">Open</th>
+					<th style="padding:5px 8px;border:1px solid var(--border,#444);font-weight:600;">Context</th>
+					<th style="padding:5px 8px;border:1px solid var(--border,#444);font-weight:600;">Multimodal</th>
+					<th style="padding:5px 8px;border:1px solid var(--border,#444);font-weight:600;">Best At</th>
+					<th style="padding:5px 8px;border:1px solid var(--border,#444);font-weight:600;">METR Horizon</th>
+					<th style="padding:5px 8px;border:1px solid var(--border,#444);font-weight:600;">SWE-bench</th>
+					<th style="padding:5px 8px;border:1px solid var(--border,#444);font-weight:600;">Cost $/M in/out</th>
+					<th style="padding:5px 8px;border:1px solid var(--border,#444);font-weight:600;">Released</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>Claude Opus 5.5</strong> <span style="color:var(--text-secondary,#888);">(Anthropic)</span></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);text-align:center;color:#f66;">✗</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">200K</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Text · Image</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Coding · Agents</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>~14.5 hrs</strong></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>88.6%</strong></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">$20 / $80</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Sep 2026</td>
+				</tr>
+				<tr style="background:var(--bg-secondary,#1e1e1e);">
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>Claude Sonnet 5.5</strong> <span style="color:var(--text-secondary,#888);">(Anthropic)</span></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);text-align:center;color:#f66;">✗</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">200K</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Text · Image</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Balanced · Speed</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">85.2%</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">$2 / $10</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Sep 2026</td>
+				</tr>
+				<tr>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>Claude Haiku 5.5</strong> <span style="color:var(--text-secondary,#888);">(Anthropic)</span></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);text-align:center;color:#f66;">✗</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">200K</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Text · Image</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Speed · Cost</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>$0.10 / $0.50</strong></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Oct 2026</td>
+				</tr>
+				<tr style="background:var(--bg-secondary,#1e1e1e);">
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>GPT-6 Astra</strong> <span style="color:var(--text-secondary,#888);">(OpenAI)</span></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);text-align:center;color:#f66;">✗</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>1M</strong></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Text · Image · Audio · Video</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">All-round · Ecosystem</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">~2.2 hrs</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">$10 / $50</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Sep 2026</td>
+				</tr>
+				<tr>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>GPT-6.1 Sol</strong> <span style="color:var(--text-secondary,#888);">(OpenAI)</span></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);text-align:center;color:#f66;">✗</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>1M</strong></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Text · Image · Audio</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Mid-tier · Speed</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">$2 / $10</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Sep 2026</td>
+				</tr>
+				<tr style="background:var(--bg-secondary,#1e1e1e);">
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>Gemini 4 Argon</strong> <span style="color:var(--text-secondary,#888);">(Google)</span></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);text-align:center;color:#f66;">✗</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>2M</strong></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Text · Image · Video</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Long context · Multimodal</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">80.6%</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">$2 / $12</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Sep 2026</td>
+				</tr>
+				<tr>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>Grok 4.6</strong> <span style="color:var(--text-secondary,#888);">(xAI)</span></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);text-align:center;color:#f66;">✗</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">128K</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Text · Image</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Real-time data · X integration</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Aug 2026</td>
+				</tr>
+				<tr style="background:var(--bg-secondary,#1e1e1e);">
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>Llama 4 Maverick</strong> <span style="color:var(--text-secondary,#888);">(Meta)</span></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);text-align:center;color:#4c4;">✓</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>1M</strong></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Text · Image</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Open-source flagship</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Free / self-host</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Apr 2025</td>
+				</tr>
+				<tr>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>Mistral Large 4</strong> <span style="color:var(--text-secondary,#888);">(Mistral)</span></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);text-align:center;color:#4c4;">✓</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">128K</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Text · Image</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">European · Multilingual · MoE</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">$0.50 / $1.50</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Oct 2026</td>
+				</tr>
+				<tr style="background:var(--bg-secondary,#1e1e1e);">
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>Qwen3.7 Flash</strong> <span style="color:var(--text-secondary,#888);">(Alibaba)</span></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);text-align:center;color:#4c4;">✓</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">128K</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Text only</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Cost · Asian languages</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>$0.06 / $0.13</strong></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Jun 2026</td>
+				</tr>
+				<tr>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>DeepSeek V4 Flash</strong> <span style="color:var(--text-secondary,#888);">(DeepSeek)</span></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);text-align:center;color:#4c4;">✓</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>1M</strong></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Text only</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Cost · Reasoning · MoE</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">—</td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);"><strong>$0.14 / $0.28</strong></td>
+					<td style="padding:4px 8px;border:1px solid var(--border,#444);">Jul 2026</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+		<p style="font-size:0.68rem;color:#aaa;margin:4px 0 20px;">METR = autonomous task horizon (50% success) · SWE-bench Verified · — = not publicly reported · Prices change frequently, verify at provider</p>
+
 		<table class="tg">
 
 		<!-- ── Foundation Models ───────────────────────────────── -->

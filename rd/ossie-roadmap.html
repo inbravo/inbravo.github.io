@@ -1,0 +1,355 @@
+<title>Ossie Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+
+<style>
+  /* Layout: three-phase column grid — active / future / incremental */
+  :root {
+    --bg: #F5F4EF;
+    --fg: #181820;
+    --fg-muted: #62627A;
+    --border: #E0DEDA;
+    --card-bg: #FFFFFF;
+
+    --c1: #1B4F72;
+    --c1-bg: #EAF2FB;
+    --c2: #0D6B58;
+    --c2-bg: #E6F4F0;
+    --c3: #6B3FA0;
+    --c3-bg: #F1EBF9;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D0D18;
+      --fg: #E6E6F0;
+      --fg-muted: #8888A8;
+      --border: #252535;
+      --card-bg: #161625;
+      --c1-bg: #0F2030;
+      --c2-bg: #0B2220;
+      --c3-bg: #1E1030;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D0D18;
+    --fg: #E6E6F0;
+    --fg-muted: #8888A8;
+    --border: #252535;
+    --card-bg: #161625;
+    --c1-bg: #0F2030;
+    --c2-bg: #0B2220;
+    --c3-bg: #1E1030;
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 40px 20px;
+    padding-block: 40px;
+  }
+
+  /* ── Header ── */
+  .header {
+    max-width: 940px;
+    margin: 0 auto 36px;
+  }
+  .eyebrow {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(22px, 4.5vw, 40px);
+    font-weight: 800;
+    line-height: 1.1;
+    text-wrap: balance;
+    color: var(--fg);
+    margin-bottom: 10px;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: var(--fg-muted);
+    line-height: 1.65;
+    max-width: 560px;
+  }
+
+  /* ── Three-column grid ── */
+  .roadmap {
+    max-width: 940px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    align-items: start;
+  }
+  @media (max-width: 660px) {
+    .roadmap { grid-template-columns: 1fr; }
+  }
+
+  /* ── Phase column ── */
+  .phase { display: flex; flex-direction: column; gap: 10px; }
+
+  .phase-header {
+    padding: 14px 16px;
+    border-radius: 10px;
+    border-left: 3px solid transparent;
+    margin-bottom: 2px;
+  }
+  .phase-header.p1 { background: var(--c1-bg); border-color: var(--c1); }
+  .phase-header.p2 { background: var(--c2-bg); border-color: var(--c2); }
+  .phase-header.p3 { background: var(--c3-bg); border-color: var(--c3); }
+
+  .phase-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .p1 .phase-label { color: var(--c1); }
+  .p2 .phase-label { color: var(--c2); }
+  .p3 .phase-label { color: var(--c3); }
+
+  .phase-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.3;
+  }
+  .phase-desc {
+    font-size: 11.5px;
+    color: var(--fg-muted);
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+
+  /* ── Initiative card ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 13px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .card-row {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .d1 { background: var(--c1); }
+  .d2 { background: var(--c2); }
+  .d3 { background: var(--c3); }
+
+  .card-name {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--fg);
+    line-height: 1.4;
+    min-width: 0;
+  }
+  .card-desc {
+    font-size: 11.5px;
+    color: var(--fg-muted);
+    line-height: 1.55;
+  }
+
+  /* ── Footer note ── */
+  .source {
+    max-width: 940px;
+    margin: 30px auto 0;
+    font-size: 11px;
+    color: var(--fg-muted);
+  }
+  .source a { color: var(--fg-muted); text-underline-offset: 2px; }
+</style>
+
+<div class="header">
+  <p class="eyebrow">Apache Ossie · Community Roadmap</p>
+  <h1>Future of the Open Semantic Layer</h1>
+  <p class="subtitle">Three tracks of work shaping how organizations define, share, and query business metrics — from a shared core model to an AI-native semantic layer.</p>
+</div>
+
+<div class="roadmap">
+
+  <!-- Phase 1: Active -->
+  <div class="phase">
+    <div class="phase-header p1">
+      <div class="phase-label">Working Now</div>
+      <div class="phase-title">Current Working Groups</div>
+      <div class="phase-desc">Active community efforts with ongoing discussions and pull requests.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d1"></div>
+        <div class="card-name">Metric Semantics &amp; Core Model</div>
+      </div>
+      <div class="card-desc">Richer aggregation, grain, and filter semantics. A documented spec of community-agreed metric behavior.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d1"></div>
+        <div class="card-name">Catalog Integration &amp; Semantic Services</div>
+      </div>
+      <div class="card-desc">Polaris-style catalog integration. Standalone semantic registry with discovery, versioning, and access control.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d1"></div>
+        <div class="card-name">Ontology &amp; Semantic Interoperability</div>
+      </div>
+      <div class="card-desc">Canonical business concept layer with schema mappings. Support for non-tabular data models.</div>
+    </div>
+  </div>
+
+  <!-- Phase 2: Future Efforts -->
+  <div class="phase">
+    <div class="phase-header p2">
+      <div class="phase-label">Coming Next</div>
+      <div class="phase-title">Future Efforts</div>
+      <div class="phase-desc">Community-voted priorities not yet in active development.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d2"></div>
+        <div class="card-name">Dataset Abstraction &amp; Logical Modeling</div>
+      </div>
+      <div class="card-desc">Decouple semantic definitions from physical storage. Logical and reusable datasets.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d2"></div>
+        <div class="card-name">Semantic Query Language &amp; Reference Engine</div>
+      </div>
+      <div class="card-desc">Standard query interface. Reference Ossie-to-SQL compiler with a conformance test suite.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d2"></div>
+        <div class="card-name">SQL Dialect &amp; Execution Boundaries</div>
+      </div>
+      <div class="card-desc">Dialect handling. Clear separation between definition and execution. Optional templating.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d2"></div>
+        <div class="card-name">Dimensions, Hierarchies &amp; Time</div>
+      </div>
+      <div class="card-desc">Hierarchical dimensions. Standardized time semantics and calendar abstractions.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d2"></div>
+        <div class="card-name">AI-Native Semantic Layer</div>
+      </div>
+      <div class="card-desc">Standardized AI context metadata. Verified queries and controls over AI exposure to business metrics.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d2"></div>
+        <div class="card-name">Governance, Identity &amp; Validation</div>
+      </div>
+      <div class="card-desc">Stable identifiers. Validation standards and governance certification frameworks.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d2"></div>
+        <div class="card-name">Domain-Specific Semantic Models</div>
+      </div>
+      <div class="card-desc">Reusable templates for SaaS, finance, and retail verticals.</div>
+    </div>
+  </div>
+
+  <!-- Phase 3: Enhancements -->
+  <div class="phase">
+    <div class="phase-header p3">
+      <div class="phase-label">Incremental</div>
+      <div class="phase-title">Enhancements &amp; Additions</div>
+      <div class="phase-desc">Backward-compatible improvements to usability, metadata, and ecosystem reach.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d3"></div>
+        <div class="card-name">Naming, Terminology &amp; UX</div>
+      </div>
+      <div class="card-desc">Rename "Field" → "Dimension." Add display names and cleaner terminology across the spec.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d3"></div>
+        <div class="card-name">Data Types &amp; Field Semantics</div>
+      </div>
+      <div class="card-desc">Units, currencies, and field type classifications — including PII tagging.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d3"></div>
+        <div class="card-name">Extended Metadata</div>
+      </div>
+      <div class="card-desc">Optional, backward-compatible additions: display formats, default aggregation, and similar.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d3"></div>
+        <div class="card-name">Developer Experience &amp; Docs</div>
+      </div>
+      <div class="card-desc">Usage guides, modeling best practices, and Markdown support in descriptions.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d3"></div>
+        <div class="card-name">Specialized Capabilities</div>
+      </div>
+      <div class="card-desc">Geospatial types, date spines, and audience/segment definitions.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <div class="dot d3"></div>
+        <div class="card-name">Tooling &amp; Ecosystem Support</div>
+      </div>
+      <div class="card-desc">Validators and converters for Snowflake, GoodData, Salesforce, Polaris, and Microsoft.</div>
+    </div>
+  </div>
+
+</div>
+
+<p class="source">
+  Source: <a href="https://github.com/apache/ossie/blob/main/ROADMAP.md" target="_blank">apache/ossie ROADMAP.md</a> · Community-informed, no version dates.
+</p>
