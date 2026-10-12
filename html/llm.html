@@ -16,58 +16,218 @@
 </head>
 
 <body>
-	
+
 	<!--Header -->
 	<div align="center">
 		<div data-include="header.html"></div>
-	</div>	
-	
-	<div align="center"> 
-		
+	</div>
+
+	<div align="center">
+
 		<table class="tg">
+
+		<!-- ── Foundation Models ───────────────────────────────── -->
 		<tr>
-			<td><a target="_blank" href="https://prompts.chat">openai.com</a></td>
-			<td>Public prompts library
+			<td><a target="_blank" href="https://www.anthropic.com">Foundation Models</a></td>
+			<td>Frontier model reference
 				<ul>
-					<li><a target="_blank" href="https://prompts.chat/prompts">gpt-oss-120b & gpt-oss-20b</a></li>
+					<li><a target="_blank" href="https://www.anthropic.com/claude">Claude (Anthropic)</a> — Opus, Sonnet, Haiku family; best for coding &amp; reasoning</li>
+					<li><a target="_blank" href="https://openai.com/gpt-4">GPT-4o / o3 (OpenAI)</a> — strongest general-purpose closed model</li>
+					<li><a target="_blank" href="https://deepmind.google/technologies/gemini/">Gemini 2.5 Pro (Google)</a> — best long context (1M tokens)</li>
+					<li><a target="_blank" href="https://llama.meta.com">Llama 3 (Meta)</a> — best open-source, free to self-host</li>
+					<li><a target="_blank" href="https://mistral.ai">Mistral Large 4</a> — open-weight Mixture-of-Experts (1.05T params, 49B active); fast, multilingual, vision-capable</li>
+					<li><a target="_blank" href="https://www.deepseek.com">DeepSeek R1</a> — open-source MoE, matches GPT-4 at near-zero cost; major attention in 2026</li>
+					<li><a target="_blank" href="https://openrouter.ai">OpenRouter</a> — single API to access 200+ models for comparison</li>
 				</ul>
 			</td>
 		</tr>
+
+		<!-- ── Reasoning Models ───────────────────────────────────── -->
 		<tr>
-			<td><a target="_blank" href="https://tensorflow.org">tensorflow.org</a></td>
-			<td>
+			<td><a target="_blank" href="https://arxiv.org/abs/2603.00207">Reasoning Models</a></td>
+			<td>Test-time compute — models that think before they answer
 				<ul>
-					<li><a target="_blank" href="https://projector.tensorflow.org">10,000 Word Vector Visualisation</a></li>
+					<li><a target="_blank" href="https://arxiv.org/abs/2603.00207">arXiv — Test-Time Scaling: Comprehensive Survey (ACL 2026)</a> — sampling-based, feedback-based and search-based approaches to inference compute</li>
+					<li><a target="_blank" href="https://ai.meta.com/research/publications/unit-unified-multimodal-chain-of-thought-test-time-scaling">Meta — UniT: Unified Multimodal Chain-of-Thought Test-Time Scaling</a> — reason, verify and refine across text and images in multiple rounds</li>
+					<li><a target="_blank" href="https://openai.com/o3">OpenAI o3</a> — flagship reasoning model; extended thinking before answering</li>
+					<li><a target="_blank" href="https://www.anthropic.com/claude">Claude Extended Thinking</a> — Anthropic's reasoning mode; visible scratchpad before final response</li>
+					<li><a target="_blank" href="https://deepmind.google/technologies/gemini/">Gemini 2.5 Thinking (Google)</a> — reasoning model with 1M token context</li>
 				</ul>
 			</td>
 		</tr>
+
+		<!-- ── Multimodal AI ───────────────────────────────────────── -->
 		<tr>
-			<td><a target="_blank" href="https://github.com">github.com</a></td>
-			<td>Awesome GitHub LLM resources
+			<td><a target="_blank" href="https://huggingface.co/models?pipeline_tag=image-text-to-text">Multimodal AI</a></td>
+			<td>Models that understand and generate across text, image, audio and video
 				<ul>
-					<li><a target="_blank" href="https://github.com/rasbt/LLMs-from-scratch">Sebastian Raschka's LLM from Scratch</a></li>
+					<li><a target="_blank" href="https://openai.com/gpt-4">GPT-4o (OpenAI)</a> — text, image, audio and video understanding in one model</li>
+					<li><a target="_blank" href="https://deepmind.google/technologies/gemini/">Gemini 2.5 Pro (Google)</a> — native multimodal; strongest for video and long documents</li>
+					<li><a target="_blank" href="https://arxiv.org/abs/2606.08231">arXiv — Test-Time Scaling in Multimodal Foundation Models (ACL 2026)</a> — survey of generation and reasoning across modalities</li>
+					<li><a target="_blank" href="https://huggingface.co/models?pipeline_tag=image-text-to-text">Hugging Face — Vision-Language Models</a> — open-source multimodal model catalogue</li>
+					<li><a target="_blank" href="https://elevenlabs.io">ElevenLabs</a> — state-of-the-art audio/voice AI; text to speech and speech to speech</li>
+				</ul>
+			</td>
+		</tr>
+
+		<!-- ── Learning Resources ──────────────────────────────── -->
+		<tr>
+			<td><a target="_blank" href="https://github.com">Learning Resources</a></td>
+			<td>Courses, books and hands-on guides
+				<ul>
+					<li><a target="_blank" href="https://github.com/rasbt/LLMs-from-scratch">Sebastian Raschka — LLM from Scratch</a></li>
 					<li><a target="_blank" href="https://github.com/Shubhamsaboo/awesome-llm-apps">Awesome LLM Apps</a></li>
-					<li><a target="_blank" href="https://github.com/f/awesome-chatgpt-prompts">Awesome ChatGPT Prompts</a></li>
-					<li><a target="_blank" href="https://github.com/themanojdesai/genai-llm-ml-case-studies">GenAI/LLM case studies</a></li>
-					<li><a target="_blank" href="https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools">System Prompts and Models of AI Tools</a></li>
-					<li><a target="_blank" href="https://github.com/dair-ai/Prompt-Engineering-Guide">Prompt Engineering Guide</a></li> 
-					<li><a target="_blank" href="https://github.com/nishchal-11/Langchain/tree/master">Langchain examples</a></li> 
+					<li><a target="_blank" href="https://github.com/themanojdesai/genai-llm-ml-case-studies">GenAI / LLM case studies</a></li>
+					<li><a target="_blank" href="https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ">Andrej Karpathy — Neural Networks: Zero to Hero</a> — most recommended free course for understanding LLMs from first principles</li>
+					<li><a target="_blank" href="https://course.fast.ai">fast.ai — Practical Deep Learning</a> — free, hands-on, highly respected</li>
+					<li><a target="_blank" href="https://www.deeplearning.ai/short-courses/">DeepLearning.AI Short Courses</a> — bite-sized courses on RAG, agents, prompt engineering</li>
+					<li><a target="_blank" href="https://huggingface.co/learn/llm-course">Hugging Face LLM Course</a> — free, covers transformers, fine-tuning, deployment end to end</li>
+					<li><a target="_blank" href="https://projector.tensorflow.org">TensorFlow — 10,000 Word Vector Visualisation</a></li>
 				</ul>
 			</td>
 		</tr>
-			<tr>
-			<td><a target="_blank" href="https://github.com">github.com</a></td>
-			<td>Agent Skill resources
+
+		<!-- ── Prompt Engineering ──────────────────────────────── -->
+		<tr>
+			<td><a target="_blank" href="https://github.com/dair-ai/Prompt-Engineering-Guide">Prompt Engineering</a></td>
+			<td>Crafting instructions to get better model outputs
 				<ul>
+					<li><a target="_blank" href="https://github.com/dair-ai/Prompt-Engineering-Guide">DAIR-AI — Prompt Engineering Guide</a> — guides, papers, notebooks, RAG, agents</li>
+					<li><a target="_blank" href="https://github.com/promptslab/Awesome-Prompt-Engineering">promptslab — Awesome Prompt Engineering</a> — curated papers, tools, APIs, datasets</li>
+					<li><a target="_blank" href="https://github.com/f/awesome-chatgpt-prompts">Awesome ChatGPT Prompts</a></li>
+					<li><a target="_blank" href="https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools">System Prompts and Models of AI Tools</a></li>
+					<li><a target="_blank" href="https://docs.anthropic.com/en/resources/prompt-library/library">Anthropic Prompt Library</a> — official curated prompts</li>
+					<li><a target="_blank" href="https://prompts.chat/prompts">prompts.chat</a> — public community prompts library</li>
+					<li><a target="_blank" href="https://github.com/stanfordnlp/dspy">DSPy (Stanford)</a> — auto-optimises prompts using examples instead of hand-tuning; major shift in how prompt engineering is done</li>
+				</ul>
+			</td>
+		</tr>
+
+		<!-- ── Context Engineering ─────────────────────────────── -->
+		<tr>
+			<td><a target="_blank" href="https://anthropic.com/engineering/effective-context-engineering-for-ai-agents">Context Engineering</a></td>
+			<td>Constructing and managing what goes into the context window
+				<ul>
+					<li><a target="_blank" href="https://anthropic.com/engineering/effective-context-engineering-for-ai-agents">Anthropic — Effective Context Engineering for AI Agents</a> — the definitive official guide; treats context as a finite, curated resource</li>
+					<li><a target="_blank" href="https://arxiv.org/abs/2507.13334">arXiv — A Survey of Context Engineering for LLMs</a> — comprehensive academic survey</li>
+					<li><a target="_blank" href="https://github.com/mlnjsh/context-engineering">mlnjsh — Complete Guide to Context Engineering</a> — papers, blogs, videos, tools, roadmap</li>
+					<li><a target="_blank" href="https://github.com/OsherElhadad/awesome-context-engineering">OsherElhadad — Awesome Context Engineering</a> — curated resources, papers, tools, best practices</li>
+					<li><a target="_blank" href="https://zilliz.com/blog/top-10-context-engineering-techniques-you-should-know-for-production-rag">Zilliz — Top 10 Context Engineering Techniques for Production RAG</a></li>
+					<li><a target="_blank" href="https://blog.logrocket.com/llm-context-problem/">LogRocket — The LLM Context Problem in 2026</a> — memory, relevance and scale strategies</li>
+				</ul>
+			</td>
+		</tr>
+
+		<!-- ── Self-Evolving Ontology ──────────────────────────── -->
+		<tr>
+			<td><a target="_blank" href="https://arxiv.org/abs/2608.22974">Self-Evolving Ontology</a></td>
+			<td>Knowledge structures that organise and update themselves autonomously
+				<ul>
+					<li><a target="_blank" href="https://arxiv.org/abs/2609.15779">EvoOntology — Ontology Layer for LLM Data Agents via MCP</a> — builder agent constructs ontology; refinement loop evolves it automatically (Sep 2026)</li>
+					<li><a target="_blank" href="https://arxiv.org/abs/2608.22974">OaK — Toward Effective and Reliable LLM Agents via Dynamic Ontology</a> — ontology-as-a-kernel; makes domain concepts explicit and iteratively refined via judge feedback (Aug 2026)</li>
+					<li><a target="_blank" href="https://github.com/DEEP-JLU/Awesome-Graph-Engineering">DEEP-JLU — Awesome Graph Engineering</a> — survey covering ontology, graph, loop and context engineering together</li>
+					<li><a target="_blank" href="https://github.com/zjukg/KG-LLM-Papers">zjukg — KG-LLM Papers</a> — paper list integrating knowledge graphs with LLMs</li>
+					<li><a target="_blank" href="https://github.com/King-s-Knowledge-Graph-Lab/OntoChat">OntoChat — Collaborative LLM-based Ontology Engineering</a> — practical tool with peer-reviewed paper</li>
+					<li><a target="_blank" href="https://github.com/kmaurinjones/ontograph">ontograph — LLM-powered Knowledge Graph Engine</a> — ontological entity resolution and hybrid semantic-graph retrieval</li>
+					<li><a target="_blank" href="https://koncordantlab.github.io/LLM4KGOE-ESWC/">LLMs4KGOE 2026 Workshop</a> — ESWC 2026 workshop on LLM-driven knowledge graph and ontology engineering</li>
+				</ul>
+			</td>
+		</tr>
+
+		<!-- ── Intent Engineering ──────────────────────────────── -->
+		<tr>
+			<td><a target="_blank" href="https://sessionize.com/s/vincentkoc/2026-the-year-of-intent-engineering/158200">Intent Engineering</a></td>
+			<td>Designing systems that correctly identify what the user actually wants
+				<ul>
+					<li><a target="_blank" href="https://sessionize.com/s/vincentkoc/2026-the-year-of-intent-engineering/158200">Vincent Koc — 2026: The Year of Intent Engineering</a> — from writing prompts to specifying goals, constraints and feedback loops</li>
+					<li><a target="_blank" href="https://blog.gopenai.com/intent-routing-for-ai-agents-e075d64da6c9">GopenAI — Intent Routing for AI Agents</a> — intent computed once, stored in agent state, not left to the LLM to decide; includes code</li>
+					<li><a target="_blank" href="https://docs.bswen.com/blog/2026-03-06-agent-routing">bswen — AI Agent Routing: Intent Classification Guide</a> — hands-on Python / LangGraph examples</li>
+					<li><a target="_blank" href="https://futureagi.com/blog/intent-classification-llm-pipeline-2026/">FutureAGI — Intent Classification LLM Pipeline 2026</a></li>
+					<li><a target="_blank" href="https://github.com/BerriAI/litellm">LiteLLM</a> — open-source router across 200+ LLMs; supports confidence-based intent routing</li>
+				</ul>
+			</td>
+		</tr>
+
+		<!-- ── Decision Engineering ────────────────────────────── -->
+		<tr>
+			<td><a target="_blank" href="https://anthropic.com/engineering/building-effective-agents">Decision Engineering</a></td>
+			<td>Governing what an agent decides to do — when to act, ask, or stop
+				<ul>
+					<li><a target="_blank" href="https://anthropic.com/engineering/building-effective-agents">Anthropic — Building Effective Agents</a> — when to use tools vs. ask vs. stop; definitive reference</li>
+					<li><a target="_blank" href="https://www.aibuilderclub.com/blog/loop-engineering-guide-2026">AI Builder Club — Loop Engineering Guide 2026</a> — designing the full agent control cycle</li>
+					<li><a target="_blank" href="https://github.com/cobusgreyling/loop-engineering">cobusgreyling — loop-engineering</a> — patterns, starters and CLI tools for agent loop design</li>
+					<li><a target="_blank" href="https://levelup.gitconnected.com/the-hitchhikers-guide-to-agentic-ai-7bf52c13eede">The Hitchhiker's Guide to Agentic AI</a> — reason → act → observe → stop condition mental model</li>
+					<li><a target="_blank" href="https://fourweekmba.com/ai-trend-2026-the-agent-reliability-gap-keeps-humans-in-the-loop/">FourWeekMBA — Agent Reliability Gap 2026</a> — why human-in-the-loop remains the dominant safe pattern</li>
+				</ul>
+			</td>
+		</tr>
+
+		<!-- ── AI Safety & Interpretability ───────────────────────── -->
+		<tr>
+			<td><a target="_blank" href="https://transformer-circuits.pub">AI Safety &amp; Interpretability</a></td>
+			<td>Understanding and aligning what happens inside the model
+				<ul>
+					<li><a target="_blank" href="https://transformer-circuits.pub">Anthropic — Transformer Circuits</a> — primary research publication for mechanistic interpretability; reverse-engineering how models work internally</li>
+					<li><a target="_blank" href="https://www.anthropic.com/news/core-views-on-ai-safety">Anthropic — Core Views on AI Safety</a> — constitutional AI, RLHF/RLAIF, scalable oversight</li>
+					<li><a target="_blank" href="https://openai.com/safety">OpenAI Safety</a> — alignment research, red-teaming and policy work</li>
+					<li><a target="_blank" href="https://www.alignmentforum.org">Alignment Forum</a> — primary community for technical AI alignment research and discussion</li>
+					<li><a target="_blank" href="https://arxiv.org/abs/2209.07858">arXiv — Constitutional AI: Harmlessness from AI Feedback</a> — Anthropic's method for training models to follow principles</li>
+				</ul>
+			</td>
+		</tr>
+
+		<!-- ── LLM Evaluation ──────────────────────────────────────── -->
+		<tr>
+			<td><a target="_blank" href="https://github.com/promptfoo/promptfoo">LLM Evaluation</a></td>
+			<td>Testing, benchmarking and measuring LLM output quality
+				<ul>
+					<li><a target="_blank" href="https://github.com/promptfoo/promptfoo">PromptFoo</a> — open-source LLM testing and red-teaming; compare prompts, models and providers</li>
+					<li><a target="_blank" href="https://github.com/confident-ai/deepeval">DeepEval</a> — unit-testing framework for LLM outputs; metrics for RAG, hallucination, toxicity</li>
+					<li><a target="_blank" href="https://www.braintrust.dev">Braintrust</a> — eval platform with dataset management, scoring and CI integration</li>
+					<li><a target="_blank" href="https://docs.smith.langchain.com">LangSmith</a> — LangChain's eval and observability platform; trace, debug and test LLM chains</li>
+					<li><a target="_blank" href="https://github.com/openai/evals">OpenAI Evals</a> — open-source framework for evaluating OpenAI models; large library of community evals</li>
+					<li><a target="_blank" href="https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard">Hugging Face Open LLM Leaderboard</a> — live benchmark comparison of open-source models</li>
+				</ul>
+			</td>
+		</tr>
+
+		<!-- ── Frameworks & Tools ──────────────────────────────── -->
+		<tr>
+			<td><a target="_blank" href="https://github.com/langchain-ai/langgraph">Frameworks &amp; Tools</a></td>
+			<td>Libraries for building LLM-powered applications and agents
+				<ul>
+					<li><a target="_blank" href="https://github.com/langchain-ai/langgraph">LangGraph</a> — hottest in production; stateful, graph-based agent workflow orchestration</li>
+					<li><a target="_blank" href="https://github.com/run-llama/llama_index">LlamaIndex</a> — go-to for RAG and document-heavy agents</li>
+					<li><a target="_blank" href="https://github.com/crewAIInc/crewAI">CrewAI</a> — easiest way to build role-based multi-agent teams</li>
+					<li><a target="_blank" href="https://github.com/nishchal-11/Langchain/tree/master">LangChain examples</a></li>
+					<li><a target="_blank" href="https://github.com/pydantic/pydantic-ai">Pydantic AI</a> — type-safe, structured LLM outputs in Python</li>
+					<li><a target="_blank" href="https://github.com/huggingface/smolagents">smolagents (Hugging Face)</a> — minimal agent library, popular for simple agent tasks</li>
+					<li><a target="_blank" href="https://github.com/microsoft/agent-sdk">Microsoft Agent Framework</a> — successor to AutoGen + Semantic Kernel merged; production-grade for Azure-centric teams (AutoGen now in maintenance)</li>
+					<li><a target="_blank" href="https://github.com/huggingface/transformers">Hugging Face Transformers</a> — standard library for running open-source models</li>
+				</ul>
+			</td>
+		</tr>
+
+		<!-- ── Agents & Agentic Systems ────────────────────────── -->
+		<tr>
+			<td><a target="_blank" href="https://github.com">Agents &amp; Agentic Systems</a></td>
+			<td>Multi-agent frameworks, protocols and skill resources
+				<ul>
+					<li><a target="_blank" href="https://modelcontextprotocol.io">MCP — Model Context Protocol (Anthropic)</a> — open standard for connecting LLMs to tools, data sources and APIs; rapidly becoming the universal standard</li>
+					<li><a target="_blank" href="https://openai.github.io/openai-agents-python/">OpenAI Agents SDK</a> — lightweight framework for OpenAI-based agents (2026)</li>
+					<li><a target="_blank" href="https://google.github.io/adk-docs/">Google ADK — Agent Development Kit</a> — Google's agent framework, gaining momentum</li>
+					<li><a target="_blank" href="https://github.com/anthropics/anthropic-sdk-python">Anthropic Agent SDK</a> — computer use as a first-class primitive; launched April 2026</li>
+					<li><a target="_blank" href="https://github.com/letta-ai/letta">Letta</a> — agents with persistent, stateful memory across sessions</li>
 					<li><a target="_blank" href="https://github.com/google/skills">Google Agent Skill GitHub repository</a></li>
 					<li><a target="_blank" href="https://agentskills.io/home">AgentSkills website</a></li>
 				</ul>
 			</td>
 		</tr>
-		</tr>
-			<tr>
-			<td><a target="_blank" href="https://github.com">github.com</a></td>
-			<td>Claude Code features
+
+		<!-- ── Claude Code ─────────────────────────────────────── -->
+		<tr>
+			<td><a target="_blank" href="https://github.com/anthropics/claude-code">Claude Code</a></td>
+			<td>Anthropic's agentic CLI and SDK for software engineering
 				<ul>
 					<li><a target="_blank" href="https://www.youtube.com/live/6eBSHbLKuN0">Mastering Claude Code in 30 minutes</a></li>
 					<li><a target="_blank" href="https://www.youtube.com/live/ZlDnsf_DOzg">Every Claude Code Concept Explained</a></li>
@@ -76,13 +236,29 @@
 				</ul>
 			</td>
 		</tr>
+
+		<!-- ── Visualisations & Playgrounds ────────────────────── -->
+		<tr>
+			<td><a target="_blank" href="https://huggingface.co/spaces">Visualisations &amp; Playgrounds</a></td>
+			<td>Interactive demos, local runtimes and model explorers
+				<ul>
+					<li><a target="_blank" href="https://projector.tensorflow.org">TensorFlow — 10,000 Word Vector Visualisation</a></li>
+					<li><a target="_blank" href="https://huggingface.co/spaces">Hugging Face Spaces</a> — thousands of live demos of open-source models</li>
+					<li><a target="_blank" href="https://lmstudio.ai">LM Studio</a> — run any open-source LLM locally on your Mac, completely offline</li>
+					<li><a target="_blank" href="https://ollama.com">Ollama</a> — run Llama, Mistral, DeepSeek locally via terminal; extremely popular in 2026</li>
+					<li><a target="_blank" href="https://openrouter.ai">OpenRouter</a> — one API to access and compare 200+ models</li>
+					<li><a target="_blank" href="https://console.anthropic.com">Anthropic Console Workbench</a> — test and iterate prompts against Claude models</li>
+				</ul>
+			</td>
+		</tr>
+
 		</table>
 	</div>
-		
+
 	<!--Footer -->
 	<div align="center">
 		<div data-include="footer.html"></div>
-	</div>	
+	</div>
 </body>
 
 </html>
