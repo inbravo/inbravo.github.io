@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="8 agent SDKs compared — docs quality, learning curve, model lock, and BFSI fit. With a recommended 3-step learning path.">
+  <meta name="author" content="Amit Dixit">
+  <link rel="icon" type="image/png" href="../images/inbravo.png">
+  <link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+  <script src="../js/jquery-1.11.3.min.js"></script>
+  <script src="../js/csi.min.js"></script>
+  <script src="../js/inbravo.js"></script>
+  <title>Agent SDK Landscape 2026</title>
+  <style>
+    /* ── PAGE LAYOUT ── */
+    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* ── PAGE HEADER ── */
+    .page-hd { padding-bottom: 32px; margin-bottom: 40px; border-bottom: 1px solid var(--border-color); }
+    .page-hd-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; color: var(--accent-cyan);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+    }
+    .page-hd-eyebrow::before { content: '//'; color: var(--accent-purple); }
+    .page-hd h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700; line-height: 1.15; margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-purple) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .page-hd p { color: var(--text-secondary); font-size: 0.95rem; margin: 0; }
+    .page-hd-date {
+      display: inline-block; margin-top: 12px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted);
+      padding: 4px 12px; background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-color); border-radius: 20px;
+    }
+
+    /* ── SECTION LABEL ── */
+    .sect-lbl {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-purple);
+      margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+    }
+    .sect-lbl::before { content: '//'; color: var(--text-muted); font-size: 0.68rem; }
+
+    /* ── FILTER STRIP ── */
+    .filter-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+    .filt-btn {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border-color);
+      color: var(--text-muted); font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 500; padding: 6px 16px;
+      border-radius: 20px; cursor: pointer; transition: var(--transition);
+    }
+    .filt-btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); background: rgba(34,211,238,0.06); }
+    .filt-btn.active { background: rgba(34,211,238,0.12); border-color: var(--accent-cyan); color: var(--accent-cyan); }
+
+    /* ── SDK GRID ── */
+    .sdk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-bottom: 56px; }
+
+    /* SDK card extends .card from inbravo.css */
+    .sdk-card { position: relative; display: flex !important; flex-direction: column; gap: 14px; padding: 22px !important; }
+    .sdk-card.deprecated { opacity: 0.4; }
+    .sdk-card.recommended { border-color: rgba(168,85,247,0.4) !important; }
+    .sdk-card.recommended::before { opacity: 1 !important; }
+
+    .rec-pill {
+      position: absolute; top: -10px; right: 14px;
+      background: var(--accent-purple); color: #fff;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
+    }
+
+    .sdk-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .sdk-name { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
+    .sdk-vendor { font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; }
+
+    .ver-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; }
+    .vb-active { background: rgba(16,185,129,0.12); color: var(--accent-green); border: 1px solid rgba(16,185,129,0.2); }
+    .vb-new    { background: rgba(34,211,238,0.12); color: var(--accent-cyan);  border: 1px solid rgba(34,211,238,0.2); }
+    .vb-depr   { background: rgba(239,68,68,0.1);   color: #ef4444;            border: 1px solid rgba(239,68,68,0.15); }
+
+    .sdk-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .sdk-tag {
+      background: rgba(168,85,247,0.08); border: 1px solid rgba(168,85,247,0.2);
+      color: var(--accent-purple); font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem; font-weight: 600; padding: 2px 8px; border-radius: 4px;
+    }
+
+    .sdk-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .meta-pair { display: flex; flex-direction: column; gap: 3px; }
+    .meta-lbl { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+    .meta-val { font-size: 0.78rem; color: var(--text-secondary); }
+    .dots-row { display: flex; gap: 3px; margin-top: 2px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+    .dot.on { background: var(--accent-cyan); }
+    .stars { color: var(--accent-cyan); font-size: 0.85rem; letter-spacing: 1px; }
+
+    .sdk-caps { display: flex; flex-direction: column; gap: 5px; }
+    .cap { font-size: 0.78rem; color: var(--text-secondary); display: flex; gap: 8px; align-items: flex-start; line-height: 1.45; }
+    .cap::before { content: '→'; color: var(--accent-cyan); flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
+    .sdk-bestfor { font-size: 0.75rem; color: var(--text-muted); padding-top: 10px; border-top: 1px solid var(--border-color); line-height: 1.5; }
+    .sdk-bestfor strong { color: var(--text-secondary); }
+    .lock-warn { color: #f59e0b; }
+    .lock-good { color: var(--accent-green); }
+
+    /* ── TABLE ── */
+    .tbl-wrap { overflow-x: auto; margin-bottom: 56px; border-radius: var(--radius); }
+    .tg { min-width: 760px; }
+    .tg td.yes      { color: var(--accent-green); font-weight: 700; }
+    .tg td.no       { color: var(--text-muted); }
+    .tg td.partial  { color: #f59e0b; font-size: 0.72rem; }
+    .tg td.lock     { color: #f59e0b; font-size: 0.78rem; }
+    .tg td.agnostic { color: var(--accent-green); font-size: 0.78rem; }
+    .tg td.nc       { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.82rem; white-space: nowrap; }
+    .tg td.stars    { color: var(--accent-cyan); font-size: 0.8rem; }
+
+    /* ── LEARNING PATH ── */
+    .lp-box {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: var(--radius); padding: 32px; margin-bottom: 56px;
+      backdrop-filter: blur(10px); position: relative;
+    }
+    .lp-box::before {
+      content: ''; position: absolute; top: -1px; left: 40px; right: 40px; height: 2px;
+      background: linear-gradient(135deg, #22d3ee 0%, #a855f7 50%, #ec4899 100%);
+    }
+    .lp-box h2 { font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+    .lp-box h2::before { content: '$ '; color: var(--accent-green); }
+    .lp-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 28px; }
+    .lp-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .lp-step {
+      background: var(--bg-secondary); border: 1px solid var(--border-color);
+      border-top: 3px solid var(--border-color); border-radius: 12px; padding: 20px;
+    }
+    .lp-step.s1 { border-top-color: var(--accent-cyan); }
+    .lp-step.s2 { border-top-color: var(--accent-purple); }
+    .lp-step.s3 { border-top-color: var(--accent-green); }
+    .lp-num { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+    .lp-step h3 { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+    .lp-sdk { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; margin-bottom: 10px; }
+    .s1 .lp-sdk { color: var(--accent-cyan); }
+    .s2 .lp-sdk { color: var(--accent-purple); }
+    .s3 .lp-sdk { color: var(--accent-green); }
+    .lp-step p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; margin: 0; }
+    .lp-timeline {
+      display: inline-block; margin-top: 12px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 4px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); color: var(--text-muted);
+    }
+
+    /* ── SOURCES ── */
+    .sources { font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 20px; line-height: 1.9; }
+    .sources-lbl { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+    .sources a { color: var(--accent-cyan); text-decoration: none; }
+    .sources a:hover { color: var(--accent-purple); text-shadow: none; }
+
+    @media (max-width: 640px) {
+      .page-wrap { padding: 20px 16px 60px; }
+      .sdk-grid { grid-template-columns: 1fr; }
+      .lp-steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div data-include="../html/header.html"></div>
+
+  <div class="page-wrap">
+
+    <div class="page-hd">
+      <div class="page-hd-eyebrow">R&amp;D Workspace · Agent Development</div>
+      <h1>Agent SDK Landscape</h1>
+      <p>8 frameworks compared — docs quality, learning curve, model lock, and BFSI fit</p>
+      <span class="page-hd-date">Oct 2026</span>
+    </div>
+
+    <div class="sect-lbl">Filter by use case</div>
+    <div class="filter-wrap" id="filters">
+      <button class="filt-btn active" data-filter="all">All SDKs</button>
+      <button class="filt-btn" data-filter="beginner">Beginner-Friendly</button>
+      <button class="filt-btn" data-filter="production">Production-Grade</button>
+      <button class="filt-btn" data-filter="agnostic">Model-Agnostic</button>
+      <button class="filt-btn" data-filter="bfsi">BFSI / Regulated</button>
+    </div>
+
+    <div class="sect-lbl">Frameworks at a glance</div>
+    <div class="sdk-grid" id="sdkGrid"></div>
+
+    <div class="sect-lbl">Feature comparison</div>
+    <div class="tbl-wrap">
+      <table class="tg">
+        <thead>
+          <tr>
+            <th>SDK</th><th>Vendor</th><th>Languages</th><th>Version</th>
+            <th>Docs</th><th>Model Lock</th><th>Multi-Agent</th>
+            <th>Human-in-Loop</th><th>MCP</th><th>BFSI Fit</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="sect-lbl">Recommended learning path</div>
+    <div class="lp-box">
+      <h2>learn agent development</h2>
+      <p class="lp-sub">For a presales architect in BFSI — 6–8 weeks to demo-ready agent competency</p>
+      <div class="lp-steps">
+        <div class="lp-step s1">
+          <div class="lp-num">Step 1 · Start here</div>
+          <h3>First agent in your stack</h3>
+          <div class="lp-sdk">Claude Agent SDK</div>
+          <p>You're already in the Claude ecosystem via Claude Code. The SDK exposes the same agent loop — streaming, tool use, MCP, subagents — that powers Claude Code itself. Build a research or proposal-drafting agent that directly accelerates your presales workflow from week one.</p>
+          <span class="lp-timeline">Weeks 1–2</span>
+        </div>
+        <div class="lp-step s2">
+          <div class="lp-num">Step 2 · Multi-agent intuition</div>
+          <h3>Build a role-based crew</h3>
+          <div class="lp-sdk">CrewAI</div>
+          <p>Role-based crews map naturally to presales storytelling: a research agent, an analyst agent, a deck-writer agent. Fast to prototype, easy to demo to clients. The "researcher → analyst → writer" pattern is a strong presales demo narrative.</p>
+          <span class="lp-timeline">Weeks 3–4</span>
+        </div>
+        <div class="lp-step s3">
+          <div class="lp-num">Step 3 · Production &amp; regulated</div>
+          <h3>Stateful orchestration</h3>
+          <div class="lp-sdk">LangGraph</div>
+          <p>The production standard your BFSI clients will ask about. Audit trails, state graphs, rollback, and human-in-the-loop approval flows are exactly what regulators want to see. Production at Klarna, LinkedIn, and Uber gives you credibility in sales conversations.</p>
+          <span class="lp-timeline">Month 2+</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sources">
+      <div class="sources-lbl">Sources</div>
+      <a href="https://www.requesty.ai/blog/best-ai-agent-sdks-compared-2026-langchain-crewai-openai-anthropic-google" target="_blank">Best AI Agent SDKs Compared 2026 — requesty.ai</a> ·
+      <a href="https://www.morphllm.com/ai-agent-framework" target="_blank">8 SDKs + Claude Agent SDK — morphllm.com</a> ·
+      <a href="https://langfuse.com/blog/2025-03-19-ai-agent-comparison" target="_blank">Open-Source AI Agent Frameworks — Langfuse</a> ·
+      <a href="https://chatforest.com/builders-log/microsoft-agent-framework-1-0-semantic-kernel-autogen-unified-sdk-builder-guide/" target="_blank">Microsoft Agent Framework 1.0 — chatforest.com</a> ·
+      <a href="https://agentmelt.com/blog/ai-agent-frameworks-compared-2026/" target="_blank">AI Agent Frameworks Compared 2026 — agentmelt.com</a> ·
+      <a href="https://turion.ai/blog/openai-vs-claude-agent-sdk-comparison-2026" target="_blank">OpenAI vs Claude Agent SDK — turion.ai</a> ·
+      <a href="https://ecorpit.com/ai-agent-framework-production-langgraph-crewai-microsoft-pydantic-2026/" target="_blank">LangGraph vs CrewAI vs Pydantic AI 2026 — ecorpit.com</a> ·
+      <a href="https://www.langchain.com/resources/ai-agent-frameworks" target="_blank">Best AI Agent Frameworks — LangChain</a>
+    </div>
+
+  </div>
+
+  <script>
+  const sdks = [
+    {
+      id: 'claude', name: 'Claude Agent SDK', vendor: 'Anthropic',
+      version: 'Active', vstatus: 'vb-new', vLabel: 'Recommended',
+      langs: 'Python · TypeScript', curve: 2, docs: 5,
+      modelLock: true, multiAgent: true, hilp: true, mcp: true, bfsi: true,
+      tags: ['beginner','bfsi'], recommended: true, deprecated: false,
+      caps: [
+        'MCP-native: connects to any MCP tool server without custom code',
+        'Subagents, tool search, session management built-in',
+        'Exact loop that powers Claude Code (streaming + prompt caching)',
+        'Built-in tracing; Python and TypeScript SDKs'
+      ],
+      bestFor: 'Claude-native agents, coding automation, presales research workflows'
+    },
+    {
+      id: 'openai', name: 'OpenAI Agents SDK', vendor: 'OpenAI',
+      version: '&lt; 1.0', vstatus: 'vb-active', vLabel: 'Beta',
+      langs: 'Python', curve: 2, docs: 4,
+      modelLock: true, multiAgent: true, hilp: true, mcp: false, bfsi: false,
+      tags: ['beginner'], recommended: false, deprecated: false,
+      caps: [
+        'Lightweight: agents, tools, handoffs, guardrails, sessions',
+        'Built-in tracing with no setup required',
+        'Guardrails for input/output validation',
+        'Clean low-boilerplate API design'
+      ],
+      bestFor: 'GPT-centric builds, fast OpenAI-ecosystem prototyping'
+    },
+    {
+      id: 'gdk', name: 'Google ADK', vendor: 'Google',
+      version: 'v2.0 · May 2026', vstatus: 'vb-new', vLabel: 'v2.0',
+      langs: 'Python · TypeScript · Go · Java · Kotlin', curve: 3, docs: 4,
+      modelLock: false, multiAgent: true, hilp: true, mcp: false, bfsi: true,
+      tags: ['production','agnostic','bfsi'], recommended: false, deprecated: false,
+      caps: [
+        'Broadest language support of any agent SDK (5 languages)',
+        'Graph-based workflow runtime added in v2.0',
+        'Human-in-the-loop support, built-in debug UI',
+        'Apache 2.0 license, GCP-native'
+      ],
+      bestFor: 'GCP-native teams; enterprise multi-language environments'
+    },
+    {
+      id: 'langgraph', name: 'LangGraph', vendor: 'LangChain',
+      version: '1.0 · Oct 2025', vstatus: 'vb-active', vLabel: 'Stable 1.0',
+      langs: 'Python · JavaScript', curve: 4, docs: 4,
+      modelLock: false, multiAgent: true, hilp: true, mcp: 'partial', bfsi: true,
+      tags: ['production','agnostic','bfsi'], recommended: false, deprecated: false,
+      caps: [
+        'Stateful directed cyclic graph execution — the key differentiator',
+        'Audit trails, rollback, durable execution for regulated workloads',
+        'Human-in-the-loop interrupt + resume built into the graph',
+        'LangSmith observability; production at Klarna, LinkedIn, Uber, Replit'
+      ],
+      bestFor: 'BFSI production agents; complex stateful workflows needing audit trails'
+    },
+    {
+      id: 'msaf', name: 'Agent Framework', vendor: 'Microsoft',
+      version: '1.0 · Apr 2026', vstatus: 'vb-new', vLabel: '1.0',
+      langs: 'Python · .NET / C#', curve: 3, docs: 4,
+      modelLock: false, multiAgent: true, hilp: true, mcp: false, bfsi: true,
+      tags: ['production','agnostic','bfsi'], recommended: false, deprecated: false,
+      caps: [
+        'Merges AutoGen + Semantic Kernel into one unified SDK',
+        'Enterprise-grade, production-ready, Azure-native integration',
+        'Durable state, multi-agent orchestration, .NET-first',
+        'Official docs at learn.microsoft.com/en-us/agent-framework'
+      ],
+      bestFor: 'Azure / .NET enterprise teams replacing AutoGen or Semantic Kernel'
+    },
+    {
+      id: 'crewai', name: 'CrewAI', vendor: 'CrewAI Inc.',
+      version: 'Active', vstatus: 'vb-active', vLabel: 'Active',
+      langs: 'Python', curve: 1, docs: 4,
+      modelLock: false, multiAgent: true, hilp: false, mcp: false, bfsi: false,
+      tags: ['beginner','agnostic'], recommended: false, deprecated: false,
+      caps: [
+        'Role-based crews: assign agents real job titles and goals',
+        'Easiest multi-agent model to explain and demo to clients',
+        'Large community, abundant YouTube tutorials and examples',
+        'Fastest path from whiteboard idea to working prototype'
+      ],
+      bestFor: 'Presales demos; rapid multi-agent prototyping; learning agent roles'
+    },
+    {
+      id: 'pydantic', name: 'Pydantic AI', vendor: 'Pydantic / Samuel Colvin',
+      version: 'v2 · Jun 2026', vstatus: 'vb-new', vLabel: 'v2 Stable',
+      langs: 'Python', curve: 2, docs: 5,
+      modelLock: false, multiAgent: false, hilp: false, mcp: false, bfsi: false,
+      tags: ['beginner','agnostic'], recommended: false, deprecated: false,
+      caps: [
+        'Type-safe agents built on Pydantic v2 — best structured output handling',
+        'Minimal, explicit code: easy to read, test and reason about',
+        'Low learning curve for any Python developer using Pydantic',
+        'Model-agnostic; excellent developer-experience documentation'
+      ],
+      bestFor: 'Python devs who value type safety; structured data extraction pipelines'
+    },
+    {
+      id: 'autogen', name: 'AutoGen', vendor: 'Microsoft',
+      version: 'Maintenance only', vstatus: 'vb-depr', vLabel: 'Deprecated',
+      langs: 'Python', curve: 3, docs: 2,
+      modelLock: false, multiAgent: true, hilp: false, mcp: false, bfsi: false,
+      tags: [], recommended: false, deprecated: true,
+      caps: [
+        'Entered maintenance mode October 2025 — no new features',
+        'Security patches only; community-managed going forward',
+        'Superseded by Microsoft Agent Framework 1.0 (Apr 2026)',
+        'Migrate existing projects to Agent Framework 1.0'
+      ],
+      bestFor: 'No new projects — migrate to Microsoft Agent Framework 1.0'
+    }
+  ];
+
+  const tagLabels = { beginner: 'Beginner-Friendly', production: 'Production-Grade', agnostic: 'Model-Agnostic', bfsi: 'BFSI / Regulated' };
+
+  function dots(n) {
+    let h = '<div class="dots-row">';
+    for (let i = 0; i < 5; i++) h += `<div class="dot${i < n ? ' on' : ''}"></div>`;
+    return h + '</div>';
+  }
+  function stars(n) { return '★'.repeat(n) + '☆'.repeat(5 - n); }
+
+  function card(s) {
+    const tags = s.tags.map(t => `<span class="sdk-tag">${tagLabels[t]}</span>`).join('');
+    const caps = s.caps.map(c => `<div class="cap">${c}</div>`).join('');
+    const lock = s.modelLock
+      ? '<span class="lock-warn">Vendor lock-in</span>'
+      : '<span class="lock-good">Model-agnostic</span>';
+    return `
+      <div class="card sdk-card${s.deprecated ? ' deprecated' : ''}${s.recommended ? ' recommended' : ''}"
+           data-tags="${s.tags.join(',')}" data-id="${s.id}">
+        ${s.recommended ? '<div class="rec-pill">Start here</div>' : ''}
+        <div class="sdk-head">
+          <div>
+            <div class="sdk-name">${s.name}</div>
+            <div class="sdk-vendor">${s.vendor}</div>
+          </div>
+          <span class="ver-badge ${s.vstatus}">${s.vLabel}</span>
+        </div>
+        ${s.tags.length ? `<div class="sdk-tags">${tags}</div>` : ''}
+        <div class="sdk-meta">
+          <div class="meta-pair">
+            <span class="meta-lbl">Languages</span>
+            <span class="meta-val" style="font-size:0.72rem">${s.langs}</span>
+          </div>
+          <div class="meta-pair">
+            <span class="meta-lbl">Docs</span>
+            <span class="stars">${stars(s.docs)}</span>
+          </div>
+          <div class="meta-pair">
+            <span class="meta-lbl">Learning curve</span>
+            ${dots(s.curve)}
+          </div>
+          <div class="meta-pair">
+            <span class="meta-lbl">Model lock</span>
+            <span class="meta-val">${lock}</span>
+          </div>
+        </div>
+        <div class="sdk-caps">${caps}</div>
+        <div class="sdk-bestfor"><strong>Best for:</strong> ${s.bestFor}</div>
+      </div>`;
+  }
+
+  function row(s) {
+    const yes = '<td class="yes">✓</td>';
+    const no  = '<td class="no">—</td>';
+    const mcp = s.mcp === 'partial' ? '<td class="partial">Via LangChain</td>' : (s.mcp ? yes : no);
+    return `
+      <tr data-tags="${s.tags.join(',')}" data-id="${s.id}"${s.deprecated ? ' style="opacity:.45"' : ''}>
+        <td class="nc">${s.name}</td>
+        <td style="font-size:0.82rem;color:var(--text-muted)">${s.vendor}</td>
+        <td style="font-size:0.75rem">${s.langs}</td>
+        <td style="font-size:0.75rem">${s.version}</td>
+        <td class="stars">${stars(s.docs)}</td>
+        <td class="${s.modelLock ? 'lock' : 'agnostic'}">${s.modelLock ? 'Vendor' : 'Agnostic'}</td>
+        ${s.multiAgent ? yes : no}
+        ${s.hilp ? yes : no}
+        ${mcp}
+        ${s.bfsi ? yes : no}
+      </tr>`;
+  }
+
+  const sorted = [...sdks].sort((a, b) => (b.recommended ? 1 : 0) - (a.recommended ? 1 : 0));
+  document.getElementById('sdkGrid').innerHTML = sorted.map(card).join('');
+  document.getElementById('tableBody').innerHTML = sorted.map(row).join('');
+
+  document.getElementById('filters').addEventListener('click', e => {
+    const btn = e.target.closest('.filt-btn');
+    if (!btn) return;
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.filt-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#sdkGrid .sdk-card').forEach(el => {
+      const t = el.dataset.tags.split(',');
+      el.style.display = (f === 'all' || t.includes(f)) ? '' : 'none';
+    });
+    document.querySelectorAll('#tableBody tr').forEach(el => {
+      const t = el.dataset.tags.split(',');
+      el.style.display = (f === 'all' || t.includes(f)) ? '' : 'none';
+    });
+  });
+  </script>
+</body>
+</html>
