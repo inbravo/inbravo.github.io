@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Semantic Portability — why semantic lock-in is the next frontier of data platform migration, Apache Ossie, and the Impetus angle.">
+  <meta name="author" content="Amit Dixit">
+  <link rel="icon" type="image/png" href="/images/inbravo.png">
+  <link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+  <script src="../js/jquery-1.11.3.min.js"></script>
+  <script src="../js/csi.min.js"></script>
+  <script src="../js/inbravo.js"></script>
+  <title>Semantic Portability — Data Platform Lock-in 2026</title>
+  <style>
+    /* ── page layout ── */
+    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* ── hero ── */
+    .sp-hero { text-align: center; padding: 3.5rem 1rem 2.5rem; }
+    .sp-hero .eyebrow {
+      display: inline-block; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent-cyan); background: rgba(34,211,238,.1);
+      border: 1px solid rgba(34,211,238,.25); border-radius: 20px;
+      padding: 0.3rem 1rem; margin-bottom: 1.2rem;
+    }
+    .sp-hero h1 {
+      font-family: 'JetBrains Mono', monospace; font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700; line-height: 1.15; margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-purple) 60%, #f59e0b 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .sp-hero .thesis {
+      font-size: 1.05rem; color: var(--text-secondary); max-width: 720px;
+      margin: 0 auto 1.8rem; line-height: 1.7;
+    }
+    .hero-meta { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+    .hero-meta span {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      color: var(--text-muted); letter-spacing: 0.06em;
+    }
+    .hero-meta .dot { color: var(--accent-cyan); }
+
+    /* ── section headers ── */
+    .sp-section { margin: 3.5rem 0 1.5rem; }
+    .sp-section h2 {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-cyan);
+      margin-bottom: 0.5rem;
+    }
+    .sp-section h3 {
+      font-size: 1.45rem; font-weight: 700; color: var(--text-primary);
+      margin-bottom: 0.5rem; line-height: 1.3;
+    }
+    .sp-section p { color: var(--text-secondary); line-height: 1.7; max-width: 820px; }
+
+    /* ── two-layer lock-in ── */
+    .lock-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem; }
+    @media (max-width: 700px) { .lock-grid { grid-template-columns: 1fr; } }
+    .lock-card {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: var(--radius); padding: 1.5rem; position: relative; overflow: hidden;
+    }
+    .lock-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .lock-card.solved::before { background: var(--accent-green); }
+    .lock-card.active::before { background: var(--accent-cyan); }
+    .lock-card .lc-badge {
+      display: inline-block; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      border-radius: 12px; padding: 0.2rem 0.7rem; margin-bottom: 0.9rem;
+    }
+    .lock-card.solved .lc-badge { background: rgba(16,185,129,.12); color: var(--accent-green); }
+    .lock-card.active .lc-badge { background: rgba(34,211,238,.12); color: var(--accent-cyan); }
+    .lock-card h4 { font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.6rem; }
+    .lock-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: 0.8rem; }
+    .lock-card ul { padding-left: 1.1rem; }
+    .lock-card ul li { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7; }
+    .lock-card ul li span { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ── ossie timeline ── */
+    .ossie-timeline { margin-top: 1.5rem; position: relative; padding-left: 2rem; }
+    .ossie-timeline::before {
+      content: ''; position: absolute; left: 0.6rem; top: 0; bottom: 0;
+      width: 2px; background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-purple));
+    }
+    .ot-item { position: relative; margin-bottom: 1.8rem; }
+    .ot-dot {
+      position: absolute; left: -1.7rem; top: 0.2rem;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent-cyan); border: 2px solid var(--bg-primary);
+      box-shadow: 0 0 8px rgba(34,211,238,.5);
+    }
+    .ot-dot.purple { background: var(--accent-purple); box-shadow: 0 0 8px rgba(168,85,247,.5); }
+    .ot-dot.green { background: var(--accent-green); box-shadow: 0 0 8px rgba(16,185,129,.5); }
+    .ot-date {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+      color: var(--accent-cyan); letter-spacing: 0.08em; margin-bottom: 0.2rem;
+    }
+    .ot-item h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem; }
+    .ot-item p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin: 0; }
+
+    /* ── ossie spec grid ── */
+    .spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+    @media (max-width: 760px) { .spec-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .spec-grid { grid-template-columns: 1fr; } }
+    .spec-item {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: var(--radius); padding: 1.1rem 1.2rem;
+    }
+    .spec-icon { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .spec-item h5 { font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem; }
+    .spec-item p { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.55; margin: 0; }
+
+    /* ── converter status ── */
+    .converter-row { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.2rem; }
+    .cv-chip {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      border-radius: 20px; padding: 0.3rem 0.8rem; border: 1px solid;
+    }
+    .cv-chip.merged { color: var(--accent-green); border-color: rgba(16,185,129,.3); background: rgba(16,185,129,.08); }
+    .cv-chip.wip { color: #f59e0b; border-color: rgba(245,158,11,.3); background: rgba(245,158,11,.08); }
+    .cv-chip.roadmap { color: var(--text-muted); border-color: var(--border-color); background: transparent; }
+    .cv-chip .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .merged .dot { background: var(--accent-green); }
+    .wip .dot { background: #f59e0b; }
+    .roadmap .dot { background: var(--text-muted); }
+
+    /* ── platform comparison table wrapper ── */
+    .tg-wrap { overflow-x: auto; margin-top: 1.5rem; border-radius: var(--radius); }
+    .tg { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .tg th {
+      background: var(--bg-secondary); color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color); text-align: left;
+    }
+    .tg td {
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary); vertical-align: top; line-height: 1.55;
+    }
+    .tg tr:last-child td { border-bottom: none; }
+    .tg tr:hover td { background: rgba(34,211,238,.03); }
+    .tg .platform-name { font-weight: 700; color: var(--text-primary); white-space: nowrap; }
+    .tg code {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      background: rgba(34,211,238,.08); color: var(--accent-cyan);
+      padding: 0.1rem 0.4rem; border-radius: 4px;
+    }
+    .badge-pill {
+      display: inline-block; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.06em; padding: 0.15rem 0.55rem;
+      border-radius: 12px; font-weight: 600;
+    }
+    .pill-red { background: rgba(239,68,68,.12); color: #ef4444; }
+    .pill-yellow { background: rgba(245,158,11,.12); color: #f59e0b; }
+    .pill-green { background: rgba(16,185,129,.12); color: var(--accent-green); }
+    .pill-blue { background: rgba(34,211,238,.12); color: var(--accent-cyan); }
+
+    /* ── scenario cards ── */
+    .scenario-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+    .scenario-card {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: var(--radius); padding: 1.6rem; position: relative; overflow: hidden;
+    }
+    .scenario-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+    }
+    .sc-a::before { background: linear-gradient(to bottom, #f59e0b, #ef4444); }
+    .sc-b::before { background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-purple)); }
+    .sc-c::before { background: linear-gradient(to bottom, var(--accent-purple), var(--accent-green)); }
+    .sc-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;
+    }
+    .scenario-card h4 { font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.8rem; }
+    .sc-flow {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .sc-node {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      background: var(--bg-secondary); border: 1px solid var(--border-color);
+      border-radius: 6px; padding: 0.25rem 0.65rem; color: var(--text-secondary);
+    }
+    .sc-arrow { color: var(--text-muted); font-size: 0.85rem; }
+    .sc-body { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    @media (max-width: 640px) { .sc-body { grid-template-columns: 1fr; } }
+    .sc-col h6 {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .sc-col ul { padding-left: 1rem; margin: 0; }
+    .sc-col ul li { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.65; }
+    .sc-col ul li strong { color: var(--text-primary); }
+
+    /* ── semantic where-it-lives ── */
+    .legacy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+    @media (max-width: 700px) { .legacy-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 440px) { .legacy-grid { grid-template-columns: 1fr; } }
+    .lg-card {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: var(--radius); padding: 1.1rem;
+    }
+    .lg-card .platform { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.3rem; }
+    .lg-card .location { font-size: 0.78rem; color: var(--accent-cyan); margin-bottom: 0.5rem; }
+    .lg-card .risk { font-size: 0.78rem; color: var(--text-muted); line-height: 1.55; }
+
+    /* ── impetus positioning ── */
+    .impetus-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem; }
+    @media (max-width: 640px) { .impetus-grid { grid-template-columns: 1fr; } }
+    .imp-card {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: var(--radius); padding: 1.4rem; position: relative; overflow: hidden;
+    }
+    .imp-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+    }
+    .imp-card h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; }
+    .imp-card p { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.65; margin: 0; }
+    .imp-card .tag {
+      display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      background: rgba(168,85,247,.1); color: var(--accent-purple); border: 1px solid rgba(168,85,247,.2);
+      border-radius: 12px; padding: 0.2rem 0.6rem; margin-bottom: 0.6rem;
+    }
+
+    /* ── key thesis callout ── */
+    .thesis-box {
+      background: rgba(34,211,238,.05); border: 1px solid rgba(34,211,238,.2);
+      border-left: 4px solid var(--accent-cyan); border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1.2rem 1.4rem; margin: 2rem 0; max-width: 820px;
+    }
+    .thesis-box p { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; margin: 0; }
+    .thesis-box strong { color: var(--accent-cyan); }
+
+    /* ── sources ── */
+    .sources { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); }
+    .sources h2 { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem; }
+    .src-list { display: flex; flex-direction: column; gap: 0.4rem; }
+    .src-list a { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .src-list a:hover { color: var(--accent-cyan); }
+    .src-label { font-family: 'JetBrains Mono', monospace; color: var(--text-muted); margin-right: 0.4rem; font-size: 0.75rem; }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div data-include="../html/header.html"></div>
+
+  <div class="page-wrap">
+
+    <!-- ── HERO ── -->
+    <div class="sp-hero">
+      <div class="eyebrow">R&amp;D Research · October 2026</div>
+      <h1>Semantic Portability</h1>
+      <p class="thesis">
+        As every major data platform rushes to build its own semantic layer, customers are trading
+        one form of lock-in for another. The open data era solved storage. The next battle is about
+        who owns the business meaning.
+      </p>
+      <div class="hero-meta">
+        <span><span class="dot">■</span> Apache Ossie · OSI Standard</span>
+        <span><span class="dot">■</span> Databricks · Snowflake · Fabric</span>
+        <span><span class="dot">■</span> Legacy Migration · Platform Consolidation</span>
+      </div>
+    </div>
+
+    <!-- ── TWO LAYERS OF LOCK-IN ── -->
+    <div class="sp-section">
+      <h2>The Problem</h2>
+      <h3>Two Layers of Lock-in — Only One Is Being Solved</h3>
+      <p>
+        Apache Iceberg and open catalogs cracked the storage layer wide open. Bidirectional Iceberg access
+        between Snowflake and Microsoft Fabric reached GA in January 2026. But below the data sits an
+        entirely different layer — business meaning — and that one is fragmenting.
+      </p>
+    </div>
+
+    <div class="lock-grid">
+      <div class="lock-card solved">
+        <div class="lc-badge">Layer 1 — Largely Solved</div>
+        <h4>Storage &amp; Table Format Lock-in</h4>
+        <p>
+          The physical data format: files, partitions, table metadata, and the query catalog.
+          Apache Iceberg provides an open format; REST catalog APIs make it engine-agnostic.
+        </p>
+        <ul>
+          <li>Apache Iceberg → universal open table format</li>
+          <li>Apache Polaris → open catalog (Snowflake-donated)</li>
+          <li>Snowflake ↔ Fabric bidirectional Iceberg: GA Jan 2026</li>
+          <li>Supported by: Spark, Flink, Trino, Dremio, DuckDB</li>
+          <li><span>Remaining risk: engine-specific pipeline features</span></li>
+        </ul>
+      </div>
+      <div class="lock-card active">
+        <div class="lc-badge">Layer 2 — Problem Now</div>
+        <h4>Semantic Layer Lock-in</h4>
+        <p>
+          The business meaning layer: metric definitions, dimensions, business rules, data contracts,
+          and governance policies. Each platform writes this in a different proprietary YAML format.
+        </p>
+        <ul>
+          <li>Databricks: Unity Catalog metric views (DBR 16.4+, UC-only)</li>
+          <li>Snowflake: Semantic views + Cortex Analyst YAML</li>
+          <li>Fabric: Power BI semantic models (DAX + tabular)</li>
+          <li>dbt: MetricFlow YAML (open-sourced 2026)</li>
+          <li><span>Same business logic, four incompatible formats</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="thesis-box">
+      <p>
+        A customer who defines <strong>"Net Revenue"</strong> inside Databricks Unity Catalog cannot
+        take that definition to Snowflake without rebuilding it from scratch. A customer who leaves
+        Informatica PowerCenter leaves behind not just ETL code but years of embedded business meaning —
+        transformation rules, glossary terms, data lineage — that no migration tool currently carries over.
+      </p>
+    </div>
+
+    <!-- ── APACHE OSSIE ── -->
+    <div class="sp-section">
+      <h2>The Emerging Standard</h2>
+      <h3>Apache Ossie — "USB-C for Business Semantics"</h3>
+      <p>
+        The Open Semantic Interchange (OSI) started as a Snowflake-led initiative to define a
+        vendor-neutral YAML format for business metrics. It is an <em>interchange format</em>, not a
+        new semantic layer product. Define once, let any engine read it.
+      </p>
+    </div>
+
+    <div class="ossie-timeline">
+      <div class="ot-item">
+        <div class="ot-dot"></div>
+        <div class="ot-date">Sept 2025</div>
+        <h4>OSI Launches</h4>
+        <p>Snowflake leads formation. Launch participants: dbt Labs, Salesforce, BlackRock, RelationalAI. Spec work begins under Apache 2.0.</p>
+      </div>
+      <div class="ot-item">
+        <div class="ot-dot"></div>
+        <div class="ot-date">Jan 27, 2026</div>
+        <h4>OSI v1.0 Specification Published</h4>
+        <p>First complete spec covering datasets, metrics, dimensions, relationships, and contexts. Published to GitHub under Apache 2.0. Four reference converters committed: dbt MetricFlow, GoodData, Salesforce, Apache Polaris.</p>
+      </div>
+      <div class="ot-item">
+        <div class="ot-dot purple"></div>
+        <div class="ot-date">July 2026</div>
+        <h4>OSI Enters Apache Incubator → Renamed Apache Ossie</h4>
+        <p>Project moves to neutral governance under the Apache Software Foundation. Now backed by 60+ organizations. De-facto standard status targeted for 2027.</p>
+      </div>
+      <div class="ot-item">
+        <div class="ot-dot green"></div>
+        <div class="ot-date">Aug–Oct 2026</div>
+        <h4>First Native Engine: Dosi</h4>
+        <p>Dosi announced as the first product to execute Apache Ossie YAML to SQL across 15+ warehouse dialects. Cube and Tableau integrations still on roadmap (Tableau: late 2026).</p>
+      </div>
+    </div>
+
+    <div class="sp-section">
+      <h2>What Ossie Covers</h2>
+      <h3>The Spec — Six Semantic Primitives</h3>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-item">
+        <div class="spec-icon">📦</div>
+        <h5>Datasets</h5>
+        <p>References to underlying tables or views. Platform-agnostic pointer to physical data.</p>
+      </div>
+      <div class="spec-item">
+        <div class="spec-icon">📐</div>
+        <h5>Metrics</h5>
+        <p>Computed business measures (revenue, churn, MAU) with SQL expression logic.</p>
+      </div>
+      <div class="spec-item">
+        <div class="spec-icon">🔵</div>
+        <h5>Dimensions</h5>
+        <p>Attributes for slicing and filtering (region, product, time grain).</p>
+      </div>
+      <div class="spec-item">
+        <div class="spec-icon">🔗</div>
+        <h5>Relationships</h5>
+        <p>Join paths between entities — how datasets relate to each other semantically.</p>
+      </div>
+      <div class="spec-item">
+        <div class="spec-icon">🗂️</div>
+        <h5>Contexts</h5>
+        <p>Named query scopes that bundle a metric set for a specific domain or persona.</p>
+      </div>
+      <div class="spec-item">
+        <div class="spec-icon">🤖</div>
+        <h5>AI Readiness</h5>
+        <p>Machine-readable format that AI agents can query to understand business terminology.</p>
+      </div>
+    </div>
+
+    <div class="sp-section">
+      <h2>Adoption Status</h2>
+      <h3>Converter Landscape — October 2026</h3>
+    </div>
+
+    <div class="converter-row">
+      <span class="cv-chip merged"><span class="dot"></span>dbt MetricFlow</span>
+      <span class="cv-chip merged"><span class="dot"></span>GoodData</span>
+      <span class="cv-chip merged"><span class="dot"></span>Salesforce</span>
+      <span class="cv-chip merged"><span class="dot"></span>Apache Polaris</span>
+      <span class="cv-chip wip"><span class="dot"></span>Dosi (native engine)</span>
+      <span class="cv-chip wip"><span class="dot"></span>Dremio</span>
+      <span class="cv-chip roadmap"><span class="dot"></span>Cube (roadmap)</span>
+      <span class="cv-chip roadmap"><span class="dot"></span>Tableau (late 2026)</span>
+      <span class="cv-chip roadmap"><span class="dot"></span>Databricks Unity Catalog</span>
+      <span class="cv-chip roadmap"><span class="dot"></span>Snowflake Semantic Views</span>
+    </div>
+
+    <!-- ── PLATFORM COMPARISON ── -->
+    <div class="sp-section">
+      <h2>Platform Formats</h2>
+      <h3>The Fragmentation Map — Same Purpose, Four Formats</h3>
+      <p>Every major platform defines "a metric" differently. This is where semantic portability breaks down today.</p>
+    </div>
+
+    <div class="tg-wrap">
+      <table class="tg">
+        <thead>
+          <tr>
+            <th>Platform</th>
+            <th>Semantic Object</th>
+            <th>Format</th>
+            <th>Query Method</th>
+            <th>Open Source?</th>
+            <th>Ossie Support</th>
+            <th>Portability Risk</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="platform-name">Databricks</span></td>
+            <td>Unity Catalog Metric Views</td>
+            <td>YAML — <code>version</code>, <code>source</code>, <code>dimensions</code>, <code>measures</code></td>
+            <td><code>MEASURE()</code> function in SQL</td>
+            <td><span class="badge-pill pill-green">Yes (2026)</span></td>
+            <td><span class="badge-pill pill-yellow">Roadmap</span></td>
+            <td><span class="badge-pill pill-yellow">Medium</span></td>
+          </tr>
+          <tr>
+            <td><span class="platform-name">Snowflake</span></td>
+            <td>Semantic Views + Cortex Analyst YAML</td>
+            <td>YAML — different schema from Databricks for same constructs</td>
+            <td>Cortex Analyst NL queries + SQL views</td>
+            <td><span class="badge-pill pill-red">No</span></td>
+            <td><span class="badge-pill pill-yellow">Roadmap</span></td>
+            <td><span class="badge-pill pill-red">High</span></td>
+          </tr>
+          <tr>
+            <td><span class="platform-name">Microsoft Fabric</span></td>
+            <td>Power BI Semantic Models</td>
+            <td>DAX + tabular model (TMDL YAML since 2025)</td>
+            <td>MDX / DAX / XMLA</td>
+            <td><span class="badge-pill pill-yellow">Partial</span></td>
+            <td><span class="badge-pill pill-red">Not yet</span></td>
+            <td><span class="badge-pill pill-red">Very High</span></td>
+          </tr>
+          <tr>
+            <td><span class="platform-name">dbt</span></td>
+            <td>MetricFlow Semantic Layer</td>
+            <td>YAML — <code>semantic_models</code>, <code>metrics</code> blocks</td>
+            <td>MetricFlow CLI / dbt Semantic Layer API</td>
+            <td><span class="badge-pill pill-green">Yes (MetricFlow)</span></td>
+            <td><span class="badge-pill pill-green">Converter merged</span></td>
+            <td><span class="badge-pill pill-green">Low</span></td>
+          </tr>
+          <tr>
+            <td><span class="platform-name">Teradata</span> <em style="font-size:0.75rem;color:var(--text-muted)">(legacy)</em></td>
+            <td>Business Metadata / Viewpoint</td>
+            <td>Proprietary — no public spec</td>
+            <td>SQL + BTEQ scripts</td>
+            <td><span class="badge-pill pill-red">No</span></td>
+            <td><span class="badge-pill pill-red">None</span></td>
+            <td><span class="badge-pill pill-red">Very High</span></td>
+          </tr>
+          <tr>
+            <td><span class="platform-name">Informatica</span> <em style="font-size:0.75rem;color:var(--text-muted)">(legacy)</em></td>
+            <td>Business Glossary + Axon Catalog</td>
+            <td>Proprietary catalog XML / REST API</td>
+            <td>EDC / Axon UI</td>
+            <td><span class="badge-pill pill-red">No</span></td>
+            <td><span class="badge-pill pill-red">None</span></td>
+            <td><span class="badge-pill pill-red">Very High</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── THREE SCENARIOS ── -->
+    <div class="sp-section">
+      <h2>Migration Scenarios</h2>
+      <h3>Three Customer Archetypes — Each With a Different Semantic Problem</h3>
+    </div>
+
+    <div class="scenario-grid">
+      <!-- Scenario A -->
+      <div class="scenario-card sc-a">
+        <div class="sc-label">Scenario A · Legacy Migration</div>
+        <h4>From Legacy to Modern — The Hidden Semantic Debt</h4>
+        <div class="sc-flow">
+          <span class="sc-node">Teradata / Oracle</span>
+          <span class="sc-arrow">→</span>
+          <span class="sc-node">Informatica / DataStage</span>
+          <span class="sc-arrow">→</span>
+          <span class="sc-node">SAS</span>
+          <span class="sc-arrow">⟶</span>
+          <span class="sc-node" style="color:var(--accent-cyan)">Databricks / Snowflake</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-col">
+            <h6>What Tooling Handles</h6>
+            <ul>
+              <li><strong>Lakebridge</strong> (Databricks) — Teradata BTEQ, T-SQL, Oracle PL/SQL → Databricks SQL</li>
+              <li><strong>SnowConvert AI</strong> — Databricks/Oracle/Teradata → Snowflake</li>
+              <li><strong>MigryX</strong> — DataStage, Informatica, SAS conversion with lineage</li>
+              <li><strong>SAS2PY</strong> — SAS data steps, macros → PySpark / Databricks</li>
+              <li><strong>LeapLogic</strong> — automated ETL migration with LLM-assisted translation</li>
+            </ul>
+          </div>
+          <div class="sc-col">
+            <h6>What Nobody Handles — The Gap</h6>
+            <ul>
+              <li><strong>Business glossary terms</strong> embedded in Informatica Axon / EDC</li>
+              <li><strong>Metric definitions</strong> in SAS metadata server — what "adjusted revenue" actually means</li>
+              <li><strong>Teradata BTEQ scripts</strong> encode business rules that aren't in DDL</li>
+              <li><strong>DataStage transformation annotations</strong> — meaning embedded in job descriptions</li>
+              <li><strong>Governance redesign</strong> always a separate workstream, always stalls</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scenario B -->
+      <div class="scenario-card sc-b">
+        <div class="sc-label">Scenario B · Modern-to-Modern Migration</div>
+        <h4>Platform Switch — Carrying the Semantic Layer Across</h4>
+        <div class="sc-flow">
+          <span class="sc-node" style="color:var(--accent-cyan)">Databricks</span>
+          <span class="sc-arrow">⇄</span>
+          <span class="sc-node" style="color:var(--accent-purple)">Snowflake</span>
+          <span class="sc-arrow">⇄</span>
+          <span class="sc-node">Microsoft Fabric</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-col">
+            <h6>What Has Improved</h6>
+            <ul>
+              <li><strong>SQL migration</strong> — both platforms have tooling (Lakebridge, SnowConvert)</li>
+              <li><strong>Data access</strong> — Apache Iceberg bidirectional access means data stays put</li>
+              <li><strong>Timeline</strong> — full estate: 6–18 months; dual-platform overlap: 3–9 months</li>
+              <li><strong>BI re-pointing</strong> — Tableau, Power BI can be redirected to new endpoints</li>
+            </ul>
+          </div>
+          <div class="sc-col">
+            <h6>Semantic Layer — Still Manual</h6>
+            <ul>
+              <li>Databricks Unity Catalog metric views → no export to Snowflake format</li>
+              <li>Snowflake semantic views → no converter to Databricks MEASURE() format</li>
+              <li>Power BI DAX measures → no automated mapping to either platform</li>
+              <li><strong>Apache Ossie</strong> would be the solution — but converters for both platforms are still roadmap (Oct 2026)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scenario C -->
+      <div class="scenario-card sc-c">
+        <div class="sc-label">Scenario C · Platform Consolidation</div>
+        <h4>Running Two Platforms — Semantic Consistency Across Both</h4>
+        <div class="sc-flow">
+          <span class="sc-node">Databricks</span>
+          <span class="sc-arrow">+</span>
+          <span class="sc-node">Snowflake</span>
+          <span class="sc-arrow">→</span>
+          <span class="sc-node" style="color:var(--accent-green)">Single Semantic Layer</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-col">
+            <h6>Why Customers End Up Here</h6>
+            <ul>
+              <li>Business acquired a company on a different platform</li>
+              <li>Different business units chose independently</li>
+              <li>Analytics team uses Snowflake, engineering uses Databricks</li>
+              <li>Finance on Fabric, Operations on Databricks</li>
+            </ul>
+          </div>
+          <div class="sc-col">
+            <h6>The Ideal State — Not Yet Possible</h6>
+            <ul>
+              <li>Apache Ossie as the neutral interchange: define "ARR" once in OSI YAML</li>
+              <li>dbt MetricFlow executes it on both engines simultaneously</li>
+              <li>Both platforms read the same definition — no divergence</li>
+              <li><strong>Reality today:</strong> manually maintained in two formats, guaranteed to drift</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── WHERE SEMANTICS LIVES IN LEGACY ── -->
+    <div class="sp-section">
+      <h2>The Invisible Layer</h2>
+      <h3>Where Business Meaning Is Trapped in Legacy Platforms</h3>
+      <p>
+        When customers migrate from legacy platforms, migration tools move SQL and pipelines.
+        Nobody moves the meaning. Here's where semantics actually lives in each legacy system.
+      </p>
+    </div>
+
+    <div class="legacy-grid">
+      <div class="lg-card">
+        <div class="platform">Teradata</div>
+        <div class="location">Business Metadata (Viewpoint)</div>
+        <div class="risk">Column descriptions, data classifications, business owner assignments stored in Teradata's proprietary repository. No export tool. Often abandoned at migration.</div>
+      </div>
+      <div class="lg-card">
+        <div class="platform">Oracle</div>
+        <div class="location">OBIEE / Oracle BI Server RPD</div>
+        <div class="risk">Business model layer (RPD files) contains join logic, metric definitions, hierarchies. Migrating to Fabric/Databricks means rebuilding the entire semantic model from scratch.</div>
+      </div>
+      <div class="lg-card">
+        <div class="platform">Informatica</div>
+        <div class="location">Axon Business Glossary + EDC</div>
+        <div class="risk">Business terms, stewardship, certification status. EDC REST API exists but no direct export to Unity Catalog, Snowflake Semantic Views, or Ossie format.</div>
+      </div>
+      <div class="lg-card">
+        <div class="platform">IBM DataStage</div>
+        <div class="location">DataStage Designer Annotations</div>
+        <div class="risk">Business logic is embedded in transformation annotations, stage descriptions, job parameters. Lives in the ETL tool, not in a dedicated semantic layer. Lost when jobs are rewritten.</div>
+      </div>
+      <div class="lg-card">
+        <div class="platform">SAS</div>
+        <div class="location">SAS Metadata Server + Libraries</div>
+        <div class="risk">SAS libraries map logical names to physical data. Macro variables encode business rules. SAS Visual Analytics has its own semantic layer. All platform-specific, no standard export path.</div>
+      </div>
+      <div class="lg-card">
+        <div class="platform">MicroStrategy</div>
+        <div class="location">MicroStrategy Schema Objects</div>
+        <div class="risk">Facts, attributes, hierarchies, transformations defined in MicroStrategy's own schema layer. Extremely rich business logic. Zero portability to any modern data platform natively.</div>
+      </div>
+    </div>
+
+    <!-- ── IT SERVICES ANGLE ── -->
+    <div class="sp-section">
+      <h2>Services Partner Angle</h2>
+      <h3>How an IT Services Company Should Position on Semantic Portability</h3>
+      <p>
+        Semantic portability is a services-heavy problem. The tooling is either missing, immature,
+        or requires significant configuration. This is a window for any IT services firm with
+        migration, data platform, and governance practice depth.
+      </p>
+    </div>
+
+    <div class="impetus-grid">
+      <div class="imp-card">
+        <div class="tag">Migration Practice</div>
+        <h4>Semantic Migration as a Distinct Workstream</h4>
+        <p>
+          Today, migration projects move SQL and pipelines but abandon business meaning.
+          A services partner with automated code migration capability should extend it:
+          extract business semantics from legacy repositories (Informatica Business Glossary,
+          Teradata metadata, SAS libraries) and emit Apache Ossie YAML as a parallel migration
+          deliverable — not a post-migration cleanup item.
+        </p>
+      </div>
+      <div class="imp-card">
+        <div class="tag">Early Adopter Play</div>
+        <h4>Own the Apache Ossie Implementation Playbook</h4>
+        <p>
+          Apache Ossie targets de-facto standard status in 2027. The implementation playbook
+          doesn't exist yet — no reference architecture, no governance model, no migration
+          patterns. The services partner who builds this first becomes the go-to for
+          every enterprise migration that follows, and earns preferred partner status with
+          both Snowflake and Databricks.
+        </p>
+      </div>
+      <div class="imp-card">
+        <div class="tag">Platform Consolidation</div>
+        <h4>Neutral Semantic Governance Layer</h4>
+        <p>
+          For customers running Databricks + Snowflake in parallel, the services play is a
+          neutral semantic orchestration layer — federated metric definitions maintained in
+          dbt MetricFlow or an Ossie-compatible format, compiled to each platform's native
+          dialect. Prevents metric drift while the Ossie ecosystem matures into native
+          platform support.
+        </p>
+      </div>
+      <div class="imp-card">
+        <div class="tag">Regulated Industries</div>
+        <h4>Compliance-Driven Semantic Portability</h4>
+        <p>
+          BCBS 239, IFRS 9, FRTB, and Solvency II all require auditable, platform-agnostic
+          definitions of risk and financial metrics. A bank migrating from Oracle OBIEE to
+          a modern platform cannot lose the certified definitions of "RWA", "PD", or "EAD."
+          This reframes semantic portability as a compliance requirement — a far stronger
+          executive conversation than a data engineering efficiency argument.
+        </p>
+      </div>
+    </div>
+
+    <!-- ── MARKET SUMMARY ── -->
+    <div class="sp-section">
+      <h2>Market Outlook</h2>
+      <h3>Where This Goes in 2027</h3>
+    </div>
+
+    <div class="tg-wrap">
+      <table class="tg">
+        <thead>
+          <tr>
+            <th>Signal</th>
+            <th>Current State (Oct 2026)</th>
+            <th>2027 Trajectory</th>
+            <th>Risk to Customers</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Apache Ossie adoption</td>
+            <td>Spec stable, 4 converters merged, Apache Incubator phase</td>
+            <td>Databricks + Snowflake native import/export converters expected</td>
+            <td>Low — open standard, neutral governance</td>
+          </tr>
+          <tr>
+            <td>Platform semantic investment</td>
+            <td>Each platform doubling down on own format (UC metric views, Cortex Analyst)</td>
+            <td>Competitive pressure from Ossie will force openness or fragmentation deepens</td>
+            <td>High — currently incompatible and accelerating</td>
+          </tr>
+          <tr>
+            <td>Legacy semantic extraction</td>
+            <td>No automated tool extracts business meaning from Teradata/Informatica/SAS to Ossie</td>
+            <td>Opportunity window: 12–24 months before someone builds this at scale</td>
+            <td>Very High — semantics lost silently on every legacy migration today</td>
+          </tr>
+          <tr>
+            <td>AI agents + semantic layer</td>
+            <td>AI agents need machine-readable semantics to query correctly; all platforms building this</td>
+            <td>Ossie becomes the lingua franca for AI agents querying enterprise data</td>
+            <td>Lock-in risk multiplies if AI tooling tied to platform-specific semantic formats</td>
+          </tr>
+          <tr>
+            <td>Data contracts portability</td>
+            <td>dbt Data Contracts, Snowflake Horizon, Databricks UC — no interop</td>
+            <td>Open Data Contract Standard (ODCS) gaining traction separately from Ossie</td>
+            <td>Medium — emerging but not yet critical path</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── SOURCES ── -->
+    <div class="sources">
+      <h2>Sources &amp; References</h2>
+      <div class="src-list">
+        <a href="https://docs.snowflake.com/en/release-notes/2026/other/2026-01-30-iceberg-microsoft-fabric-bidirectional-data-access-ga" target="_blank"><span class="src-label">Snowflake →</span>Bidirectional Iceberg Access with Microsoft Fabric — GA Jan 2026</a>
+        <a href="https://www.microsoft.com/en-us/microsoft-fabric/blog/2025/09/16/microsoft-and-snowflake-delivering-on-the-promise-of-openness-and-interoperability/" target="_blank"><span class="src-label">Microsoft →</span>Microsoft and Snowflake: Delivering on the promise of openness and interoperability</a>
+        <a href="https://www.snowflake.com/en/blog/microsoft-partnership-enhancing-interoperability/" target="_blank"><span class="src-label">Snowflake →</span>Snowflake &amp; Microsoft: Boosting interoperability with Apache Iceberg</a>
+        <a href="https://www.getdbt.com/blog/the-osi-spec-updates" target="_blank"><span class="src-label">dbt Labs →</span>Open Semantic Interchange (OSI) spec updates</a>
+        <a href="https://www.snowflake.com/en/blog/open-semantic-interchanges-specs-finalized/" target="_blank"><span class="src-label">Snowflake →</span>Open Semantic Interchange Specification Finalized</a>
+        <a href="https://www.databricks.com/blog/redefining-semantics-data-layer-future-bi-and-ai" target="_blank"><span class="src-label">Databricks →</span>Announcing GA and Open Sourcing of Unity Catalog Business Semantics</a>
+        <a href="https://datus.ai/blog/open-semantic-interchange-osi/" target="_blank"><span class="src-label">Datus →</span>Open Semantic Interchange (OSI): What the New Standard Means for Data Engineering and AI Agents</a>
+        <a href="https://datus.ai/blog/semantic-layer-tools-list-osi/" target="_blank"><span class="src-label">Datus →</span>Semantic Layer Tools in 2026: Complete List + OSI (Apache Ossie) Status</a>
+        <a href="https://colrows.com/blogs/open-semantic-interchange/" target="_blank"><span class="src-label">Colrows →</span>Open Semantic Interchange (Apache Ossie) Explained</a>
+        <a href="https://spatialists.ch/posts/2026/09/25-an-update-on-open-semantic-interchange-osi/index.html" target="_blank"><span class="src-label">Spatialists →</span>An update on Open Semantic Interchange (OSI) — Sept 2026</a>
+        <a href="https://medium.com/@data-guy/the-rise-of-the-semantic-layer-snowflake-semantic-views-vs-databricks-metric-views-ff22f397b12a" target="_blank"><span class="src-label">Medium →</span>The Rise of the Semantic Layer: Snowflake Semantic Views vs. Databricks Metric Views</a>
+        <a href="https://www.databricks.com/blog/introducing-lakebridge-free-open-data-migration-databricks-sql" target="_blank"><span class="src-label">Databricks →</span>Introducing Lakebridge: Free, Open Data Migration to Databricks SQL</a>
+        <a href="https://www.leaplogic.io/blog/modernizing-legacy-etl-to-databricks-a-practical-architecture-driven-approach-powered-by-leaplogic" target="_blank"><span class="src-label">LeapLogic →</span>Modernizing Legacy ETL to Databricks — Architecture-Driven Approach</a>
+        <a href="https://atlan.com/know/ai-agent/semantic-layer/unity-catalog-semantic-layer/" target="_blank"><span class="src-label">Atlan →</span>Unity Catalog Semantic Layer: Metric Views vs. dbt, Cube [2026]</a>
+        <a href="https://siliconangle.com/2026/06/04/apache-iceberg-interoperability-snowflakesummit/" target="_blank"><span class="src-label">SiliconANGLE →</span>Apache Iceberg interoperability reaches tipping point — Snowflake Summit 2026</a>
+      </div>
+    </div>
+
+  </div><!-- /page-wrap -->
+</body>
+</html>
