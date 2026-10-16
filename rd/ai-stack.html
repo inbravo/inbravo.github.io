@@ -1,0 +1,970 @@
+<title>AI Engineering Stack</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+<style>
+/* ── Tokens ─────────────────────────────────────────── */
+:root {
+  --bg:           #F4F6FA;
+  --surface:      #FFFFFF;
+  --surface-alt:  #EDF0F7;
+  --border:       #D1D9E6;
+  --text:         #0F172A;
+  --text-muted:   #5A6A82;
+  --accent:       #1B4FCC;
+  --accent-bright:#2563EB;
+  --accent-bg:    #EBF1FF;
+  --accent-sub:   #7C3AED;
+  --warn:         #B45309;
+  --warn-bg:      #FFFBEB;
+  --success:      #15803D;
+  --success-bg:   #F0FDF4;
+  --red:          #DC2626;
+  --red-bg:       #FEF2F2;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:           #070E1A;
+    --surface:      #0D1A2E;
+    --surface-alt:  #102033;
+    --border:       #1C3252;
+    --text:         #D8E6F8;
+    --text-muted:   #7A9CC0;
+    --accent:       #3B82F6;
+    --accent-bright:#60A5FA;
+    --accent-bg:    #0C1E42;
+    --accent-sub:   #A78BFA;
+    --warn:         #F59E0B;
+    --warn-bg:      #1A1100;
+    --success:      #34D399;
+    --success-bg:   #012918;
+    --red:          #F87171;
+    --red-bg:       #1A0606;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:           #070E1A;
+  --surface:      #0D1A2E;
+  --surface-alt:  #102033;
+  --border:       #1C3252;
+  --text:         #D8E6F8;
+  --text-muted:   #7A9CC0;
+  --accent:       #3B82F6;
+  --accent-bright:#60A5FA;
+  --accent-bg:    #0C1E42;
+  --accent-sub:   #A78BFA;
+  --warn:         #F59E0B;
+  --warn-bg:      #1A1100;
+  --success:      #34D399;
+  --success-bg:   #012918;
+  --red:          #F87171;
+  --red-bg:       #1A0606;
+  color-scheme: dark;
+}
+
+/* ── Base ────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-bottom: 100px;
+}
+
+h1, h2, h3, h4 { text-wrap: balance; line-height: 1.25; font-weight: 700; }
+strong { font-weight: 600; }
+
+.mono {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.8em;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.1em 0.4em;
+}
+
+/* ── Nav ─────────────────────────────────────────────── */
+.top-nav {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 11px max(20px, env(safe-area-inset-left, 0px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 100;
+  margin-left: max(-16px, calc(-1 * env(safe-area-inset-left, 0px)));
+  margin-right: max(-16px, calc(-1 * env(safe-area-inset-right, 0px)));
+}
+.nav-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.theme-btn {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  font-family: inherit;
+}
+.theme-btn:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
+
+/* ── Page wrapper ────────────────────────────────────── */
+.page { max-width: 1080px; margin: 0 auto; padding-top: 44px; }
+
+/* ── Hero ────────────────────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: 40px 24px 36px;
+  margin-bottom: 16px;
+}
+.hero-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+.hero h1 {
+  font-size: clamp(30px, 5.5vw, 52px);
+  color: var(--accent-bright);
+  margin-bottom: 10px;
+}
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 520px;
+  margin: 0 auto 6px;
+}
+.hero-date {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  opacity: 0.5;
+  margin-top: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── Section ─────────────────────────────────────────── */
+.section { margin-bottom: 60px; }
+.sec-hdr {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border);
+}
+.sec-num {
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 3px 8px;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+.sec-hdr h2 { font-size: 1.3rem; }
+
+/* ── Callout ─────────────────────────────────────────── */
+.callout {
+  border-left: 4px solid var(--accent);
+  background: var(--accent-bg);
+  border-radius: 0 8px 8px 0;
+  padding: 15px 18px;
+  margin: 14px 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.callout.warn   { border-color: var(--warn);    background: var(--warn-bg); }
+.callout.danger { border-color: var(--red);     background: var(--red-bg); }
+.callout.good   { border-color: var(--success); background: var(--success-bg); }
+
+.clabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+.callout.warn   .clabel { color: var(--warn); }
+.callout.danger .clabel { color: var(--red); }
+.callout.good   .clabel { color: var(--success); }
+
+/* ── Spend bar ───────────────────────────────────────── */
+.spend-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin: 16px 0;
+}
+.spend-bar {
+  height: 30px;
+  border-radius: 6px;
+  display: flex;
+  overflow: hidden;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+.bar-first { background: var(--accent);    flex: 40; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 600; color: #fff; padding: 0 8px; white-space: nowrap; }
+.bar-loops { background: #C53030;          flex: 60; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 600; color: #fff; padding: 0 8px; white-space: nowrap; }
+.spend-note { font-size: 0.72rem; color: var(--text-muted); }
+
+/* ── Evidence grid ───────────────────────────────────── */
+.evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.ev-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.ev-num  { font-size: 1.6rem; font-weight: 800; color: var(--accent-bright); line-height: 1; margin-bottom: 3px; }
+.ev-text { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+.ev-src  { font-size: 0.68rem; color: var(--text-muted); opacity: 0.55; margin-top: 4px; }
+
+/* ── Era grid ────────────────────────────────────────── */
+.era-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
+  gap: 14px;
+}
+.era-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  position: relative;
+  overflow: hidden;
+}
+.era-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.era-card.pe::before { background: #64748B; }
+.era-card.ce::before { background: var(--accent-sub); }
+.era-card.ie::before { background: var(--accent); }
+.era-card.se::before { background: var(--success); }
+
+.era-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.era-card.pe .era-badge { color: #64748B; }
+.era-card.ce .era-badge { color: var(--accent-sub); }
+.era-card.ie .era-badge { color: var(--accent); }
+.era-card.se .era-badge { color: var(--success); }
+
+.era-name  { font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.era-years { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px; }
+.era-def   { font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin-bottom: 10px; line-height: 1.45; }
+
+.mini-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; margin-top: 10px; }
+.mini-label.broke { color: var(--red); }
+.mini-label.cost  { color: var(--warn); }
+.mini-label.cost-good { color: var(--success); }
+.mini-label.neutral { color: var(--text-muted); }
+
+.era-text  { font-size: 0.78rem; line-height: 1.5; color: var(--text-muted); }
+.era-text.broke    { color: var(--red); }
+.era-text.cost-bad { color: var(--warn); }
+.era-text.cost-good { color: var(--success); }
+
+/* ── Failure chain ───────────────────────────────────── */
+.chain { display: flex; flex-direction: column; gap: 6px; margin-top: 18px; }
+.chain-row { display: grid; grid-template-columns: 68px 1fr; gap: 12px; align-items: start; }
+.chain-from { font-size: 0.75rem; font-weight: 700; color: var(--accent); text-align: right; padding-top: 2px; line-height: 1.4; }
+.chain-text { font-size: 0.84rem; color: var(--text); line-height: 1.5; }
+
+/* ── Tech landscape table ────────────────────────────── */
+.table-scroll { overflow-x: auto; margin: 0; }
+.tech-table { width: 100%; min-width: 720px; border-collapse: collapse; font-size: 0.81rem; }
+.tech-table thead th {
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 0.77rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.tech-table thead th:first-child {
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  width: 130px;
+}
+.tech-table td {
+  padding: 12px 14px;
+  vertical-align: top;
+  border: 1px solid var(--border);
+  line-height: 1.55;
+  min-width: 0;
+}
+.tech-table tr:nth-child(odd) td  { background: var(--surface); }
+.tech-table tr:nth-child(even) td { background: var(--surface-alt); }
+.tech-table .row-hdr {
+  background: var(--surface-alt) !important;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+.tlist { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 5px; }
+.tlist li { font-size: 0.79rem; color: var(--text); line-height: 1.45; }
+.tn { font-size: 0.71rem; color: var(--text-muted); }
+
+/* ── ERA 4 grid ──────────────────────────────────────── */
+.era4-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 20px; }
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+}
+.panel-title { font-size: 0.92rem; font-weight: 700; margin-bottom: 3px; }
+.panel-sub   { font-size: 0.76rem; color: var(--text-muted); margin-bottom: 12px; }
+.plist { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 7px; }
+.plist li { font-size: 0.8rem; color: var(--text); padding-left: 14px; position: relative; line-height: 1.45; }
+.plist li::before { content: '·'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
+.convergence-bar {
+  background: var(--success-bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--success);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  margin-top: 16px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* ── Dual panel ──────────────────────────────────────── */
+.dual { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 620px) { .dual { grid-template-columns: 1fr; } }
+
+.nope {
+  background: var(--red-bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--red);
+  border-radius: 0 6px 6px 0;
+  padding: 10px 12px;
+  margin-top: 12px;
+  font-size: 0.77rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* ── Levers table ────────────────────────────────────── */
+.levers-table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 0.81rem; }
+.levers-table thead th {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  padding: 9px 14px;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+.levers-table td {
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.55;
+  min-width: 0;
+}
+.levers-table tr:nth-child(odd) td  { background: var(--surface); }
+.levers-table tr:nth-child(even) td { background: var(--surface-alt); }
+.lever-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.big-num { font-size: 1rem; font-weight: 700; color: var(--accent-bright); }
+.caveat  { font-size: 0.74rem; color: var(--warn); margin-top: 5px; line-height: 1.4; }
+
+/* ── KPI argument ────────────────────────────────────── */
+.kpi-box {
+  background: var(--accent-bg);
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  padding: 30px;
+}
+.kpi-headline { font-size: 1.45rem; font-weight: 800; color: var(--accent-bright); margin-bottom: 22px; }
+.kpi-row { display: grid; grid-template-columns: 10px 1fr; gap: 12px; margin-bottom: 12px; align-items: start; }
+.kpi-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-top: 6px; flex-shrink: 0; }
+.kpi-text { font-size: 0.88rem; color: var(--text); line-height: 1.6; }
+.kpi-punchline {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  border-top: 1px solid var(--border);
+  padding-top: 22px;
+  margin-top: 22px;
+  text-align: center;
+  font-style: italic;
+}
+</style>
+
+<!-- ── NAV ──────────────────────────────────────────── -->
+<nav class="top-nav">
+  <span class="nav-label">AI Engineering Stack · Oct 2026</span>
+  <button class="theme-btn" id="theme-toggle">🌙 Dark</button>
+</nav>
+
+<!-- ── PAGE ─────────────────────────────────────────── -->
+<div class="page">
+
+  <!-- HERO -->
+  <header class="hero">
+    <p class="hero-eyebrow">Technical Reference · Oct 2026</p>
+    <h1>AI Engineering Stack</h1>
+    <p class="hero-sub">Four eras. What broke. Where the money goes.</p>
+    <p class="hero-date">Oct 2026</p>
+  </header>
+
+  <!-- §1 TOKEN PRICE FALLACY -->
+  <section class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">§1</span>
+      <h2>The Token Price Fallacy</h2>
+    </div>
+
+    <div class="callout warn">
+      <div class="clabel">The paradox</div>
+      Token prices fell <strong>280×</strong> in two years. Enterprise AI compute spend grew <strong>320%</strong>. Cheaper tokens produced more calls, not fewer.
+    </div>
+
+    <div class="spend-wrap">
+      <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:10px;">Where spend goes in an agentic task</p>
+      <div class="spend-bar">
+        <div class="bar-first">Call 1 — first inference · ~40%</div>
+        <div class="bar-loops">Calls 2–N — refinement loops · ~60% ◄ the real target</div>
+      </div>
+      <p class="spend-note">McKinsey July 2026 — one agentic task triggers 10–20 LLM calls. $0.10–0.50/request → $150K–750K/month at 10K users.</p>
+    </div>
+
+    <div class="evidence-grid">
+      <div class="ev-card">
+        <div class="ev-num">93%</div>
+        <div class="ev-text">of organisations exceeded their AI budget in 2026</div>
+        <div class="ev-src">McKinsey, May 2026</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-num">7.2×</div>
+        <div class="ev-text">median monthly LLM spend growth year-over-year</div>
+        <div class="ev-src">Digital Applied, Apr 2026</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-num">44%</div>
+        <div class="ev-text">of D&A leaders have financial guardrails in place today</div>
+        <div class="ev-src">Gartner, Mar 2026 (n=353)</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-num">40%</div>
+        <div class="ev-text">of agentic AI projects will be cancelled by 2027</div>
+        <div class="ev-src">Gartner Hype Cycle, 2026</div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:16px;">
+      <div class="clabel">Case in point</div>
+      <strong>Uber</strong> exhausted their 2026 AI coding budget in 4 months — capped at $1,500/user/month.<br>
+      <strong>Microsoft</strong> cancelled most internal Claude Code licenses, June 30, 2026.
+    </div>
+  </section>
+
+  <!-- §2 FOUR-ERA EVOLUTION -->
+  <section class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">§2</span>
+      <h2>The Four-Era Evolution</h2>
+    </div>
+
+    <div class="era-grid">
+      <div class="era-card pe">
+        <div class="era-badge">Era 1</div>
+        <div class="era-name">Prompt Engineering</div>
+        <div class="era-years">2022–23</div>
+        <div class="era-def">"What to say to the model"</div>
+        <p class="era-text" style="margin-bottom:6px;">Year one. Each user writes their own prompts. Works for demos and narrow tasks with stable scope.</p>
+        <div class="mini-label broke">What broke</div>
+        <p class="era-text broke">Quality per user. Business rules in prompts go stale. Model updates silently degrade every prompt. 20–30% accuracy ceiling.</p>
+        <div class="mini-label cost">Cost failure</div>
+        <p class="era-text cost-bad">Every retry invisible. No budget cap. No session limit. Total cost of ownership hidden in human review time, not compute spend.</p>
+      </div>
+
+      <div class="era-card ce">
+        <div class="era-badge">Era 2</div>
+        <div class="era-name">Context Engineering</div>
+        <div class="era-years">2024–25</div>
+        <div class="era-def">"What the model needs to know" — methodology, not a layer</div>
+        <p class="era-text" style="margin-bottom:6px;">Centralises semantic context. Removes per-user variability. AI-available ≠ AI-consumable.</p>
+        <div class="mini-label broke">What broke</div>
+        <p class="era-text broke">Model knows what to know, not what to do. No stop rules. No optimization goal. Klarna: perfect context, wrong goal — $60M to rehire.</p>
+        <div class="mini-label cost">Cost failure</div>
+        <p class="era-text cost-bad">40% NL accuracy without semantic layer → 60% more failure-triggered retries. Multi-model setups add routing complexity CE doesn't address.</p>
+      </div>
+
+      <div class="era-card ie">
+        <div class="era-badge">Era 3</div>
+        <div class="era-name">Intent Engineering</div>
+        <div class="era-years">2026</div>
+        <div class="era-def">"What the model must achieve — within what limits" — methodology, not a layer</div>
+        <p class="era-text" style="margin-bottom:6px;">Huryn 8-component model: Strategy · Objectives · Stop Rules · Autonomy Boundaries. Encodes organizational goals, not just data.</p>
+        <div class="mini-label broke">What broke</div>
+        <p class="era-text broke">Intent buried in code — not auditable or versioned. Model-coupled: swap Opus for Haiku = full re-engineering. Assumptions hidden in natural language.</p>
+        <div class="mini-label cost">Cost failure</div>
+        <p class="era-text cost-bad">No Stop Rules = agent refines past "good enough". 60% of agentic spend is in refinement loops with no exit condition.</p>
+      </div>
+
+      <div class="era-card se">
+        <div class="era-badge">Era 4</div>
+        <div class="era-name">Specification Engineering</div>
+        <div class="era-years">Emerging</div>
+        <div class="era-def">"What can be proved — at what cost — by whom — at what version"</div>
+        <p class="era-text" style="margin-bottom:6px;">Versioned, model-agnostic specs. Clauses carry unique IDs. Example prompts are unit tests. Spec IS the regulatory artifact.</p>
+        <div class="mini-label neutral">Still maturing</div>
+        <p class="era-text">No dominant toolchain. No spec completeness standard. Most tools in Beta or Preview. Practitioner adoption early.</p>
+        <div class="mini-label cost-good">Cost breakthrough</div>
+        <p class="era-text cost-good">Model-agnostic spec = swap Opus → Haiku freely under budget pressure. Only layer that reduces cost without reducing governance.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:28px;margin-bottom:10px;font-size:1rem;">The failure chain</h3>
+    <div class="chain">
+      <div class="chain-row">
+        <div class="chain-from">PE → CE</div>
+        <div class="chain-text">Each user supplied their own context → quality was unpredictable, every call was unique, no caching possible, hidden cost in human review time.</div>
+      </div>
+      <div class="chain-row">
+        <div class="chain-from">CE → IE</div>
+        <div class="chain-text">Context was governed, behavior was not → agents wandered past "good enough" with no exit condition, consuming 60% of budget in refinement loops.</div>
+      </div>
+      <div class="chain-row">
+        <div class="chain-from">IE → SE</div>
+        <div class="chain-text">Intent was encoded in code — couldn't be audited, ported, or proved. Model-coupled intent = can't swap to a cheaper model = cost locked in.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- §3 TECH LANDSCAPE -->
+  <section class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">§3</span>
+      <h2>Tech Landscape by Layer</h2>
+    </div>
+
+    <div class="table-scroll">
+      <table class="tech-table">
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Era 1 · PE · 2022–23</th>
+            <th>Era 2 · CE · 2024–25</th>
+            <th>Era 3 · IE · 2026</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- ORCHESTRATION -->
+          <tr>
+            <td class="row-hdr">Orchestration<br>Frameworks</td>
+            <td>
+              <ul class="tlist">
+                <li><strong>LangChain</strong> <span class="tn">— prompt chains</span></li>
+                <li><strong>DSPy</strong> <span class="tn">— Stanford, programmatic prompting</span></li>
+                <li><strong>Guidance</strong> <span class="tn">— Microsoft, structured generation</span></li>
+                <li><strong>PromptFlow</strong> <span class="tn">— Azure</span></li>
+              </ul>
+            </td>
+            <td>
+              <ul class="tlist">
+                <li><strong>LlamaIndex</strong> <span class="tn">— context management</span></li>
+                <li><strong>Haystack</strong> <span class="tn">— RAG pipelines</span></li>
+                <li><strong>Semantic Kernel</strong> <span class="tn">— Microsoft, context + tools</span></li>
+                <li><strong>Chroma / Pinecone / pgvector</strong> <span class="tn">— vector / RAG stores</span></li>
+                <li><strong>MCP protocol</strong> <span class="tn">— Anthropic → industry standard for context delivery</span></li>
+                <li><strong>Atlan / Alation</strong> <span class="tn">— data catalogs</span></li>
+              </ul>
+            </td>
+            <td>
+              <ul class="tlist">
+                <li><strong>LangGraph</strong> <span class="tn">— stateful agent loops</span></li>
+                <li><strong>CrewAI</strong> <span class="tn">— role-based multi-agent</span></li>
+                <li><strong>AutoGen / AG2</strong> <span class="tn">— self-brands as "open-source AgentOS"</span></li>
+                <li><strong>Mastra</strong> <span class="tn">— TypeScript-native</span></li>
+                <li><strong>OpenAI Agents SDK</strong> <span class="tn">— Responses API + loops + handoffs + guardrails</span></li>
+                <li><strong>Anthropic Agent SDK</strong> <span class="tn">— model + harness + tools + environment (4-component)</span></li>
+                <li><strong>Google A2A protocol</strong> <span class="tn">— cross-framework agent interoperability</span></li>
+              </ul>
+            </td>
+          </tr>
+          <!-- CLOUD PLATFORMS -->
+          <tr>
+            <td class="row-hdr">Cloud<br>Platforms</td>
+            <td>
+              <ul class="tlist">
+                <li>Azure OpenAI</li>
+                <li>OpenAI API</li>
+                <li>AWS Bedrock <span class="tn">(basic)</span></li>
+                <li>GCP Vertex AI Studio</li>
+              </ul>
+            </td>
+            <td>
+              <ul class="tlist">
+                <li><strong>Databricks Genie Ontology</strong> <span class="tn">— GA Apr '26</span></li>
+                <li><strong>Snowflake Cortex Analyst + Horizon Context</strong> <span class="tn">— GA Jun '26</span></li>
+                <li><strong>MS Fabric Semantic Models</strong></li>
+                <li><strong>Unity Catalog</strong> <span class="tn">— data lineage</span></li>
+                <li><strong>Apache Ossie</strong> <span class="tn">— YAML semantic portability, Jan '26</span></li>
+                <li><strong>dbt MetricFlow</strong> <span class="tn">— 83% NL accuracy benchmark</span></li>
+              </ul>
+            </td>
+            <td>
+              <ul class="tlist">
+                <li><strong>Databricks Mosaic AI</strong></li>
+                <li><strong>AWS Bedrock AgentCore</strong> <span class="tn">— multi-agent runtime</span></li>
+                <li><strong>Google ADK</strong> <span class="tn">— Python GA May '26 · Go Jun '26 · TypeScript GA Aug '26 · Java 1.0 Mar '26</span></li>
+                <li><strong>Copilot Studio</strong> <span class="tn">— multi-agent GA Mar '26</span></li>
+                <li><strong>MS Fabric ops agents</strong> <span class="tn">— Preview</span></li>
+              </ul>
+            </td>
+          </tr>
+          <!-- OBSERVABILITY -->
+          <tr>
+            <td class="row-hdr">Observability</td>
+            <td>
+              <ul class="tlist">
+                <li>Basic API logs</li>
+                <li>OpenAI usage dashboard</li>
+              </ul>
+            </td>
+            <td>
+              <ul class="tlist">
+                <li>dbt tests</li>
+                <li>Data quality checks</li>
+                <li>Atlan / Alation catalogs</li>
+              </ul>
+            </td>
+            <td>
+              <ul class="tlist">
+                <li><strong>Langfuse</strong></li>
+                <li><strong>AgentOps</strong></li>
+                <li><strong>Phoenix</strong> <span class="tn">— Arize</span></li>
+                <li><strong>Weights &amp; Biases</strong></li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ERA 4 SEPARATE -->
+    <h3 style="font-size:1rem;margin-top:28px;margin-bottom:4px;">Era 4 · SE · Governance / OS Layer</h3>
+    <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0;">SE lives here — the policy, spec, and audit layer above the harness.</p>
+    <div class="era4-grid">
+      <div class="panel">
+        <div class="panel-title">Orchestration (Spec Tooling)</div>
+        <div class="panel-sub">Where specs are authored and enforced</div>
+        <ul class="plist">
+          <li><strong>MS Agent Governance Toolkit</strong> (MIT, Apr '26) — Agent OS: YAML/OPA Rego/Cedar, sub-ms; Agent Mesh: crypto ID, trust 0–1000, 5 tiers; EU AI Act + HIPAA + SOC2 + OWASP×10</li>
+          <li><strong>Open Agent Spec</strong> (ACM CAIS '26) — portable across LangGraph, CrewAI runtimes</li>
+          <li><strong>AWS Kiro</strong> — spec-driven: requirements → design → tasks → code</li>
+          <li><strong>GitHub Spec Kit</strong> (open-sourced Sep '25)</li>
+          <li><strong>OpenAI Model Spec</strong> — unique clause IDs + prompts as unit tests</li>
+          <li><strong>Anthropic Claude Constitution</strong> (84-page, Jan '26)</li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Cloud Platforms (AgentOS)</div>
+        <div class="panel-sub">Policy enforcement + cost governance at runtime</div>
+        <ul class="plist">
+          <li><strong>Databricks Unity AI Gateway</strong> (Beta, Jun '26) — 30%+ smart routing; spend caps at 4 levels: user / use-case / workspace / account; SQL policies as UC functions applied to MCPs</li>
+          <li><strong>AWS Bedrock AgentCore Policy</strong> (Cedar, GA) — deterministic authorization; temporal session-history auth</li>
+          <li><strong>AWS Agent Registry</strong> (Preview, Apr '26) — central agent inventory</li>
+          <li><strong>MS Fabric + Purview + Entra ID</strong> — governance + identity layer</li>
+          <li><strong>Copilot Studio Agent 365</strong> — shared policies + lifecycle oversight</li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Observability (Era 4)</div>
+        <div class="panel-sub">Audit-grade lineage, not just logs</div>
+        <ul class="plist">
+          <li><strong>AgentOps</strong> — full agent lifecycle tracking</li>
+          <li>Compliance evidence packages</li>
+          <li>Audit trail traceable to spec clause</li>
+          <li>BCBS 239 / DORA data lineage</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="convergence-bar">
+      <strong>Cedar convergence signal:</strong> Both AWS AgentCore and MS Agent Governance Toolkit independently chose Cedar for deterministic per-action authorization. Two major platforms converging on the same policy language is an industry standard forming.
+    </div>
+  </section>
+
+  <!-- §4 AGENTOS vs AGENTHARNESS -->
+  <section class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">§4</span>
+      <h2>AgentOS vs AgentHarness</h2>
+    </div>
+    <p style="font-size:0.84rem;color:var(--text-muted);margin-bottom:16px;">Category terms, not single products. The market is converging on this vocabulary.</p>
+
+    <div class="dual">
+      <div class="panel">
+        <div class="panel-title">AgentHarness</div>
+        <div class="panel-sub">The layer that <em>runs</em> agents</div>
+        <ul class="plist">
+          <li>Wraps, controls, tests, monitors, evaluates the agent loop</li>
+          <li><strong>LangGraph · CrewAI · AutoGen/AG2 · Mastra · OpenHarness</strong></li>
+          <li>Observability: AgentOps · Langfuse · Phoenix (Arize)</li>
+          <li>Solves: agent loop management, tool calling, multi-agent handoffs</li>
+        </ul>
+        <div class="nope">
+          Does <strong>not</strong> solve: cost governance, regulatory audit, model portability
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">AgentOS</div>
+        <div class="panel-sub">The layer that <em>governs</em> agents — sits above the harness</div>
+        <ul class="plist">
+          <li>Policy engine — determines what agents can do, at what cost, in what order</li>
+          <li><strong>MS Agent Governance Toolkit</strong> "Agent OS" component (YAML/OPA Rego/Cedar)</li>
+          <li><strong>Databricks Unity AI Gateway</strong> — spend caps + smart routing</li>
+          <li><strong>AWS AgentCore Policy</strong> — Cedar, temporal session auth</li>
+          <li>AG2 self-brands as "open-source AgentOS"</li>
+          <li>Solves: cost guardrails, action authorization, compliance evidence</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:16px;">
+      <div class="clabel">Relationship</div>
+      AgentHarness <strong>runs</strong> agents. AgentOS <strong>governs</strong> them. A spend cap in Databricks Unity AI Gateway is AgentOS. The LangGraph loop that executes is AgentHarness. Both are required. Neither replaces the other.
+    </div>
+  </section>
+
+  <!-- §5 COST CONTROL LEVERS -->
+  <section class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">§5</span>
+      <h2>Six Cost Control Levers — Verified Numbers</h2>
+    </div>
+
+    <div class="table-scroll">
+      <table class="levers-table">
+        <thead>
+          <tr>
+            <th style="width:36px;">#</th>
+            <th style="min-width:160px;">Lever</th>
+            <th>What it fixes</th>
+            <th style="min-width:200px;">Numbers</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="lever-badge">1</span></td>
+            <td>
+              <strong>Context quality</strong><br>
+              <span class="tn">CE layer</span><br>
+              <span class="tn">Databricks Genie Ontology · Snowflake Cortex · dbt MetricFlow</span>
+            </td>
+            <td>
+              Poor semantic context → misunderstood query → failure-triggered retry loops. CE is a cost lever, not just a quality lever. Every wasted token is a CE failure.
+            </td>
+            <td>
+              <span class="big-num">83% vs ~40%</span> NL accuracy with/without semantic layer<br>
+              → <span class="big-num">~50%</span> fewer retry loops<br>
+              <span class="tn">dbt MetricFlow, 2025</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="lever-badge">2</span></td>
+            <td>
+              <strong>Prompt caching</strong><br>
+              <span class="tn">Native: Anthropic, OpenAI, Google APIs</span>
+            </td>
+            <td>
+              Long system prompts re-sent on every call. Cache the stable parts — pay only for the delta.
+              <div class="caveat">Caveat: misconfigured caching can increase the bill — cache write premium + misses. Measure before committing.</div>
+            </td>
+            <td>
+              <span class="big-num">~90%</span> off cached tokens — Anthropic<br>
+              <span class="big-num">~50%</span> off — OpenAI<br>
+              <span class="big-num">~75%</span> off — Gemini (&gt;32K tokens)<br>
+              Enterprise: <strong>40–80%</strong> input cost cut at volume
+            </td>
+          </tr>
+          <tr>
+            <td><span class="lever-badge">3</span></td>
+            <td>
+              <strong>Model routing</strong><br>
+              <span class="tn">RouteLLM (OSS) · Databricks Unity AI Gateway · AWS Bedrock IPR · LiteLLM</span>
+            </td>
+            <td>
+              Every task hits the frontier model — simple tasks overpay. Route by complexity: cheap for simple, frontier for hard.
+              <div class="caveat">Caveat: one benchmark showed router cost 35× a fixed cheap model. Route only at volume.</div>
+            </td>
+            <td>
+              <span class="big-num">31–44%</span> real agentic savings — RouteLLM (ICLR 2025)<br>
+              <span class="big-num">72%</span> reduction, &lt;3% quality drop — AgentRouter (ICML '26)<br>
+              <span class="big-num">30%+</span> per task — Databricks internal<br>
+              <span class="big-num">~50%</span> in production — Uber, Stripe, Ramp
+            </td>
+          </tr>
+          <tr>
+            <td><span class="lever-badge">4</span></td>
+            <td>
+              <strong>Loop guardrails</strong><br>
+              <span class="tn">AgentOS: Databricks Unity AI Gateway · AWS AgentCore · MS Agent Governance Toolkit</span>
+            </td>
+            <td>
+              Agents refine indefinitely — no session ceiling, no exit signal. Per-session spend caps + circuit breakers + retry limits + tool-call depth limits.
+            </td>
+            <td>
+              G1000 orgs face <span class="big-num">30%</span> rise in underestimated AI infra costs by 2027 <span class="tn">(IDC, 2026)</span><br><br>
+              Only 44% of orgs have financial guardrails today <span class="tn">(Gartner, 2026)</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="lever-badge">5</span></td>
+            <td>
+              <strong>Intent encoding / Stop Rules</strong><br>
+              <span class="tn">IE: LangGraph · CrewAI · AG2 · Mosaic AI</span>
+            </td>
+            <td>
+              No encoded "done" criteria → agent refines past the useful point. Stop Rules + Autonomy Boundaries = runtime loop termination.<br><br>
+              <strong>Stop Rules are a cost feature, not just a safety feature.</strong> A spend cap fires at a dollar threshold. A Stop Rule fires when the domain goal is met. Those aren't the same thing.
+            </td>
+            <td>
+              <span class="big-num">60%</span> of agentic spend is in loops<br><br>
+              Agent that knows when to stop spends <span class="big-num">60–70%</span> less than one that doesn't.<br><br>
+              Klarna: $60M to rehire after agent optimised cost-per-token, not customer lifetime value
+            </td>
+          </tr>
+          <tr>
+            <td><span class="lever-badge">6</span></td>
+            <td>
+              <strong>Spec portability</strong><br>
+              <span class="tn">SE: OpenAI Model Spec · Anthropic Constitution · AWS Kiro · Open Agent Spec</span>
+            </td>
+            <td>
+              Intent is model-coupled → can't swap to a cheaper model without full re-engineering. Model-agnostic spec = choose cheapest model that still honours intent.
+            </td>
+            <td>
+              <strong>Only lever that reduces cost without reducing governance.</strong> All other levers trade quality or governance for savings. SE doesn't — it lets you choose the cheapest model that honours the spec.<br><br>
+              Databricks combined techniques: up to <span class="big-num">90%</span> savings (routing + caching + model swap)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- §6 KPI ARGUMENT -->
+  <section class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">§6</span>
+      <h2>The Argument</h2>
+    </div>
+
+    <div class="kpi-box">
+      <div class="kpi-headline">Accountable AI, by design.</div>
+
+      <div class="kpi-row">
+        <div class="kpi-dot"></div>
+        <div class="kpi-text">Every platform ships cost controls. Databricks has spend caps. AWS has Cedar. Microsoft has trust scoring. None of them know your business logic.</div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-dot"></div>
+        <div class="kpi-text">A spend cap that fires at the wrong point doesn't reduce cost — it breaks output.</div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-dot"></div>
+        <div class="kpi-text">CE makes context precise → fewer retries → lower token waste.</div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-dot"></div>
+        <div class="kpi-text">IE makes behavior bounded → fewer refinement loops → lower call volume.</div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-dot"></div>
+        <div class="kpi-text">SE makes intent portable → cheaper models viable → lower unit cost.</div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-dot"></div>
+        <div class="kpi-text">AgentOS enforces it at runtime → no runaway sessions → lower infrastructure spend.</div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-dot"></div>
+        <div class="kpi-text">That's the methodology gap the platforms can't sell you. The platform ships the controls. We ship the judgment about when to use them.</div>
+      </div>
+
+      <div class="kpi-punchline">"The platform ships AI. We ship accountability."</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function() {
+  var btn = document.getElementById('theme-toggle');
+  var root = document.documentElement;
+  function getTheme() {
+    try { return localStorage.getItem('kpi-stack-theme') || 'light'; } catch(e) { return 'light'; }
+  }
+  function setTheme(t) {
+    root.setAttribute('data-theme', t);
+    btn.textContent = t === 'dark' ? '☀ Light' : '🌙 Dark';
+    try { localStorage.setItem('kpi-stack-theme', t); } catch(e) {}
+  }
+  setTheme(getTheme());
+  btn.addEventListener('click', function() {
+    setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+  });
+})();
+</script>
