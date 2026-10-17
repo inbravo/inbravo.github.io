@@ -777,14 +777,33 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin-block: 52
 <section class="section" id="architecture">
   <div class="s-eye">§2 — The Architecture</div>
   <h2 class="s-title">BI is splitting into three layers</h2>
-  <p class="s-sub">The tools that bundled extraction, semantic logic, and rendering together for 20 years are losing that advantage. Each layer is now a separate market.</p>
+  <p class="s-sub">The tools that bundled extraction, semantic logic, and rendering together for 20 years are losing that advantage. Each layer is now a separate market — and Impetus plays across all three.</p>
 
   <div class="layer-stack">
-    <!-- Layer 1 -->
-    <div class="layer" style="background:linear-gradient(135deg,rgba(37,99,235,.06),transparent)">
-      <div class="layer-num">Layer 1 — Extraction</div>
-      <div class="layer-name" style="color:var(--blue-b)">AI Agents Pull KPIs from Legacy Reports</div>
-      <p class="layer-desc">Business logic buried inside Cognos Framework Manager, SAP BO Universes, Tableau calculated fields, and MicroStrategy metrics gets extracted by AI reader agents — mapped to a unified business glossary, lineage reconstructed, formulas documented. What was invisible becomes the foundation.</p>
+
+    <!-- ── Layer 1 ── -->
+    <div class="layer" style="background:linear-gradient(135deg,rgba(37,99,235,.06),transparent);position:relative;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <div class="layer-num">Layer 1 — Extraction</div>
+          <div class="layer-name" style="color:var(--blue-b);margin-bottom:0">Unlock KPIs from Legacy Reports</div>
+        </div>
+        <div style="
+          flex-shrink:0;
+          background:rgba(217,119,6,.12);
+          border:1px solid rgba(245,158,11,.35);
+          border-radius:5px;
+          padding:4px 10px;
+          font-family:'JetBrains Mono',monospace;
+          font-size:10px;
+          font-weight:600;
+          letter-spacing:.07em;
+          text-transform:uppercase;
+          color:var(--amber-b);
+          white-space:nowrap;
+        ">Impetus · Entry Point</div>
+      </div>
+      <p class="layer-desc">Business logic buried inside Cognos Framework Manager, SAP BO Universes, Tableau calculated fields, and MicroStrategy metrics — extracted by AI reader agents, mapped to a unified business glossary, lineage reconstructed, formulas documented. The KPI inventory that makes Layer 2 possible.</p>
       <div class="tags">
         <span class="tag tag-blue">Cognos</span>
         <span class="tag tag-blue">SAP BusinessObjects</span>
@@ -793,15 +812,62 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin-block: 52
         <span class="tag tag-teal">AI Reader/Writer Agents</span>
       </div>
     </div>
+
     <div class="layer-connector">
       <span>↓</span>
       <em>KPIs and business logic land here</em>
     </div>
-    <!-- Layer 2 -->
-    <div class="layer" style="background:linear-gradient(135deg,rgba(5,150,105,.06),transparent)">
-      <div class="layer-num">Layer 2 — Semantic Foundation</div>
-      <div class="layer-name" style="color:var(--green-b)">Governed Metric Definitions — Defined Once, Served Everywhere</div>
-      <p class="layer-desc">KPIs land in a portable semantic layer. Defined once in YAML or MetricFlow — revenue, churn, risk exposure, regulatory capital — and served to any renderer via REST, GraphQL, or MCP. The semantic layer is the source of truth agents consult. Without it, NL-to-SQL produces confident wrong answers on real estates.</p>
+
+    <!-- ── Layer 2 — THE ANCHOR ── -->
+    <div class="layer" style="
+      background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(5,150,105,.05));
+      border-left:4px solid var(--green-b);
+      position:relative;
+    ">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+        <div>
+          <div class="layer-num" style="color:var(--green-b);font-weight:700;">★ Layer 2 — Semantic Foundation</div>
+          <div class="layer-name" style="color:var(--green-b);margin-bottom:0">Governed Metric Definitions — Defined Once, Served Everywhere</div>
+        </div>
+        <div style="
+          flex-shrink:0;
+          background:rgba(16,185,129,.18);
+          border:1px solid rgba(16,185,129,.5);
+          border-radius:5px;
+          padding:5px 12px;
+          font-family:'JetBrains Mono',monospace;
+          font-size:10px;
+          font-weight:700;
+          letter-spacing:.07em;
+          text-transform:uppercase;
+          color:var(--green-b);
+          white-space:nowrap;
+        ">★ Impetus Anchor</div>
+      </div>
+
+      <p class="layer-desc" style="margin-bottom:16px;">KPIs unlocked in Layer 1 land here — defined once in YAML or MetricFlow as revenue, churn, risk exposure, regulatory capital — and served to any renderer via REST, GraphQL, or MCP. The semantic layer is the durable asset. Metric governance is ongoing, not a one-time project. This is where the client relationship deepens.</p>
+
+      <!-- CE callout inside Layer 2 -->
+      <div style="
+        background:rgba(124,58,237,.08);
+        border:1px solid rgba(168,85,247,.25);
+        border-left:3px solid var(--purple-b);
+        border-radius:6px;
+        padding:14px 18px;
+        margin-bottom:14px;
+      ">
+        <div style="
+          font-family:'JetBrains Mono',monospace;
+          font-size:10px;
+          font-weight:700;
+          letter-spacing:.08em;
+          text-transform:uppercase;
+          color:var(--purple-b);
+          margin-bottom:8px;
+        ">Context Engineering applies here</div>
+        <p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin:0;">CE encodes not just what a KPI <em>is</em>, but what it <em>means</em> to the business — units, grain, filters, edge cases, business calendar rules. IE adds intent: when an agent should trust a metric, when to escalate, what stop rules apply. Without CE + IE at this layer, NL-to-SQL produces confident wrong answers on real enterprise estates.</p>
+      </div>
+
       <div class="tags">
         <span class="tag tag-green">dbt MetricFlow</span>
         <span class="tag tag-green">Databricks Metric Views</span>
@@ -809,16 +875,43 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin-block: 52
         <span class="tag tag-amber">OSI / Apache Ossie (emerging)</span>
       </div>
     </div>
+
     <div class="layer-connector">
       <span>↓</span>
       <em>same foundation powers both outputs</em>
     </div>
-    <!-- Layer 3 — Two outputs -->
-    <div class="layer" style="padding:0">
-      <div class="output-top">
-        <div class="output-top-eye">Layer 3 — Rendering</div>
-        <div class="output-top-name">Two output lanes. One foundation.</div>
-        <div class="output-top-sub">The BI tool is now just a rendering surface. Swap it without touching the semantic layer.</div>
+
+    <!-- ── Layer 3 ── -->
+    <div class="layer" style="padding:0;position:relative;">
+      <div style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+        flex-wrap:wrap;
+        padding:16px 24px 14px;
+        background:linear-gradient(135deg,rgba(59,130,246,.06),transparent);
+        border-bottom:1px solid var(--border);
+      ">
+        <div>
+          <div class="output-top-eye" style="text-align:left;margin-bottom:2px;">Layer 3 — Rendering</div>
+          <div class="output-top-name" style="text-align:left;font-size:15px;">Two output lanes. One foundation.</div>
+          <div class="output-top-sub" style="text-align:left;margin-top:2px;">The BI tool is now just a rendering surface. Swap it without touching the semantic layer.</div>
+        </div>
+        <div style="
+          flex-shrink:0;
+          background:rgba(59,130,246,.1);
+          border:1px solid rgba(59,130,246,.3);
+          border-radius:5px;
+          padding:4px 10px;
+          font-family:'JetBrains Mono',monospace;
+          font-size:10px;
+          font-weight:600;
+          letter-spacing:.07em;
+          text-transform:uppercase;
+          color:var(--blue-b);
+          white-space:nowrap;
+        ">Impetus · Proof Point</div>
       </div>
       <div class="output-lanes">
         <div class="output-lane">
@@ -845,6 +938,91 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin-block: 52
           </div>
         </div>
       </div>
+    </div>
+
+  </div><!-- /layer-stack -->
+
+  <!-- ── Impetus Methodology Strip ── -->
+  <div style="
+    margin-top:24px;
+    margin-bottom:24px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+  ">
+    <div style="
+      background:linear-gradient(90deg,rgba(16,185,129,.1),rgba(59,130,246,.07),rgba(124,58,237,.07));
+      border-bottom:1px solid var(--border);
+      padding:12px 20px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    ">
+      <div style="
+        font-family:'JetBrains Mono',monospace;
+        font-size:10px;
+        font-weight:700;
+        letter-spacing:.1em;
+        text-transform:uppercase;
+        color:var(--text);
+      ">The Impetus Play — Across All Three Layers</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
+
+      <div style="padding:18px 20px;border-right:1px solid var(--border);min-width:0;">
+        <div style="
+          font-family:'JetBrains Mono',monospace;
+          font-size:9px;
+          font-weight:700;
+          letter-spacing:.09em;
+          text-transform:uppercase;
+          color:var(--amber-b);
+          margin-bottom:6px;
+        ">Layer 1 · Entry Point</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">Unlock the KPIs</div>
+        <p style="font-size:12px;color:var(--muted);line-height:1.55;margin:0;">Extract buried business logic from Cognos, SAP BO, Tableau, MicroStrategy. Build the KPI inventory. Create the asset that makes everything else possible.</p>
+      </div>
+
+      <div style="
+        padding:18px 20px;
+        border-right:1px solid var(--border);
+        min-width:0;
+        background:rgba(16,185,129,.05);
+        position:relative;
+      ">
+        <div style="
+          position:absolute;
+          top:0;left:0;right:0;
+          height:3px;
+          background:linear-gradient(90deg,var(--green-b),var(--teal-b));
+        "></div>
+        <div style="
+          font-family:'JetBrains Mono',monospace;
+          font-size:9px;
+          font-weight:700;
+          letter-spacing:.09em;
+          text-transform:uppercase;
+          color:var(--green-b);
+          margin-bottom:6px;
+        ">★ Layer 2 · Anchor</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">Govern the Semantic Foundation</div>
+        <p style="font-size:12px;color:var(--muted);line-height:1.55;margin:0;">CE + IE methodology applied. Metrics defined once, served to any renderer. Durable client relationship — metric governance is ongoing, not a project. This is where IP lives.</p>
+      </div>
+
+      <div style="padding:18px 20px;min-width:0;">
+        <div style="
+          font-family:'JetBrains Mono',monospace;
+          font-size:9px;
+          font-weight:700;
+          letter-spacing:.09em;
+          text-transform:uppercase;
+          color:var(--blue-b);
+          margin-bottom:6px;
+        ">Layer 3 · Proof Point</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">Prove Both Output Lanes</div>
+        <p style="font-size:12px;color:var(--muted);line-height:1.55;margin:0;">Wire conversational BI and governed regulated output from one foundation. Business case is visible here. The client sees the value before the project ends.</p>
+      </div>
+
     </div>
   </div>
 
