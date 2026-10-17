@@ -1,0 +1,1126 @@
+<title>BI Disruption</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Dark-first · Space Grotesk display · Inter body · JetBrains Mono labels
+   Layout: sticky nav + single-column 860px content */
+:root {
+  color-scheme: dark;
+  --bg:        #0A1628;
+  --surface:   #0F2040;
+  --surface-2: #152850;
+  --surface-3: #1A3060;
+  --border:    #1E3A5F;
+  --border-l:  #243B61;
+  --text:      #E8EEF8;
+  --muted:     #94A3B8;
+  --dim:       #64748B;
+  --blue:      #2563EB;
+  --blue-b:    #3B82F6;
+  --teal:      #0D9488;
+  --teal-b:    #14B8A6;
+  --purple:    #7C3AED;
+  --purple-b:  #A855F7;
+  --green:     #059669;
+  --green-b:   #10B981;
+  --amber:     #D97706;
+  --amber-b:   #F59E0B;
+  --red:       #DC2626;
+  --red-b:     #F87171;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg:        #F4F6FA;
+    --surface:   #FFFFFF;
+    --surface-2: #F0F2F8;
+    --surface-3: #E8EBF4;
+    --border:    #D1D9E6;
+    --border-l:  #E2E8F4;
+    --text:      #0F1923;
+    --muted:     #4A5568;
+    --dim:       #718096;
+    --blue:      #1B4FCC;
+    --blue-b:    #2563EB;
+    --teal:      #0D7E78;
+    --teal-b:    #0D9488;
+    --purple:    #6D28D9;
+    --purple-b:  #7C3AED;
+    --green:     #047857;
+    --green-b:   #059669;
+    --amber:     #B45309;
+    --amber-b:   #D97706;
+    --red:       #B91C1C;
+    --red-b:     #EF4444;
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg:        #F4F6FA;
+  --surface:   #FFFFFF;
+  --surface-2: #F0F2F8;
+  --surface-3: #E8EBF4;
+  --border:    #D1D9E6;
+  --border-l:  #E2E8F4;
+  --text:      #0F1923;
+  --muted:     #4A5568;
+  --dim:       #718096;
+  --blue:      #1B4FCC;
+  --blue-b:    #2563EB;
+  --teal:      #0D7E78;
+  --teal-b:    #0D9488;
+  --purple:    #6D28D9;
+  --purple-b:  #7C3AED;
+  --green:     #047857;
+  --green-b:   #059669;
+  --amber:     #B45309;
+  --amber-b:   #D97706;
+  --red:       #B91C1C;
+  --red-b:     #EF4444;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-left:  max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+
+/* ── Nav ── */
+.nav {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px max(16px, env(safe-area-inset-right, 0px)) 8px max(16px, env(safe-area-inset-left, 0px));
+  margin-left:  calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  z-index: 100;
+  flex-wrap: wrap;
+}
+.nav-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--dim);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.nav-links {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: flex-end;
+}
+.nav-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--dim);
+  text-decoration: none;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  transition: color .15s, border-color .15s;
+}
+.nav-links a:hover { color: var(--text); border-color: var(--border-l); }
+.theme-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--dim);
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  transition: color .15s;
+}
+.theme-btn:hover { color: var(--text); }
+
+/* ── Wrapper ── */
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-block: 40px 80px;
+}
+
+/* ── Hero ── */
+.hero {
+  padding-block: 48px 44px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 52px;
+}
+.hero-eye {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--teal-b);
+  margin-bottom: 12px;
+}
+.hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(26px, 5vw, 40px);
+  font-weight: 700;
+  line-height: 1.15;
+  text-wrap: balance;
+  margin-bottom: 16px;
+}
+.hero-title em { font-style: normal; color: var(--blue-b); }
+.hero-sub {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 640px;
+  margin-bottom: 20px;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(13,148,136,.1);
+  border: 1px solid rgba(20,184,166,.25);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal-b);
+}
+.hero-badge::before { content: '↗'; font-size: 16px; }
+
+/* ── Section ── */
+.section { margin-bottom: 60px; }
+.s-eye {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 6px;
+}
+.s-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  text-wrap: balance;
+  margin-bottom: 8px;
+}
+.s-sub {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 680px;
+  margin-bottom: 24px;
+}
+hr.divider { border: none; border-top: 1px solid var(--border); margin-block: 52px; }
+
+/* ── Convergence block ── */
+.conv {
+  background: var(--surface);
+  border: 1px solid var(--border-l);
+  border-left: 3px solid var(--teal-b);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+}
+.conv-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--teal-b);
+  margin-bottom: 10px;
+}
+.conv-thesis {
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+.conv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.conv-card {
+  background: var(--surface-2);
+  border-radius: 6px;
+  padding: 14px 16px;
+  min-width: 0;
+}
+.conv-card-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.conv-card-body {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.conv-implication {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.6;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+/* ── Three-layer stack ── */
+.layer-stack {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+.layer {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.layer:last-child { border-bottom: none; }
+.layer-connector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  gap: 6px;
+  position: relative;
+}
+.layer-connector span {
+  font-size: 18px;
+  color: var(--border-l);
+  line-height: 1;
+}
+.layer-connector em {
+  font-style: normal;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.layer-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.layer-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.layer-desc {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.55;
+  margin-bottom: 10px;
+  min-width: 0;
+}
+.tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid;
+}
+.tag-blue   { color: var(--blue-b);   border-color: rgba(59,130,246,.3);  background: rgba(37,99,235,.08); }
+.tag-teal   { color: var(--teal-b);   border-color: rgba(20,184,166,.3);  background: rgba(13,148,136,.08); }
+.tag-purple { color: var(--purple-b); border-color: rgba(168,85,247,.3);  background: rgba(124,58,237,.08); }
+.tag-green  { color: var(--green-b);  border-color: rgba(16,185,129,.3);  background: rgba(5,150,105,.08); }
+.tag-amber  { color: var(--amber-b);  border-color: rgba(245,158,11,.3);  background: rgba(217,119,6,.08); }
+
+/* ── Two-output model ── */
+.output-model {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+.output-top {
+  background: linear-gradient(135deg, rgba(5,150,105,.12), rgba(13,148,136,.08));
+  border-bottom: 1px solid var(--border);
+  padding: 18px 24px;
+  text-align: center;
+}
+.output-top-eye {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--green-b);
+  margin-bottom: 4px;
+}
+.output-top-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.output-top-sub {
+  font-size: 12px;
+  color: var(--dim);
+}
+.output-bridge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+.output-bridge-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  max-width: 140px;
+}
+.output-bridge-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.output-lanes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 560px) { .output-lanes { grid-template-columns: 1fr; } }
+.output-lane {
+  padding: 20px 24px;
+}
+.output-lane:first-child { border-right: 1px solid var(--border); }
+@media (max-width: 560px) {
+  .output-lane:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+}
+.output-lane-eye {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.output-lane-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.output-lane-desc {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+
+/* ── Tools grid ── */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.tool-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  min-width: 0;
+}
+.tool-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.tool-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--dim);
+  margin-bottom: 8px;
+}
+.tool-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ── Timeline ── */
+.tl {
+  border-left: 2px solid var(--border);
+  margin-left: 10px;
+  padding-left: 22px;
+  margin-bottom: 28px;
+}
+.tl-item {
+  position: relative;
+  padding-bottom: 18px;
+}
+.tl-item:last-child { padding-bottom: 0; }
+.tl-dot {
+  position: absolute;
+  left: -29px;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--bg);
+}
+.tl-when {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--dim);
+  margin-bottom: 2px;
+}
+.tl-who {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.tl-what {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ── Vibe block ── */
+.vibe {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--purple-b);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+.vibe-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--purple-b);
+  margin-bottom: 8px;
+}
+.vibe-body {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+.quote-block {
+  background: var(--surface-2);
+  border-left: 2px solid var(--border-l);
+  border-radius: 0 4px 4px 0;
+  padding: 10px 14px;
+  margin-top: 10px;
+}
+.quote-text  { font-size: 12px; color: var(--muted); font-style: italic; line-height: 1.55; margin-bottom: 4px; }
+.quote-src   { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--dim); }
+
+/* ── Gartner bifurcation ── */
+.bif {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+}
+.bif-title { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.bif-src   { font-size: 12px; color: var(--dim); font-style: italic; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border); line-height: 1.5; }
+.bif-row   { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 10px; }
+.bif-row:last-child { margin-bottom: 0; }
+.bif-icon  { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.bif-icon.yes { background: rgba(5,150,105,.15); color: var(--green-b); }
+.bif-icon.new { background: rgba(37,99,235,.15); color: var(--blue-b); }
+.bif-icon.no  { background: rgba(220,38,38,.12); color: var(--red-b); }
+.bif-text { font-size: 12.5px; color: var(--muted); line-height: 1.55; min-width: 0; }
+
+/* ── Comparison table ── */
+.table-wrap { overflow-x: auto; margin-bottom: 28px; }
+.cmp {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  min-width: 480px;
+}
+.cmp th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-align: left;
+  padding: 10px 14px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+.cmp td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  vertical-align: top;
+  line-height: 1.5;
+  min-width: 0;
+}
+.cmp tr:last-child td { border-bottom: none; }
+.cmp td:first-child {
+  color: var(--dim);
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.ours { color: var(--green-b); font-weight: 500; }
+
+/* ── Portability cards ── */
+.port-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.port-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  min-width: 0;
+}
+.port-eye {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.port-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.port-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.pill {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-top: 8px;
+}
+.pill-ga   { background: rgba(5,150,105,.15);  color: var(--green-b); }
+.pill-new  { background: rgba(245,158,11,.15); color: var(--amber-b); }
+.pill-lock { background: rgba(220,38,38,.12);  color: var(--red-b); }
+
+/* ── Callout ── */
+.callout {
+  background: rgba(13,148,136,.07);
+  border: 1px solid rgba(20,184,166,.2);
+  border-left: 3px solid var(--teal-b);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+.callout-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--teal-b);
+  margin-bottom: 7px;
+}
+.callout p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* ── Stats row ── */
+.stat-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.stat-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 20px;
+  flex: 1;
+  min-width: 120px;
+}
+.stat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.stat-lbl { font-size: 11px; color: var(--dim); line-height: 1.4; }
+</style>
+
+<!-- NAV -->
+<nav class="nav">
+  <span class="nav-brand">BI Disruption</span>
+  <div class="nav-links">
+    <a href="#convergence">The Convergence</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#tools">Live Now</a>
+    <a href="#vibe">Vibe Analytics</a>
+    <a href="#gartner">Bifurcation</a>
+    <a href="#our-play">Our Play</a>
+    <a href="#portability">Portability</a>
+  </div>
+  <button class="theme-btn" onclick="
+    const r=document.documentElement;
+    const d=r.getAttribute('data-theme');
+    r.setAttribute('data-theme', d==='light'?'dark':'light');
+    this.textContent=r.getAttribute('data-theme')==='dark'?'☀ Light':'🌙 Dark';
+  ">☀ Light</button>
+</nav>
+
+<div class="wrap">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eye">BI Strategy · October 2026</div>
+  <h1 class="hero-title">The BI Disruption —<br><em>The Wave Worth Catching</em></h1>
+  <p class="hero-sub">Traditional BI tools are being disassembled into three separate concerns — extraction, semantic foundation, and rendering. The 12–18 month window to own this transition is now.</p>
+  <div class="hero-badge">Every client on Databricks or Fabric is sitting at this intersection right now</div>
+</section>
+
+<!-- §1 THE CONVERGENCE ARGUMENT -->
+<section class="section" id="convergence">
+  <div class="s-eye">§1 — The Setup</div>
+  <h2 class="s-title">Two disruptions. One intersection.</h2>
+  <p class="s-sub">This isn't one market shift. It's two happening simultaneously — and where they cross is the opportunity.</p>
+
+  <div class="conv">
+    <div class="conv-lbl">The Convergence Argument</div>
+    <p class="conv-thesis"><strong>Agentic data engineering is the synthesis of two simultaneous disruptions</strong> — not one. Understanding both is what makes the methodology argument commercially precise rather than generic AI hype.</p>
+    <div class="conv-grid">
+      <div class="conv-card">
+        <div class="conv-card-lbl" style="color:var(--blue-b)">Disruption 1 — DE Workflows</div>
+        <div class="conv-card-body">
+          <span style="color:var(--dim)">2023–24:</span> AI-assisted DE — LLMs writing SQL, dbt models, documentation. Human still in the loop.<br>
+          <span style="color:var(--text)">2025→:</span> Agentic DE — agents autonomously orchestrating, repairing, and adapting pipelines without human steering.
+        </div>
+      </div>
+      <div class="conv-card">
+        <div class="conv-card-lbl" style="color:var(--purple-b)">Disruption 2 — BI Consumption</div>
+        <div class="conv-card-body">
+          <span style="color:var(--text)">2025–26:</span> The output contract for data engineers has changed. Data is no longer built for dashboards — it is built for AI-native interfaces (Genie, Claude Dashboards, Cortex Analyst). AI-available ≠ AI-consumable.
+        </div>
+      </div>
+      <div class="conv-card">
+        <div class="conv-card-lbl" style="color:var(--green-b)">Enabling Force — Semantic Infra</div>
+        <div class="conv-card-body">
+          <span style="color:var(--text)">2025–26:</span> Semantic layers are becoming cloud defaults — Unity Catalog, Snowflake Horizon, Fabric Semantic Models. The substrate exists. The practice that makes it <em>your</em> semantic layer — not the platform's generic one — is what's missing.
+        </div>
+      </div>
+    </div>
+    <p class="conv-implication"><strong style="color:var(--text)">The implication:</strong> Every client on Databricks or Fabric is sitting at this intersection — agentic DE arriving from above, BI disruption arriving from below. The engineering discipline that connects them is CE + IE. That is your white space.</p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-box">
+      <div class="stat-num" style="color:var(--red-b)">8%</div>
+      <div class="stat-lbl">of new enterprise reports use GenAI today (Gartner 2026)<br>The acceleration is ahead, not behind.</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:var(--amber-b)">60%</div>
+      <div class="stat-lbl">of self-service analytics users will use LLMs for ad hoc analysis by 2028 (Gartner)</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:var(--green-b)">90min</div>
+      <div class="stat-lbl">for a telecom to surface more insights via vibe analytics than they generate in 90 days (MIT Sloan)</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- §2 THE THREE-LAYER ARCHITECTURE -->
+<section class="section" id="architecture">
+  <div class="s-eye">§2 — The Architecture</div>
+  <h2 class="s-title">BI is splitting into three layers</h2>
+  <p class="s-sub">The tools that bundled extraction, semantic logic, and rendering together for 20 years are losing that advantage. Each layer is now a separate market.</p>
+
+  <div class="layer-stack">
+    <!-- Layer 1 -->
+    <div class="layer" style="background:linear-gradient(135deg,rgba(37,99,235,.06),transparent)">
+      <div class="layer-num">Layer 1 — Extraction</div>
+      <div class="layer-name" style="color:var(--blue-b)">AI Agents Pull KPIs from Legacy Reports</div>
+      <p class="layer-desc">Business logic buried inside Cognos Framework Manager, SAP BO Universes, Tableau calculated fields, and MicroStrategy metrics gets extracted by AI reader agents — mapped to a unified business glossary, lineage reconstructed, formulas documented. What was invisible becomes the foundation.</p>
+      <div class="tags">
+        <span class="tag tag-blue">Cognos</span>
+        <span class="tag tag-blue">SAP BusinessObjects</span>
+        <span class="tag tag-blue">Tableau</span>
+        <span class="tag tag-blue">MicroStrategy</span>
+        <span class="tag tag-teal">AI Reader/Writer Agents</span>
+      </div>
+    </div>
+    <div class="layer-connector">
+      <span>↓</span>
+      <em>KPIs and business logic land here</em>
+    </div>
+    <!-- Layer 2 -->
+    <div class="layer" style="background:linear-gradient(135deg,rgba(5,150,105,.06),transparent)">
+      <div class="layer-num">Layer 2 — Semantic Foundation</div>
+      <div class="layer-name" style="color:var(--green-b)">Governed Metric Definitions — Defined Once, Served Everywhere</div>
+      <p class="layer-desc">KPIs land in a portable semantic layer. Defined once in YAML or MetricFlow — revenue, churn, risk exposure, regulatory capital — and served to any renderer via REST, GraphQL, or MCP. The semantic layer is the source of truth agents consult. Without it, NL-to-SQL produces confident wrong answers on real estates.</p>
+      <div class="tags">
+        <span class="tag tag-green">dbt MetricFlow</span>
+        <span class="tag tag-green">Databricks Metric Views</span>
+        <span class="tag tag-green">Snowflake Semantic Views</span>
+        <span class="tag tag-amber">OSI / Apache Ossie (emerging)</span>
+      </div>
+    </div>
+    <div class="layer-connector">
+      <span>↓</span>
+      <em>same foundation powers both outputs</em>
+    </div>
+    <!-- Layer 3 — Two outputs -->
+    <div class="layer" style="padding:0">
+      <div class="output-top">
+        <div class="output-top-eye">Layer 3 — Rendering</div>
+        <div class="output-top-name">Two output lanes. One foundation.</div>
+        <div class="output-top-sub">The BI tool is now just a rendering surface. Swap it without touching the semantic layer.</div>
+      </div>
+      <div class="output-lanes">
+        <div class="output-lane">
+          <div class="output-lane-eye" style="color:var(--blue-b)">Conversational BI</div>
+          <div class="output-lane-name">Ask. Get an answer.</div>
+          <p class="output-lane-desc">Natural language interfaces for executives and ad hoc analytics. No dashboard, no analyst in the middle. Prompt → visualisation → insight.</p>
+          <div class="tags">
+            <span class="tag tag-blue">Claude Dashboards</span>
+            <span class="tag tag-blue">Databricks Genie</span>
+            <span class="tag tag-blue">Cortex Analyst</span>
+            <span class="tag tag-blue">Fabric Copilot</span>
+            <span class="tag tag-blue">Looker Agents</span>
+          </div>
+        </div>
+        <div class="output-lane">
+          <div class="output-lane-eye" style="color:var(--amber-b)">Governed Render</div>
+          <div class="output-lane-name">Pixel-perfect. Auditable.</div>
+          <p class="output-lane-desc">Regulated reporting — BCBS 239, COREP, SOX, IFRS — stays as controlled, certified output. Same semantic foundation underneath. Governance and auditability intact.</p>
+          <div class="tags">
+            <span class="tag tag-amber">Regulatory Reports</span>
+            <span class="tag tag-amber">Executive Scorecards</span>
+            <span class="tag tag-amber">Customer Embedded</span>
+            <span class="tag tag-amber">Audit-ready Output</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-lbl">The Critical Constraint</div>
+    <p>BI development is not being eliminated — it's being <em>redirected</em>: from building dashboards to building semantic models that AI surfaces automatically. An enterprise that deployed AI analytics without a governed semantic layer saw <strong style="color:var(--text)">adoption collapse to 12% in six months</strong> as conflicting metric definitions destroyed user trust. The semantic layer is the most valuable BI investment of the next three years.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- §3 LIVE NOW -->
+<section class="section" id="tools">
+  <div class="s-eye">§3 — What's Live Now</div>
+  <h2 class="s-title">AI BI tools in production today</h2>
+  <p class="s-sub">This is no longer a roadmap conversation. Clients are being pitched these tools right now.</p>
+
+  <div class="tools-grid">
+    <div class="tool-card" style="border-left:2px solid var(--blue-b)">
+      <div class="tool-name">Claude Dashboards</div>
+      <div class="tool-meta">Anthropic · Beta Oct 9, 2026</div>
+      <p class="tool-desc">MCP-connected live dashboards from natural language. Sources: Databricks, Snowflake, BigQuery, Salesforce, Amazon Redshift, ClickHouse. Can export to BI tools. Governance flagged as a concern for enterprise production use.</p>
+    </div>
+    <div class="tool-card" style="border-left:2px solid var(--teal-b)">
+      <div class="tool-name">Databricks AI/BI Genie</div>
+      <div class="tool-meta">Databricks · GA 2026</div>
+      <p class="tool-desc">Chat + dashboard + NL query, fully integrated. Powered by Databricks Metric Views (GA 2026) and Genie Ontology. Agents can now monitor metrics and trigger downstream actions.</p>
+    </div>
+    <div class="tool-card" style="border-left:2px solid var(--blue-b)">
+      <div class="tool-name">Snowflake Cortex Analyst</div>
+      <div class="tool-meta">Snowflake · GA 2026</div>
+      <p class="tool-desc">NL-to-SQL grounded in YAML Semantic Views (GA 2026). Internal benchmark: >90% SQL accuracy with a governed semantic model. Without it: similar low accuracy as any raw NL-to-SQL approach.</p>
+    </div>
+    <div class="tool-card" style="border-left:2px solid var(--purple-b)">
+      <div class="tool-name">Looker BI Agents</div>
+      <div class="tool-meta">Google · Next '26 · April 2026</div>
+      <p class="tool-desc">Grounded in LookML semantic layer. Native MCP server for agent access. Agentic Workflows that monitor metrics and surface recommendations autonomously. Published to Gemini Enterprise.</p>
+    </div>
+    <div class="tool-card" style="border-left:2px solid var(--teal-b)">
+      <div class="tool-name">ThoughtSpot Spotter Semantics</div>
+      <div class="tool-meta">ThoughtSpot · March 2026</div>
+      <p class="tool-desc">Dedicated semantic layer with deterministic reasoning, aggregate awareness, and governed business definitions. ThoughtSpot now positions itself as an "Agentic Analytics Platform."</p>
+    </div>
+    <div class="tool-card" style="border-left:2px solid var(--blue-b)">
+      <div class="tool-name">Copilot in Microsoft Fabric</div>
+      <div class="tool-meta">Microsoft · Generally Available</div>
+      <p class="tool-desc">"A report author you collaborate with." Deep integration with Power BI semantic models. Generates DAX, builds visuals, explains measures. Strongest in Microsoft-stack enterprises.</p>
+    </div>
+  </div>
+
+  <!-- Vendor timeline -->
+  <div class="s-eye" style="margin-bottom:12px">Vendor Moves — 2026</div>
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--amber-b)"></div>
+      <div class="tl-when">January 2026</div>
+      <div class="tl-who">dbt Labs, Snowflake, Salesforce/Tableau</div>
+      <p class="tl-what">Launch OSI (Apache Ossie) — open standard for portable semantic layer definitions. First version of the specification published. No product ships native import/export yet.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--purple-b)"></div>
+      <div class="tl-when">March 2026</div>
+      <div class="tl-who">ThoughtSpot</div>
+      <p class="tl-what">Spotter Semantics launched — deterministic reasoning layer, aggregate awareness, governed definitions. Platform rebranded as "Agentic Analytics."</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--teal-b)"></div>
+      <div class="tl-when">April 2026 — Google Next '26</div>
+      <div class="tl-who">Google / Looker</div>
+      <p class="tl-what">Looker BI Agents with native MCP server. Agentic Workflows monitoring metrics autonomously. Agents draw from up to 5 explores simultaneously, published to Gemini Enterprise.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--green-b)"></div>
+      <div class="tl-when">2026 — GA</div>
+      <div class="tl-who">Databricks + Snowflake</div>
+      <p class="tl-what">Databricks Metric Views and Snowflake Semantic Views both reach General Availability. Warehouse-native semantic layers are now production-grade — but not portable between platforms.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--blue-b)"></div>
+      <div class="tl-when">October 9, 2026</div>
+      <div class="tl-who">Anthropic</div>
+      <p class="tl-what">Claude Dashboards public beta. MCP-native, connects to Databricks, Snowflake, BigQuery, Salesforce, Redshift, ClickHouse. Generates live, interactive dashboards from natural language.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- §4 VIBE ANALYTICS -->
+<section class="section" id="vibe">
+  <div class="s-eye">§4 — The New Interaction Paradigm</div>
+  <h2 class="s-title">Vibe Analytics</h2>
+  <p class="s-sub">The term is new. The pattern is accelerating.</p>
+
+  <div class="vibe">
+    <div class="vibe-lbl">"Vibe Analytics" — MIT Sloan / Michael Schrage</div>
+    <p class="vibe-body">Coined by MIT Sloan's Michael Schrage (MIT Sloan Management Review, 2025). The core idea: <strong style="color:var(--text)">eliminate the traditional translation layer between business questions and technical analysis</strong>. The user describes what they want to an LLM — the tool builds the visualisation, exploration, or app. No SQL. No analyst queue. No waiting three days for the wrong chart.<br><br>It's the analytics version of vibe coding: the user's intent becomes the interface.</p>
+    <div class="quote-block">
+      <p class="quote-text">"A Southeast Asian telecom surfaced more financially relevant insights in 90 minutes than it typically generates in 90 days."</p>
+      <div class="quote-src">MIT Sloan Management Review, 2026</div>
+    </div>
+    <div class="quote-block" style="margin-top:8px">
+      <p class="quote-text">"MCP tools gave agents a standard way to discover schemas and run queries — vibe analytics as MCP-native analytics."</p>
+      <div class="quote-src">MotherDuck / Vercel framing, 2026</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-lbl">Why Vibe Analytics Needs the Semantic Layer</div>
+    <p>Most vibe analytics demos work on a clean star schema with five tables. Enterprise estates have 50,000 tables, three conflicting definitions of "revenue," and a semantic layer nobody has maintained since 2019. A governed semantic model is the only thing that makes Genie, Cortex Analyst, and Fabric Copilot safe to put in front of an executive. Almost none are. That is the entry point.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- §5 GARTNER BIFURCATION -->
+<section class="section" id="gartner">
+  <div class="s-eye">§5 — The Market Split</div>
+  <h2 class="s-title">What survives. What's new. What's gone.</h2>
+  <p class="s-sub">Gartner's 2026 Market Guide draws a clear line: not all of BI is going conversational.</p>
+
+  <div class="bif">
+    <div class="bif-title">The Gartner Bifurcation (Market Guide, 2026)</div>
+    <div class="bif-src">"By 2028, 60% of self-service analytics users will use general-purpose LLMs for ad hoc analysis, while production reporting stays on traditional BI platforms." — Gartner via ThoughtSpot Market Guide</div>
+    <div class="bif-row">
+      <div class="bif-icon yes">✓</div>
+      <div class="bif-text"><strong style="color:var(--text)">Survives:</strong> Certified dashboards — executive scorecards, regulated reporting (BCBS 239, SOX, IFRS), customer-embedded analytics. Governance and auditability requirements demand a controlled definition layer. These don't go away. They get a better foundation.</div>
+    </div>
+    <div class="bif-row">
+      <div class="bif-icon new">★</div>
+      <div class="bif-text"><strong style="color:var(--text)">New category:</strong> AI-generated ephemeral dashboards — vibe analytics, MCP-native, conversational. Claude Dashboards is the first entrant. ThoughtSpot Spotter and Looker Agents are the established-vendor plays. This is where the growth is.</div>
+    </div>
+    <div class="bif-row">
+      <div class="bif-icon no">✗</div>
+      <div class="bif-text"><strong style="color:var(--text)">Being replaced:</strong> Ad hoc Power BI / Tableau / Looker report building. Business users asking one-off questions will go to NL interfaces, not open a report editor. The "build me a dashboard" request is going away. The "what's happening with X" question is going to an agent.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- §6 OUR PLAY -->
+<section class="section" id="our-play" style="
+  background: linear-gradient(135deg, rgba(16,185,129,.07) 0%, rgba(59,130,246,.06) 100%);
+  border: 2px solid var(--green-b);
+  border-radius: 14px;
+  padding: 32px 28px 28px;
+  position: relative;
+  overflow: hidden;
+">
+  <div style="
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--green-b), var(--blue-b), var(--teal-b));
+    border-radius: 14px 14px 0 0;
+  "></div>
+
+  <div class="s-eye" style="color: var(--green-b); font-size: 11px; letter-spacing: .12em;">★ §6 — WHERE WE PLAY</div>
+  <h2 class="s-title" style="font-size: clamp(22px, 4vw, 32px); color: var(--text);">Semantic BI Modernisation —<br><span style="color: var(--green-b);">not report migration</span></h2>
+  <p class="s-sub" style="font-size: 14px;">Most vendors offer an as-is tool swap — move the dashboards from Tableau to Power BI, same problem, new invoice. The opportunity is the semantic modernisation play: extract the KPIs, govern the foundation, and serve both output lanes from it.</p>
+
+  <div class="table-wrap">
+    <table class="cmp" style="border: 1px solid rgba(16,185,129,.3); border-radius: 8px; overflow: hidden;">
+      <thead>
+        <tr>
+          <th style="background: rgba(16,185,129,.12); color: var(--dim);">Dimension</th>
+          <th style="background: rgba(16,185,129,.12); color: var(--dim);">As-Is Migration (tool swap)</th>
+          <th style="background: rgba(16,185,129,.22); color: var(--green-b);">★ Semantic BI Modernisation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>What moves</td>
+          <td class="asis">Reports, pixel for pixel</td>
+          <td class="ours">KPIs, business logic, metric definitions</td>
+        </tr>
+        <tr>
+          <td>Output</td>
+          <td class="asis">Same reports in a new tool</td>
+          <td class="ours">Conversational BI + governed regulated renders — from one foundation</td>
+        </tr>
+        <tr>
+          <td>Lock-in</td>
+          <td class="asis">New vendor, same problem</td>
+          <td class="ours">OSI-portable semantic layer — swap renderers without rebuilding</td>
+        </tr>
+        <tr>
+          <td>Regulatory reports</td>
+          <td class="asis">Migrated as-is, still manual</td>
+          <td class="ours">Stay — but now fed by the same governed semantic layer as conversational BI</td>
+        </tr>
+        <tr>
+          <td>Timeline to value</td>
+          <td class="asis">Long — report by report</td>
+          <td class="ours">Phased — semantic layer first, both output lanes follow</td>
+        </tr>
+        <tr>
+          <td>AI-readiness</td>
+          <td class="asis">None — raw tables still the query surface</td>
+          <td class="ours">Built in — semantic model is the governed query surface for all agents</td>
+        </tr>
+        <tr>
+          <td>Vendor pitch resistance</td>
+          <td class="asis">Vulnerable — next tool swap already coming</td>
+          <td class="ours">Durable — foundation is vendor-agnostic</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="
+    background: rgba(16,185,129,.12);
+    border: 1px solid rgba(16,185,129,.4);
+    border-left: 4px solid var(--green-b);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-top: 4px;
+  ">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--green-b);margin-bottom:8px;">⚡ The Window</div>
+    <p style="font-size:13.5px;color:var(--text);line-height:1.65;">Clients are getting pitched conversational BI by Databricks and Snowflake right now. Some are saying yes before they understand what it takes to make it work on a real estate. <strong>When it breaks — and on a raw, ungoverned estate it will — someone gets called in to fix the semantic layer.</strong> That call is the entry point. The window to be that someone is 12–18 months before the market learns to ask for it upfront.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- §7 PORTABILITY PLAY -->
+<section class="section" id="portability">
+  <div class="s-eye">§7 — The Portable BI Play</div>
+  <h2 class="s-title">The experience is leaving the tool</h2>
+  <p class="s-sub">The lock-in that Tableau, Power BI, and Qlik rely on lives in their semantic layer. Move that layer out, make it portable, and the BI tool becomes a rendering surface you can swap. OSI is early. The opportunity to own the portability layer is now.</p>
+
+  <div class="port-grid">
+    <div class="port-card">
+      <div class="port-eye" style="color:var(--green-b)">Most Mature</div>
+      <div class="port-name">dbt Semantic Layer (MetricFlow)</div>
+      <p class="port-desc">Define metrics once in YAML alongside dbt models. MetricFlow generates SQL for every downstream tool. Flows to Tableau Cloud, Power BI, Looker, Genie via REST, GraphQL, and SQL. Requires paid dbt Starter or Enterprise tier.</p>
+      <span class="pill pill-ga">GA — Most Adopted</span>
+    </div>
+    <div class="port-card">
+      <div class="port-eye" style="color:var(--teal-b)">Warehouse-Native</div>
+      <div class="port-name">Databricks Metric Views</div>
+      <p class="port-desc">GA in 2026. Integrated with Genie and Unity Catalog governance. Deep Databricks-native. Not portable to Snowflake or other platforms.</p>
+      <span class="pill pill-ga">GA 2026</span>
+    </div>
+    <div class="port-card">
+      <div class="port-eye" style="color:var(--blue-b)">Warehouse-Native</div>
+      <div class="port-name">Snowflake Semantic Views</div>
+      <p class="port-desc">GA in 2026. YAML-based, powers Cortex Analyst. Snowflake-only. Not portable. LookML carries the same warning — meaningful vendor lock-in.</p>
+      <span class="pill pill-ga">GA 2026</span>
+    </div>
+    <div class="port-card">
+      <div class="port-eye" style="color:var(--amber-b)">Open Standard — Emerging</div>
+      <div class="port-name">OSI / Apache Ossie</div>
+      <p class="port-desc">Launched January 2026 by dbt Labs, Snowflake, and Salesforce/Tableau. Targets portable authorship of semantic definitions across platforms. No product ships native import/export yet. The standard exists — the ecosystem is catching up.</p>
+      <span class="pill pill-new">Emerging · Jan 2026</span>
+    </div>
+  </div>
+
+</section>
+
+</div><!-- /wrap -->
+
+<script>
+  try {
+    const t = localStorage.getItem('bi-dis-theme');
+    if (t) {
+      document.documentElement.setAttribute('data-theme', t);
+      const btn = document.querySelector('.theme-btn');
+      if (btn) btn.textContent = t === 'dark' ? '☀ Light' : '🌙 Dark';
+    }
+  } catch(e) {}
+
+  document.querySelector('.theme-btn').addEventListener('click', function() {
+    try {
+      localStorage.setItem('bi-dis-theme', document.documentElement.getAttribute('data-theme'));
+    } catch(e) {}
+  });
+</script>
