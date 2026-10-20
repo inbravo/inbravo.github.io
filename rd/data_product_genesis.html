@@ -1,0 +1,1359 @@
+<title>Data Product Genesis Engine</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+/* ── Layout: sticky nav + full-width bands, content max-w 1080px ── */
+:root {
+  --bg:        #F0F4FA;
+  --surf:      #FFFFFF;
+  --surf2:     #E6EFF8;
+  --surf3:     #D4E4F2;
+  --acc:       #0055B3;
+  --acc2:      #1472D4;
+  --acc-dim:   rgba(0,85,179,.09);
+  --grn:       #0B6B42;
+  --grn-bg:    rgba(11,107,66,.09);
+  --red:       #B91C1C;
+  --red-bg:    rgba(185,28,28,.09);
+  --amb:       #92400E;
+  --amb-bg:    rgba(146,64,14,.09);
+  --fg:        #0C1520;
+  --fg2:       #2D4460;
+  --fg3:       #5A7898;
+  --bdr:       #C0D4EC;
+  --bdr2:      #DCE9F6;
+  --sh:        0 1px 3px rgba(0,20,60,.07),0 5px 14px rgba(0,20,60,.04);
+  --sh2:       0 2px 8px rgba(0,20,60,.10),0 12px 30px rgba(0,20,60,.06);
+  --r:         11px;
+  --r2:        7px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#07101E; --surf:#0C1828; --surf2:#112035; --surf3:#1A3050;
+    --acc:#3B9EF0; --acc2:#5BB4F8; --acc-dim:rgba(59,158,240,.13);
+    --grn:#10B981; --grn-bg:rgba(16,185,129,.13);
+    --red:#F87171; --red-bg:rgba(248,113,113,.13);
+    --amb:#FBBF24; --amb-bg:rgba(251,191,36,.13);
+    --fg:#E0EAF8; --fg2:#8AAACE; --fg3:#4A6A8A;
+    --bdr:#1A3050; --bdr2:#102030;
+    --sh:0 1px 4px rgba(0,0,0,.25),0 6px 18px rgba(0,0,0,.18);
+    --sh2:0 2px 10px rgba(0,0,0,.35),0 14px 36px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#07101E; --surf:#0C1828; --surf2:#112035; --surf3:#1A3050;
+  --acc:#3B9EF0; --acc2:#5BB4F8; --acc-dim:rgba(59,158,240,.13);
+  --grn:#10B981; --grn-bg:rgba(16,185,129,.13);
+  --red:#F87171; --red-bg:rgba(248,113,113,.13);
+  --amb:#FBBF24; --amb-bg:rgba(251,191,36,.13);
+  --fg:#E0EAF8; --fg2:#8AAACE; --fg3:#4A6A8A;
+  --bdr:#1A3050; --bdr2:#102030;
+  --sh:0 1px 4px rgba(0,0,0,.25),0 6px 18px rgba(0,0,0,.18);
+  --sh2:0 2px 10px rgba(0,0,0,.35),0 14px 36px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+:root[data-theme="light"] { color-scheme: light; }
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body {
+  background:var(--bg); color:var(--fg);
+  font-family:'Source Sans 3',system-ui,sans-serif;
+  font-size:15px; line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0;
+}
+h1,h2,h3,h4,h5{font-family:'Outfit',system-ui,sans-serif;font-weight:700;line-height:1.2;text-wrap:balance;color:var(--fg)}
+code,pre,.mono{font-family:'JetBrains Mono',monospace;font-size:.85em}
+a{color:var(--acc);text-decoration:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+
+/* ── Nav ── */
+.topbar {
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:100;
+  background:var(--surf); border-bottom:1px solid var(--bdr);
+  box-shadow:var(--sh);
+}
+.topbar-inner {
+  max-width:1080px; margin:0 auto;
+  display:flex; align-items:center; gap:8px; height:52px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.brand {
+  font-family:'Outfit',sans-serif; font-weight:800; font-size:13px;
+  color:var(--acc); white-space:nowrap; margin-right:6px;
+}
+.navlinks {
+  display:flex; gap:2px; overflow-x:auto; scrollbar-width:none; flex:1; min-width:0;
+}
+.navlinks::-webkit-scrollbar{display:none}
+.navlinks a {
+  font-size:12px; font-weight:500; color:var(--fg2);
+  padding:4px 10px; border-radius:20px; white-space:nowrap;
+  transition:background .15s,color .15s;
+}
+.navlinks a:hover{background:var(--acc-dim);color:var(--acc)}
+.theme-toggle {
+  margin-left:auto; flex-shrink:0;
+  background:var(--surf2); border:1px solid var(--bdr);
+  border-radius:20px; padding:5px 13px;
+  font-size:12px; font-weight:600; color:var(--fg2);
+  cursor:pointer; font-family:'Outfit',sans-serif;
+  transition:background .15s,color .15s;
+}
+.theme-toggle:hover{background:var(--acc-dim);color:var(--acc)}
+
+/* ── Bands ── */
+.band { padding-block:52px; }
+.band-alt { background:var(--surf); border-top:1px solid var(--bdr2); border-bottom:1px solid var(--bdr2); }
+.inner { max-width:1080px; margin:0 auto; }
+
+/* ── Hero ── */
+.hero { background:var(--surf); border-bottom:1px solid var(--bdr); padding-block:52px; }
+.eyebrow {
+  font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--acc); margin-bottom:14px;
+}
+.hero h1 { font-size:clamp(24px,4vw,42px); font-weight:800; margin-bottom:14px; max-width:760px; }
+.hero-sub { font-size:16px; color:var(--fg2); max-width:660px; margin-bottom:36px; line-height:1.65; }
+.stats { display:flex; flex-wrap:wrap; gap:10px; }
+.stat {
+  background:var(--surf2); border:1px solid var(--bdr);
+  border-radius:var(--r2); padding:14px 20px; min-width:130px;
+}
+.stat-n {
+  font-family:'Outfit',sans-serif; font-size:22px; font-weight:800;
+  color:var(--acc); font-variant-numeric:tabular-nums; line-height:1; margin-bottom:3px;
+}
+.stat-l { font-size:11px; color:var(--fg3); font-weight:500; text-transform:uppercase; letter-spacing:.05em; }
+
+/* ── Section heading ── */
+.sec-label {
+  font-family:'JetBrains Mono',monospace; font-size:10px;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--fg3); margin-bottom:6px;
+}
+.sec-title { font-size:clamp(19px,2.5vw,26px); font-weight:700; margin-bottom:8px; }
+.sec-sub { color:var(--fg2); font-size:15px; max-width:680px; margin-bottom:28px; }
+
+/* ── Phases accordion ── */
+.phases { display:flex; flex-direction:column; gap:8px; }
+.phase { border:1px solid var(--bdr); border-radius:var(--r); background:var(--surf); overflow:hidden; box-shadow:var(--sh); transition:box-shadow .2s; }
+.phase.open { box-shadow:var(--sh2); }
+.phase-hdr {
+  display:flex; align-items:center; gap:14px; padding:16px 18px;
+  cursor:pointer; user-select:none; transition:background .15s;
+}
+.phase-hdr:hover { background:var(--acc-dim); }
+.phase-num {
+  width:34px; height:34px; border-radius:50%; flex-shrink:0;
+  background:var(--acc-dim); color:var(--acc);
+  font-family:'Outfit',sans-serif; font-weight:700; font-size:14px;
+  display:flex; align-items:center; justify-content:center;
+  transition:background .2s,color .2s;
+}
+.phase.open .phase-num { background:var(--acc); color:#fff; }
+.phase-title-wrap { flex:1; min-width:0; }
+.phase-title { font-family:'Outfit',sans-serif; font-weight:600; font-size:15px; color:var(--fg); }
+.phase-desc { font-size:12px; color:var(--fg3); margin-top:2px; }
+.phase-meta { display:flex; align-items:center; gap:8px; flex-shrink:0; flex-wrap:wrap; justify-content:flex-end; }
+.phase-chevron { color:var(--fg3); font-size:11px; transition:transform .2s; flex-shrink:0; margin-left:4px; }
+.phase.open .phase-chevron { transform:rotate(180deg); }
+.phase-body { display:none; padding:0 18px 18px; border-top:1px solid var(--bdr2); }
+.phase.open .phase-body { display:block; }
+.phase-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+@media (max-width:600px) { .phase-grid { grid-template-columns:1fr; } }
+.pcard {
+  background:var(--surf2); border:1px solid var(--bdr);
+  border-radius:var(--r2); padding:13px 15px;
+}
+.pcard h4 {
+  font-size:10px; font-weight:600; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--fg3); margin-bottom:8px;
+}
+.pcard ul { list-style:none; display:flex; flex-direction:column; gap:5px; }
+.pcard ul li { font-size:13px; color:var(--fg2); padding-left:14px; position:relative; }
+.pcard ul li::before { content:'→'; position:absolute; left:0; color:var(--acc); font-size:11px; line-height:2; }
+.pcard p { font-size:13px; color:var(--fg2); line-height:1.55; }
+.chips { display:flex; flex-wrap:wrap; gap:5px; margin-top:10px; }
+.chip {
+  display:inline-flex; align-items:center; gap:4px;
+  background:var(--acc-dim); color:var(--acc);
+  border:1px solid color-mix(in srgb,var(--acc) 20%,transparent);
+  border-radius:20px; padding:2px 9px;
+  font-size:11px; font-weight:600; font-family:'Outfit',sans-serif;
+}
+
+/* ── Badges ── */
+.badge {
+  display:inline-block; border-radius:20px; padding:2px 9px;
+  font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+}
+.badge-g { background:var(--grn-bg); color:var(--grn); }
+.badge-r { background:var(--red-bg); color:var(--red); }
+.badge-a { background:var(--amb-bg); color:var(--amb); }
+.badge-b { background:var(--acc-dim); color:var(--acc); }
+
+/* ── Tabs ── */
+.tabs-nav {
+  display:flex; gap:3px; border-bottom:2px solid var(--bdr);
+  margin-bottom:22px; overflow-x:auto; scrollbar-width:none;
+}
+.tabs-nav::-webkit-scrollbar{display:none}
+.tbtn {
+  padding:9px 16px; font-size:13px; font-weight:600;
+  font-family:'Outfit',sans-serif; color:var(--fg3);
+  background:none; border:none; border-bottom:2px solid transparent;
+  margin-bottom:-2px; cursor:pointer; white-space:nowrap;
+  transition:color .15s,border-color .15s;
+}
+.tbtn:hover{color:var(--fg2)}
+.tbtn.on{color:var(--acc);border-bottom-color:var(--acc)}
+.tpane{display:none}
+.tpane.on{display:block}
+
+/* ── Stack detail grid ── */
+.sgrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+@media (max-width:600px){.sgrid{grid-template-columns:1fr}}
+.scard { background:var(--surf2); border:1px solid var(--bdr); border-radius:var(--r2); padding:13px 15px; }
+.scard h4 { font-size:10px; text-transform:uppercase; letter-spacing:.08em; font-weight:600; color:var(--fg3); margin-bottom:7px; }
+.scard p { font-size:13px; color:var(--fg2); line-height:1.55; }
+.flow-steps { display:flex; flex-wrap:wrap; align-items:center; gap:5px; margin-top:10px; }
+.fs { background:var(--surf); border:1px solid var(--bdr); border-radius:var(--r2); padding:4px 9px; font-size:11px; font-weight:500; color:var(--fg2); }
+.fa { color:var(--fg3); font-size:10px; }
+
+/* ── Code blocks ── */
+.codeblock {
+  background:var(--surf2); border:1px solid var(--bdr);
+  border-radius:var(--r2); padding:15px 17px; overflow-x:auto;
+}
+.codeblock code {
+  font-family:'JetBrains Mono',monospace; font-size:12px;
+  color:var(--fg); line-height:1.75; white-space:pre; display:block;
+}
+
+/* ── Output panes ── */
+.out-hdr { display:flex; align-items:flex-start; gap:12px; margin-bottom:14px; }
+.out-icon {
+  width:38px; height:38px; border-radius:var(--r2); flex-shrink:0;
+  background:var(--acc-dim); color:var(--acc);
+  display:flex; align-items:center; justify-content:center; font-size:17px;
+}
+.out-hdr h3 { font-size:16px; margin-bottom:2px; }
+.out-hdr p { font-size:13px; color:var(--fg2); }
+.how-strip {
+  background:var(--surf2); border:1px solid var(--bdr);
+  border-left:3px solid var(--acc); border-radius:var(--r2);
+  padding:11px 14px; margin-bottom:14px;
+}
+.how-strip p { font-size:13px; color:var(--fg2); }
+.how-strip strong { color:var(--fg); }
+.mmd-wrap {
+  background:var(--surf); border:1px solid var(--bdr);
+  border-radius:var(--r2); padding:18px; overflow-x:auto; text-align:center;
+}
+
+/* ── Devin capability cards ── */
+.capgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:12px; }
+.capcard {
+  background:var(--surf); border:1px solid var(--bdr);
+  border-radius:var(--r); padding:17px 18px; box-shadow:var(--sh);
+}
+.capcard-top { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
+.capcard-icon {
+  width:32px; height:32px; border-radius:8px; flex-shrink:0;
+  background:var(--acc-dim); display:flex; align-items:center; justify-content:center; font-size:15px;
+}
+.capcard h4 { font-family:'Outfit',sans-serif; font-weight:600; font-size:14px; }
+.capcard p { font-size:13px; color:var(--fg2); line-height:1.55; }
+.caphase { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--fg3); margin-bottom:4px; }
+
+/* ── Comparison table ── */
+.tbl-wrap { overflow-x:auto; border:1px solid var(--bdr); border-radius:var(--r); }
+.cmptbl { width:100%; border-collapse:collapse; font-size:13px; }
+.cmptbl th {
+  background:var(--surf2); padding:10px 14px; text-align:left;
+  font-family:'Outfit',sans-serif; font-size:12px; font-weight:600; color:var(--fg2);
+  border-bottom:2px solid var(--bdr);
+}
+.cmptbl td { padding:10px 14px; border-bottom:1px solid var(--bdr2); color:var(--fg2); vertical-align:top; min-width:0; }
+.cmptbl tr:last-child td { border-bottom:none; }
+.cmptbl td:first-child { color:var(--fg); font-weight:500; min-width:160px; }
+
+/* ── Risk cards ── */
+.riskgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(295px,1fr)); gap:12px; }
+.rcard { background:var(--surf); border:1px solid var(--bdr); border-radius:var(--r); padding:17px 18px; box-shadow:var(--sh); }
+.rcard-top { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
+.rcard h4 { font-family:'Outfit',sans-serif; font-size:15px; font-weight:600; }
+.rcard p { font-size:13px; color:var(--fg2); margin-bottom:9px; line-height:1.55; }
+.rmit { background:var(--surf2); border-radius:var(--r2); padding:8px 11px; font-size:12px; color:var(--fg2); }
+.rmit strong { color:var(--grn); }
+
+/* ── Next steps ── */
+.stepgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(275px,1fr)); gap:12px; }
+.stepcard { background:var(--surf); border:1px solid var(--bdr); border-radius:var(--r); padding:20px; box-shadow:var(--sh); }
+.stepcard-n { font-family:'Outfit',sans-serif; font-size:30px; font-weight:800; color:var(--acc); line-height:1; margin-bottom:7px; }
+.stepcard h4 { font-family:'Outfit',sans-serif; font-size:15px; margin-bottom:5px; }
+.stepcard p { font-size:13px; color:var(--fg2); line-height:1.55; }
+
+/* ── Footer ── */
+footer {
+  background:var(--surf); border-top:1px solid var(--bdr);
+  padding:22px max(20px,env(safe-area-inset-left,0px));
+  font-size:12px; color:var(--fg3); text-align:center;
+}
+</style>
+
+<!-- ─── NAV ─────────────────────────────────────────────────────────── -->
+<nav class="topbar" aria-label="Page navigation">
+  <div class="topbar-inner">
+    <span class="brand">Data Product Genesis</span>
+    <div class="navlinks">
+      <a href="#overview">Overview</a>
+      <a href="#dynamism">Lineage Dynamism</a>
+      <a href="#approach">5-Phase Approach</a>
+      <a href="#stacks">Per-Stack Extraction</a>
+      <a href="#outputs">4 Outputs</a>
+      <a href="#devin">Devin Integration</a>
+      <a href="#risks">Risks</a>
+    </div>
+    <button class="theme-toggle" id="themeBtn" aria-label="Toggle colour theme">🌙 Dark</button>
+  </div>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────────────────────────────── -->
+<header class="hero" id="overview">
+  <div class="inner">
+    <p class="eyebrow">Barclays · Legacy Lineage &amp; Data Products · Technical Solution Approach</p>
+    <h1>Data Product Genesis Engine</h1>
+    <p class="hero-sub">A 5-phase pipeline to extract column-level lineage from Teradata BTEQ, Ab Initio, SAS, and Informatica — and generate 4 structured data product outputs per attribute, powered by Devin as the autonomous execution layer.</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-n">47–57k</div><div class="stat-l">Base Attributes</div></div>
+      <div class="stat"><div class="stat-n">8–10k</div><div class="stat-l">Report Attributes</div></div>
+      <div class="stat"><div class="stat-n">4</div><div class="stat-l">Tech Stacks</div></div>
+      <div class="stat"><div class="stat-n">8</div><div class="stat-l">Lines of Business</div></div>
+      <div class="stat"><div class="stat-n">4</div><div class="stat-l">Output Types</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ─── SECTION: LINEAGE DYNAMISM ────────────────────────────────────── -->
+<section class="band band-alt" id="dynamism">
+  <div class="inner">
+    <p class="sec-label">Impetus — 12 Years in Legacy Migration</p>
+    <h2 class="sec-title">Legacy Code Dynamism — Where Lineage Quality Is Won or Lost</h2>
+    <p class="sec-sub">Generic tools and first-generation AI parsers share one blind spot: they assume code is static. In financial services legacy codebases, it rarely is. The patterns below are a representative sample of the dynamic cases that silently drop lineage edges — making lineage look complete while being wrong. Navigating these is where 12 years of engagement experience becomes the accuracy differentiator.</p>
+
+    <!-- Main dynamics table -->
+    <div class="tbl-wrap" style="margin-bottom:20px">
+      <table class="cmptbl">
+        <thead>
+          <tr>
+            <th style="width:110px">Stack</th>
+            <th>Dynamic Pattern</th>
+            <th>What Breaks Without Domain Expertise</th>
+            <th>Impetus Resolution Approach</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="4" style="font-weight:700;color:var(--acc);vertical-align:middle;font-family:'Outfit',sans-serif">BTEQ / SQL</td>
+            <td><code>KSH variable construction</code></td>
+            <td><code>"${ENV}_${REGION}_POSITIONS"</code> — table name invisible to any static scanner</td>
+            <td>Shell pre-processor resolves env vars before BTEQ parse</td>
+          </tr>
+          <tr>
+            <td><code>Teradata CALL macros</code></td>
+            <td>Macro body lives in <code>DBC.TVM</code>, not the script — static tools see a CALL but cannot follow</td>
+            <td>Local macro registry built from <code>.btq</code> definitions</td>
+          </tr>
+          <tr>
+            <td><code>Volatile tables</code></td>
+            <td><code>CREATE VOLATILE TABLE</code> — session-scoped, no DDL in any persistent catalog; lineage breaks silently</td>
+            <td>Session-scoped volatile tracker maintained within BTEQ script scope</td>
+          </tr>
+          <tr>
+            <td><code>FastLoad shell args</code></td>
+            <td><code>${TARGET_DB}.${TARGET_TABLE}</code> passed as shell arguments — target invisible to BTEQ parser</td>
+            <td>Shell variable resolver in Phase 0 pre-processing pass</td>
+          </tr>
+          <tr style="border-top:2px solid var(--bdr)">
+            <td rowspan="4" style="font-weight:700;color:var(--acc);vertical-align:middle;font-family:'Outfit',sans-serif">Ab Initio</td>
+            <td><code>.pset non-resolution</code></td>
+            <td>GDE XML shows <code>$(LOOKUP_TABLE)</code> token — lineage records a parameter reference, not a table name</td>
+            <td>Step 1 of 7-step playbook: .pset injection before any graph parse</td>
+          </tr>
+          <tr>
+            <td><code>Built-in components (Join / Rollup / Sort)</code></td>
+            <td>No <code>.xfr</code> file exists for these components — field-level lineage is null without semantic knowledge</td>
+            <td>Semantic rules library: component type + input/output port schema inference</td>
+          </tr>
+          <tr>
+            <td><code>Subgraph recursion</code></td>
+            <td>Depth unknown at parse time — naive parsers stop at the top-level graph</td>
+            <td>Recursive <code>.mp</code> traversal with cycle detection in Step 3</td>
+          </tr>
+          <tr>
+            <td><code>m_switch conditional flows</code></td>
+            <td>Branch selection on runtime record values — static tools either inflate or lose lineage</td>
+            <td>All branches enumerated; confidence flag added per edge</td>
+          </tr>
+          <tr style="border-top:2px solid var(--bdr)">
+            <td rowspan="4" style="font-weight:700;color:var(--acc);vertical-align:middle;font-family:'Outfit',sans-serif">SAS</td>
+            <td><code>CALL SYMPUT / SYMGET</code></td>
+            <td>Target table set from a data value mid-execution — unresolvable by any static parser</td>
+            <td>Pass 1 macro simulator resolves SYMPUT/SYMGET chains before extraction</td>
+          </tr>
+          <tr>
+            <td><code>%INCLUDE with macro paths</code></td>
+            <td><code>%include "&SASPROG_ROOT./load_&ENTITY..sas"</code> — included file path is itself a macro variable</td>
+            <td>Include chain resolver in Pass 1 before Pass 2 extraction</td>
+          </tr>
+          <tr>
+            <td><code>ARRAY indirect references</code></td>
+            <td>Loop-driven <code>SET &tbl_refs{i}</code> — field lineage unresolvable without loop unrolling</td>
+            <td>Loop unroller: expands ARRAY iterations to explicit column references</td>
+          </tr>
+          <tr>
+            <td><code>%macro + &amp;param substitution</code></td>
+            <td>Table names computed at call time and passed as parameters — invisible in the calling script</td>
+            <td>Full macro simulation pass; all call sites resolved before lineage extraction</td>
+          </tr>
+          <tr style="border-top:2px solid var(--bdr)">
+            <td rowspan="4" style="font-weight:700;color:var(--acc);vertical-align:middle;font-family:'Outfit',sans-serif">Informatica</td>
+            <td><code>SQL Override on Source Qualifier</code></td>
+            <td>Override query joins multiple tables — tools using repository metadata miss all override joins</td>
+            <td>SQL Override extracted and parsed as a standalone SQL block</td>
+          </tr>
+          <tr>
+            <td><code>Java Transformation</code></td>
+            <td>JDBC calls inside Java are opaque — no input-to-output field mapping available to any static tool</td>
+            <td>Flagged for port-level manual review; never silently dropped from the lineage chain</td>
+          </tr>
+          <tr>
+            <td><code>Mapplet nesting</code></td>
+            <td>Tools that flatten mapplets drop intermediate transformations silently</td>
+            <td>Mapplet registry with recursive port binding resolution across mapping XMLs</td>
+          </tr>
+          <tr>
+            <td><code>Router default group</code></td>
+            <td>Unmatched rows route to default group — tools that only parse named conditions silently lose this lineage</td>
+            <td>All groups including default parsed explicitly; no silent drops</td>
+          </tr>
+          <tr style="border-top:2px solid var(--bdr)">
+            <td rowspan="3" style="font-weight:700;color:var(--acc);vertical-align:middle;font-family:'Outfit',sans-serif">Cross-Stack</td>
+            <td><code>Shell as integration layer</code></td>
+            <td>Data contract between Ab Initio and BTEQ lives in JIL/KSH — neither stack's parser sees the other side</td>
+            <td>AutoSys JIL parser in Phase 0; shell wrapper resolver links cross-stack boundaries</td>
+          </tr>
+          <tr>
+            <td><code>File-based handoffs</code></td>
+            <td><code>positions_${BIZDATE}.dat</code> — writer and reader linked only by shell convention; invisible to any tool</td>
+            <td>File convention pattern-matching rules in the stitching layer</td>
+          </tr>
+          <tr>
+            <td><code>AutoSys global variable bus</code></td>
+            <td><code>${TARGET_DB}</code> injected at job start — the stack parser has no visibility of the AutoSys source</td>
+            <td>JIL + KSH + BTEQ parsed in a single resolution pass</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Accuracy + Devin callout row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start">
+      <div class="tbl-wrap">
+        <table class="cmptbl">
+          <thead><tr><th>Stack</th><th>Without Domain Expertise</th><th>With Impetus Playbooks</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:600">BTEQ</td><td style="color:var(--red)">~65%</td><td><strong style="color:var(--grn)">97%</strong> <span style="font-size:11px;color:var(--fg3)">proven · GCA Wave 2</span></td></tr>
+            <tr><td style="font-weight:600">Ab Initio</td><td style="color:var(--red)">Table-level only</td><td><strong style="color:var(--grn)">Column-level</strong> <span style="font-size:11px;color:var(--fg3)">post feasibility spike</span></td></tr>
+            <tr><td style="font-weight:600">SAS</td><td style="color:var(--red)">~55% <span style="font-size:11px">(macros as black boxes)</span></td><td><strong style="color:var(--grn)">~95%</strong></td></tr>
+            <tr><td style="font-weight:600">Informatica</td><td style="color:var(--red)">~75% <span style="font-size:11px">(surface XML only)</span></td><td><strong style="color:var(--grn)">~95%+</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="background:var(--acc-dim);border:1px solid color-mix(in srgb,var(--acc) 22%,transparent);border-radius:var(--r);padding:18px 20px">
+        <p style="font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:var(--acc);margin-bottom:8px">Devin executes. Impetus defines what gets executed.</p>
+        <p style="font-size:13px;color:var(--fg2);line-height:1.65">A Devin session running generic playbooks produces generic accuracy. The resolution strategies above — the .pset injector, the macro simulator, the shell variable resolver, the semantic rules library — are encoded as Impetus playbooks. That is the IP Devin executes at scale.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SECTION 1: 5-PHASE APPROACH ─────────────────────────────────── -->
+<section class="band" id="approach">
+  <div class="inner">
+    <p class="sec-label">Technical Solution</p>
+    <h2 class="sec-title">The 5-Phase Approach</h2>
+    <p class="sec-sub">Each phase gates the next. No phase commits to engineering until its inputs are confirmed. Click any phase to expand its detail.</p>
+    <div class="phases">
+
+      <!-- Phase 0 -->
+      <div class="phase" id="ph0">
+        <div class="phase-hdr" onclick="togglePhase('ph0')">
+          <div class="phase-num">0</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Active Inventory Discovery</div>
+            <div class="phase-desc">AutoSys JIL → active script inventory per LOB per stack</div>
+          </div>
+          <div class="phase-meta"><span class="badge badge-b">Gate phase</span></div>
+          <span class="phase-chevron">▼</span>
+        </div>
+        <div class="phase-body">
+          <p style="font-size:13px;color:var(--fg2);margin-top:14px">47–57k base attributes is too large to process cold. Legacy codebases carry 30–40% dead weight — orphaned scripts, tables no longer populated, columns no longer read. AutoSys scopes the work to what is live in production.</p>
+          <div class="phase-grid">
+            <div class="pcard">
+              <h4>Process Steps</h4>
+              <ul>
+                <li>Parse JIL files → extract all job definitions</li>
+                <li>Map each job → script + tech stack</li>
+                <li>Build job dependency graph (which job depends on which)</li>
+                <li>Tag each job with LOB from job name conventions</li>
+                <li>Mark active vs. inactive (scheduled vs. orphaned)</li>
+              </ul>
+            </div>
+            <div class="pcard">
+              <h4>Output</h4>
+              <ul>
+                <li>Active script inventory per LOB per stack</li>
+                <li>Active base attributes (47–57k scoped to live-only)</li>
+                <li>LOB-level code size breakdown per stack</li>
+                <li>Job dependency map (used for Phase 1 ordering)</li>
+              </ul>
+              <div class="chips">
+                <span class="chip">Devin: JIL parser playbook</span>
+                <span class="chip">Devin: DeepWiki index</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 1 -->
+      <div class="phase" id="ph1">
+        <div class="phase-hdr" onclick="togglePhase('ph1')">
+          <div class="phase-num">1</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Multi-Stack Lineage Extraction</div>
+            <div class="phase-desc">4 parallel streams — BTEQ · Informatica · SAS · Ab Initio → unified lineage CSV</div>
+          </div>
+          <div class="phase-meta">
+            <span class="badge badge-g">Streams A/B: Low risk</span>
+            <span class="badge badge-a">Stream C: Medium</span>
+            <span class="badge badge-r">Stream D: High ⚠</span>
+          </div>
+          <span class="phase-chevron">▼</span>
+        </div>
+        <div class="phase-body">
+          <p style="font-size:13px;color:var(--fg2);margin-top:14px">All 4 streams produce the same unified CSV schema: <code>source_schema · source_table · source_column · target_schema · target_table · target_column · transform_type · transform_expr · filter_logic · stack · script</code>. No stream waits for another.</p>
+          <div class="phase-grid">
+            <div class="pcard">
+              <h4>Streams</h4>
+              <ul>
+                <li><strong>A — BTEQ/SQL:</strong> LeapLogic + LLM · proven at GCA Wave 2 · 97% accuracy</li>
+                <li><strong>B — Informatica XML:</strong> CONNECTOR + TRANSFORMFIELD parser · .par resolution</li>
+                <li><strong>C — SAS .sas:</strong> Two-pass: macro expansion → PROC SQL + DATA step + LLM for ARRAY</li>
+                <li><strong>D — Ab Initio:</strong> 7-step playbook · .pset → .dml → .mp recursive → .xfr hybrid DML</li>
+              </ul>
+            </div>
+            <div class="pcard">
+              <h4>Ab Initio Feasibility Spike (required before Stream D)</h4>
+              <p style="color:var(--red);font-weight:600;margin-bottom:6px">Run on 5–10 sample plans first</p>
+              <ul>
+                <li>Validate XFR coverage per component type</li>
+                <li>Confirm .pset PROD values available</li>
+                <li>Assess DML complexity distribution</li>
+                <li>Go/No-go: column-level vs. table-level lineage</li>
+              </ul>
+              <div class="chips">
+                <span class="chip">Devin: 4 managed worker sessions</span>
+                <span class="chip">Devin: per-stack playbooks</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase" id="ph2">
+        <div class="phase-hdr" onclick="togglePhase('ph2')">
+          <div class="phase-num">2</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Unified Cross-Stack Lineage Graph</div>
+            <div class="phase-desc">Stitch all 4 stack CSVs at Teradata boundaries → single queryable graph</div>
+          </div>
+          <div class="phase-meta"><span class="badge badge-a">Requires naming convention audit</span></div>
+          <span class="phase-chevron">▼</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-grid">
+            <div class="pcard">
+              <h4>Graph Structure</h4>
+              <ul>
+                <li><strong>Node:</strong> SCHEMA.TABLE.COLUMN (Teradata-normalised)</li>
+                <li><strong>Edge:</strong> source_col → target_col + {stack · script · transform · filter}</li>
+                <li><strong>Storage:</strong> flat CSV + JSON — lineage_graph_query.py as query engine</li>
+                <li><strong>Upgrade path:</strong> Neo4j if query complexity demands it (not for MVP)</li>
+              </ul>
+            </div>
+            <div class="pcard">
+              <h4>Stitching Steps</h4>
+              <ul>
+                <li>Build naming convention map (Phase 0 audit)</li>
+                <li>Resolve $(PARAM) table names via .pset / .par</li>
+                <li>Resolve Teradata views to base tables</li>
+                <li>Build alias registry for known naming mismatches</li>
+                <li>Validate on 10 known end-to-end chains before batch</li>
+              </ul>
+              <div class="chips">
+                <span class="chip">Devin: orchestrator merges 4 worker outputs</span>
+                <span class="chip">Devin: DeepWiki naming map</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="phase" id="ph3">
+        <div class="phase-hdr" onclick="togglePhase('ph3')">
+          <div class="phase-num">3</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Attribute Resolution Engine</div>
+            <div class="phase-desc">Input: PCIDB.AB.BALANCE → 4 data product outputs per attribute</div>
+          </div>
+          <div class="phase-meta"><span class="badge badge-g">Requires: confirmed attribute list</span></div>
+          <span class="phase-chevron">▼</span>
+        </div>
+        <div class="phase-body">
+          <p style="font-size:13px;color:var(--fg2);margin-top:14px">A Barclays user provides one report attribute. The engine runs a backward BFS traversal across the unified graph and generates all 4 outputs in one session. Runs in batch mode across all 8–10k report attributes.</p>
+          <div class="phase-grid">
+            <div class="pcard">
+              <h4>Traversal Logic</h4>
+              <ul>
+                <li>BFS backward from target attribute</li>
+                <li>Traverse all stacks — cross-stack edges stitched in Phase 2</li>
+                <li>Collect: hop count · branch count · active flag · schedule</li>
+                <li>lineage_graph_query.py as the traversal engine (580 edges, 334 nodes proven on test data)</li>
+              </ul>
+            </div>
+            <div class="pcard">
+              <h4>4 Outputs Per Attribute</h4>
+              <ul>
+                <li><strong>A — Lineage JSON:</strong> full hop chain, machine-readable</li>
+                <li><strong>B — Business Summary:</strong> plain-English markdown for data stewards</li>
+                <li><strong>C — Graphical View:</strong> Mermaid diagram (renders in GitHub / Confluence)</li>
+                <li><strong>D — ODCS Contract:</strong> YAML v3.1.0, validated by data-contract-cli</li>
+              </ul>
+              <div class="chips">
+                <span class="chip">Devin: structured JSON output schema</span>
+                <span class="chip">Devin: orchestrator per attribute</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="phase" id="ph4">
+        <div class="phase-hdr" onclick="togglePhase('ph4')">
+          <div class="phase-num">4</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Data Product Catalog &amp; Query Interface</div>
+            <div class="phase-desc">File-based catalog · CLI query · platform-neutral · migrates to any target</div>
+          </div>
+          <div class="phase-meta"><span class="badge badge-b">Platform-neutral MVP</span></div>
+          <span class="phase-chevron">▼</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-grid">
+            <div class="pcard">
+              <h4>Catalog Structure</h4>
+              <ul>
+                <li>catalog/&lt;lob&gt;/dp_&lt;attr&gt;.json — Lineage JSON</li>
+                <li>catalog/&lt;lob&gt;/dp_&lt;attr&gt;.md — Business Summary</li>
+                <li>catalog/&lt;lob&gt;/dp_&lt;attr&gt;.mmd — Mermaid source</li>
+                <li>catalog/&lt;lob&gt;/dp_&lt;attr&gt;.yaml — ODCS contract</li>
+              </ul>
+            </div>
+            <div class="pcard">
+              <h4>CLI Query Examples</h4>
+              <ul>
+                <li><code>query.py --attribute "PCIDB.AB.BALANCE"</code></li>
+                <li><code>query.py --lob PBWM --list</code></li>
+                <li><code>query.py --attribute "..." --upstream</code></li>
+                <li><code>query.py --attribute "..." --impact</code></li>
+              </ul>
+              <div class="chips">
+                <span class="chip">Devin: CLI written from playbook</span>
+                <span class="chip">Devin: Automation nightly re-index</span>
+              </div>
+            </div>
+          </div>
+          <div class="pcard" style="margin-top:12px">
+            <h4>Future State (once target platform confirmed)</h4>
+            <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px">
+              <div style="flex:1;min-width:180px"><strong style="font-size:13px;color:var(--fg)">Databricks</strong><p>YAML → Unity Catalog · SQL → Delta CTAS</p></div>
+              <div style="flex:1;min-width:180px"><strong style="font-size:13px;color:var(--fg)">Snowflake</strong><p>YAML → Data Product Registry · SQL → Snowflake CTAS</p></div>
+              <div style="flex:1;min-width:180px"><strong style="font-size:13px;color:var(--fg)">AWS Native</strong><p>YAML → Glue Data Catalog · SQL → Athena CREATE TABLE AS</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /phases -->
+  </div>
+</section>
+
+<!-- ─── SECTION 2: PER-STACK EXTRACTION ──────────────────────────────── -->
+<section class="band band-alt" id="stacks">
+  <div class="inner">
+    <p class="sec-label">Phase 1 Detail</p>
+    <h2 class="sec-title">Per-Stack Extraction</h2>
+    <p class="sec-sub">Each stack has a dedicated extraction strategy. Click each tab for parsing approach, input files, key challenges, and Devin's specific role.</p>
+    <div class="tabs-nav" role="tablist">
+      <button class="tbtn on" role="tab" onclick="switchTab('stacks','bteq',this)">Stream A · BTEQ</button>
+      <button class="tbtn" role="tab" onclick="switchTab('stacks','informatica',this)">Stream B · Informatica</button>
+      <button class="tbtn" role="tab" onclick="switchTab('stacks','sas',this)">Stream C · SAS</button>
+      <button class="tbtn" role="tab" onclick="switchTab('stacks','abinitio',this)">Stream D · Ab Initio</button>
+    </div>
+
+    <div class="tpane on" id="stacks-bteq" role="tabpanel">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
+        <h3 style="font-size:17px">BTEQ / Teradata SQL</h3>
+        <span class="badge badge-g">Risk: LOW ✓</span>
+        <span class="badge badge-b">Proven at GCA Wave 2</span>
+      </div>
+      <div class="sgrid">
+        <div class="scard"><h4>Input Files</h4><p>.sql · .bteq · .ksh (Korn shell scripts with dynamic SQL)</p></div>
+        <div class="scard"><h4>Parsing Strategy</h4><p>LeapLogic static analysis for table dependencies + LLM column-level extraction for complex transformations. Proven on 11,896 files at 97% accuracy.</p></div>
+        <div class="scard"><h4>Challenges</h4><p>Teradata-specific syntax (QUALIFY, RANKID, macros); dynamic SQL in KSH string concatenation; macro definitions split across files.</p></div>
+        <div class="scard"><h4>Mitigations</h4><p>Teradata macro resolver pre-processing pass; flag dynamic SQL as "partial lineage" rather than fail; cross-file macro resolver.</p></div>
+      </div>
+      <div class="scard">
+        <h4>Extraction Flow</h4>
+        <div class="flow-steps">
+          <span class="fs">Identify SQL statements</span><span class="fa">→</span>
+          <span class="fs">Parse SELECT/INSERT/CTAS</span><span class="fa">→</span>
+          <span class="fs">Expand Teradata macros</span><span class="fa">→</span>
+          <span class="fs">Extract column mappings</span><span class="fa">→</span>
+          <span class="fs">LLM for complex transforms</span><span class="fa">→</span>
+          <span class="fs">Output unified CSV</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tpane" id="stacks-informatica" role="tabpanel">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
+        <h3 style="font-size:17px">Informatica PowerCenter XML</h3>
+        <span class="badge badge-g">Risk: LOW ✓</span>
+        <span class="badge badge-b">Most structured format</span>
+      </div>
+      <div class="sgrid">
+        <div class="scard"><h4>Input Files</h4><p>PowerCenter workflow XML files (.xml); .par parameter files for table name resolution.</p></div>
+        <div class="scard"><h4>Key XML Elements</h4><p>CONNECTOR (explicit field-to-field mappings) · TRANSFORMFIELD (transformation expressions) · SOURCE/TARGET (Teradata table names, direct) · FILTER/LOOKUP (filter and lookup dataset refs).</p></div>
+        <div class="scard"><h4>Challenges</h4><p>.par parameter files must be resolved; reusable mapplets create cross-XML references; Java/SQL override transforms need LLM extraction.</p></div>
+        <div class="scard"><h4>Mitigations</h4><p>Parameter resolver (same pattern as .pset); cross-file resolver across mapping XMLs; LLM extraction routed only for Java/SQL override blocks.</p></div>
+      </div>
+      <div class="scard">
+        <h4>Extraction Flow</h4>
+        <div class="flow-steps">
+          <span class="fs">Export repository → workflow XML</span><span class="fa">→</span>
+          <span class="fs">Resolve .par parameters</span><span class="fa">→</span>
+          <span class="fs">Parse CONNECTOR elements</span><span class="fa">→</span>
+          <span class="fs">Parse TRANSFORMFIELD</span><span class="fa">→</span>
+          <span class="fs">Route overrides to LLM</span><span class="fa">→</span>
+          <span class="fs">Output unified CSV</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tpane" id="stacks-sas" role="tabpanel">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
+        <h3 style="font-size:17px">SAS Programs</h3>
+        <span class="badge badge-a">Risk: MEDIUM</span>
+        <span class="badge badge-b">Two-pass required</span>
+      </div>
+      <div class="sgrid">
+        <div class="scard"><h4>Input Files</h4><p>.sas files containing PROC SQL, DATA step code, and SAS macro definitions (%let · %macro · %if · %do).</p></div>
+        <div class="scard"><h4>Three Constructs, Three Strategies</h4><p><strong>PROC SQL:</strong> direct SQL parser (same as BTEQ). <strong>DATA Step:</strong> assignment parser + LLM for ARRAY loops and MERGE. <strong>Macros:</strong> must be expanded before extraction.</p></div>
+        <div class="scard"><h4>Pass 1 — Macro Expansion</h4><p>Resolve all %let and %macro definitions. Substitute macro variables into code. Expand %if / %do conditional blocks. Output: flat, macro-free .sas code per file.</p></div>
+        <div class="scard"><h4>Pass 2 — Lineage Extraction</h4><p>Parse PROC SQL → column edges. Parse DATA step → assignment expressions. LLM for ARRAY-derived columns. Flag ARRAY columns as "array-generated" in unified CSV.</p></div>
+      </div>
+    </div>
+
+    <div class="tpane" id="stacks-abinitio" role="tabpanel">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
+        <h3 style="font-size:17px">Ab Initio</h3>
+        <span class="badge badge-r">Risk: HIGH ⚠</span>
+        <span class="badge badge-b">Spike required</span>
+      </div>
+      <div class="sgrid">
+        <div class="scard"><h4>5 File Types — None Alone Is Sufficient</h4>
+          <p><strong>.mp</strong> — graph plans (data flow topology, source/target tables)<br>
+          <strong>.xfr</strong> ★ — transforms (field-to-field DML expressions, the core lineage)<br>
+          <strong>.pset</strong> — parameters (table names, env flags, runtime values)<br>
+          <strong>.dml</strong> — port schemas (field names and types, reveals passthroughs)<br>
+          <strong>Subgraph .mp</strong> — nested calls (recursive traversal required)</p>
+        </div>
+        <div class="scard"><h4>7-Step Extraction Playbook</h4>
+          <ul>
+            <li>Step 1: Parse .pset → parameter resolution map</li>
+            <li>Step 2: Parse .dml → port schema registry</li>
+            <li>Step 3: Recursive .mp traversal (depth-first, cycle detection)</li>
+            <li>Step 4: .xfr DML extraction (rule-based + LLM hybrid)</li>
+            <li>Step 5: Built-in component semantic rules (join/rollup/scan/merge)</li>
+            <li>Step 6: Per-plan lineage assembly</li>
+            <li>Step 7: Cross-stack boundary stitching</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scard" style="border-left:3px solid var(--amb)">
+        <h4 style="color:var(--amb)">DML Parsing Approach — Hybrid (rule-based + LLM)</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px">
+          <div style="flex:1;min-width:160px"><p><strong>Rule-based:</strong> simple direct assignments <code>out.X = in.Y</code> — covers ~70–80% of cases</p></div>
+          <div style="flex:1;min-width:160px"><p><strong>LLM-aided:</strong> conditionals, lookup functions, date/string transforms — covers residual ~20–30%</p></div>
+          <div style="flex:1;min-width:160px"><p><strong>Combined accuracy:</strong> ~95%+ with human spot-check on a sample. Bootstrap with Ab Initio EME export where available.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SECTION 3: 4 DATA PRODUCT OUTPUTS ────────────────────────────── -->
+<section class="band" id="outputs">
+  <div class="inner">
+    <p class="sec-label">Phase 3 Outputs</p>
+    <h2 class="sec-title">4 Data Product Outputs Per Attribute</h2>
+    <p class="sec-sub">One attribute in → four structured outputs out. All platform-neutral. No target platform decision required before delivery.</p>
+    <div class="tabs-nav" role="tablist">
+      <button class="tbtn on" role="tab" onclick="switchTab('out','json',this)">A · Lineage JSON</button>
+      <button class="tbtn" role="tab" onclick="switchTab('out','biz',this)">B · Business Summary</button>
+      <button class="tbtn" role="tab" onclick="switchTab('out','graph',this)">C · Graphical View</button>
+      <button class="tbtn" role="tab" onclick="switchTab('out','odcs',this)">D · ODCS Contract</button>
+    </div>
+
+    <!-- Output A: Lineage JSON -->
+    <div class="tpane on" id="out-json" role="tabpanel">
+      <div class="out-hdr">
+        <div class="out-icon">{ }</div>
+        <div><h3>Lineage JSON</h3><p>Full hop chain, machine-readable, one file per attribute. Powers all other outputs.</p></div>
+      </div>
+      <div class="how-strip"><p><strong>How Devin generates it:</strong> The resolution engine uses Devin's structured JSON output API — schema defined in the playbook prompt. Devin updates its JSON notebook on every hop it traces, so partial results are available mid-session.</p></div>
+      <div class="codeblock"><code>{
+  "attribute": "PCIDB.AB.BALANCE",
+  "lob": "PBWM",
+  "depth": 4,
+  "active": true,
+  "schedule": "daily 02:30 UTC",
+  "hops": [
+    {
+      "hop": 1,
+      "source_schema": "RAW_SYSTEMS",
+      "source_table":  "CUSTOMER_MASTER",
+      "source_column": "BALANCE",
+      "target_schema": "GCA_STG",
+      "target_table":  "WT_CUST",
+      "target_column": "BAL_AMT",
+      "stack":         "ABINITIO",
+      "script":        "CUST_EXTRACT.mp",
+      "transform_type":"CAST",
+      "transform_expr":"CAST(in.BALANCE AS DECIMAL(18,2))"
+    },
+    {
+      "hop": 2,
+      "source_schema": "GCA_STG",
+      "source_table":  "WT_CUST",
+      "source_column": "BAL_AMT",
+      "target_schema": "GCA_CLEAN",
+      "target_table":  "CLEAN_CUST",
+      "target_column": "BALANCE",
+      "stack":         "BTEQ",
+      "script":        "50123_ACCT_LOAD.SQL",
+      "transform_type":"DERIVED",
+      "transform_expr":"ROUND(BAL_AMT, 2)"
+    },
+    {
+      "hop": 3,
+      "source_schema": "GCA_CLEAN",
+      "source_table":  "CLEAN_CUST",
+      "source_column": "BALANCE",
+      "target_schema": "GCA_AGG",
+      "target_table":  "AGG_ACCT",
+      "target_column": "TOTAL_BALANCE",
+      "stack":         "BTEQ",
+      "script":        "50267_DEALS_STAGE.SQL",
+      "transform_type":"AGGREGATE",
+      "transform_expr":"SUM(BALANCE) GROUP BY CUST_ID"
+    },
+    {
+      "hop": 4,
+      "source_schema": "GCA_AGG",
+      "source_table":  "AGG_ACCT",
+      "source_column": "TOTAL_BALANCE",
+      "target_schema": "PCIDB",
+      "target_table":  "AB",
+      "target_column": "BALANCE",
+      "stack":         "BTEQ",
+      "script":        "50286_SUMMARY_LOAD.SQL",
+      "transform_type":"DIRECT",
+      "transform_expr":"TOTAL_BALANCE"
+    }
+  ]
+}</code></div>
+    </div>
+
+    <!-- Output B: Business Summary -->
+    <div class="tpane" id="out-biz" role="tabpanel">
+      <div class="out-hdr">
+        <div class="out-icon">📄</div>
+        <div><h3>Business Summary</h3><p>Plain-English markdown for data stewards, business analysts, and CDOs. No SQL, no UUIDs.</p></div>
+      </div>
+      <div class="how-strip"><p><strong>How Devin generates it:</strong> The orchestrator session feeds the Lineage JSON into our validated prompt (<code>LINEAGE_TO_BUSINESS_SUMMARY_PROMPT.md</code>). Devin writes the markdown to <code>catalog/pbwm/dp_pcidb_ab_balance.md</code>. A document owner note flags what requires human confirmation.</p></div>
+      <div class="codeblock"><code># Business Summary — Account Balance (BALANCE)
+
+**Field:** PCIDB.AB.BALANCE
+**Business Name:** Account Balance
+**LOB:** PBWM — Private Banking &amp; Wealth Management
+**Version:** Auto-generated · lineage-grounded · no inferred claims
+
+---
+
+## 1. What This Field Represents
+
+BALANCE holds the total account balance aggregated per client,
+expressed in the reporting currency, as at the AutoSys run date
+(daily 02:30 UTC). It is calculated by summing individual balance
+amounts across all active Loan IQ accounts per client identifier.
+
+&gt; Note to document owner: Regulatory use cases and downstream
+&gt; consumer teams should be confirmed before sharing with stakeholders.
+
+## 2. Where the Data Ultimately Comes From
+
+| Priority | Source System   | Business Role                             |
+|----------|-----------------|-------------------------------------------|
+| Primary  | Customer Master | Authoritative client reference database   |
+
+## 3. How the Value Is Determined
+
+Step 1 — Stage raw balance from Customer Master via Ab Initio
+         (type-casted to DECIMAL 18,2)
+Step 2 — Clean and round to 2 decimal places (BTEQ 50123)
+Step 3 — Aggregate per client identifier: SUM(BALANCE) (BTEQ 50267)
+Step 4 — Write to PBWM reporting table (BTEQ 50286)
+
+## 6. Lineage Snapshot
+
+  Source systems → Customer Master (Ab Initio pipeline)
+  Staging layers → 3 intermediate tables
+  Target report  → PCIDB.AB.BALANCE
+  Depth          : 4 hops  |  Stack mix: Ab Initio + BTEQ
+  Active         : Yes  |  Schedule: daily 02:30 UTC</code></div>
+    </div>
+
+    <!-- Output C: Graphical View -->
+    <div class="tpane" id="out-graph" role="tabpanel">
+      <div class="out-hdr">
+        <div class="out-icon">◈</div>
+        <div><h3>Graphical View — Live Lineage Diagram</h3><p>Mermaid diagram auto-generated from Lineage JSON. Renders in GitHub, Confluence, Notion — no build step.</p></div>
+      </div>
+      <div class="how-strip"><p><strong>How Devin generates it:</strong> Devin writes a <code>json_to_mermaid.py</code> converter as part of the Phase 1 playbook. For each attribute, it reads the Lineage JSON and emits a <code>.mmd</code> file. Phase 2 upgrade: Devin builds a react-flow interactive portal over the catalog.</p></div>
+      <div class="mmd-wrap">
+        <pre class="mermaid">
+flowchart LR
+    A["RAW_SYSTEMS\nCUSTOMER_MASTER\n.BALANCE"] -->|"Ab Initio\nCUST_EXTRACT.mp\nCAST DECIMAL(18,2)"| B["GCA_STG\nWT_CUST\n.BAL_AMT"]
+    B -->|"BTEQ 50123\nACCT_LOAD.SQL\nROUND 2dp"| C["GCA_CLEAN\nCLEAN_CUST\n.BALANCE"]
+    C -->|"BTEQ 50267\nDEALS_STAGE.SQL\nSUM GROUP BY CUST_ID"| D["GCA_AGG\nAGG_ACCT\n.TOTAL_BALANCE"]
+    D -->|"BTEQ 50286\nSUMMARY_LOAD.SQL\nDIRECT"| E["PCIDB.AB\n.BALANCE"]
+        </pre>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:var(--fg3)">Source: <code>catalog/pbwm/dp_pcidb_ab_balance.mmd</code> · Generated by json_to_mermaid.py from Lineage JSON</div>
+    </div>
+
+    <!-- Output D: ODCS Contract -->
+    <div class="tpane" id="out-odcs" role="tabpanel">
+      <div class="out-hdr">
+        <div class="out-icon">📋</div>
+        <div><h3>ODCS Data Contract</h3><p>YAML v3.1.0 (Open Data Contract Standard · LF AI &amp; Data Foundation). Validated by data-contract-cli before writing to catalog.</p></div>
+      </div>
+      <div class="how-strip"><p><strong>How Devin generates it:</strong> After Lineage JSON is complete, the Devin orchestrator fills the ODCS v3.1.0 template — every field grounded in the lineage graph (no hallucination risk). Then runs <code>data-contract-cli validate</code> in the same session before writing to catalog.</p></div>
+      <div class="codeblock"><code>apiVersion: v3.1.0
+kind: DataContract
+
+id: dp_pcidb_ab_balance
+info:
+  title: Account Balance
+  status: active
+  owner: PBWM Data Office
+  domain: pbwm
+  lob: Private Banking &amp; Wealth Management
+
+servers:
+  teradata_prod:
+    type: teradata
+    database: PCIDB
+    dataset: AB
+
+schema:
+  - name: AB
+    fields:
+      - name: BALANCE
+        type: decimal(18,2)
+        description: >
+          Total account balance per client, aggregated daily.
+          Sourced from Customer Master via Ab Initio + 3 BTEQ stages.
+        lineage:
+          depth: 4
+          stacks: [ABINITIO, BTEQ]
+          active: true
+          schedule: "daily 02:30 UTC"
+
+quality:
+  - type: notNull
+    field: AB.BALANCE
+    description: "Balance must not be NULL for active accounts"
+  - type: custom
+    description: "balance_date must equal AutoSys run date"
+
+custom:
+  impetus_generated: true
+  pipeline_version: "genesis-engine-v1"
+  catalog_path: "catalog/pbwm/dp_pcidb_ab_balance.yaml"
+
+# Validated: data-contract-cli validate dp_pcidb_ab_balance.yaml
+# Result: ✓ Valid against ODCS v3.1.0 JSON Schema</code></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SECTION 4: DEVIN INTEGRATION ─────────────────────────────────── -->
+<section class="band band-alt" id="devin">
+  <div class="inner">
+    <p class="sec-label">Execution Layer</p>
+    <h2 class="sec-title">Devin as the Execution Layer</h2>
+    <p class="sec-sub">Devin (Cognition AI) is an autonomous software engineering agent. It does not replace the pipeline — it executes it. Each phase maps to a specific Devin capability.</p>
+
+    <div class="capgrid" style="margin-bottom:32px">
+      <div class="capcard">
+        <div class="capcard-top"><div class="capcard-icon">🗺</div><h4>DeepWiki — Codebase Indexing</h4></div>
+        <p class="caphase">Phase 0 / Phase 1 gate</p>
+        <p>Auto-indexes all 4 stacks every few hours → architecture diagrams with code links. Used to produce the naming convention map — Ab Initio output table names vs. BTEQ source table names — before the stitching layer is built.</p>
+      </div>
+      <div class="capcard">
+        <div class="capcard-top"><div class="capcard-icon">⚡</div><h4>Managed Devins — Parallel Workers</h4></div>
+        <p class="caphase">Phase 1 — all 4 streams</p>
+        <p>4 Managed Devin sessions run in isolated VMs simultaneously. Each carries its own stack-specific playbook. An orchestrator session monitors progress and merges the 4 unified CSV outputs. No stream waits for another.</p>
+      </div>
+      <div class="capcard">
+        <div class="capcard-top"><div class="capcard-icon">📋</div><h4>Playbooks — Reusable Task Templates</h4></div>
+        <p class="caphase">Phase 1 — per-stack playbooks</p>
+        <p>The 7-step Ab Initio extraction architecture, the SAS two-pass approach, and the Informatica XML parser are each encoded as a Devin playbook with structured output schema. Applied consistently across all plans within that stack.</p>
+      </div>
+      <div class="capcard">
+        <div class="capcard-top"><div class="capcard-icon">{ }</div><h4>Structured JSON Output</h4></div>
+        <p class="caphase">Phase 3 — attribute resolution</p>
+        <p>Schema defined in the orchestrator prompt. Devin updates its JSON notebook on every hop it traces — partial results are available mid-session. The unified lineage edge schema is enforced across all workers consistently.</p>
+      </div>
+      <div class="capcard">
+        <div class="capcard-top"><div class="capcard-icon">🔄</div><h4>Automations — Nightly Re-index</h4></div>
+        <p class="caphase">Phase 4 — catalog maintenance</p>
+        <p>Devin Automation triggers on a cron schedule (or on a GitHub push event via webhook). Re-runs extraction on changed files, updates the lineage graph delta, regenerates affected ODCS contracts and business summaries.</p>
+      </div>
+      <div class="capcard">
+        <div class="capcard-top"><div class="capcard-icon">🧠</div><h4>Knowledge Base — Codebase Context</h4></div>
+        <p class="caphase">All phases — per-LOB instances</p>
+        <p>Ab Initio DML patterns, component semantic rules, naming convention map, and LOB-specific conventions stored as Knowledge items. Per-LOB Devin instances keep each instance within the 300-item knowledge cap.</p>
+      </div>
+    </div>
+
+    <!-- DeepWiki Continuous Lineage -->
+    <div style="margin-top:8px">
+      <p class="sec-label" style="margin-bottom:6px">DeepWiki Deep Dive</p>
+      <h3 style="font-size:20px;font-family:'Outfit',sans-serif;font-weight:700;margin-bottom:6px">Continuous Lineage with DeepWiki</h3>
+      <p style="font-size:14px;color:var(--fg2);max-width:720px;margin-bottom:24px">DeepWiki is the intelligence layer that makes lineage <em>continuous</em>, not a one-time exercise. It auto-indexes all 4 stacks every few hours — the moment a BTEQ script or Ab Initio plan changes in source control, DeepWiki detects the delta and triggers the downstream pipeline automatically.</p>
+
+      <!-- Lifecycle diagram -->
+      <div style="background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:22px;margin-bottom:20px;box-shadow:var(--sh);overflow-x:auto">
+        <h4 style="font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;color:var(--fg3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:18px">Continuous Lineage Lifecycle</h4>
+        <div style="display:flex;align-items:stretch;gap:0;min-width:600px">
+          <div style="flex:1;background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r2) 0 0 var(--r2);padding:14px 12px;text-align:center">
+            <div style="font-size:18px;margin-bottom:6px">🔀</div>
+            <div style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;color:var(--fg);margin-bottom:3px">Code Change</div>
+            <div style="font-size:11px;color:var(--fg3)">git push / DDL alter</div>
+          </div>
+          <div style="display:flex;align-items:center;padding:0 2px;flex-shrink:0">
+            <div style="width:28px;height:2px;background:var(--acc);position:relative">
+              <div style="position:absolute;right:-5px;top:-4px;color:var(--acc);font-size:10px">▶</div>
+            </div>
+          </div>
+          <div style="flex:1;background:var(--acc-dim);border:1px solid color-mix(in srgb,var(--acc) 25%,transparent);padding:14px 12px;text-align:center">
+            <div style="font-size:18px;margin-bottom:6px">🗺</div>
+            <div style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;color:var(--acc);margin-bottom:3px">DeepWiki</div>
+            <div style="font-size:11px;color:var(--fg3)">Delta Index</div>
+          </div>
+          <div style="display:flex;align-items:center;padding:0 2px;flex-shrink:0">
+            <div style="width:28px;height:2px;background:var(--acc);position:relative">
+              <div style="position:absolute;right:-5px;top:-4px;color:var(--acc);font-size:10px">▶</div>
+            </div>
+          </div>
+          <div style="flex:1;background:var(--surf2);border:1px solid var(--bdr);padding:14px 12px;text-align:center">
+            <div style="font-size:18px;margin-bottom:6px">⚡</div>
+            <div style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;color:var(--fg);margin-bottom:3px">Devin Automation</div>
+            <div style="font-size:11px;color:var(--fg3)">Triggered</div>
+          </div>
+          <div style="display:flex;align-items:center;padding:0 2px;flex-shrink:0">
+            <div style="width:28px;height:2px;background:var(--acc);position:relative">
+              <div style="position:absolute;right:-5px;top:-4px;color:var(--acc);font-size:10px">▶</div>
+            </div>
+          </div>
+          <div style="flex:1;background:var(--surf2);border:1px solid var(--bdr);padding:14px 12px;text-align:center">
+            <div style="font-size:18px;margin-bottom:6px">🔁</div>
+            <div style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;color:var(--fg);margin-bottom:3px">Delta Extraction</div>
+            <div style="font-size:11px;color:var(--fg3)">changed scripts only</div>
+          </div>
+          <div style="display:flex;align-items:center;padding:0 2px;flex-shrink:0">
+            <div style="width:28px;height:2px;background:var(--acc);position:relative">
+              <div style="position:absolute;right:-5px;top:-4px;color:var(--acc);font-size:10px">▶</div>
+            </div>
+          </div>
+          <div style="flex:1;background:var(--surf2);border:1px solid var(--bdr);padding:14px 12px;text-align:center">
+            <div style="font-size:18px;margin-bottom:6px">📊</div>
+            <div style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;color:var(--fg);margin-bottom:3px">Lineage Diff</div>
+            <div style="font-size:11px;color:var(--fg3)">lineage_diff.json</div>
+          </div>
+          <div style="display:flex;align-items:center;padding:0 2px;flex-shrink:0">
+            <div style="width:28px;height:2px;background:var(--acc);position:relative">
+              <div style="position:absolute;right:-5px;top:-4px;color:var(--acc);font-size:10px">▶</div>
+            </div>
+          </div>
+          <div style="flex:1;background:var(--surf2);border:1px solid var(--bdr);padding:14px 12px;text-align:center">
+            <div style="font-size:18px;margin-bottom:6px">📋</div>
+            <div style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;color:var(--fg);margin-bottom:3px">ODCS Contracts</div>
+            <div style="font-size:11px;color:var(--fg3)">regenerated + validated</div>
+          </div>
+          <div style="display:flex;align-items:center;padding:0 2px;flex-shrink:0">
+            <div style="width:28px;height:2px;background:var(--acc);position:relative">
+              <div style="position:absolute;right:-5px;top:-4px;color:var(--acc);font-size:10px">▶</div>
+            </div>
+          </div>
+          <div style="flex:1;background:var(--grn-bg);border:1px solid color-mix(in srgb,var(--grn) 30%,transparent);border-radius:0 var(--r2) var(--r2) 0;padding:14px 12px;text-align:center">
+            <div style="font-size:18px;margin-bottom:6px">📂</div>
+            <div style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;color:var(--grn);margin-bottom:3px">Catalog</div>
+            <div style="font-size:11px;color:var(--fg3)">published</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--fg3);text-align:center">Cycle triggered automatically on every code change · stewards notified on ODCS contract updates</div>
+      </div>
+
+      <!-- 4 roles table -->
+      <h4 style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;margin-bottom:12px">DeepWiki's 4 Roles Across the Lineage Lifecycle</h4>
+      <div class="tbl-wrap" style="margin-bottom:20px">
+        <table class="cmptbl">
+          <thead><tr><th>Role</th><th>When It Fires</th><th>What Barclays Gets</th><th>Phase</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Initial Index</strong></td>
+              <td>Sprint 0 — first run against the full codebase</td>
+              <td>Naming convention map across all 4 stacks · dead code filter · LOB attribution · architecture diagrams with live code links</td>
+              <td><span class="badge badge-b">Phase 0</span></td>
+            </tr>
+            <tr>
+              <td><strong>Change Detection</strong></td>
+              <td>Every few hours — continuous background indexing</td>
+              <td>Delta file list: which scripts changed since last run. Triggers Devin Automation for affected scripts only — no full re-extraction needed</td>
+              <td><span class="badge badge-b">Phase 1 onward</span></td>
+            </tr>
+            <tr>
+              <td><strong>Impact Analysis</strong></td>
+              <td>Pre-commit / on every PR against the code repo</td>
+              <td>"This BTEQ change touches 3 downstream ODCS contracts." Lineage validation as a CI gate — PR fails if an upstream hop disappears from a live contract</td>
+              <td><span class="badge badge-b">Phase 3–4</span></td>
+            </tr>
+            <tr>
+              <td><strong>Knowledge Base Feed</strong></td>
+              <td>Continuous — after each index cycle</td>
+              <td>New Ab Initio component patterns, new SAS macro variants, new BTEQ table naming patterns auto-captured into Devin Knowledge Base — workers stay current without manual updates</td>
+              <td><span class="badge badge-b">All phases</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Lineage Diff + CI Gate side by side -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div style="grid-column:1/-1">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="scard" style="border-left:3px solid var(--acc)">
+              <h4>Lineage Diff — The BCBS 239 Audit Trail</h4>
+              <p>Every time DeepWiki detects a code change and the delta extraction runs, it produces a <code>lineage_diff.json</code>. This records exactly which edges were added, removed, or modified — timestamped against the git commit that caused the change.</p>
+              <p style="margin-top:8px;font-size:12px;color:var(--fg3)">This is the provable audit trail Barclays BCBS 239 wave 3 needs: lineage changed only because code changed, with a git-linked timestamp.</p>
+              <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r2);padding:10px 12px;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--fg2);line-height:1.7">
+                <span style="color:var(--grn)">+ edge added:</span> GCA_STG.WT_CUST.BAL_AMT<br>
+                <span style="color:var(--grn)">+   → GCA_CLEAN.CLEAN_CUST.BALANCE</span><br>
+                <span style="color:var(--grn)">+   via: BTEQ 50123 | ROUND transform</span><br>
+                <br>
+                <span style="color:var(--red)">- edge removed:</span> GCA_STG.WT_CUST.OLD_BAL<br>
+                <span style="color:var(--red)">-   → GCA_CLEAN.CLEAN_CUST.BALANCE</span><br>
+                <span style="color:var(--fg3)">commit: a4f9c2d · 2026-10-19 · author: dev-team</span>
+              </div>
+            </div>
+            <div class="scard" style="border-left:3px solid var(--grn)">
+              <h4>PR / CI Gate — Lineage as Code Quality</h4>
+              <p>When a developer raises a PR against the BTEQ or Ab Initio codebase, a Devin Automation session fires against the changed files before merge:</p>
+              <ul style="list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:6px">
+                <li style="font-size:13px;color:var(--fg2);padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--acc);font-size:11px;line-height:2">→</span>Run delta extraction on PR diff only</li>
+                <li style="font-size:13px;color:var(--fg2);padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--acc);font-size:11px;line-height:2">→</span>Compare new lineage edges against live ODCS contracts</li>
+                <li style="font-size:13px;color:var(--fg2);padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--acc);font-size:11px;line-height:2">→</span>Flag broken upstream hops → fail the PR check</li>
+                <li style="font-size:13px;color:var(--fg2);padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--acc);font-size:11px;line-height:2">→</span>Auto-update ODCS contracts if change is intentional + approved</li>
+              </ul>
+              <div style="margin-top:10px;background:var(--grn-bg);border-radius:var(--r2);padding:8px 11px;font-size:12px;color:var(--grn)"><strong>Result:</strong> Lineage integrity is enforced at the point of code change — not discovered weeks later during a regulatory audit.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Human-facing wiki -->
+        <div class="scard" style="grid-column:1/-1">
+          <h4>Human-Facing Wiki — For Barclays Data Stewards &amp; CDOs</h4>
+          <p style="font-size:13px;color:var(--fg2);margin-bottom:10px">DeepWiki's indexed understanding is browsable by non-engineers. Data stewards and CDOs can navigate the codebase wiki without reading SQL or Ab Initio DML — understanding what each script does, what tables it populates, and what business process it serves. This is the human layer of continuous lineage: the wiki is the lineage in plain language.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+            <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r2);padding:10px 13px">
+              <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--fg3);margin-bottom:5px">Data Stewards</div>
+              <p style="font-size:12px;color:var(--fg2)">Browse by LOB · see which scripts feed each report attribute · confirm business names without engineering support</p>
+            </div>
+            <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r2);padding:10px 13px">
+              <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--fg3);margin-bottom:5px">CDO / Governance</div>
+              <p style="font-size:12px;color:var(--fg2)">BCBS 239 lineage diff report per sprint · attestation that lineage reflects production code · no manual documentation</p>
+            </div>
+            <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r2);padding:10px 13px">
+              <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--fg3);margin-bottom:5px">Engineering Leads</div>
+              <p style="font-size:12px;color:var(--fg2)">Architecture diagrams with live code links · identify orphaned scripts before decommission · cross-stack dependency view</p>
+            </div>
+            <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r2);padding:10px 13px">
+              <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--fg3);margin-bottom:5px">Regulators / Audit</div>
+              <p style="font-size:12px;color:var(--fg2)">Point-in-time lineage snapshot per regulatory date · git-linked timestamps · automated, not manually maintained</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SECTION 5: RISKS + NEXT STEPS ────────────────────────────────── -->
+<section class="band" id="risks">
+  <div class="inner">
+    <p class="sec-label">Risk Register</p>
+    <h2 class="sec-title">Top Risks &amp; Mitigations</h2>
+    <p class="sec-sub">All risks are known and mitigated. Risks 1, 2 and 3 have explicit gates — decisions made before engineering commits prevent schedule risk.</p>
+    <div class="riskgrid" style="margin-bottom:48px">
+      <div class="rcard">
+        <div class="rcard-top"><span class="badge badge-r">HIGH ⚠</span><h4>Ab Initio XFR Coverage Gaps</h4></div>
+        <p>Built-in components (Join, Rollup, Scan) have no XFR file — column logic must be inferred from component type + port schema. If coverage is below 60%, column-level lineage is not viable.</p>
+        <div class="rmit"><strong>Mitigation:</strong> 1-week feasibility spike on 5–10 sample plans before committing. Fallback: table-level lineage for Ab Initio, column-level for all other stacks.</div>
+      </div>
+      <div class="rcard">
+        <div class="rcard-top"><span class="badge badge-r">HIGH ⚠</span><h4>Cross-Stack Naming Mismatch</h4></div>
+        <p>Ab Initio output table names may not match BTEQ source table names after parameter resolution — different teams, different conventions. A single mismatch breaks the stitching edge silently.</p>
+        <div class="rmit"><strong>Mitigation:</strong> Naming convention audit in first sprint using DeepWiki output. Build alias registry for known mismatches before stitching layer.</div>
+      </div>
+      <div class="rcard">
+        <div class="rcard-top"><span class="badge badge-r">HIGH ⚠</span><h4>Barclays Attribute List Not Available</h4></div>
+        <p>Phase 3 cannot run without the 8–10k report attribute list. If not provided before Phase 3 starts, the MVP cannot demonstrate end-to-end resolution.</p>
+        <div class="rmit"><strong>Mitigation:</strong> Escalate as a named gate dependency. Barclays provides a list of 20–30 priority attributes for MVP before Phase 3 begins.</div>
+      </div>
+      <div class="rcard">
+        <div class="rcard-top"><span class="badge badge-a">MEDIUM</span><h4>AutoSys JIL Export Incomplete</h4></div>
+        <p>Incomplete JIL export means the active inventory misses live code — Phase 1 processes dead scripts and the graph has incorrect coverage.</p>
+        <div class="rmit"><strong>Mitigation:</strong> Validate JIL coverage against known job counts per LOB. Cross-check with LOB teams before Phase 1 starts.</div>
+      </div>
+      <div class="rcard">
+        <div class="rcard-top"><span class="badge badge-a">MEDIUM</span><h4>Devin Session Cost at Scale</h4></div>
+        <p>Batch run across 8–10k attributes = thousands of Devin sessions. At Devin's current pricing, this may exceed budget for the full production run.</p>
+        <div class="rmit"><strong>Mitigation:</strong> Use Devin for MVP (20–30 attributes). Full batch uses direct Python pipeline with LLM API calls — same quality, fraction of the cost.</div>
+      </div>
+      <div class="rcard">
+        <div class="rcard-top"><span class="badge badge-g">LOW ✓</span><h4>Target Platform Not Confirmed</h4></div>
+        <p>Databricks / Snowflake / AWS Native decision is still pending. This could delay catalog publication if outputs are platform-specific.</p>
+        <div class="rmit"><strong>Mitigation:</strong> Simplified SQL is ANSI. ODCS YAML is platform-neutral. Catalog is file-based. MVP delivery is not blocked by platform decision.</div>
+      </div>
+    </div>
+
+    <p class="sec-label">Where to Start</p>
+    <h2 class="sec-title" style="margin-bottom:8px">Next Steps</h2>
+    <p class="sec-sub">Three actions before engineering commits. All run before the first line of extraction code is written.</p>
+    <div class="stepgrid">
+      <div class="stepcard">
+        <div class="stepcard-n">01</div>
+        <h4>Barclays Gates — 5 inputs needed</h4>
+        <p>Nominated MVP LOB · code for that LOB (all 4 stacks) · AutoSys JIL for nominated LOB · list of 20–30 priority attributes · PROD .pset files for Ab Initio plans in scope. No engineering starts without these.</p>
+      </div>
+      <div class="stepcard">
+        <div class="stepcard-n">02</div>
+        <h4>First Sprint — 4 parallel tracks on Day 1</h4>
+        <p>AutoSys JIL parse → active inventory · Ab Initio feasibility spike (5–10 sample plans) · Informatica XML parser (fastest win) · Naming convention audit via DeepWiki. All run simultaneously.</p>
+      </div>
+      <div class="stepcard">
+        <div class="stepcard-n">03</div>
+        <h4>First Milestone — Prove the Pipeline End-to-End</h4>
+        <p>One report attribute resolved across 2+ stacks, producing all 4 outputs: Lineage JSON · Business Summary · Mermaid graph · ODCS YAML. Validated by Barclays against a known source-to-target chain.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Impetus Technologies · Data Product Genesis Engine · Barclays Engagement · October 2026 · Internal working document
+</footer>
+
+<script>
+(function () {
+  // ── Theme toggle ──────────────────────────────────────────────────────
+  var btn = document.getElementById('themeBtn');
+  var root = document.documentElement;
+
+  function applyTheme(dark) {
+    if (dark) {
+      root.setAttribute('data-theme', 'dark');
+      btn.textContent = '☀ Light';
+    } else {
+      root.setAttribute('data-theme', 'light');
+      btn.textContent = '🌙 Dark';
+    }
+    try { localStorage.setItem('dpge-theme', dark ? 'dark' : 'light'); } catch(e){}
+  }
+
+  var saved = 'light';
+  try { saved = localStorage.getItem('dpge-theme') || 'light'; } catch(e){}
+  applyTheme(saved === 'dark');
+
+  btn.addEventListener('click', function () {
+    applyTheme(root.getAttribute('data-theme') !== 'dark');
+  });
+
+  // ── Phase accordion ───────────────────────────────────────────────────
+  window.togglePhase = function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.toggle('open');
+  };
+
+  // ── Tab switching ─────────────────────────────────────────────────────
+  window.switchTab = function (group, pane, btn) {
+    // deactivate all tabs and panes in this group
+    var allBtns = btn.closest('.tabs-nav').querySelectorAll('.tbtn');
+    allBtns.forEach(function(b){ b.classList.remove('on'); b.setAttribute('aria-selected','false'); });
+    var allPanes = btn.closest('section, div.inner').querySelectorAll('[id^="' + group + '-"]');
+    allPanes.forEach(function(p){ p.classList.remove('on'); });
+    // activate selected
+    btn.classList.add('on');
+    btn.setAttribute('aria-selected','true');
+    var target = document.getElementById(group + '-' + pane);
+    if (target) target.classList.add('on');
+  };
+})();
+</script>
