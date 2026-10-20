@@ -1,0 +1,1347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>AON Marketing Intelligence</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,800;1,9..144,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* ── Layout: full-width bands, 1160px inner column ──────────────────────── */
+/* ── Palette: editorial white, ink navy, deep azure accent, crisis coral  ── */
+:root {
+  --bg:        #FFFFFF;
+  --bg2:       #F4F7FA;
+  --bg3:       #EBF0F5;
+  --ink:       #0B1724;
+  --ink2:      #3D5166;
+  --ink3:      #7A919F;
+  --azure:     #1B5EAB;
+  --azure-lt:  #EBF1FB;
+  --coral:     #C23B22;
+  --coral-lt:  #FDF0EC;
+  --jade:      #0F7B51;
+  --jade-lt:   #EBF7F2;
+  --indigo:    #4538C8;
+  --indigo-lt: #EFEDFC;
+  --teal:      #0878A4;
+  --teal-lt:   #EAF4F9;
+  --border:    #D8E2EB;
+  --ff-display:'Fraunces', Georgia, serif;
+  --ff-body:   'Inter', system-ui, sans-serif;
+  --ff-mono:   'JetBrains Mono', 'Fira Code', monospace;
+  color-scheme: light;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--ff-body);
+  font-size: 16px;
+  line-height: 1.65;
+  padding-left: max(0px, env(safe-area-inset-left,0px));
+  padding-right: max(0px, env(safe-area-inset-right,0px));
+  padding-block: 0;
+}
+img { max-width: 100%; }
+a { color: var(--azure); text-decoration: none; }
+[hidden] { display: none !important; }
+
+/* ── Shared layout ── */
+.band { padding-block: 80px; }
+.band-alt { background: var(--bg2); }
+.inner { max-width: 1160px; margin: 0 auto; padding-inline: max(24px,env(safe-area-inset-left,0px)); }
+.eyebrow {
+  font-family: var(--ff-mono); font-size: 11px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 16px; display: block;
+}
+.section-head { font-family: var(--ff-display); font-size: clamp(28px,4vw,40px); font-weight: 700; color: var(--ink); line-height: 1.2; text-wrap: balance; margin-bottom: 16px; }
+.section-sub { font-size: 17px; color: var(--ink2); max-width: 640px; line-height: 1.7; }
+.divider { width: 40px; height: 3px; background: var(--azure); border-radius: 2px; margin-bottom: 48px; }
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: env(safe-area-inset-top,0px); z-index: 100;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  padding-block: 0;
+}
+.nav-inner {
+  max-width: 1160px; margin: 0 auto;
+  padding-inline: max(24px,env(safe-area-inset-left,0px));
+  height: 58px; display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand { display: flex; align-items: center; gap: 12px; }
+.nav-logo {
+  width: 32px; height: 32px; border-radius: 6px;
+  background: var(--azure); display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-display); font-size: 14px; font-weight: 700; color: #fff; letter-spacing: -.02em;
+}
+.nav-name { font-family: var(--ff-display); font-size: 15px; font-weight: 700; color: var(--ink); }
+.nav-sub { font-size: 12px; color: var(--ink3); letter-spacing: .03em; }
+.nav-badge {
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  border: 1px solid var(--border); color: var(--ink2); padding: 4px 10px; border-radius: 3px;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding-block: 96px 80px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '14';
+  position: absolute; right: -2%; top: 50%; transform: translateY(-50%);
+  font-family: var(--ff-display); font-size: min(38vw,520px);
+  font-weight: 800; color: rgba(27,94,171,0.04);
+  line-height: 1; pointer-events: none; user-select: none;
+}
+.hero-kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--azure-lt); border: 1px solid rgba(27,94,171,0.15);
+  border-radius: 4px; padding: 6px 12px; margin-bottom: 32px;
+}
+.hero-kicker-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--azure); }
+.hero-kicker span { font-family: var(--ff-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--azure); }
+.hero h1 {
+  font-family: var(--ff-display); font-size: clamp(38px,6vw,68px); font-weight: 800;
+  color: var(--ink); line-height: 1.1; text-wrap: balance; margin-bottom: 24px;
+  max-width: 820px;
+}
+.hero h1 .num { color: var(--coral); }
+.hero h1 .num-good { color: var(--azure); }
+.hero-desc { font-size: 18px; color: var(--ink2); max-width: 580px; line-height: 1.75; margin-bottom: 48px; }
+.hero-stats {
+  display: flex; flex-wrap: wrap; gap: 0; margin-top: 8px;
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  max-width: 680px;
+}
+.hero-stat {
+  flex: 1; min-width: 160px; padding: 24px 28px;
+  border-right: 1px solid var(--border);
+  background: var(--bg);
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat-n {
+  font-family: var(--ff-display); font-size: clamp(36px,5vw,54px); font-weight: 800;
+  line-height: 1; margin-bottom: 6px; font-variant-numeric: tabular-nums;
+}
+.hero-stat-n.total  { color: var(--ink); }
+.hero-stat-n.blocked { color: var(--coral); }
+.hero-stat-n.rules  { color: var(--azure); }
+.hero-stat-lbl { font-size: 13px; color: var(--ink3); font-weight: 500; }
+
+/* ── PERSONAS ── */
+.personas-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+@media(max-width:780px){ .personas-grid{ grid-template-columns:1fr; } }
+
+.persona-card {
+  border: 1px solid var(--border); border-radius: 6px;
+  overflow: hidden; background: var(--bg);
+}
+.persona-top {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.persona-avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-display); font-size: 19px; font-weight: 700;
+  color: #fff; margin-bottom: 16px; flex-shrink: 0;
+}
+.persona-card.exec  .persona-avatar { background: var(--indigo); }
+.persona-card.camp  .persona-avatar { background: var(--teal); }
+.persona-card.event .persona-avatar { background: var(--jade); }
+.persona-card.exec  { border-top: 3px solid var(--indigo); }
+.persona-card.camp  { border-top: 3px solid var(--teal); }
+.persona-card.event { border-top: 3px solid var(--jade); }
+.persona-name { font-family: var(--ff-display); font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+.persona-role { font-size: 13px; color: var(--ink3); font-weight: 500; margin-bottom: 14px; }
+.persona-q {
+  font-size: 14px; color: var(--ink2); line-height: 1.6;
+  font-style: italic; border-left: 2px solid var(--border); padding-left: 12px;
+}
+.persona-bottom { padding: 18px 24px; }
+.persona-stat-row { display: flex; gap: 20px; flex-wrap: wrap; }
+.persona-stat { }
+.persona-stat-n { font-family: var(--ff-display); font-size: 26px; font-weight: 700; color: var(--coral); line-height: 1; }
+.persona-stat-l { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+.persona-chip {
+  display: inline-block; font-family: var(--ff-mono); font-size: 10px; letter-spacing: .06em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 3px;
+  margin-top: 10px;
+}
+.exec-chip  { background: var(--indigo-lt); color: var(--indigo); }
+.camp-chip  { background: var(--teal-lt); color: var(--teal); }
+.event-chip { background: var(--jade-lt); color: var(--jade); }
+
+/* ── KPI TABLE ── */
+.kpi-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.kf {
+  font-family: var(--ff-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+  padding: 7px 14px; border-radius: 3px; cursor: pointer; transition: all .15s;
+  border: 1px solid var(--border); color: var(--ink2); background: var(--bg);
+}
+.kf.active { background: var(--azure); border-color: var(--azure); color: #fff; }
+.kpi-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
+.kpi-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 720px; }
+.kpi-table th {
+  background: var(--bg2); font-family: var(--ff-mono); font-size: 10px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink3); padding: 12px 16px; text-align: left;
+  font-weight: 500; border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+.kpi-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.kpi-table tr:last-child td { border-bottom: none; }
+.kpi-table tr:hover td { background: var(--bg2); }
+.kpi-name { font-weight: 600; color: var(--ink); }
+.stage-chip {
+  display: inline-block; font-family: var(--ff-mono); font-size: 10px; letter-spacing: .05em;
+  padding: 3px 8px; border-radius: 3px; font-weight: 500; white-space: nowrap;
+}
+.stage-1 { background: var(--jade-lt); color: var(--jade); }
+.stage-2 { background: var(--coral-lt); color: var(--coral); }
+.stage-1u { background: var(--jade-lt); color: var(--jade); }
+.blocker-chip {
+  display: inline-block; font-family: var(--ff-mono); font-size: 10px; letter-spacing: .04em;
+  padding: 3px 8px; border-radius: 3px; white-space: nowrap;
+}
+.b1 { background: var(--coral-lt); color: var(--coral); }
+.b2 { background: rgba(194,59,34,0.08); color: #A33A28; }
+.b3 { background: rgba(139,92,246,0.08); color: #6D28D9; }
+.p-chip {
+  display: inline-block; font-family: var(--ff-mono); font-size: 10px;
+  letter-spacing: .04em; padding: 3px 8px; border-radius: 3px; white-space: nowrap;
+}
+.p-exec  { background: var(--indigo-lt); color: var(--indigo); }
+.p-camp  { background: var(--teal-lt);   color: var(--teal); }
+.p-event { background: var(--jade-lt);   color: var(--jade); }
+.kpi-impact { color: var(--ink2); font-size: 13px; max-width: 320px; }
+
+/* ── BLOCKERS ── */
+.blockers-list { display: flex; flex-direction: column; gap: 16px; }
+.blocker-card {
+  border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
+  transition: box-shadow .2s;
+}
+.blocker-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.blocker-header {
+  display: flex; align-items: center; gap: 20px; padding: 24px 28px;
+  cursor: pointer; user-select: none; background: var(--bg);
+  transition: background .15s;
+}
+.blocker-header:hover { background: var(--bg2); }
+.blocker-num {
+  font-family: var(--ff-display); font-size: 42px; font-weight: 800;
+  color: var(--coral); line-height: 1; flex-shrink: 0;
+  opacity: 0.9; min-width: 48px; font-variant-numeric: tabular-nums;
+}
+.blocker-meta { flex: 1; min-width: 0; }
+.blocker-title { font-family: var(--ff-display); font-size: 21px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.blocker-sub { font-size: 14px; color: var(--ink2); }
+.blocker-kpi-count {
+  font-family: var(--ff-mono); font-size: 11px; color: var(--coral); letter-spacing: .04em;
+  margin-left: auto; white-space: nowrap; flex-shrink: 0;
+}
+.blocker-caret { font-size: 18px; color: var(--ink3); transition: transform .2s; flex-shrink: 0; margin-left: 16px; }
+.blocker-caret.open { transform: rotate(180deg); }
+.blocker-body { border-top: 1px solid var(--border); background: var(--bg2); }
+.blocker-content { padding: 28px 28px 28px; max-width: 860px; }
+.blocker-content p { font-size: 15px; color: var(--ink2); line-height: 1.75; margin-bottom: 16px; }
+.blocker-content p:last-child { margin-bottom: 0; }
+.blocker-quote {
+  border-left: 3px solid var(--coral); padding: 12px 16px; margin: 20px 0;
+  background: var(--coral-lt); border-radius: 0 4px 4px 0;
+  font-size: 14px; color: var(--coral); font-style: italic; line-height: 1.65;
+}
+.blocker-quote strong { font-style: normal; font-family: var(--ff-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; display: block; margin-bottom: 4px; color: var(--ink3); }
+.conflict-box {
+  display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0;
+}
+.conflict-side {
+  flex: 1; min-width: 200px;
+  border: 1px solid var(--border); border-radius: 4px; padding: 16px 18px; background: var(--bg);
+}
+.conflict-side.coral { border-color: rgba(194,59,34,0.2); }
+.conflict-side.azure { border-color: rgba(27,94,171,0.2); }
+.conflict-label { font-family: var(--ff-mono); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; }
+.conflict-value { font-family: var(--ff-display); font-size: 28px; font-weight: 700; line-height: 1; margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+.coral-val { color: var(--coral); }
+.azure-val { color: var(--azure); }
+.conflict-note { font-size: 12px; color: var(--ink3); line-height: 1.5; }
+.blocker-resolution {
+  border: 1px solid rgba(27,94,171,0.15); border-radius: 4px; background: var(--azure-lt);
+  padding: 14px 18px; display: flex; align-items: flex-start; gap: 10px; margin-top: 20px;
+}
+.br-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.br-text { font-size: 13px; color: var(--azure); line-height: 1.6; }
+.br-text strong { font-family: var(--ff-mono); font-size: 11px; display: block; margin-bottom: 2px; letter-spacing: .03em; }
+
+/* ── CE RESOLUTION ── */
+.ce-grid { display: flex; flex-direction: column; gap: 16px; }
+.ce-row {
+  display: grid; grid-template-columns: 1fr 60px 1fr 60px 1fr; align-items: center; gap: 0;
+}
+@media(max-width:700px){ .ce-row{ grid-template-columns:1fr; gap:8px; } .ce-arrow{ display:none; } }
+.ce-blocker, .ce-artifact, .ce-unlock {
+  border: 1px solid var(--border); border-radius: 6px; padding: 20px 22px;
+}
+.ce-blocker { background: var(--coral-lt); border-color: rgba(194,59,34,0.2); }
+.ce-artifact { background: var(--azure-lt); border-color: rgba(27,94,171,0.15); }
+.ce-unlock { background: var(--jade-lt); border-color: rgba(15,123,81,0.15); }
+.ce-label { font-family: var(--ff-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; }
+.ce-title { font-family: var(--ff-display); font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 6px; line-height: 1.3; }
+.ce-blocker .ce-title { color: var(--coral); }
+.ce-artifact .ce-title { color: var(--azure); }
+.ce-unlock .ce-title { color: var(--jade); }
+.ce-desc { font-size: 13px; color: var(--ink2); line-height: 1.55; }
+.ce-count { font-family: var(--ff-display); font-size: 22px; font-weight: 700; color: var(--jade); }
+.ce-arrow { text-align: center; font-size: 20px; color: var(--ink3); }
+.ce-code { font-family: var(--ff-mono); font-size: 11px; color: var(--azure); background: rgba(27,94,171,0.06); padding: 6px 10px; border-radius: 3px; display: block; margin-top: 8px; line-height: 1.5; }
+
+/* ── PAYOFF (portability) ── */
+.payoff-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.pt {
+  font-family: var(--ff-body); font-size: 13px; font-weight: 500;
+  padding: 10px 18px; border-radius: 4px; cursor: pointer;
+  border: 1px solid var(--border); color: var(--ink2); background: var(--bg);
+  display: flex; align-items: center; gap: 8px; transition: all .15s;
+}
+.pt.active { border-color: var(--azure); color: var(--azure); background: var(--azure-lt); }
+.pt-icon { font-size: 18px; }
+.payoff-panel { display: none; }
+.payoff-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+@media(max-width:700px){ .payoff-panel.active{ grid-template-columns:1fr; } }
+.payoff-persona {
+  border: 1px solid var(--border); border-radius: 6px; padding: 24px; background: var(--bg);
+}
+.payoff-persona-name { font-family: var(--ff-display); font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.payoff-persona-role { font-size: 13px; color: var(--ink3); margin-bottom: 20px; }
+.chat { display: flex; flex-direction: column; gap: 12px; }
+.chat-q, .chat-a {
+  max-width: 88%; padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.6;
+}
+.chat-q { background: var(--bg3); color: var(--ink); border-radius: 12px 12px 12px 2px; align-self: flex-start; }
+.chat-a { background: var(--azure); color: #fff; border-radius: 12px 12px 2px 12px; align-self: flex-end; }
+.chat-a .answer-big { font-family: var(--ff-display); font-size: 22px; font-weight: 700; display: block; margin-bottom: 4px; }
+.chat-a .answer-note { font-size: 12px; opacity: 0.8; }
+.payoff-source {
+  border: 1px solid var(--border); border-radius: 6px; padding: 24px; background: var(--bg2);
+}
+.payoff-source-label { font-family: var(--ff-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 14px; }
+.payoff-source-name { font-family: var(--ff-display); font-size: 19px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.payoff-source-desc { font-size: 14px; color: var(--ink2); line-height: 1.65; }
+.payoff-source-mv {
+  font-family: var(--ff-mono); font-size: 11px; color: var(--azure);
+  background: var(--azure-lt); padding: 8px 12px; border-radius: 3px;
+  display: block; margin-top: 14px; line-height: 1.65;
+}
+
+/* ── TECH SECTION ── */
+.tech-toggle {
+  border: 1px solid var(--border); border-radius: 6px; background: var(--bg2);
+  padding: 22px 28px; display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; gap: 16px; transition: background .15s;
+}
+.tech-toggle:hover { background: var(--bg3); }
+.tech-toggle-left { display: flex; align-items: center; gap: 14px; }
+.tech-toggle-icon {
+  width: 40px; height: 40px; border-radius: 6px; background: var(--bg3); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+}
+.tech-toggle-text { }
+.tech-toggle-title { font-family: var(--ff-display); font-size: 16px; font-weight: 700; color: var(--ink); }
+.tech-toggle-sub { font-size: 12px; color: var(--ink3); font-family: var(--ff-mono); margin-top: 2px; letter-spacing: .03em; }
+.tech-caret { font-size: 16px; color: var(--ink3); transition: transform .2s; flex-shrink: 0; }
+.tech-caret.open { transform: rotate(180deg); }
+.tech-body { border: 1px solid var(--border); border-top: none; border-radius: 0 0 6px 6px; }
+.tech-inner { padding: 32px; }
+.tech-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+.tt {
+  font-family: var(--ff-mono); font-size: 11px; letter-spacing: .05em; text-transform: uppercase;
+  padding: 7px 14px; border: 1px solid var(--border); border-radius: 3px;
+  cursor: pointer; color: var(--ink3); background: var(--bg); transition: all .15s;
+}
+.tt.active { background: var(--azure); border-color: var(--azure); color: #fff; }
+.tech-panel { display: none; }
+.tech-panel.active { display: block; }
+.arch-note { font-size: 14px; color: var(--ink2); line-height: 1.7; margin-bottom: 24px; max-width: 720px; }
+.arch-svg-wrap { overflow-x: auto; }
+pre.code {
+  background: var(--ink); color: #D4E0F0; font-family: var(--ff-mono); font-size: 12px;
+  line-height: 1.8; padding: 20px 24px; border-radius: 4px; overflow-x: auto; max-height: 440px;
+  tab-size: 2;
+}
+.c-kw { color: #7EC8E3; }
+.c-str { color: #A8D8A8; }
+.c-cm { color: #6080A0; }
+.c-fn { color: #F0C080; }
+.c-num { color: #FFB86C; }
+.c-field { color: #C8A0E8; }
+.code-block { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
+.code-hdr {
+  background: var(--bg3); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.code-fn { font-family: var(--ff-mono); font-size: 11px; color: var(--ink2); font-weight: 500; }
+.copy-btn {
+  font-family: var(--ff-mono); font-size: 10px; border: 1px solid var(--border);
+  background: var(--bg); color: var(--ink3); padding: 3px 10px; border-radius: 3px; cursor: pointer;
+  transition: all .15s;
+}
+.copy-btn:hover { border-color: var(--azure); color: var(--azure); }
+.copy-btn.ok { border-color: var(--jade); color: var(--jade); }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border); padding-block: 32px;
+  background: var(--bg);
+}
+.footer-inner {
+  max-width: 1160px; margin: 0 auto;
+  padding-inline: max(24px,env(safe-area-inset-left,0px));
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+}
+.footer-brand { font-family: var(--ff-display); font-size: 13px; font-weight: 700; color: var(--ink2); }
+.footer-meta { font-family: var(--ff-mono); font-size: 11px; color: var(--ink3); }
+
+/* ── Utilities ── */
+.tag {
+  display: inline-block; font-family: var(--ff-mono); font-size: 10px; letter-spacing: .05em;
+  text-transform: uppercase; padding: 2px 7px; border-radius: 3px;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-logo">A</div>
+      <div>
+        <div class="nav-name">AON Marketing Data Lake</div>
+        <div class="nav-sub">Context Engineering · Sprint 8 · October 2026</div>
+      </div>
+    </div>
+    <div class="nav-badge">AON × KPI Partners</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="inner">
+    <div class="hero-kicker">
+      <div class="hero-kicker-dot"></div>
+      <span>B2B Marketing Intelligence · Databricks Unity Catalog</span>
+    </div>
+    <h1>
+      53 KPIs defined.<br>
+      <span class="num">14 blocked.</span><br>
+      <span class="num-good">3 rules to write.</span>
+    </h1>
+    <p class="hero-desc">
+      AON built one of the most rigorous marketing KPI charters we have seen at a $14B company.
+      Every formula documented. Every persona mapped. The data exists in Databricks.<br><br>
+      Three business rules were never encoded in the platform. They block every commercial KPI
+      the CMO needs for the board. Context Engineering writes them once — and every tool reads them forever.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-n total">53</div>
+        <div class="hero-stat-lbl">KPIs defined across<br>3 personas</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-n blocked">14</div>
+        <div class="hero-stat-lbl">Stage 2 KPIs —<br>blocked today</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-n rules">3</div>
+        <div class="hero-stat-lbl">Missing business rules<br>in the platform</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAS -->
+<section class="band band-alt">
+  <div class="inner">
+    <span class="eyebrow">The People Who Need Answers</span>
+    <h2 class="section-head">Three leaders. Three questions. Same platform.</h2>
+    <p class="section-sub">Each persona has a well-defined accountability, real data in the MDL, and a specific KPI that is currently unanswerable. They do not share tools. They should share definitions.</p>
+    <div class="divider" style="margin-top:32px;"></div>
+    <div class="personas-grid">
+
+      <div class="persona-card exec">
+        <div class="persona-top">
+          <div class="persona-avatar">S</div>
+          <div class="persona-name">Sarah</div>
+          <div class="persona-role">CMO / VP Marketing — Global</div>
+          <div class="persona-q">"How much of Q3 pipeline did marketing generate — and can I defend that number to the CRO in tomorrow's board review?"</div>
+        </div>
+        <div class="persona-bottom">
+          <span class="persona-chip exec-chip">Executive</span>
+          <div class="persona-stat-row" style="margin-top:14px;">
+            <div class="persona-stat">
+              <div class="persona-stat-n">6</div>
+              <div class="persona-stat-l">Starred KPIs blocked</div>
+            </div>
+            <div class="persona-stat">
+              <div class="persona-stat-n" style="color:var(--coral-lt);-webkit-text-stroke:1px var(--coral);">$36M</div>
+              <div class="persona-stat-l">Attribution gap</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--ink2);margin-top:14px;line-height:1.6;">
+            Reports to the CRO. Every quarter the same question: did marketing generate pipeline, or did Sales generate pipeline that marketing touched?
+            The MDL returns a different answer depending on which <code style="font-family:var(--ff-mono);font-size:11px">lead_source</code> field you query.
+            Sarah uses Power BI Copilot on her laptop.
+          </p>
+        </div>
+      </div>
+
+      <div class="persona-card camp">
+        <div class="persona-top">
+          <div class="persona-avatar">P</div>
+          <div class="persona-name">Priya</div>
+          <div class="persona-role">Campaign Manager — EMEA</div>
+          <div class="persona-q">"Which of my 12 active EMEA campaigns is actually working — and which three should I cut before the Q4 budget lock in three weeks?"</div>
+        </div>
+        <div class="persona-bottom">
+          <span class="persona-chip camp-chip">Campaign Manager</span>
+          <div class="persona-stat-row" style="margin-top:14px;">
+            <div class="persona-stat">
+              <div class="persona-stat-n">4</div>
+              <div class="persona-stat-l">Budget KPIs blocked</div>
+            </div>
+            <div class="persona-stat">
+              <div class="persona-stat-n" style="color:var(--coral-lt);-webkit-text-stroke:1px var(--coral);">368</div>
+              <div class="persona-stat-l">MQLs, unreliable count</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--ink2);margin-top:14px;line-height:1.6;">
+            Allocates budget across LinkedIn, content syndication, webinars, and in-person events.
+            Cost per MQL by channel is her single most important signal — but MQL means different things
+            in Eloqua vs Aon Connect vs the MDL. Every campaign comparison is fiction. She uses Genie in Databricks.
+          </p>
+        </div>
+      </div>
+
+      <div class="persona-card event">
+        <div class="persona-top">
+          <div class="persona-avatar">M</div>
+          <div class="persona-name">Marcus</div>
+          <div class="persona-role">Event Lead — EMEA Programme</div>
+          <div class="persona-q">"London Insurance Forum: 340 attendees, £180K budget, July 15th. The CFO wants the pipeline number. I know it worked. I cannot prove it."</div>
+        </div>
+        <div class="persona-bottom">
+          <span class="persona-chip event-chip">Event Lead</span>
+          <div class="persona-stat-row" style="margin-top:14px;">
+            <div class="persona-stat">
+              <div class="persona-stat-n">4</div>
+              <div class="persona-stat-l">Event ROI KPIs blocked</div>
+            </div>
+            <div class="persona-stat">
+              <div class="persona-stat-n" style="color:var(--coral-lt);-webkit-text-stroke:1px var(--coral);">5</div>
+              <div class="persona-stat-l">Undocumented joins</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--ink2);margin-top:14px;line-height:1.6;">
+            Runs EMEA's event programme: forums, roundtables, executive dinners. Cvent registration data
+            exists in Eloqua as a Custom Data Object. Pipeline data exists in Aon Connect. Nobody has
+            documented the five-hop join between them. Marcus cannot run an event ROI report. He uses Claude.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- KPI CHARTER -->
+<section class="band">
+  <div class="inner">
+    <span class="eyebrow">The KPI Charter</span>
+    <h2 class="section-head">What AON needs to measure — and what's actually live.</h2>
+    <p class="section-sub">
+      Ten of the highest-priority KPIs from AON's working document. Every formula is agreed. Every source system is identified. Stage 2 means the data exists — the definition has never been encoded.
+    </p>
+    <div class="divider" style="margin-top:32px;"></div>
+
+    <div class="kpi-filters">
+      <div class="kf active" onclick="filterKPIs('all',this)">All KPIs</div>
+      <div class="kf" onclick="filterKPIs('executive',this)">Executive</div>
+      <div class="kf" onclick="filterKPIs('campaign',this)">Campaign Manager</div>
+      <div class="kf" onclick="filterKPIs('event',this)">Event Lead</div>
+    </div>
+
+    <div class="kpi-table-wrap">
+      <table class="kpi-table" id="kpi-table">
+        <thead>
+          <tr>
+            <th style="width:26%">KPI Name</th>
+            <th>Persona</th>
+            <th>Stage</th>
+            <th>Blocker</th>
+            <th style="min-width:240px">Business Value</th>
+            <th>CE Outcome</th>
+          </tr>
+        </thead>
+        <tbody id="kpi-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- BLOCKERS -->
+<section class="band band-alt">
+  <div class="inner">
+    <span class="eyebrow">The Three Blockers</span>
+    <h2 class="section-head">Same database. Three missing rules. 14 KPIs waiting.</h2>
+    <p class="section-sub">
+      These are not data quality problems. The data exists, the sources are mapped, and the joins are documented. Three agreed business rules were never encoded anywhere in the platform.
+    </p>
+    <div class="divider" style="margin-top:32px;"></div>
+
+    <div class="blockers-list">
+
+      <!-- BLOCKER 1 -->
+      <div class="blocker-card">
+        <div class="blocker-header" onclick="toggleBlocker('b1')">
+          <div class="blocker-num">6</div>
+          <div class="blocker-meta">
+            <div class="blocker-title">The Attribution War</div>
+            <div class="blocker-sub">Marketing says $58.4M. Sales says $21.2M. Same database. Same quarter. Both are wrong because neither is agreed.</div>
+          </div>
+          <div class="blocker-kpi-count">6 KPIs blocked</div>
+          <div class="blocker-caret" id="b1-caret">▼</div>
+        </div>
+        <div class="blocker-body" id="b1-body" hidden>
+          <div class="blocker-content">
+            <p>
+              AON's marketing attribution question has two answers because the MDL has two <code style="font-family:var(--ff-mono);font-size:12px">lead_source</code> fields — and no agreed rule for which one to use.
+              Marketing uses <code style="font-family:var(--ff-mono);font-size:12px">C_Lead_Source___Original1</code> from Eloqua, which captures the original first-touch channel at the moment the lead was created.
+              Sales uses <code style="font-family:var(--ff-mono);font-size:12px">lead_source</code> from Aon Connect, which reflects the current field value — updated whenever a rep takes ownership of a lead.
+            </p>
+            <p>
+              Neither field is wrong. They measure different things: Eloqua records what marketing did first; Aon Connect records what the business decided later. Without an agreed rule encoded in the platform, every dashboard author picks their own field, and every report produces a different number.
+            </p>
+
+            <div class="conflict-box">
+              <div class="conflict-side coral">
+                <div class="conflict-label">Marketing's view · Eloqua first-touch</div>
+                <div class="conflict-value coral-val">$58.4M</div>
+                <div class="conflict-note">Uses C_Lead_Source___Original1<br>Field: Eloqua, set at lead creation</div>
+              </div>
+              <div class="conflict-side azure">
+                <div class="conflict-label">Sales' view · Aon Connect current</div>
+                <div class="conflict-value azure-val">$21.2M</div>
+                <div class="conflict-note">Uses lead_source from Aon Connect<br>Field: updated when rep takes ownership</div>
+              </div>
+              <div class="conflict-side" style="border-color:rgba(15,123,81,0.2)">
+                <div class="conflict-label">Governed answer · CE encoded</div>
+                <div class="conflict-value" style="color:var(--jade)">$34.8M</div>
+                <div class="conflict-note">Agreed allowlist: Event, Content Syndication, Paid Social, Webinar, Email Campaign. Encoded in UC.</div>
+              </div>
+            </div>
+
+            <div class="blocker-quote">
+              <strong>Enterprise Architecture comment · AON MDL Working Document</strong>
+              "Requires an agreed rule for what counts as 'marketing sourced' at the record level. Currently in the marketing influenced dashboard but definition needs to be agreed with potential logic changes required."
+            </div>
+
+            <p>
+              This single unresolved rule blocks six KPIs: Marketing-Sourced Pipeline, Marketing-Attributed Pipeline, Marketing Pipeline as % of Total, Marketing ROI, Closed-Won Revenue (Marketing-attributed), and Pipeline Influenced per Campaign. Sarah cannot present a defensible pipeline number to the board until this is encoded.
+            </p>
+
+            <div class="blocker-resolution">
+              <div class="br-icon">→</div>
+              <div class="br-text">
+                <strong>CE Resolution</strong>
+                ALTER COLUMN COMMENT on <code style="font-family:var(--ff-mono)">lead_source</code> encodes the agreed allowlist permanently in Unity Catalog. All downstream tools — Power BI, Genie, SQL — read the same rule. Zero replication. One source of truth.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCKER 2 -->
+      <div class="blocker-card">
+        <div class="blocker-header" onclick="toggleBlocker('b2')">
+          <div class="blocker-num">4</div>
+          <div class="blocker-meta">
+            <div class="blocker-title">The MQL Mirage</div>
+            <div class="blocker-sub">There is no <code style="font-family:var(--ff-mono);font-size:12px">is_mql</code> flag in the MDL. The MQL derivation rule has never been agreed or encoded. Every tool uses a different one.</div>
+          </div>
+          <div class="blocker-kpi-count">4 KPIs blocked</div>
+          <div class="blocker-caret" id="b2-caret">▼</div>
+        </div>
+        <div class="blocker-body" id="b2-body" hidden>
+          <div class="blocker-content">
+            <p>
+              A Marketing Qualified Lead is the most important quantity in marketing operations — it governs budget allocation, sales handoff, and conversion rate reporting.
+              AON does not have a stable MQL definition. The MDL has no <code style="font-family:var(--ff-mono);font-size:12px">is_mql</code> flag. To count MQLs, every tool must derive the value from two fields: <code style="font-family:var(--ff-mono);font-size:12px">lead_status_code = 'QUALIFIED' AND lead_stage = 'MQL'</code> — but nobody documented that rule, so every report implements it differently.
+            </p>
+            <p>
+              The EA comment raises an additional complication: "Sales Accepted" is also a valid SQL stage — not just Converted. So MQL-to-SQL conversion rate is computed with different denominators and numerators depending on who runs it. The metric that governs Priya's entire channel allocation is fiction.
+            </p>
+
+            <div class="blocker-quote">
+              <strong>Enterprise Architecture comment · AON MDL Working Document</strong>
+              "Is there alignment between Marketing and the business on the criteria that defines a qualified lead? No explicit MQL flag in the dictionaries; MQL must be defined from lead_status_code / lead_stage values and Eloqua status. Additionally, 'Sales Accepted' is also a lead stage — not just Converted. Language used needs clarification."
+            </div>
+
+            <p>
+              Priya needs to make a Q4 budget reallocation decision in three weeks. Without a stable MQL count, Cost per MQL by channel is guesswork. She cannot tell whether Events at £3,240 per MQL is genuinely cheaper than Paid Social at £8,100 — because the MQL counts driving those numbers use different derivation logic.
+            </p>
+
+            <div class="blocker-resolution">
+              <div class="br-icon">→</div>
+              <div class="br-text">
+                <strong>CE Resolution</strong>
+                ALTER COLUMN COMMENT on <code style="font-family:var(--ff-mono)">lead_status_code</code> and <code style="font-family:var(--ff-mono)">lead_stage</code> encodes the two-field derivation rule. The <code style="font-family:var(--ff-mono)">mv_marketing_pipeline</code> Metric View bakes it into a governed <code style="font-family:var(--ff-mono)">mql_volume</code> measure. Priya gets stable numbers. Genie, Power BI, and SQL all use the same rule.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCKER 3 -->
+      <div class="blocker-card">
+        <div class="blocker-header" onclick="toggleBlocker('b3')">
+          <div class="blocker-num">4</div>
+          <div class="blocker-meta">
+            <div class="blocker-title">The Invisible Event</div>
+            <div class="blocker-sub">Cvent data exists in Eloqua. Pipeline exists in Aon Connect. The five-hop join between them has never been documented. Event ROI is currently incalculable.</div>
+          </div>
+          <div class="blocker-kpi-count">4 KPIs blocked</div>
+          <div class="blocker-caret" id="b3-caret">▼</div>
+        </div>
+        <div class="blocker-body" id="b3-body" hidden>
+          <div class="blocker-content">
+            <p>
+              London Insurance Forum ran on 15 July 2026. 340 attendees. £180,000 budget. Marcus knows the event generated significant pipeline — he can name three deals that started with conversations in that room. His CFO has asked for the pipeline number before approving next year's events budget. The data exists in Databricks. The join chain has never been written down.
+            </p>
+            <p>
+              Cvent registration data enters the MDL via an Eloqua Custom Data Object called <code style="font-family:var(--ff-mono);font-size:12px">SYS_Cvent_Event</code>. Reaching pipeline from there requires five hops: through the campaign master, the campaign membership bridge, the lead table, and finally the opportunity table. No attribution window has been agreed — different team members use 30, 60, or 90 days depending on who you ask.
+            </p>
+
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:16px 18px;margin:20px 0;overflow-x:auto;">
+              <div style="font-family:var(--ff-mono);font-size:11px;color:var(--ink3);margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase;">The undocumented five-hop join chain</div>
+              <div style="font-family:var(--ff-mono);font-size:12px;color:var(--ink2);line-height:2;white-space:nowrap;">
+                SYS_Cvent_Event
+                <span style="color:var(--azure)"> ──(Event_Code = campaign_cvent_id)──▶ </span>
+                cmpgn_campaigns_it<br>
+                <span style="padding-left:24px"></span>
+                <span style="color:var(--azure)"> ──(campaign_id)──▶ </span>
+                campaign_member_it<br>
+                <span style="padding-left:48px"></span>
+                <span style="color:var(--azure)"> ──(lead_id)──▶ </span>
+                lead_attributes_it<br>
+                <span style="padding-left:72px"></span>
+                <span style="color:var(--azure)"> ──(opty_lead_id)──▶ </span>
+                opportunity_attributes_iit
+              </div>
+            </div>
+
+            <div class="blocker-quote">
+              <strong>Enterprise Architecture comment · AON MDL Working Document</strong>
+              "Requires an agreed attribution window (e.g. 30/60/90 days) and the ability to match an opportunity back to an attendee via account/contact. Partially mapped: pipeline side mapped; per-event cost is outside the data model."
+            </div>
+
+            <p>
+              The answer is not missing because the data is missing. It is missing because the five-hop join and the attribution window have never been formalised and encoded. Every analyst who attempts this query builds the join from scratch, uses a different window, and gets a different number.
+            </p>
+
+            <div class="blocker-resolution">
+              <div class="br-icon">→</div>
+              <div class="br-text">
+                <strong>CE Resolution</strong>
+                <code style="font-family:var(--ff-mono)">mv_event_attribution</code> Metric View encodes the complete five-hop join chain and the agreed 90-day attribution window as a single governed measure: <code style="font-family:var(--ff-mono)">post_event_pipeline_90d</code>. Marcus asks the question. Every tool returns $12.5M. Event ROI: 6.9×.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- blockers-list -->
+  </div>
+</section>
+
+<!-- CE RESOLUTION -->
+<section class="band">
+  <div class="inner">
+    <span class="eyebrow">The Resolution</span>
+    <h2 class="section-head">Context Engineering. Three artifacts. One sprint.</h2>
+    <p class="section-sub">
+      Context Engineering does not add a layer. It encodes agreed business rules as permanent objects in Databricks Unity Catalog — exactly where every downstream tool already looks before answering any question.
+    </p>
+    <div class="divider" style="margin-top:32px;"></div>
+
+    <div class="ce-grid">
+
+      <div class="ce-row">
+        <div class="ce-blocker">
+          <div class="ce-label">Blocker 1</div>
+          <div class="ce-title">Attribution War</div>
+          <div class="ce-desc">No agreed lead_source allowlist. Marketing and Sales use different fields.</div>
+        </div>
+        <div class="ce-arrow">→</div>
+        <div class="ce-artifact">
+          <div class="ce-label">CE Artifact</div>
+          <div class="ce-title">UC Column Comment</div>
+          <div class="ce-desc">Encodes the agreed allowlist on lead_source in Unity Catalog — permanent, versioned, readable by every tool.</div>
+          <code class="ce-code">ALTER TABLE lead_attributes_it<br>ALTER COLUMN lead_source<br>COMMENT 'Agreed allowlist: Event,<br>Content Syndication, Paid Social,<br>Webinar, Email Campaign …'</code>
+        </div>
+        <div class="ce-arrow">→</div>
+        <div class="ce-unlock">
+          <div class="ce-label">Unlocked</div>
+          <div class="ce-count">6 KPIs</div>
+          <div class="ce-desc" style="margin-top:6px;">Marketing-sourced pipeline · Influenced pipeline · % of total · MROI · Closed-won revenue · Campaign pipeline ROI</div>
+        </div>
+      </div>
+
+      <div class="ce-row">
+        <div class="ce-blocker">
+          <div class="ce-label">Blocker 2</div>
+          <div class="ce-title">MQL Mirage</div>
+          <div class="ce-desc">No is_mql flag. Derivation rule undocumented. Every system counts differently.</div>
+        </div>
+        <div class="ce-arrow">→</div>
+        <div class="ce-artifact">
+          <div class="ce-label">CE Artifact</div>
+          <div class="ce-title">Metric View + Column Comment</div>
+          <div class="ce-desc">mv_marketing_pipeline encodes the two-field MQL rule, Cost per MQL, and MQL→SQL conversion as governed measures.</div>
+          <code class="ce-code">measures:<br>  - name: mql_volume<br>    expr: COUNT(DISTINCT CASE<br>      WHEN lead_status_code='QUALIFIED'<br>      AND lead_stage='MQL'<br>      THEN lead_id END)</code>
+        </div>
+        <div class="ce-arrow">→</div>
+        <div class="ce-unlock">
+          <div class="ce-label">Unlocked</div>
+          <div class="ce-count">4 KPIs</div>
+          <div class="ce-desc" style="margin-top:6px;">MQL volume · MQL→SQL conversion rate · Cost per MQL by channel · MQL volume by campaign</div>
+        </div>
+      </div>
+
+      <div class="ce-row">
+        <div class="ce-blocker">
+          <div class="ce-label">Blocker 3</div>
+          <div class="ce-title">Invisible Event</div>
+          <div class="ce-desc">Five-hop Cvent join undocumented. No attribution window agreed. Event ROI incalculable.</div>
+        </div>
+        <div class="ce-arrow">→</div>
+        <div class="ce-artifact">
+          <div class="ce-label">CE Artifact</div>
+          <div class="ce-title">Event Attribution Metric View</div>
+          <div class="ce-desc">mv_event_attribution encodes the five-hop join chain and 90-day attribution window as a single governed measure.</div>
+          <code class="ce-code">measures:<br>  - name: post_event_pipeline_90d<br>    expr: SUM(CASE<br>      WHEN opty_created_date BETWEEN<br>      event_start_date AND<br>      DATE_ADD(event_start_date,90)<br>      THEN opty_amount_usd END)</code>
+        </div>
+        <div class="ce-arrow">→</div>
+        <div class="ce-unlock">
+          <div class="ce-label">Unlocked</div>
+          <div class="ce-count">4 KPIs</div>
+          <div class="ce-desc" style="margin-top:6px;">Event ROI · Event-attributed opportunity volume · Event-attributed lead volume · Post-event pipeline (30d / 90d)</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:32px;padding:20px 24px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+      <div style="font-family:var(--ff-display);font-size:40px;font-weight:800;color:var(--jade);line-height:1;font-variant-numeric:tabular-nums;">14</div>
+      <div>
+        <div style="font-family:var(--ff-display);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:4px;">KPIs move from Stage 2 to live. In one sprint.</div>
+        <div style="font-size:14px;color:var(--ink2);">Three UC artifacts. The data was always there. The definitions just needed a permanent home.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PORTABILITY PAYOFF -->
+<section class="band band-alt">
+  <div class="inner">
+    <span class="eyebrow">The Portability Payoff</span>
+    <h2 class="section-head">One definition. Every tool. Zero drift.</h2>
+    <p class="section-sub">
+      Once encoded in Unity Catalog, the business rule belongs to the platform — not to any one tool. Sarah, Priya, and Marcus each use a different interface. They all get the same governed answer.
+    </p>
+    <div class="divider" style="margin-top:32px;"></div>
+
+    <div class="payoff-tabs">
+      <div class="pt active" onclick="switchPayoff(0,this)">
+        <span class="pt-icon">📊</span> Sarah · Power BI Copilot
+      </div>
+      <div class="pt" onclick="switchPayoff(1,this)">
+        <span class="pt-icon">🔮</span> Priya · Genie One
+      </div>
+      <div class="pt" onclick="switchPayoff(2,this)">
+        <span class="pt-icon">◆</span> Marcus · Claude via MCP
+      </div>
+    </div>
+
+    <div class="payoff-panel active" id="pp0">
+      <div class="payoff-persona">
+        <div class="payoff-persona-name" style="color:var(--indigo);">Sarah — CMO</div>
+        <div class="payoff-persona-role">Power BI Copilot on her laptop, before the board review</div>
+        <div class="chat">
+          <div class="chat-q">"What percentage of Q3 pipeline was marketing-sourced? I need the number for the board deck."</div>
+          <div class="chat-a">
+            <span class="answer-big">36.1% · $34.8M</span>
+            Marketing-sourced pipeline from $96.2M total Q3 pipeline. Based on agreed allowlist: Event, Content Syndication, Paid Social, Webinar, Email Campaign — encoded in Unity Catalog October 2026.
+            <span class="answer-note" style="display:block;margin-top:6px;">Source: mv_marketing_pipeline · aon_mdl · marketing</span>
+          </div>
+          <div class="chat-q">"Break it down by channel."</div>
+          <div class="chat-a">
+            Event: $12.5M (35.9%) · Content Syndication: $8.7M (25%) · Paid Social: $6.2M (17.8%) · Webinar: $4.9M (14.1%) · Email: $2.5M (7.2%)
+            <span class="answer-note" style="display:block;margin-top:6px;">Same definition. Same source. Sales will see the same numbers.</span>
+          </div>
+        </div>
+      </div>
+      <div class="payoff-source">
+        <div class="payoff-source-label">Definition Source</div>
+        <div class="payoff-source-name">mv_marketing_pipeline</div>
+        <div class="payoff-source-desc">
+          Power BI Copilot reads from this Metric View via the Tabular Editor 3 Semantic Bridge. The attribution allowlist is read from the Unity Catalog column comment — not stored in Power BI. When the rule changes, every tool sees the update immediately.
+        </div>
+        <code class="payoff-source-mv">measure: marketing_sourced_pipeline<br>field: C_Lead_Source___Original1<br>allowlist: Event · Content Syndication<br>          Paid Social · Webinar · Email Campaign<br>source: aon_mdl_test.marketing.lead_attributes_it</code>
+      </div>
+    </div>
+
+    <div class="payoff-panel" id="pp1">
+      <div class="payoff-persona">
+        <div class="payoff-persona-name" style="color:var(--teal);">Priya — Campaign Manager</div>
+        <div class="payoff-persona-role">Genie One in Databricks, three weeks before Q4 budget lock</div>
+        <div class="chat">
+          <div class="chat-q">"Which EMEA channel had the lowest cost per MQL last quarter? And which had the best conversion rate?"</div>
+          <div class="chat-a">
+            <span class="answer-big">Events at £3,240 / MQL</span>
+            Best Cost per MQL across EMEA channels. Paid Social was £8,100. Conversion: Events 38.2% → SQL, Paid Social 19.4%.
+            <span class="answer-note" style="display:block;margin-top:6px;">MQL definition: lead_status_code='QUALIFIED' AND lead_stage='MQL' · mv_marketing_pipeline</span>
+          </div>
+          <div class="chat-q">"How does that compare to Q2?"</div>
+          <div class="chat-a">
+            Events improved from £3,890 (Q2) to £3,240 (Q3) — 17% efficiency gain. Paid Social flat. Recommend +20% event budget reallocation for Q4.
+            <span class="answer-note" style="display:block;margin-top:6px;">Same MQL rule applied to both quarters. No retrospective adjustment needed.</span>
+          </div>
+        </div>
+      </div>
+      <div class="payoff-source">
+        <div class="payoff-source-label">Definition Source</div>
+        <div class="payoff-source-name">mv_marketing_pipeline</div>
+        <div class="payoff-source-desc">
+          Genie One reads the Metric View definition plus the Genie Knowledge Store instruction before generating any SQL. It never guesses the MQL rule — it reads the encoded definition. Priya gets consistent numbers whether she asks today or next quarter.
+        </div>
+        <code class="payoff-source-mv">measure: mql_volume<br>instruction: "MQL derivation: lead_status_code<br>= QUALIFIED AND lead_stage = MQL.<br>Do not attempt to derive manually."<br>source: aon_mdl_test.marketing.mv_marketing_pipeline</code>
+      </div>
+    </div>
+
+    <div class="payoff-panel" id="pp2">
+      <div class="payoff-persona">
+        <div class="payoff-persona-name" style="color:var(--jade);">Marcus — Event Lead</div>
+        <div class="payoff-persona-role">Claude via MCP endpoint, preparing the CFO report</div>
+        <div class="chat">
+          <div class="chat-q">"What pipeline did London Insurance Forum generate? I need the 90-day number for the CFO."</div>
+          <div class="chat-a">
+            <span class="answer-big">$12.5M · Event ROI 6.9×</span>
+            8 opportunities created within 90 days of London Insurance Forum (15 Jul 2026). Total: $12.5M vs £180K event cost. 90-day window is the agreed standard.
+            <span class="answer-note" style="display:block;margin-top:6px;">Source: mv_event_attribution · 5-hop Cvent join encoded · aon_mdl_test.marketing</span>
+          </div>
+          <div class="chat-q">"What about the 30-day number?"</div>
+          <div class="chat-a">
+            30-day pipeline: $5.8M from 3 opportunities. The remaining $6.7M (5 opps) converted in days 31–90, typical for roundtable-style events with longer consideration cycles.
+            <span class="answer-note" style="display:block;margin-top:6px;">measure: post_event_pipeline_30d · same source, different window</span>
+          </div>
+        </div>
+      </div>
+      <div class="payoff-source">
+        <div class="payoff-source-label">Definition Source</div>
+        <div class="payoff-source-name">mv_event_attribution</div>
+        <div class="payoff-source-desc">
+          Claude calls the Genie MCP endpoint at <code style="font-family:var(--ff-mono);font-size:11px">/ai-gateway/mcp-services/system.ai.genie_one_mcp</code>. Genie reads the Metric View, which encodes the five-hop Cvent join chain and the 90-day window. Marcus gets a defensible number without building a single JOIN.
+        </div>
+        <code class="payoff-source-mv">measure: post_event_pipeline_90d<br>window: 90 days from event_start_date<br>join_chain: SYS_Cvent_Event → campaigns<br>           → members → leads → opps<br>source: aon_mdl_test.marketing.mv_event_attribution</code>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TECHNICAL DETAIL (EXPANDABLE) -->
+<section class="band">
+  <div class="inner">
+    <span class="eyebrow">Technical Reference</span>
+    <div class="tech-toggle" onclick="toggleTech()">
+      <div class="tech-toggle-left">
+        <div class="tech-toggle-icon">⚙</div>
+        <div class="tech-toggle-text">
+          <div class="tech-toggle-title">Architecture, CE Artifacts &amp; Test Environment</div>
+          <div class="tech-toggle-sub">Technical details hidden · click to expand — for architects and engineers</div>
+        </div>
+      </div>
+      <div class="tech-caret" id="tech-caret">▼</div>
+    </div>
+    <div class="tech-body" id="tech-body" hidden>
+      <div class="tech-inner">
+        <div class="tech-tabs">
+          <button class="tt active" onclick="switchTech(0)">Architecture</button>
+          <button class="tt" onclick="switchTech(1)">UC Comments SQL</button>
+          <button class="tt" onclick="switchTech(2)">Metric View YAML</button>
+          <button class="tt" onclick="switchTech(3)">Genie Setup</button>
+        </div>
+
+        <!-- Architecture -->
+        <div class="tech-panel active" id="tp0">
+          <p class="arch-note">
+            The CE layer sits between the MDL's Gold zone and all consumer tools. Unity Catalog is the single source of semantic truth — column comments, Metric Views, and the Genie Knowledge Store are the three artifacts. No new infrastructure. No new data movement.
+          </p>
+          <div class="arch-svg-wrap">
+            <svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;min-width:600px;font-family:var(--ff-mono)">
+              <!-- Source systems -->
+              <rect x="10" y="30" width="120" height="40" rx="4" fill="#EBF1FB" stroke="#B0C8E8" stroke-width="1"/>
+              <text x="70" y="55" text-anchor="middle" fill="#1B5EAB" font-size="11" font-weight="500">Eloqua (MDL)</text>
+              <rect x="10" y="84" width="120" height="40" rx="4" fill="#EBF1FB" stroke="#B0C8E8" stroke-width="1"/>
+              <text x="70" y="109" text-anchor="middle" fill="#1B5EAB" font-size="11" font-weight="500">Aon Connect</text>
+              <rect x="10" y="138" width="120" height="40" rx="4" fill="#EBF1FB" stroke="#B0C8E8" stroke-width="1"/>
+              <text x="70" y="163" text-anchor="middle" fill="#1B5EAB" font-size="11" font-weight="500">Cvent / ON24</text>
+              <rect x="10" y="192" width="120" height="40" rx="4" fill="#EBF1FB" stroke="#B0C8E8" stroke-width="1"/>
+              <text x="70" y="217" text-anchor="middle" fill="#1B5EAB" font-size="11" font-weight="500">Unity CDP</text>
+              <rect x="10" y="246" width="120" height="40" rx="4" fill="#EBF1FB" stroke="#B0C8E8" stroke-width="1"/>
+              <text x="70" y="271" text-anchor="middle" fill="#1B5EAB" font-size="11" font-weight="500">Reltio MDM</text>
+
+              <!-- Arrow to Bronze/Silver/Gold -->
+              <line x1="130" y1="175" x2="175" y2="175" stroke="#B0C8E8" stroke-width="1.5"/>
+              <polygon points="175,170 185,175 175,180" fill="#B0C8E8"/>
+
+              <!-- Bronze/Silver/Gold -->
+              <rect x="185" y="130" width="130" height="90" rx="4" fill="#F4F7FA" stroke="#D8E2EB" stroke-width="1"/>
+              <text x="250" y="162" text-anchor="middle" fill="#7A919F" font-size="10">Bronze / Silver</text>
+              <text x="250" y="178" text-anchor="middle" fill="#526070" font-size="12" font-weight="600">Gold Zone</text>
+              <text x="250" y="194" text-anchor="middle" fill="#7A919F" font-size="10">Unity Catalog</text>
+              <text x="250" y="210" text-anchor="middle" fill="#7A919F" font-size="10">MDL Schema</text>
+
+              <!-- Arrow to CE Layer -->
+              <line x1="315" y1="175" x2="360" y2="175" stroke="#1B5EAB" stroke-width="1.5"/>
+              <polygon points="360,170 370,175 360,180" fill="#1B5EAB"/>
+
+              <!-- CE Layer - the key box -->
+              <rect x="370" y="80" width="180" height="190" rx="6" fill="#EBF1FB" stroke="#1B5EAB" stroke-width="2"/>
+              <text x="460" y="106" text-anchor="middle" fill="#1B5EAB" font-size="11" font-weight="700" letter-spacing="0.04em">CONTEXT ENGINEERING</text>
+              <rect x="384" y="118" width="152" height="34" rx="3" fill="white" stroke="#B0C8E8" stroke-width="1"/>
+              <text x="460" y="132" text-anchor="middle" fill="#526070" font-size="10">UC Column Comments</text>
+              <text x="460" y="145" text-anchor="middle" fill="#0B1724" font-size="10" font-weight="600">Business Rule Encoding</text>
+              <rect x="384" y="162" width="152" height="34" rx="3" fill="white" stroke="#B0C8E8" stroke-width="1"/>
+              <text x="460" y="176" text-anchor="middle" fill="#526070" font-size="10">Metric Views (v1.1)</text>
+              <text x="460" y="189" text-anchor="middle" fill="#0B1724" font-size="10" font-weight="600">Governed Measures</text>
+              <rect x="384" y="206" width="152" height="34" rx="3" fill="white" stroke="#B0C8E8" stroke-width="1"/>
+              <text x="460" y="220" text-anchor="middle" fill="#526070" font-size="10">Genie Knowledge Store</text>
+              <text x="460" y="233" text-anchor="middle" fill="#0B1724" font-size="10" font-weight="600">Semantic Instructions</text>
+              <text x="460" y="256" text-anchor="middle" fill="#1B5EAB" font-size="10">Databricks Runtime 17.2+</text>
+
+              <!-- Arrows to consumers -->
+              <line x1="550" y1="130" x2="600" y2="100" stroke="#0F7B51" stroke-width="1.5"/>
+              <polygon points="596,93 606,99 599,106" fill="#0F7B51"/>
+              <line x1="550" y1="175" x2="600" y2="175" stroke="#0F7B51" stroke-width="1.5"/>
+              <polygon points="600,170 610,175 600,180" fill="#0F7B51"/>
+              <line x1="550" y1="220" x2="600" y2="252" stroke="#0F7B51" stroke-width="1.5"/>
+              <polygon points="596,246 606,252 599,259" fill="#0F7B51"/>
+
+              <!-- Consumer boxes -->
+              <rect x="610" y="70" width="130" height="50" rx="4" fill="#EBF7F2" stroke="#0F7B51" stroke-width="1"/>
+              <text x="675" y="91" text-anchor="middle" fill="#0F7B51" font-size="11" font-weight="600">Power BI Copilot</text>
+              <text x="675" y="108" text-anchor="middle" fill="#526070" font-size="10">Sarah's dashboard</text>
+
+              <rect x="610" y="150" width="130" height="50" rx="4" fill="#EBF7F2" stroke="#0F7B51" stroke-width="1"/>
+              <text x="675" y="171" text-anchor="middle" fill="#0F7B51" font-size="11" font-weight="600">Genie One</text>
+              <text x="675" y="188" text-anchor="middle" fill="#526070" font-size="10">Priya's analytics</text>
+
+              <rect x="610" y="228" width="130" height="50" rx="4" fill="#EBF7F2" stroke="#0F7B51" stroke-width="1"/>
+              <text x="675" y="249" text-anchor="middle" fill="#0F7B51" font-size="11" font-weight="600">Claude via MCP</text>
+              <text x="675" y="266" text-anchor="middle" fill="#526070" font-size="10">Marcus's questions</text>
+
+              <!-- Labels -->
+              <text x="70" y="320" text-anchor="middle" fill="#7A919F" font-size="10">Source Systems</text>
+              <text x="250" y="320" text-anchor="middle" fill="#7A919F" font-size="10">MDL Gold Zone</text>
+              <text x="460" y="320" text-anchor="middle" fill="#1B5EAB" font-size="10" font-weight="600">CE Layer (new)</text>
+              <text x="675" y="320" text-anchor="middle" fill="#7A919F" font-size="10">Consumer Tools</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- UC Comments SQL -->
+        <div class="tech-panel" id="tp1">
+          <p class="arch-note">Two ALTER COLUMN COMMENT statements encode the agreed rules directly in Unity Catalog. Any tool that reads schema metadata — Genie, Power BI, SQL Analyst — immediately inherits the definition.</p>
+          <div class="code-block">
+            <div class="code-hdr"><span class="code-fn">uc_comments.sql — Attribution and MQL rules</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre class="code"><span class="c-cm">-- ── Attribution allowlist — agreed Oct 2026, CMO sign-off ──────────</span>
+<span class="c-kw">ALTER TABLE</span> aon_mdl_test.marketing.lead_attributes_it
+  <span class="c-kw">ALTER COLUMN</span> <span class="c-field">lead_source</span>
+  <span class="c-kw">COMMENT</span> <span class="c-str">'Agreed allowlist for marketing-sourced attribution (Oct 2026):
+Event, Content Syndication, Paid Social, Webinar, Email Campaign.
+Use Eloqua C_Lead_Source___Original1 (first-touch), NOT this field,
+when computing marketing_sourced_pipeline. Any value outside the
+allowlist is attributed to Sales / Other.'</span>;
+
+<span class="c-cm">-- ── MQL derivation rule — no is_mql flag exists in MDL ─────────────</span>
+<span class="c-kw">ALTER TABLE</span> aon_mdl_test.marketing.lead_attributes_it
+  <span class="c-kw">ALTER COLUMN</span> <span class="c-field">lead_status_code</span>
+  <span class="c-kw">COMMENT</span> <span class="c-str">'MQL derivation rule (agreed Oct 2026):
+A lead is MQL when lead_status_code = QUALIFIED AND lead_stage = MQL.
+No pre-built is_mql flag exists. Always use both fields together.
+SQL also includes leads at Sales_Accepted status (not just Converted).'</span>;
+
+<span class="c-cm">-- ── Eloqua first-touch source — authoritative for attribution ───────</span>
+<span class="c-kw">ALTER TABLE</span> aon_mdl_test.marketing.eloqua_contacts
+  <span class="c-kw">ALTER COLUMN</span> <span class="c-field">C_Lead_Source___Original1</span>
+  <span class="c-kw">COMMENT</span> <span class="c-str">'First-touch lead source captured by Eloqua at lead creation.
+This is the authoritative field for marketing attribution — NOT
+lead_source from Aon Connect (which reflects sales-rep updates).
+Allowlist: Event · Content Syndication · Paid Social · Webinar · Email Campaign'</span>;</pre>
+          </div>
+        </div>
+
+        <!-- Metric View YAML -->
+        <div class="tech-panel" id="tp2">
+          <p class="arch-note">Two Metric View YAML files. Requires Databricks Runtime 17.2+ and Unity Catalog. Deploy with <code style="font-family:var(--ff-mono);font-size:12px">databricks unity-catalog metric-views create --file &lt;file&gt;</code>.</p>
+          <div class="code-block">
+            <div class="code-hdr"><span class="code-fn">mv_marketing_pipeline.yml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre class="code">name: mv_marketing_pipeline
+catalog: aon_mdl_test
+schema: marketing
+comment: >
+  Marketing pipeline and MQL metrics for AON MDL.
+  Encodes the agreed attribution allowlist (Oct 2026) and MQL
+  derivation rule so every BI tool returns identical numbers.
+
+source:
+  table: marketing.lead_attributes_it
+  alias: l
+
+joins:
+  - table: marketing.opportunity_attributes_iit
+    alias: o
+    on: "l.lead_id = o.opty_lead_id"
+    type: LEFT
+  - table: marketing.eloqua_contacts
+    alias: ec
+    on: "l.lead_id = ec.lead_id"
+    type: LEFT
+
+measures:
+  - name: marketing_sourced_pipeline
+    expr: >
+      SUM(CASE WHEN ec.C_Lead_Source___Original1 IN
+        ('Event','Content Syndication','Paid Social','Webinar','Email Campaign')
+      THEN o.opty_amount_usd ELSE 0 END)
+    synonyms: ["marketing pipeline","mktg pipeline","marketing sourced revenue"]
+
+  - name: mql_volume
+    expr: >
+      COUNT(DISTINCT CASE
+        WHEN l.lead_status_code='QUALIFIED' AND l.lead_stage='MQL'
+        THEN l.lead_id END)
+    synonyms: ["MQLs","qualified leads","marketing qualified leads"]
+
+  - name: mql_to_sql_conversion_rate
+    expr: >
+      ROUND(100.0 *
+        COUNT(DISTINCT CASE WHEN l.lead_stage='SQL' THEN l.lead_id END) /
+        NULLIF(COUNT(DISTINCT CASE
+          WHEN l.lead_status_code='QUALIFIED' AND l.lead_stage='MQL'
+          THEN l.lead_id END), 0), 1)
+    synonyms: ["conversion rate","MQL conversion","lead conversion"]</pre>
+          </div>
+          <div class="code-block">
+            <div class="code-hdr"><span class="code-fn">mv_event_attribution.yml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre class="code">name: mv_event_attribution
+catalog: aon_mdl_test
+schema: marketing
+comment: >
+  Event-to-pipeline attribution. Encodes the agreed 90-day window
+  (Oct 2026, CMO sign-off required to change) and the complete
+  five-hop Cvent join chain as a single governed measure.
+
+source:
+  table: marketing.sys_cvent_event
+  alias: ev
+
+joins:
+  - table: marketing.cmpgn_campaigns_it
+    alias: c
+    on: "ev.Event_Code = c.cvent_event_code"
+    type: LEFT
+  - table: marketing.campaign_member_it
+    alias: cm
+    on: "c.campaign_id = cm.campaign_id"
+    type: LEFT
+  - table: marketing.lead_attributes_it
+    alias: l
+    on: "cm.lead_id = l.lead_id"
+    type: LEFT
+  - table: marketing.opportunity_attributes_iit
+    alias: o
+    on: "l.lead_id = o.opty_lead_id"
+    type: LEFT
+
+measures:
+  - name: post_event_pipeline_90d
+    expr: >
+      SUM(CASE WHEN o.opty_created_date
+        BETWEEN ev.Event_Start_Date
+            AND DATE_ADD(ev.Event_Start_Date, 90)
+        THEN o.opty_amount_usd ELSE 0 END)
+    synonyms: ["post-event pipeline","event pipeline","pipeline from event"]
+    comment: "90-day attribution window. CMO sign-off required to change."
+
+  - name: post_event_pipeline_30d
+    expr: >
+      SUM(CASE WHEN o.opty_created_date
+        BETWEEN ev.Event_Start_Date
+            AND DATE_ADD(ev.Event_Start_Date, 30)
+        THEN o.opty_amount_usd ELSE 0 END)
+    synonyms: ["30-day event pipeline"]</pre>
+          </div>
+        </div>
+
+        <!-- Genie Setup -->
+        <div class="tech-panel" id="tp3">
+          <p class="arch-note">Python SDK setup. Requires <code style="font-family:var(--ff-mono);font-size:12px">databricks-sdk &gt;= 0.28.0</code>. Creates the Genie Space, loads both Metric Views, and installs the standing instructions that prevent Genie from re-deriving governed rules.</p>
+          <div class="code-block">
+            <div class="code-hdr"><span class="code-fn">setup_genie_space.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre class="code"><span class="c-kw">from</span> databricks.sdk <span class="c-kw">import</span> WorkspaceClient
+<span class="c-kw">from</span> databricks.sdk.service.dashboards <span class="c-kw">import</span> (
+    GenieSpace, GenieSpaceDataset,
+    GenieSpaceInstruction, GenieSpaceTrustedQuery
+)
+
+w = WorkspaceClient()
+
+space = w.genie.create(GenieSpace(
+    title=<span class="c-str">"AON Marketing Data Lake — CE"</span>,
+    warehouse_id=<span class="c-str">"&lt;your-sql-warehouse-id&gt;"</span>,
+))
+space_id = space.space_id
+
+<span class="c-kw">for</span> mv <span class="c-kw">in</span> [<span class="c-str">"mv_marketing_pipeline"</span>, <span class="c-str">"mv_event_attribution"</span>]:
+    w.genie.create_space_dataset(space_id=space_id,
+        dataset=GenieSpaceDataset(display_name=mv,
+            table=<span class="c-fn">f</span><span class="c-str">"aon_mdl_test.marketing.{mv}"</span>))
+
+INSTRUCTIONS = [
+    <span class="c-str">"ALWAYS use mv_marketing_pipeline for pipeline, revenue, or MQL questions."</span>,
+    <span class="c-str">"ALWAYS use mv_event_attribution for event or forum questions."</span>,
+    <span class="c-str">"For marketing-sourced pipeline use the marketing_sourced_pipeline measure. "</span>
+    <span class="c-str">"DO NOT filter on lead_attributes_it.lead_source — that is the Sales CRM field."</span>,
+    <span class="c-str">"For MQL counts use the mql_volume measure. DO NOT derive manually."</span>,
+    <span class="c-str">"For post-event pipeline use post_event_pipeline_90d. The 90-day window "</span>
+    <span class="c-str">"is agreed standard. CMO sign-off required to change it."</span>,
+]
+<span class="c-kw">for</span> text <span class="c-kw">in</span> INSTRUCTIONS:
+    w.genie.create_space_instruction(space_id=space_id,
+        instruction=GenieSpaceInstruction(instruction=text))</pre>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">KPI Partners · Context Engineering Practice</div>
+    <div class="footer-meta">AON Marketing Data Lake · Discovery · Oct 2026 · synthetic data only</div>
+  </div>
+</footer>
+
+<script>
+/* ── KPI Data ── */
+const KPIS = [
+  { p:'executive', pL:'Executive', name:'Marketing-sourced pipeline',        type:'KPI',        s:2, bN:1, bL:'Attribution War', impact:'Primary CMO accountability metric. Justifies the entire marketing budget to the board. Q3 gap: $58.4M vs $21.2M.', val:'$34.8M governed' },
+  { p:'executive', pL:'Executive', name:'Marketing-attributed pipeline',      type:'KPI',        s:2, bN:1, bL:'Attribution War', impact:'Broader than sourced — any opportunity marketing touched. Requires identity resolution across Eloqua and Aon Connect.', val:'Requires identity res.' },
+  { p:'executive', pL:'Executive', name:'Marketing pipeline as % of total',   type:'KPI',        s:2, bN:1, bL:'Attribution War', impact:'The quarterly board number. Derived directly from the two rows above — blocked until attribution war resolves.', val:'36.1% governed' },
+  { p:'executive', pL:'Executive', name:'MQL volume',                         type:'KPI',        s:1, bN:2, bL:'MQL Mirage',      impact:'Headline lead quality number. Stage 1 but unreliable — no is_mql flag, derivation rule differs by system.', val:'368 EMEA governed' },
+  { p:'executive', pL:'Executive', name:'MQL → SQL conversion rate',          type:'Diagnostic', s:1, bN:2, bL:'MQL Mirage',      impact:'Measures whether Marketing\'s leads are good enough for Sales to accept. Numerator and denominator both disputed.', val:'32.3% governed' },
+  { p:'campaign',  pL:'Campaign Mgr', name:'Cost per MQL by channel',         type:'KPI',        s:1, bN:2, bL:'MQL Mirage',      impact:'Priya\'s primary budget allocation signal. Meaningless until MQL count stabilises. Events £3,240 vs Paid Social £8,100.', val:'Events £3,240 governed' },
+  { p:'campaign',  pL:'Campaign Mgr', name:'Pipeline influenced per campaign', type:'KPI',        s:2, bN:1, bL:'Attribution War', impact:'Commercial ROI per campaign. Needs agreed attribution model to mean anything — currently returns different values each time.', val:'Requires CE encoding' },
+  { p:'campaign',  pL:'Campaign Mgr', name:'MQL volume by campaign',           type:'Diagnostic', s:1, bN:2, bL:'MQL Mirage',      impact:'Tells Priya which campaigns generate quality leads vs junk. Drives Q4 reallocation. Needs stable MQL derivation rule.', val:'Needs stable MQL rule' },
+  { p:'event',     pL:'Event Lead',  name:'Event ROI (cost vs. pipeline)',     type:'KPI',        s:2, bN:3, bL:'Invisible Event', impact:'Justifies the events budget to the CFO. London Insurance Forum: £180K cost, $12.5M pipeline — 6.9× return. Currently unprovable.', val:'6.9× governed' },
+  { p:'event',     pL:'Event Lead',  name:'Event-attributed opportunity vol.', type:'KPI',        s:2, bN:3, bL:'Invisible Event', impact:'How many new deals originated within 90 days of attending an event? Currently unanswerable — no attribution window agreed.', val:'8 opps governed' },
+];
+
+const stageLabel = { 1:'Stage 1 · Live', 2:'Stage 2 · Blocked' };
+const stageClass = { 1:'stage-1', 2:'stage-2' };
+const pClass  = { executive:'p-exec', campaign:'p-camp', event:'p-event' };
+const bClass  = { 1:'b1', 2:'b2', 3:'b3' };
+
+function renderKPIs(filter) {
+  const rows = KPIS.filter(k => filter === 'all' || k.p === filter);
+  const tbody = document.getElementById('kpi-body');
+  tbody.innerHTML = rows.map(k => `
+    <tr>
+      <td><span class="kpi-name">${k.name}</span></td>
+      <td><span class="p-chip ${pClass[k.p]}">${k.pL}</span></td>
+      <td><span class="stage-chip ${stageClass[k.s]}">${stageLabel[k.s]}</span></td>
+      <td><span class="blocker-chip ${bClass[k.bN]}">${k.bL}</span></td>
+      <td><span class="kpi-impact">${k.impact}</span></td>
+      <td><span style="font-family:var(--ff-mono);font-size:11px;color:var(--jade);white-space:nowrap">${k.val}</span></td>
+    </tr>`).join('');
+}
+
+function filterKPIs(f, el) {
+  document.querySelectorAll('.kf').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  renderKPIs(f);
+}
+
+renderKPIs('all');
+
+/* ── Blockers ── */
+function toggleBlocker(id) {
+  const body = document.getElementById(id+'-body');
+  const caret = document.getElementById(id+'-caret');
+  const opening = body.hidden;
+  body.hidden = !opening;
+  caret.classList.toggle('open', opening);
+}
+
+/* ── Payoff tabs ── */
+function switchPayoff(idx, el) {
+  document.querySelectorAll('.pt').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.payoff-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+}
+
+/* ── Tech section ── */
+function toggleTech() {
+  const body = document.getElementById('tech-body');
+  const caret = document.getElementById('tech-caret');
+  const opening = body.hidden;
+  body.hidden = !opening;
+  caret.classList.toggle('open', opening);
+}
+
+let techTab = 0;
+function switchTech(idx) {
+  techTab = idx;
+  document.querySelectorAll('.tech-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+  document.querySelectorAll('.tt').forEach((t,i) => t.classList.toggle('active', i===idx));
+}
+
+/* ── Copy buttons ── */
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  try {
+    navigator.clipboard.writeText(pre.textContent).then(() => {
+      btn.textContent = '✓ Copied'; btn.classList.add('ok');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('ok'); }, 2000);
+    });
+  } catch(e) {
+    const r = document.createRange(); r.selectNodeContents(pre);
+    window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+    btn.textContent = '✓ Selected'; setTimeout(() => btn.textContent = 'Copy', 2000);
+  }
+}
+</script>
+</body>
+</html>
