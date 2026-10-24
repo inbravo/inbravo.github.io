@@ -984,9 +984,10 @@ footer {
       <div class="tech-inner">
         <div class="tech-tabs">
           <button class="tt active" onclick="switchTech(0)">Architecture</button>
-          <button class="tt" onclick="switchTech(1)">UC Comments SQL</button>
-          <button class="tt" onclick="switchTech(2)">Metric View YAML</button>
-          <button class="tt" onclick="switchTech(3)">Genie Setup</button>
+          <button class="tt" onclick="switchTech(1)">Lead Data Flow</button>
+          <button class="tt" onclick="switchTech(2)">UC Comments SQL</button>
+          <button class="tt" onclick="switchTech(3)">Metric View YAML</button>
+          <button class="tt" onclick="switchTech(4)">Genie Setup</button>
         </div>
 
         <!-- Architecture -->
@@ -1067,8 +1068,94 @@ footer {
           </div>
         </div>
 
-        <!-- UC Comments SQL -->
+        <!-- Lead Data Flow -->
         <div class="tech-panel" id="tp1">
+          <p class="arch-note">End-to-end journey of a lead — from first marketing touch through five source systems into the MDL Gold zone. Two fields capture the same lead with different values; the conflict between them is the attribution war.</p>
+          <div style="overflow-x:auto;">
+<pre class="code" style="font-size:11px;line-height:1.75;white-space:pre;">
+<span class="c-cm">╔══════════════════════════════════════════════════════════════════════════════════╗</span>
+<span class="c-cm">║  PERSON / PROSPECT  (a marketing contact at a target account)                   ║</span>
+<span class="c-cm">╚══════════════════════════════════════════════════════════════════════════════════╝</span>
+         │                    │                    │                    │
+    fills a form         registers for          attends             visits website /
+    downloads content    London Forum           webinar             clicks email
+         │                    │                    │                    │
+         ▼                    ▼                    ▼                    ▼
+  <span class="c-kw">┌─────────────┐</span>    <span class="c-kw">┌──────────────┐</span>    <span class="c-kw">┌──────────────┐</span>    <span class="c-kw">┌─────────────────┐</span>
+  <span class="c-kw">│   ELOQUA    │</span>    <span class="c-kw">│    CVENT     │</span>    <span class="c-kw">│    ON24      │</span>    <span class="c-kw">│    ELOQUA       │</span>
+  <span class="c-kw">│             │</span>    <span class="c-kw">│  (event reg) │</span>    <span class="c-kw">│  (webinar)   │</span>    <span class="c-kw">│  (web tracking) │</span>
+  <span class="c-kw">│ Creates lead│</span>    <span class="c-kw">└──────┬───────┘</span>    <span class="c-kw">└──────┬───────┘</span>    <span class="c-kw">└────────┬────────┘</span>
+  <span class="c-kw">│             │</span>           │  pushes via API    │  pushes via API        │
+  <span class="c-str">│ C_Lead_     │</span>           │                   │                        │
+  <span class="c-str">│ Source___   │</span>           ▼                   ▼                        │
+  <span class="c-str">│ Original1   │</span>    <span class="c-fn">┌──────────────────────────────────────────────┐</span>   │
+  <span class="c-str">│ ← FROZEN    │</span>    <span class="c-fn">│  ELOQUA CDO  ·  SYS_Cvent_Event              │</span>◀──┘
+  <span class="c-str">│   at birth  │</span>    <span class="c-fn">│  Custom Data Object — event registrations    │</span>
+  <span class="c-kw">└──────┬──────┘</span>    <span class="c-fn">└──────────────────────┬───────────────────────┘</span>
+         │                                   │
+         │           <span class="c-cm">┌────────────────────────────────────────────┐</span>
+         │           <span class="c-cm">│  RELTIO MDM  ·  Master Data Management     │</span>
+         │           <span class="c-cm">│  Resolves: duplicate contacts, company      │</span>
+         │           <span class="c-cm">│  hierarchies, account golden records        │</span>
+         │           <span class="c-cm">└───────────────────┬────────────────────────┘</span>
+         │                               │
+         │           <span class="c-cm">┌───────────────────▼────────────────────────┐</span>
+         │           <span class="c-cm">│  UNITY CDP  ·  Customer Data Platform      │</span>
+         │           <span class="c-cm">│  "Is this Eloqua contact the same person   │</span>
+         │           <span class="c-cm">│   as this Aon Connect contact?"            │</span>
+         │           <span class="c-cm">│  Cross-system identity resolution          │</span>
+         │           <span class="c-cm">└───────────────────┬────────────────────────┘</span>
+         │                               │
+         ▼                               │
+  <span class="c-field">┌──────────────────┐</span>                │
+  <span class="c-field">│   AON CONNECT    │</span>◀───────────────┘
+  <span class="c-field">│  Oracle Sales    │</span>   Eloqua syncs lead → Sales reps take ownership
+  <span class="c-field">│  Cloud  (CRM)    │</span>
+  <span class="c-field">│                  │</span>
+  <span class="c-field">│  lead_source     │</span>  <span class="c-str">← MUTABLE — rep can change this field any time</span>
+  <span class="c-field">│                  │</span>
+  <span class="c-field">│  Creates:        │</span>
+  <span class="c-field">│  Opportunities   │</span>
+  <span class="c-field">│  Pipeline values │</span>
+  <span class="c-field">└────────┬─────────┘</span>
+           │
+     <span class="c-num">╔═══════════════════════════════════════════════════════╗</span>
+     <span class="c-num">║  THE CONFLICT ZONE                                    ║</span>
+     <span class="c-num">║                                                       ║</span>
+     <span class="c-num">║  Eloqua field:      C_Lead_Source___Original1         ║</span>
+     <span class="c-num">║  → first touch · set by marketing · never changes     ║</span>
+     <span class="c-num">║                                                       ║</span>
+     <span class="c-num">║  Aon Connect field: lead_source                       ║</span>
+     <span class="c-num">║  → current value · set by sales rep · can change      ║</span>
+     <span class="c-num">║                                                       ║</span>
+     <span class="c-num">║  SAME LEAD.  DIFFERENT FIELD.  DIFFERENT ANSWER.      ║</span>
+     <span class="c-num">╚═══════════════════════════════════════════════════════╝</span>
+           │
+           ▼
+<span class="c-kw">╔══════════════════════════════════════════════════════════════════════════════╗</span>
+<span class="c-kw">║  DATABRICKS  ·  MARKETING DATA LAKE  ·  UNITY CATALOG  ·  GOLD ZONE        ║</span>
+<span class="c-kw">╠═══════════════════╦══════════════════╦═════════════════╦════════════════════╣</span>
+<span class="c-kw">║</span> <span class="c-str">lead_attributes_it</span> <span class="c-kw">║</span> <span class="c-str">opportunity_      </span><span class="c-kw">║</span> <span class="c-str">cmpgn_           </span><span class="c-kw">║</span> <span class="c-str">sys_cvent_event   </span><span class="c-kw">║</span>
+<span class="c-kw">║</span>                   <span class="c-kw">║</span> <span class="c-str">attributes_iit    </span><span class="c-kw">║</span> <span class="c-str">campaigns_it     </span><span class="c-kw">║</span>                  <span class="c-kw">║</span>
+<span class="c-kw">║</span> lead_id           <span class="c-kw">║</span> opty_lead_id      <span class="c-kw">║</span> campaign_id      <span class="c-kw">║</span> Event_Code        <span class="c-kw">║</span>
+<span class="c-kw">║</span> lead_source       <span class="c-kw">║</span> opty_amount_usd   <span class="c-kw">║</span> cvent_event_code <span class="c-kw">║</span> Event_Start_Date  <span class="c-kw">║</span>
+<span class="c-kw">║</span> lead_status_code  <span class="c-kw">║</span> opty_created_date <span class="c-kw">║</span>                  <span class="c-kw">║</span> <span class="c-cm">← Cvent 5-hop    </span><span class="c-kw">║</span>
+<span class="c-kw">║</span> lead_stage        <span class="c-kw">║</span>                  <span class="c-kw">║</span>                  <span class="c-kw">║</span> <span class="c-cm">   join to opp   </span><span class="c-kw">║</span>
+<span class="c-kw">║</span> C_Lead_Source___  <span class="c-kw">║</span> lead_id           <span class="c-kw">║</span>                  <span class="c-kw">║</span> <span class="c-cm">   undocumented  </span><span class="c-kw">║</span>
+<span class="c-kw">║</span> Original1         <span class="c-kw">║</span> = opty_lead_id   <span class="c-kw">║</span>                  <span class="c-kw">║</span>                  <span class="c-kw">║</span>
+<span class="c-kw">║</span>                   <span class="c-kw">║</span> <span class="c-cm">(join key)       </span><span class="c-kw">║</span>                  <span class="c-kw">║</span>                  <span class="c-kw">║</span>
+<span class="c-kw">║</span> lead_comverted_   <span class="c-kw">║</span>                  <span class="c-kw">║</span>                  <span class="c-kw">║</span>                  <span class="c-kw">║</span>
+<span class="c-kw">║</span> <span class="c-num">date  ← typo(1n)  </span><span class="c-kw">║</span>                  <span class="c-kw">║</span>                  <span class="c-kw">║</span>                  <span class="c-kw">║</span>
+<span class="c-kw">╠═══════════════════╩══════════════════╩═════════════════╩════════════════════╣</span>
+<span class="c-kw">║</span>  <span class="c-num">MISSING:</span>  no is_mql flag · no agreed lead_source allowlist                 <span class="c-kw">║</span>
+<span class="c-kw">║</span>           no documented Cvent join · spend data lives in Hive9 (outside MDL)<span class="c-kw">║</span>
+<span class="c-kw">╚══════════════════════════════════════════════════════════════════════════════╝</span>
+</pre>
+          </div>
+        </div>
+
+        <!-- UC Comments SQL -->
+        <div class="tech-panel" id="tp2">
           <p class="arch-note">Two ALTER COLUMN COMMENT statements encode the agreed rules directly in Unity Catalog. Any tool that reads schema metadata — Genie, Power BI, SQL Analyst — immediately inherits the definition.</p>
           <div class="code-block">
             <div class="code-hdr"><span class="code-fn">uc_comments.sql — Attribution and MQL rules</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
@@ -1100,7 +1187,7 @@ Allowlist: Event · Content Syndication · Paid Social · Webinar · Email Campa
         </div>
 
         <!-- Metric View YAML -->
-        <div class="tech-panel" id="tp2">
+        <div class="tech-panel" id="tp3">
           <p class="arch-note">Two Metric View YAML files. Requires Databricks Runtime 17.2+ and Unity Catalog. Deploy with <code style="font-family:var(--ff-mono);font-size:12px">databricks unity-catalog metric-views create --file &lt;file&gt;</code>.</p>
           <div class="code-block">
             <div class="code-hdr"><span class="code-fn">mv_marketing_pipeline.yml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
@@ -1203,7 +1290,7 @@ measures:
         </div>
 
         <!-- Genie Setup -->
-        <div class="tech-panel" id="tp3">
+        <div class="tech-panel" id="tp4">
           <p class="arch-note">Python SDK setup. Requires <code style="font-family:var(--ff-mono);font-size:12px">databricks-sdk &gt;= 0.28.0</code>. Creates the Genie Space, loads both Metric Views, and installs the standing instructions that prevent Genie from re-deriving governed rules.</p>
           <div class="code-block">
             <div class="code-hdr"><span class="code-fn">setup_genie_space.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>

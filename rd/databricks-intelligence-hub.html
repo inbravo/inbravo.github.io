@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Databricks Intelligence Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #1a1f2e;
+  --surface2: #222840;
+  --border: #2d3455;
+  --text: #e2e8f0;
+  --text-muted: #8899b4;
+  --text-dim: #64748b;
+  --accent: #FF3621;
+  --accent-soft: rgba(255,54,33,0.12);
+  --green: #22c55e;
+  --green-bg: rgba(34,197,94,0.12);
+  --blue: #3b82f6;
+  --blue-bg: rgba(59,130,246,0.12);
+  --orange: #f97316;
+  --orange-bg: rgba(249,115,22,0.12);
+  --purple: #a855f7;
+  --purple-bg: rgba(168,85,247,0.12);
+  --amber: #f59e0b;
+  --amber-bg: rgba(245,158,11,0.12);
+  --pill-active-bg: var(--accent);
+  --pill-active-text: #fff;
+  --radius: 8px;
+  --radius-sm: 5px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+[data-theme="light"] {
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --surface2: #f8fafc;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #94a3b8;
+  --accent-soft: rgba(255,54,33,0.08);
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.65;min-height:100vh}
+a{color:var(--blue);text-decoration:none}
+code,pre{font-family:'JetBrains Mono',monospace}
+
+/* ─── HEADER ─────────────────────────────────────────────── */
+.site-header{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.site-logo{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.04em;white-space:nowrap}
+.site-logo span{color:var(--text-muted);font-weight:400}
+.note-pills{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.note-pill{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-muted);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit}
+.note-pill:hover{border-color:var(--accent);color:var(--text)}
+.note-pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.theme-toggle{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-muted);font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s}
+.theme-toggle:hover{border-color:var(--accent);color:var(--text)}
+
+/* ─── LAYOUT ─────────────────────────────────────────────── */
+.note-view{display:none;max-width:960px;margin:0 auto;padding:32px 24px 80px}
+.note-view.active{display:block}
+
+/* ─── NOTE HEADER ────────────────────────────────────────── */
+.note-header{margin-bottom:24px}
+.note-eyebrow{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.note-title{font-size:24px;font-weight:700;line-height:1.25;color:var(--text);margin-bottom:8px}
+.note-meta{font-size:12px;color:var(--text-dim)}
+
+/* ─── SIGNALS ────────────────────────────────────────────── */
+.signals{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.signal{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.signal-red{background:var(--accent-soft);color:var(--accent)}
+.signal-blue{background:var(--blue-bg);color:var(--blue)}
+.signal-green{background:var(--green-bg);color:var(--green)}
+.signal-orange{background:var(--orange-bg);color:var(--orange)}
+.signal-purple{background:var(--purple-bg);color:var(--purple)}
+.signal-amber{background:var(--amber-bg);color:var(--amber)}
+
+/* ─── SECTION JUMPS ──────────────────────────────────────── */
+.section-jumps{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+.jump-label{font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;align-self:center;margin-right:4px;white-space:nowrap}
+.jump{padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-muted);font-size:11px;cursor:pointer;transition:all .12s;font-family:inherit}
+.jump:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ─── SECTIONS ───────────────────────────────────────────── */
+.note-section{margin-bottom:36px;scroll-margin-top:72px}
+h2.section-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3.sub-title{font-size:14px;font-weight:600;color:var(--text);margin:18px 0 8px}
+p{margin-bottom:10px;color:var(--text)}
+p:last-child{margin-bottom:0}
+
+/* ─── BADGES ─────────────────────────────────────────────── */
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle;margin-left:6px}
+.badge-ga{background:var(--green-bg);color:var(--green)}
+.badge-preview{background:var(--blue-bg);color:var(--blue)}
+.badge-beta{background:var(--orange-bg);color:var(--orange)}
+.badge-alpha{background:var(--amber-bg);color:var(--amber)}
+.badge-labs{background:var(--purple-bg);color:var(--purple)}
+.badge-announced{background:rgba(100,116,139,.15);color:var(--text-dim)}
+
+/* ─── TABLE ──────────────────────────────────────────────── */
+.table-wrap{overflow-x:auto;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead tr{background:var(--surface2)}
+th{padding:8px 12px;text-align:left;font-weight:600;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid var(--border)}
+td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--surface2)}
+
+/* ─── CODE ───────────────────────────────────────────────── */
+.code-block{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;font-size:12px;line-height:1.6;margin:12px 0;color:var(--text)}
+pre.diagram{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;overflow-x:auto;font-size:11.5px;line-height:1.5;margin:12px 0;color:var(--text)}
+.inline-code{background:var(--surface2);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-size:11px;color:var(--text)}
+
+/* ─── CALLOUT ────────────────────────────────────────────── */
+.callout{background:var(--surface);border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 16px;margin:14px 0;font-size:13px}
+.callout.blue{border-left-color:var(--blue)}
+.callout.green{border-left-color:var(--green)}
+.callout.purple{border-left-color:var(--purple)}
+.callout-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:4px}
+.callout.blue .callout-label{color:var(--blue)}
+.callout.green .callout-label{color:var(--green)}
+.callout.purple .callout-label{color:var(--purple)}
+
+/* ─── PATTERN CARDS (N7 accordion) ──────────────────────── */
+.pattern-card{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;transition:border-color .15s}
+.pattern-card:hover{border-color:var(--accent)}
+.pattern-card.open{border-color:var(--accent)}
+.pattern-header{display:flex;align-items:flex-start;gap:12px;padding:16px 18px;cursor:pointer;background:var(--surface)}
+.pattern-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.pattern-summary{flex:1}
+.pattern-name{font-size:15px;font-weight:700;color:var(--text);line-height:1.3}
+.pattern-def{font-size:12.5px;color:var(--text-muted);margin-top:3px;line-height:1.4}
+.pattern-toggle{color:var(--text-dim);font-size:18px;flex-shrink:0;align-self:center;transition:transform .2s}
+.pattern-card.open .pattern-toggle{transform:rotate(180deg)}
+.pattern-body{display:none;padding:0 18px 18px;background:var(--surface)}
+.pattern-card.open .pattern-body{display:block}
+.pattern-section{margin-top:14px}
+.pattern-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);margin-bottom:8px}
+
+/* ─── STACK DIAGRAM ──────────────────────────────────────── */
+.stack{margin:12px 0}
+.stack-layer{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:4px;background:var(--surface)}
+.stack-layer-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.stack-layer-content{font-size:12px;color:var(--text-muted)}
+.layer-7{--lc:var(--green);border-left:3px solid var(--green)}
+.layer-6{--lc:var(--blue);border-left:3px solid var(--blue)}
+.layer-5{--lc:var(--purple);border-left:3px solid var(--purple)}
+.layer-4{--lc:var(--orange);border-left:3px solid var(--orange)}
+.layer-3{--lc:var(--amber);border-left:3px solid var(--amber)}
+.layer-2{--lc:#06b6d4;border-left:3px solid #06b6d4}
+.layer-1{--lc:var(--text-dim);border-left:3px solid var(--text-dim)}
+.stack-layer .stack-layer-label{color:var(--lc)}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width:640px){
+  .site-header{padding:10px 16px}
+  .note-view{padding:20px 16px 60px}
+  .note-title{font-size:20px}
+  pre.diagram{font-size:10px}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-logo">DATABRICKS <span>/ Intelligence Hub</span></div>
+  <nav class="note-pills">
+    <button class="note-pill active" onclick="switchNote(1)">N1 · AI Direction</button>
+    <button class="note-pill" onclick="switchNote(2)">N2 · Ontology Deep</button>
+    <button class="note-pill" onclick="switchNote(3)">N3 · Platform</button>
+    <button class="note-pill" onclick="switchNote(4)">N4 · Verticals &amp; OSI</button>
+    <button class="note-pill" onclick="switchNote(5)">N5 · UC Catalog</button>
+    <button class="note-pill" onclick="switchNote(6)">N6 · AgentOS</button>
+    <button class="note-pill" onclick="switchNote(7)">N7 · Patterns</button>
+  </nav>
+  <button class="theme-toggle" onclick="toggleTheme()">☀ Light</button>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════
+     NOTE 1 — AI Direction
+══════════════════════════════════════════════════════════ -->
+<section id="note1" class="note-view active">
+  <div class="note-header">
+    <div class="note-eyebrow">Note 1 of 7 · October 2026</div>
+    <h1 class="note-title">Databricks AI Direction — Next 12 Months</h1>
+    <div class="note-meta">Anchored: DAIS 2026 + subsequent announcements</div>
+  </div>
+
+  <div class="signals">
+    <span class="signal signal-red">Lakehouse = Agentic Control Plane</span>
+    <span class="signal signal-blue">Context Engineering Cert Launched</span>
+    <span class="signal signal-green">Lakebase GA · Feb 2026</span>
+    <span class="signal signal-orange">Genie Ontology Public Preview</span>
+    <span class="signal signal-amber">LTAP Announced · Not Shipped</span>
+  </div>
+
+  <div class="section-jumps">
+    <span class="jump-label">Jump to</span>
+    <button class="jump" onclick="jumpTo('n1-thesis')">Thesis</button>
+    <button class="jump" onclick="jumpTo('n1-context-eng')">Context Engineering</button>
+    <button class="jump" onclick="jumpTo('n1-genie-ont')">Genie Ontology</button>
+    <button class="jump" onclick="jumpTo('n1-uc-stack')">UC Semantic Stack</button>
+    <button class="jump" onclick="jumpTo('n1-memory')">Agent Memory</button>
+    <button class="jump" onclick="jumpTo('n1-agent-bricks')">Agent Bricks</button>
+    <button class="jump" onclick="jumpTo('n1-bfsi')">BFSI Partners</button>
+    <button class="jump" onclick="jumpTo('n1-competitive')">Competitive</button>
+    <button class="jump" onclick="jumpTo('n1-si')">SI Opportunities</button>
+  </div>
+
+  <div id="n1-thesis" class="note-section">
+    <h2 class="section-title">The Overarching Thesis</h2>
+    <p>Databricks has made a single coherent bet: <strong>the lakehouse becomes the agentic control plane</strong>. Every major announcement in 2026 — Genie Ontology, Agent Bricks, Lakebase, Unity Catalog semantic stack, Omnigent — is a layer in one architecture.</p>
+    <div class="callout">
+      <div class="callout-label">The new unit of value</div>
+      <em>"Your agents will be smarter, safer, and cheaper to run because they run on your data — not on a copy of it sent to someone else's SaaS."</em>
+    </div>
+  </div>
+
+  <div id="n1-context-eng" class="note-section">
+    <h2 class="section-title">Context Engineering — The New Discipline</h2>
+    <p>Databricks launched the <strong>Certified Context Engineer Associate</strong> (May 2026) — billed as the industry's first certification for reliable AI agent systems. The cert syllabus defines five layers:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Layer</th><th>What it covers</th><th>Databricks Component</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Instructions</strong></td><td>System prompts, agent behaviour constraints</td><td>Agent Bricks / Genie Spaces</td></tr>
+        <tr><td><strong>Retrieval</strong></td><td>Surfacing relevant knowledge at query time</td><td>AI Search (formerly Vector Search)</td></tr>
+        <tr><td><strong>Memory</strong></td><td>Persisting state across sessions</td><td>Lakebase Agent Memory (MemCurrent)</td></tr>
+        <tr><td><strong>Tools</strong></td><td>Connecting agents to data and external systems</td><td>MCP Catalog + Unity Catalog</td></tr>
+        <tr><td><strong>Governance</strong></td><td>Metadata, PII, access policies, quality</td><td>Unity Catalog (metrics, glossary, domains)</td></tr>
+      </tbody>
+    </table></div>
+    <p>These five layers are the SI discovery framework for any agentic engagement. Cert price ~$200. Beta takers report it demanding — not a typical vendor cert.</p>
+  </div>
+
+  <div id="n1-genie-ont" class="note-section">
+    <h2 class="section-title">Genie Ontology — The Context Layer <span class="badge badge-preview">Preview</span></h2>
+    <p>A live, self-improving knowledge graph of business meaning that grounds Genie agents. Prevents agents from generating syntactically valid SQL that returns the wrong business result.</p>
+    <pre class="diagram">EXTRACT  →  Ranked snippets from: UC Metrics (highest authority),
+             dashboards, SQL history, 50+ app connectors
+
+RANK     →  OntoRank: creator authority × usage breadth
+             × dataset linkage × recency
+
+RETRIEVE →  At query time: fetch top-ranked snippets,
+             apply UC permission gate, inject into context window</pre>
+    <p><strong>Benchmark (self-reported):</strong> 84.5% first-attempt accuracy vs 52.4% for strongest general-purpose agent. Not independently verified — treat as directional.</p>
+    <div class="callout blue">
+      <div class="callout-label">OntoRank Risk</div>
+      A high-volume Genie Space instruction can accumulate enough usage signal to outrank a freshly certified UC Metric View. No "certified metric always wins" override documented.
+    </div>
+  </div>
+
+  <div id="n1-uc-stack" class="note-section">
+    <h2 class="section-title">Unity Catalog Semantic Stack</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Feature</th><th>Status</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Certified Metrics (Metric Views)</td><td><span class="badge badge-ga">GA</span></td><td>GA Apr 2026; open-sourced into UC OSS v0.5</td></tr>
+        <tr><td>Domains</td><td><span class="badge badge-ga">GA</span></td><td>GA Oct 8, 2026</td></tr>
+        <tr><td>Business Glossary</td><td><span class="badge badge-preview">Preview</span></td><td>AI-assisted drafting and drift detection</td></tr>
+        <tr><td>Governance Hub</td><td><span class="badge badge-preview">Private Preview</span></td><td>Single command centre for stewards and admins</td></tr>
+        <tr><td>MCP support (UC functions, Genie, SQL)</td><td><span class="badge badge-ga">GA</span></td><td>OAuth on-behalf-of user</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div id="n1-memory" class="note-section">
+    <h2 class="section-title">Agent Memory — MemCurrent on Lakebase <span class="badge badge-beta">Beta</span></h2>
+    <p>Two memory layers: <strong>Episodic</strong> (raw session event log) and <strong>Distilled</strong> (async background consolidation). Three access patterns: automatic plugins, on-demand tools, background dreaming. All stored in the customer's own Lakebase — data never leaves their cloud.</p>
+    <div class="callout green">
+      <div class="callout-label">Self-reported benchmark</div>
+      3× pass rate · 12× fewer input tokens · 31% lower total token usage · 26% faster task completion. 114-case benchmark, not independently verified.
+    </div>
+  </div>
+
+  <div id="n1-agent-bricks" class="note-section">
+    <h2 class="section-title">Agent Bricks &amp; Unity AI Gateway</h2>
+    <p><strong>Unity AI Gateway</strong> <span class="badge badge-ga">GA Aug 4 2026</span> — central control plane for all model access: smart routing, fallback chains, budget hard caps with attribution per user/team/tool, unified tracing into UC system tables, guardrails (PII, prompt injection) in beta.</p>
+    <p><strong>Omnigent</strong> <span class="badge badge-alpha">Apache 2.0 · Jun 2026</span> — meta-harness above existing agent CLIs (Claude Code, Codex, Pi). Declarative YAML: harness is a one-line swap. Policy engine: allow / ask / deny, enforced outside the prompt. Session sharing by URL.</p>
+    <p><strong>MCP Catalog in Marketplace</strong> — governed discovery of MCP tools with credentials managed by Unity Catalog, not in agent code.</p>
+  </div>
+
+  <div id="n1-bfsi" class="note-section">
+    <h2 class="section-title">BFSI Partner Accelerators</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Partner</th><th>Accelerator</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td>zeb</td><td>Agentic MDM for FSI</td><td>Reconciles fragmented entities (funds, counterparties, clients) for Basel III / Dodd-Frank / GDPR</td></tr>
+        <tr><td>EY</td><td>Data Fusion</td><td>Cloud-native AI data management; 2026 FS Partner of the Year</td></tr>
+        <tr><td>Neudesic</td><td>Payment Intelligence</td><td>Unified real-time payment operations + analytics on Lakebase</td></tr>
+        <tr><td>Genpact</td><td>Finance One</td><td>Fragmented FP&amp;A data; NL queries; claims 5%+ EBITDA lift</td></tr>
+        <tr><td>Celebal</td><td>Agent Garage</td><td>Loan origination 30 days → 4 hours (self-reported)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div id="n1-competitive" class="note-section">
+    <h2 class="section-title">Competitive Snapshot (Context + Agents)</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Dimension</th><th>Databricks</th><th>Snowflake</th><th>Azure Fabric</th></tr></thead>
+      <tbody>
+        <tr><td>Context layer</td><td>Genie Ontology (preview)</td><td>Cortex Analyst (GA)</td><td>Copilot Studio (GA)</td></tr>
+        <tr><td>Semantic / metric layer</td><td>UC Metrics (GA, open-source)</td><td>Semantic Views (preview)</td><td>Power BI semantic model</td></tr>
+        <tr><td>Agent memory</td><td>Lakebase MemCurrent (beta)</td><td>None native</td><td>Cosmos DB (external)</td></tr>
+        <tr><td>Multi-agent orchestration</td><td>Omnigent (alpha, OSS)</td><td>None native</td><td>Semantic Kernel</td></tr>
+        <tr><td>Context engineer cert</td><td>Yes — Associate (May 2026)</td><td>No</td><td>No</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div id="n1-si" class="note-section">
+    <h2 class="section-title">SI Opportunity Map</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Theme</th><th>Where SI value lands</th><th>Maturity</th></tr></thead>
+      <tbody>
+        <tr><td>Context engineering practice</td><td>Build the 5-layer architecture for customer agents</td><td>New — cert just launched</td></tr>
+        <tr><td>UC semantic stack build-out</td><td>Populate Metrics, Glossary, Domains from BI assets</td><td>High demand, under-served · 4–8 weeks</td></tr>
+        <tr><td>Agent Bricks implementation</td><td>Build + test + deploy governed production agents</td><td>Growing — mostly PoC-grade today</td></tr>
+        <tr><td>Lakebase memory architecture</td><td>Design persistent agent memory schemas and MemCurrent patterns</td><td>Emerging — early-mover advantage</td></tr>
+        <tr><td>Vertical accelerator on Agent Bricks</td><td>Build BFSI agent accelerators for Databricks Marketplace</td><td>Highest value if Marketplace-published</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     NOTE 2 — Ontology Deep Dive
+══════════════════════════════════════════════════════════ -->
+<section id="note2" class="note-view">
+  <div class="note-header">
+    <div class="note-eyebrow">Note 2 of 7 · October 2026</div>
+    <h1 class="note-title">Ontology &amp; Semantic Architecture — Deep Dive</h1>
+    <div class="note-meta">Four distinct "ontology" things · Genie two-context model · UC Metric View spec · OSI → Apache Ossie</div>
+  </div>
+
+  <div class="signals">
+    <span class="signal signal-red">Four Distinct Ontology Things</span>
+    <span class="signal signal-blue">Genie Two-Context Model</span>
+    <span class="signal signal-green">UC Metric Views GA Apr 2026</span>
+    <span class="signal signal-orange">OSI → Apache Ossie Jul 2026</span>
+    <span class="signal signal-purple">OntoBricks v0.9.0 Labs</span>
+  </div>
+
+  <div class="section-jumps">
+    <span class="jump-label">Jump to</span>
+    <button class="jump" onclick="jumpTo('n2-landscape')">Landscape</button>
+    <button class="jump" onclick="jumpTo('n2-genie-arch')">Genie Architecture</button>
+    <button class="jump" onclick="jumpTo('n2-metric-views')">Metric Views</button>
+    <button class="jump" onclick="jumpTo('n2-osi')">OSI / Ossie</button>
+    <button class="jump" onclick="jumpTo('n2-ontos')">Ontos</button>
+    <button class="jump" onclick="jumpTo('n2-ontobricks')">OntoBricks</button>
+  </div>
+
+  <div id="n2-landscape" class="note-section">
+    <h2 class="section-title">The Landscape at a Glance</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Name</th><th>Type</th><th>Status</th><th>What it is</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Genie Ontology</strong></td><td>Core product</td><td><span class="badge badge-preview">Preview</span></td><td>AI-facing context layer: modeled + inferred knowledge graph feeding Genie</td></tr>
+        <tr><td><strong>UC Metric Views</strong></td><td>Core product</td><td><span class="badge badge-ga">GA</span></td><td>Governed semantic definitions — highest-authority input to Genie Ontology</td></tr>
+        <tr><td><strong>Ontos</strong></td><td>Labs</td><td><span class="badge badge-labs">v1.0.0</span></td><td>Business catalog: data products, data contracts, data mesh on top of UC</td></tr>
+        <tr><td><strong>OntoBricks</strong></td><td>Labs</td><td><span class="badge badge-labs">v0.9.0</span></td><td>Formal OWL ontology → knowledge graph on Databricks, exposed via MCP</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout">
+      <div class="callout-label">Key distinction</div>
+      These are not parts of one system. Genie Ontology is the product layer. Metric Views are the semantic substrate it consumes. Ontos and OntoBricks are Labs experiments — AS-IS, no formal support.
+    </div>
+  </div>
+
+  <div id="n2-genie-arch" class="note-section">
+    <h2 class="section-title">Genie Ontology — Two-Context Model</h2>
+    <pre class="diagram">┌─────────────────────────────────────────────────────────┐
+│                    GENIE ONTOLOGY                        │
+│                                                          │
+│  ┌─────────────────────┐   ┌──────────────────────────┐ │
+│  │   MODELED CONTEXT   │   │    INFERRED CONTEXT      │ │
+│  │ (you define &amp; certify)│   │ (Genie extracts &amp; ranks) │ │
+│  │                     │   │                          │ │
+│  │ · UC Metric Views   │   │ · Dashboards             │ │
+│  │ · Domains           │   │ · SQL query history      │ │
+│  │ · Genie Agent Pages │   │ · Genie Agents           │ │
+│  └────────┬────────────┘   └─────────────┬────────────┘ │
+│           └──────────────┬───────────────┘              │
+│                          ▼                               │
+│                     OntoRank                             │
+│         (authority × usage × linkage × recency)         │
+│                          ↓                               │
+│             Permission gate (UC policies)                │
+│                          ↓                               │
+│              Snippets injected into context window       │
+└─────────────────────────────────────────────────────────┘</pre>
+    <h3 class="sub-title">OntoRank Scoring Signals</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Signal</th><th>What it measures</th></tr></thead>
+      <tbody>
+        <tr><td>Creator authority</td><td>Steward vs. power user vs. anonymous query</td></tr>
+        <tr><td>Usage breadth</td><td>How many people and queries rely on this definition</td></tr>
+        <tr><td>Dataset linkage</td><td>How closely tied to certified, widely-used UC assets</td></tr>
+        <tr><td>Recency</td><td>Freshness of the definition</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout">
+      <div class="callout-label">Auditability Gap</div>
+      No public-facing explainability for why a snippet ranked above another. OntoRank internals are not documented. The four-signal model above is from secondary sources.
+    </div>
+  </div>
+
+  <div id="n2-metric-views" class="note-section">
+    <h2 class="section-title">UC Metric Views — Technical Spec <span class="badge badge-ga">GA Apr 2026</span></h2>
+    <p>YAML-based semantic layer inside Unity Catalog. Define once, query from SQL, BI tools, REST APIs, agents. Advanced features include multi-fact relationships, LOD calculations, parameterised metrics, window measures, measure-on-measure composition.</p>
+    <pre class="code-block">metric_view:
+  name: order_metrics
+  source: catalog.schema.orders
+
+  measures:
+    - name: total_revenue
+      synonyms: ["revenue", "sales", "GMV"]
+      aggregate: SUM(order_value)
+      filter: WHERE status != 'RETURNED'
+
+    - name: avg_order_value
+      aggregate: total_revenue / order_count  # measure-on-measure
+
+  dimensions:
+    - name: region
+    - name: channel
+
+  materialization:
+    enabled: true
+    refresh_schedule: "0 6 * * *"</pre>
+    <div class="callout blue">
+      <div class="callout-label">UI vs YAML naming</div>
+      Catalog Explorer UI calls columns <strong>Fields</strong>, but YAML syntax uses <code class="inline-code">dimensions</code>. Known inconsistency — worth flagging in implementations.
+    </div>
+  </div>
+
+  <div id="n2-osi" class="note-section">
+    <h2 class="section-title">Open Semantic Interchange → Apache Ossie</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Date</th><th>Event</th></tr></thead>
+      <tbody>
+        <tr><td>Sept 2025</td><td>Snowflake launches OSI with Salesforce, dbt Labs, BlackRock</td></tr>
+        <tr><td>Jan 2026</td><td>Databricks joins; OSI v1.0 spec published under Apache 2.0</td></tr>
+        <tr><td>Jul 10, 2026</td><td>Donated to Apache Software Foundation; renamed Apache Ossie</td></tr>
+        <tr><td>Aug 2026</td><td>Snowflake ships native SYSTEM$CREATE/READ_OSSIE_YAML (GA)</td></tr>
+        <tr><td>Oct 2026</td><td>PR #152 open — Databricks UC Metric View bidirectional converter</td></tr>
+      </tbody>
+    </table></div>
+    <p>Databricks joined four months after Snowflake originated it — a defensive move to ensure UC Metric Views' features (window functions, materialization) are represented in <code class="inline-code">custom_extensions</code> rather than lost. No native UI for OSI import/export yet on Databricks.</p>
+  </div>
+
+  <div id="n2-ontos" class="note-section">
+    <h2 class="section-title">Ontos (Labs) — Business Catalog <span class="badge badge-labs">v1.0.0 · Jun 2026</span></h2>
+    <p>A Databricks App that adds data mesh semantics UC doesn't natively provide: data products, data contracts (ODCS v3.1.0), domain ownership. React + FastAPI + OWL TTL entity model stored in Lakebase (Postgres).</p>
+    <div class="callout purple">
+      <div class="callout-label">Strategic note</div>
+      Ontos is the preview of what UC Business Semantics will look like in 12–18 months. Use Ontos for data contracts <em>now</em> (accepting Labs-grade support), or wait for Governance Hub GA.
+    </div>
+  </div>
+
+  <div id="n2-ontobricks" class="note-section">
+    <h2 class="section-title">OntoBricks (Labs) — Formal Knowledge Graph <span class="badge badge-labs">v0.9.0</span></h2>
+    <p>LLM-assisted OWL 2 ontology generation from UC table metadata → R2RML mappings → RDF triples in Lakebase / Delta / Neo4j → GraphQL API + MCP server for agents.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th></th><th>Genie Ontology</th><th>OntoBricks</th></tr></thead>
+      <tbody>
+        <tr><td>Approach</td><td>Bottom-up (learned from usage)</td><td>Top-down (formally modeled OWL)</td></tr>
+        <tr><td>Representation</td><td>Ranked snippets (internal)</td><td>Standard RDF/OWL triples</td></tr>
+        <tr><td>Reasoning</td><td>Not documented</td><td>OWL 2 RL, SWRL, SHACL</td></tr>
+        <tr><td>Auditability</td><td>Limited</td><td>Full (inspectable RDF graph)</td></tr>
+        <tr><td>Target</td><td>General enterprise agents</td><td>Regulated industries needing auditable knowledge models</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     NOTE 3 — Platform Foundations
+══════════════════════════════════════════════════════════ -->
+<section id="note3" class="note-view">
+  <div class="note-header">
+    <div class="note-eyebrow">Note 3 of 7 · October 2026</div>
+    <h1 class="note-title">Platform Foundations, Capability Convergence &amp; Evolution</h1>
+    <div class="note-meta">7-layer stack · MemCurrent · Unity AI Gateway · Agent Bricks execution · Lakewatch SIEM</div>
+  </div>
+
+  <div class="signals">
+    <span class="signal signal-red">7-Layer Platform Stack</span>
+    <span class="signal signal-blue">Unity AI Gateway GA Aug 2026</span>
+    <span class="signal signal-green">MemCurrent 3× Pass Rate</span>
+    <span class="signal signal-orange">Lakewatch SIEM GA</span>
+    <span class="signal signal-purple">~$134B Valuation · IPO 2027?</span>
+  </div>
+
+  <div class="section-jumps">
+    <span class="jump-label">Jump to</span>
+    <button class="jump" onclick="jumpTo('n3-stack')">7-Layer Stack</button>
+    <button class="jump" onclick="jumpTo('n3-overlaps')">Capability Overlaps</button>
+    <button class="jump" onclick="jumpTo('n3-context-flow')">Context Flow</button>
+    <button class="jump" onclick="jumpTo('n3-lakewatch')">Lakewatch</button>
+    <button class="jump" onclick="jumpTo('n3-memcurrent')">MemCurrent</button>
+    <button class="jump" onclick="jumpTo('n3-aigateway')">Unity AI Gateway</button>
+    <button class="jump" onclick="jumpTo('n3-agent-exec')">Agent Execution</button>
+    <button class="jump" onclick="jumpTo('n3-evolution')">Future Evolution</button>
+  </div>
+
+  <div id="n3-stack" class="note-section">
+    <h2 class="section-title">The Full Platform Stack</h2>
+    <div class="stack">
+      <div class="stack-layer layer-7"><div class="stack-layer-label">Layer 7 · Applications &amp; Intelligence</div><div class="stack-layer-content">Genie One (GA) · Genie Agents (GA) · Lakewatch SIEM (GA) · Databricks Apps · Marketplace</div></div>
+      <div class="stack-layer layer-6"><div class="stack-layer-label">Layer 6 · Semantic + Context</div><div class="stack-layer-content">UC Metric Views (GA) · Domains (GA) · Business Glossary (Preview) · Genie Ontology (Preview)</div></div>
+      <div class="stack-layer layer-5"><div class="stack-layer-label">Layer 5 · AI / ML</div><div class="stack-layer-content">Model Serving · MLflow · Agent Bricks · Unity AI Gateway (GA) · AI Search / RAG</div></div>
+      <div class="stack-layer layer-4"><div class="stack-layer-label">Layer 4 · Compute &amp; Serving</div><div class="stack-layer-content">Databricks SQL · Serverless · Lakehouse//RT (Beta, 10ms) · Lakebase (GA, Postgres) · LTAP (Announced)</div></div>
+      <div class="stack-layer layer-3"><div class="stack-layer-label">Layer 3 · Processing &amp; Pipelines</div><div class="stack-layer-content">Lakeflow — Zerobus Ingest (GA) · Spark Declarative Pipelines · Real-Time Mode (GA, ~5ms e2e)</div></div>
+      <div class="stack-layer layer-2"><div class="stack-layer-label">Layer 2 · Governance Spine</div><div class="stack-layer-content">Unity Catalog — tables, models, dashboards, agents, MCPs · Lineage · RBAC · Audit · AI Gateway traces</div></div>
+      <div class="stack-layer layer-1"><div class="stack-layer-label">Layer 1 · Storage</div><div class="stack-layer-content">Delta Lake (open) on customer cloud storage (AWS S3 / Azure ADLS / GCS) · Apache Iceberg</div></div>
+    </div>
+  </div>
+
+  <div id="n3-overlaps" class="note-section">
+    <h2 class="section-title">Capability Overlaps — Where Boundaries Are Blurry</h2>
+    <h3 class="sub-title">UC Metric Views vs Genie Ontology</h3>
+    <p>They don't compete — they're designed to layer. <strong>Design intent:</strong> define the 20% of concepts that cannot be wrong as Metric Views. Let Genie Ontology handle the long tail (80% of business terms that would never justify a formal YAML definition).</p>
+    <h3 class="sub-title">Ontos (Labs) vs UC Business Glossary + Governance Hub</h3>
+    <p>Ontos is the preview of what UC Business Semantics will look like in 12–18 months. Customers who need data contracts <em>now</em> use Ontos; those who can wait should watch Governance Hub GA.</p>
+  </div>
+
+  <div id="n3-context-flow" class="note-section">
+    <h2 class="section-title">How Context Flows Through the Stack</h2>
+    <pre class="diagram">DEFINITION TIME
+  1. Data engineer writes UC Metric View for "revenue" (YAML, versioned)
+  2. Domain steward adds Business Glossary definition → linked to Metric View
+  3. Genie Ontology extracts: certified Metric View + dashboard tiles + SQL history
+     → OntoRank scores certified Metric View highest
+
+QUERY TIME
+  4. User asks Genie: "What was our revenue last quarter?"
+  5. Genie Ontology retrieves top-ranked snippets → UC permission gate
+  6. Snippets injected into context window
+  7. Agent generates SQL using certified definition + UC lineage
+  8. Result returned with source attribution</pre>
+    <p>Without UC Metric Views, step 7 relies on inferred snippets — which can drift or conflict over time.</p>
+  </div>
+
+  <div id="n3-lakewatch" class="note-section">
+    <h2 class="section-title">Lakewatch — Agentic SIEM <span class="badge badge-ga">GA</span></h2>
+    <p>Databricks' entry into cybersecurity. Agentic SIEM powered by Claude (Anthropic), built on Unity Catalog + Panther (detection-as-code). Runs entirely on the lakehouse — security data lives where business data already lives.</p>
+    <p>Uses: Lakeflow ingest (OCSF-aligned) → Delta Lake → UC governance (NIS2/DORA) → Agent Bricks agents for detection, triage, threat hunting → Unity AI Gateway traces as security signals.</p>
+    <div class="callout blue">
+      <div class="callout-label">SI angle</div>
+      Competing against Splunk, Microsoft Sentinel, CrowdStrike. Differentiator: no separate security data lake. For regulated industries (BFSI, healthcare) this resonates with data sovereignty requirements.
+    </div>
+  </div>
+
+  <div id="n3-memcurrent" class="note-section">
+    <h2 class="section-title">MemCurrent — Persistent Agent Memory <span class="badge badge-beta">Beta</span></h2>
+    <p>Three access patterns: <strong>Plugins</strong> (automatic log/load without agent action), <strong>Tools</strong> (on-demand explicit query), <strong>Dreaming</strong> (async consolidation from episodic to distilled). Storage on Lakebase (Postgres) in customer's cloud account — never shared with Databricks.</p>
+    <div class="callout">
+      <div class="callout-label">Security note</div>
+      Agent memory persists user data across sessions → new attack surface. "Agent memory poisoning" risk: adversarial inputs designed to corrupt future agent behavior. Mitigations: input validation + SHACL shape checks before memory writes.
+    </div>
+  </div>
+
+  <div id="n3-aigateway" class="note-section">
+    <h2 class="section-title">Unity AI Gateway — Runtime AI Governance <span class="badge badge-ga">GA Aug 4 2026</span></h2>
+    <p>Sits between all consumers (users, apps, agents) and all LLM endpoints (internal + external). Four capability clusters:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Capability</th><th>What it does</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Access Control</td><td>UC-governed per user, team, agent, app, use case</td><td><span class="badge badge-ga">GA</span></td></tr>
+        <tr><td>Smart Routing + Fallback</td><td>Pick model by cost + quality; failover chains; cross-provider</td><td><span class="badge badge-ga">GA</span></td></tr>
+        <tr><td>Budget Caps</td><td>Hard spend stops at token level; attribution per user/team/tool; external provider tracking (Oct 2026)</td><td><span class="badge badge-ga">GA</span></td></tr>
+        <tr><td>Unified Tracing</td><td>Every model call, MCP invocation, agent step → UC system tables → Lakewatch</td><td><span class="badge badge-ga">GA</span></td></tr>
+        <tr><td>Guardrails (PII, prompt injection, MCP payload logging)</td><td>Policy-based rules per use case or MCP server type</td><td><span class="badge badge-beta">Beta</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div id="n3-agent-exec" class="note-section">
+    <h2 class="section-title">Agent Bricks Execution Architecture</h2>
+    <pre class="diagram">┌─────────────────────────────────────────────┐
+│  AGENT RUNTIME                               │
+│  Manages hosting, identity, scaling on Apps  │
+│               ↓                              │
+│  DurableAgentServer                          │
+│  Wraps any framework (LangGraph, CrewAI,     │
+│  Claude Code SDK, vanilla Python)            │
+│  API modes: sync · streaming · background    │
+│  Runtime Store → crash recovery (Lakebase)  │
+│               ↓                              │
+│  Databricks Sandbox                          │
+│  Isolated code execution, scoped UC access  │
+│  Persistent home directory across calls     │
+└─────────────────────────────────────────────┘</pre>
+  </div>
+
+  <div id="n3-evolution" class="note-section">
+    <h2 class="section-title">Future Evolution Signals</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Signal</th><th>What to watch</th></tr></thead>
+      <tbody>
+        <tr><td>LTAP GA (H1 2027?)</td><td>Layers 3+4 collapse. ETL/CDC pipelines become optional. Most disruptive event for data engineering services.</td></tr>
+        <tr><td>Genie Ontology GA</td><td>Current "no cost during preview" ends. Watch pricing model — per-workspace vs per-query.</td></tr>
+        <tr><td>Governance Hub GA</td><td>Will likely absorb or productize Ontos Labs features.</td></tr>
+        <tr><td>OSI / Ossie native UI</td><td>Snowflake has native SYSTEM$ functions now. Databricks still on community PR #152.</td></tr>
+        <tr><td>IPO 2027</td><td>~$134B valuation, ~$5.4B ARR. Usage-based pricing must be defensible per product line.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     NOTE 4 — Verticals & OSI
+══════════════════════════════════════════════════════════ -->
+<section id="note4" class="note-view">
+  <div class="note-header">
+    <div class="note-eyebrow">Note 4 of 7 · October 2026</div>
+    <h1 class="note-title">Vertical Solutions &amp; Semantic Portability</h1>
+    <div class="note-meta">BFSI / HLS accelerator composition · Apache Ossie hub-and-spoke · PR #152</div>
+  </div>
+
+  <div class="signals">
+    <span class="signal signal-red">Fraud Detection &lt;300ms on Lakebase</span>
+    <span class="signal signal-blue">zeb: Semantic Layer in 4–6 Weeks</span>
+    <span class="signal signal-green">HLS hls-skills Repo (Oct 19 update)</span>
+    <span class="signal signal-orange">Apache Ossie Hub-and-Spoke</span>
+    <span class="signal signal-amber">PR #152: Bidirectional UC↔Ossie</span>
+  </div>
+
+  <div class="section-jumps">
+    <span class="jump-label">Jump to</span>
+    <button class="jump" onclick="jumpTo('n4-composition')">Vertical Composition</button>
+    <button class="jump" onclick="jumpTo('n4-bfsi')">BFSI Accelerators</button>
+    <button class="jump" onclick="jumpTo('n4-fraud')">Fraud Architecture</button>
+    <button class="jump" onclick="jumpTo('n4-hls')">HLS Vertical</button>
+    <button class="jump" onclick="jumpTo('n4-ossie')">Apache Ossie</button>
+    <button class="jump" onclick="jumpTo('n4-si')">SI Opportunities</button>
+  </div>
+
+  <div id="n4-composition" class="note-section">
+    <h2 class="section-title">How Vertical Solutions Are Composed</h2>
+    <pre class="diagram">┌──────────────────────────────────────────────────┐
+│  Branded App (Genpact FinanceOne, CitiusTech ClinicalIQ)
+├──────────────────────────────────────────────────┤
+│  Databricks Apps (FastAPI + React, in workspace) │
+├──────────────────────────────────────────────────┤
+│  Genie Spaces  │  Agent Bricks  │  Lakewatch SIEM│
+├──────────────────────────────────────────────────┤
+│  Unity AI Gateway — routing, budgets, audit      │
+├──────────────────────────────────────────────────┤
+│  Genie Ontology / UC Metric Views (pre-populated)│
+├──────────────────────────────────────────────────┤
+│  Lakebase (operational)  ·  Lakehouse//RT (ms)   │
+├──────────────────────────────────────────────────┤
+│  Unity Catalog — governance, lineage, RBAC       │
+├──────────────────────────────────────────────────┤
+│  Delta Lake / Lakeflow Zerobus                   │
+└──────────────────────────────────────────────────┘</pre>
+    <p>Vertical IP is what partners <strong>pre-build on top</strong>: domain Metric Views, pre-populated Genie Ontology snippets, pre-wired Agent Bricks workflows, regulatory governance templates, industry-shaped Apps.</p>
+  </div>
+
+  <div id="n4-bfsi" class="note-section">
+    <h2 class="section-title">BFSI Composition Patterns</h2>
+    <div class="callout green">
+      <div class="callout-label">Pattern 1 — Replace the Feature Store</div>
+      All 2026 BFSI accelerators move Redis/DynamoDB into Lakebase, eliminating a system boundary and keeping feature data inside UC governance.
+    </div>
+    <div class="callout blue">
+      <div class="callout-label">Pattern 2 — Semantic Layer as Entry Point</div>
+      Every BFSI accelerator leads with pre-built UC Metric Views + Genie Ontology snippets. Highest-value, lowest-risk SI differentiator: "we pre-build the domain semantics so your business teams don't wait 6–9 months."
+    </div>
+    <div class="callout purple">
+      <div class="callout-label">Pattern 3 — HITL Gate for Regulated Writes</div>
+      Loan, compliance, AML workflows use Agent Bricks + Omnigent human-in-the-loop gate before any write. Unity AI Gateway provides the audit trail. This is how accelerators claim regulatory coverage.
+    </div>
+  </div>
+
+  <div id="n4-fraud" class="note-section">
+    <h2 class="section-title">Real-Time Fraud Detection Reference Architecture</h2>
+    <pre class="diagram">Raw card transactions
+  └─ Lakeflow Zerobus (gRPC, sub-5s, no broker)
+       └─ Delta Lake (raw + feature tables)
+            ├─ Spark Real-Time Mode (~5ms e2e)
+            │    └─ Lakebase customer risk profiles (&lt;300ms reads)
+            ├─ MLflow Model Registry + feature serving
+            └─ Databricks App (FastAPI + React fraud dashboard)
+                 └─ Unity AI Gateway (audit, spend controls)</pre>
+    <p>Key design: <strong>Lakebase replaces external Redis/DynamoDB</strong> as the online feature store. No separate operational database. UC governs data and models on one platform for BCBS 239-style lineage.</p>
+    <h3 class="sub-title">Named BFSI Partners</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Partner</th><th>Focus</th><th>Key fact</th></tr></thead>
+      <tbody>
+        <tr><td>zeb</td><td>Capital markets semantic layer</td><td>Pre-certified UC Metric Views (P&amp;L, VaR, sensitivities); 4–6 week deployment vs. typical 6–9 months</td></tr>
+        <tr><td>Genpact FinanceOne</td><td>CFO office FP&amp;A</td><td>Driver graph across ERP/EPM; NL on KPIs; claims 5%+ EBITDA</td></tr>
+        <tr><td>Neudesic</td><td>Payments</td><td>Built on Lakebase; unifies transactional + analytical + AI workloads</td></tr>
+        <tr><td>Celebal</td><td>Loan origination</td><td>30 days → 4 hours; Omnigent HITL gate before disbursement</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div id="n4-hls" class="note-section">
+    <h2 class="section-title">HLS Composition Patterns</h2>
+    <p>Databricks maintains an open-source <strong>hls-skills</strong> repo (<code class="inline-code">databricks-industry-solutions</code>, last updated Oct 19, 2026) with PHI detection, genomics cohort queries, RWE cohorts, HEDIS measures, and an evaluation harness.</p>
+    <div class="callout green">
+      <div class="callout-label">Pattern 1 — PHI Governance as Entry Point</div>
+      UC column masking + hls-skills PHI detection = defensible first deliverable. Demonstrates platform value to compliance and CDO simultaneously. 2–4 week fast win.
+    </div>
+    <div class="callout blue">
+      <div class="callout-label">Pattern 2 — Skills Repo as Accelerator Kit</div>
+      Building a branded "Clinical AI Accelerator" on top of hls-skills is a 3–4 week effort. Persistent Systems, CitiusTech (ClinicalIQ), and StrandLogic/Cognizant all follow this pattern.
+    </div>
+    <div class="callout purple">
+      <div class="callout-label">Pattern 3 — Customer Workspace Isolation</div>
+      HLS partners specifically emphasize FedRAMP/HIPAA compliance posture: workloads run inside the customer's own Databricks workspace. PHI never moves to vendor SaaS.
+    </div>
+  </div>
+
+  <div id="n4-ossie" class="note-section">
+    <h2 class="section-title">Apache Ossie — Semantic Portability</h2>
+    <p>Vendor-neutral YAML-based interchange format for semantic definitions. Think of it as <strong>Parquet for semantic models</strong>. Hub-and-spoke model: each platform has a converter to/from Ossie YAML as the hub.</p>
+    <pre class="code-block">version: "0.1.1"
+semantic_model:
+  - name: finance_model
+    ai_context: "Use for P&amp;L, revenue, and cost analysis"
+    datasets:
+      - name: orders
+        source: prod_catalog.finance.orders
+    metrics:
+      - name: total_revenue
+        expr:
+          ANSI_SQL: "SUM(order_amount)"
+          DATABRICKS: "SUM(order_amount)"
+          SNOWFLAKE: "SUM(order_amount)"
+        ai_context: "Primary top-line revenue metric"</pre>
+    <p><strong>Hub-and-spoke ecosystem:</strong> dbt MetricFlow → Ossie YAML (reference) · Snowflake native SYSTEM$ functions (GA Aug 2026) · Databricks UC Metric View converter (PR #152, bidirectional) · GoodData, Salesforce, Apache Polaris also listed.</p>
+    <div class="callout">
+      <div class="callout-label">Portability verdict</div>
+      Snowflake has the most complete native implementation. Databricks has community PR #152 — no official docs or UI yet. Gap is narrowing but real in Oct 2026.
+    </div>
+  </div>
+
+  <div id="n4-si" class="note-section">
+    <h2 class="section-title">SI Opportunity Map</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Entry point</th><th>Components</th><th>SI effort</th></tr></thead>
+      <tbody>
+        <tr><td>Semantic layer (capital markets)</td><td>UC Metric Views + Genie Ontology pre-population</td><td>4–8 weeks (vs. 6–9 months without SI)</td></tr>
+        <tr><td>Fraud detection accelerator</td><td>Lakeflow + Lakehouse//RT + Lakebase + MLflow + App</td><td>6–10 weeks</td></tr>
+        <tr><td>Regulatory reporting (BCBS 239)</td><td>UC lineage + Metric Views</td><td>8–12 weeks</td></tr>
+        <tr><td>Agentic loan origination</td><td>Agent Bricks + Omnigent HITL + Lakebase</td><td>6–8 weeks</td></tr>
+        <tr><td>PHI de-identification (HLS)</td><td>UC column masking + hls-skills PHI agent</td><td>2–4 weeks (fast win)</td></tr>
+        <tr><td>Snowflake→Databricks metric migration</td><td>dbt MetricFlow → Ossie YAML → UC converter</td><td>1–2 weeks discovery</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     NOTE 5 — UC as Semantic Catalog
+══════════════════════════════════════════════════════════ -->
+<section id="note5" class="note-view">
+  <div class="note-header">
+    <div class="note-eyebrow">Note 5 of 7 · October 2026</div>
+    <h1 class="note-title">Unity Catalog as Semantic Catalog</h1>
+    <div class="note-meta">Governance layer → Business knowledge layer for AI · No-sync-lag advantage · MCP servers</div>
+  </div>
+
+  <div class="signals">
+    <span class="signal signal-red">Governance → Business Knowledge Layer</span>
+    <span class="signal signal-blue">5-Layer UC Semantic Stack</span>
+    <span class="signal signal-green">MCP OAuth On-Behalf-Of User</span>
+    <span class="signal signal-orange">No-Sync-Lag vs Collibra/Alation</span>
+    <span class="signal signal-amber">UC OSS v0.5 → Apache Spark</span>
+  </div>
+
+  <div class="section-jumps">
+    <span class="jump-label">Jump to</span>
+    <button class="jump" onclick="jumpTo('n5-shift')">Strategic Shift</button>
+    <button class="jump" onclick="jumpTo('n5-stack')">5-Layer Stack</button>
+    <button class="jump" onclick="jumpTo('n5-layers')">Layer Details</button>
+    <button class="jump" onclick="jumpTo('n5-mcp')">MCP Servers</button>
+    <button class="jump" onclick="jumpTo('n5-grounding')">Grounding Chain</button>
+    <button class="jump" onclick="jumpTo('n5-vs')">vs. Catalogs</button>
+    <button class="jump" onclick="jumpTo('n5-status')">GA vs Preview</button>
+  </div>
+
+  <div id="n5-shift" class="note-section">
+    <h2 class="section-title">The Strategic Shift</h2>
+    <p>UC started as a <strong>governance layer</strong> (control access to tables and files). The 2024–2026 arc is a deliberate expansion into <strong>business semantics</strong>: making UC the system that knows what things <em>mean</em>.</p>
+    <p>Traditional data catalogs (Collibra, Alation, Atlan) were built for <strong>data stewards — humans</strong> who curate metadata. UC's new semantic layers are explicitly designed for <strong>AI agents — machines</strong> that query business context at inference time. This is a fundamentally different design target.</p>
+  </div>
+
+  <div id="n5-stack" class="note-section">
+    <h2 class="section-title">The Five-Layer UC Semantic Stack</h2>
+    <div class="stack">
+      <div class="stack-layer layer-7"><div class="stack-layer-label">Layer 5 · Live Context (Genie Ontology) <span class="badge badge-preview">Preview</span></div><div class="stack-layer-content">Continuously learned from queries, dashboards, UC assets · Serves Genie, Agent Bricks, MCP agents at query time</div></div>
+      <div class="stack-layer layer-6"><div class="stack-layer-label">Layer 4 · Semantic Enrichment</div><div class="stack-layer-content">Business Glossary <span class="badge badge-preview">Preview</span> · Domains <span class="badge badge-ga">GA Oct 8</span> · UC Pages <span class="badge badge-ga">GA</span> · Tags · Governance Hub <span class="badge badge-preview">Pvt Preview</span></div></div>
+      <div class="stack-layer layer-5"><div class="stack-layer-label">Layer 3 · Certified Metrics <span class="badge badge-ga">GA Apr 2</span></div><div class="stack-layer-content">UC Metric Views (YAML, open-sourced UC OSS v0.5) · Measures + dimensions + joins · Certification flag with owner sign-off</div></div>
+      <div class="stack-layer layer-4"><div class="stack-layer-label">Layer 2 · Lineage <span class="badge badge-ga">GA</span></div><div class="stack-layer-content">Column-level lineage end-to-end · External lineage (manual) · Cross-account / cross-cloud lineage (DAIS 2026)</div></div>
+      <div class="stack-layer layer-3"><div class="stack-layer-label">Layer 1 · Technical Catalog <span class="badge badge-ga">GA</span></div><div class="stack-layer-content">Four-level namespace: metastore.catalog.schema.table · All asset types · Multi-cloud · Iceberg v3 GA</div></div>
+    </div>
+    <p>Each layer is independently queryable and additive — you don't need Layer 5 before Layer 3 delivers value.</p>
+  </div>
+
+  <div id="n5-layers" class="note-section">
+    <h2 class="section-title">Layer Highlights</h2>
+    <h3 class="sub-title">Business Glossary <span class="badge badge-preview">Preview</span></h3>
+    <p>AI-native design: Genie Code drafts new Glossary pages from query patterns, flags definitions that drift from actual usage, surfaces definitions as context when agents query any linked asset. Key differentiator from Collibra/Alation: <strong>the glossary is actively maintained by the platform's AI, not just human stewards</strong>.</p>
+    <h3 class="sub-title">UC Pages <span class="badge badge-ga">GA</span></h3>
+    <p>Human-authored markdown context attached to any UC asset. Free-form narrative: "what this dataset is, how to use it, known quirks." UC Pages feed the <strong>modeled context</strong> side of Genie Ontology — the human voice in the knowledge graph.</p>
+    <h3 class="sub-title">Domains <span class="badge badge-ga">GA Oct 8 2026</span></h3>
+    <p>Business-aligned groupings of UC assets. Agents scoped to a Domain only retrieve context from that domain's assets — bounded, relevant context instead of the whole catalog. Subdomains supported (Finance &gt; Treasury &gt; Liquidity).</p>
+  </div>
+
+  <div id="n5-mcp" class="note-section">
+    <h2 class="section-title">Unity Catalog MCP Servers</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>MCP Endpoint</th><th>What it exposes</th><th>Auth model</th></tr></thead>
+      <tbody>
+        <tr><td>UC Functions</td><td>Any UC-registered function (Python, SQL, system)</td><td>OAuth on-behalf-of user</td></tr>
+        <tr><td>Genie Spaces</td><td>NL query to a specific Genie Space</td><td>OAuth on-behalf-of user</td></tr>
+        <tr><td>SQL Warehouse</td><td>Direct SQL against UC-governed tables</td><td>OAuth on-behalf-of user</td></tr>
+        <tr><td>Vector Search</td><td>Semantic search over indexed UC tables</td><td>OAuth on-behalf-of user</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout green">
+      <div class="callout-label">Key design</div>
+      All MCP calls authenticate as the <strong>requesting user</strong> (on-behalf-of OAuth), not a service account. UC access control — row filters, column masks, domain scoping — applies to every agent call. Any MCP-compatible agent (Claude Code, OpenAI Codex, LangGraph) can call these endpoints.
+    </div>
+  </div>
+
+  <div id="n5-grounding" class="note-section">
+    <h2 class="section-title">The Grounding Chain</h2>
+    <pre class="diagram">Agent question: "What is our Q3 NPS by region?"
+         ↓
+Genie Ontology query (OntoRank retrieval)
+  → certified UC Metric View: "net_promoter_score"
+  → Domain: "Customer Experience"
+  → Glossary term: "NPS" → definition + linked table
+  → UC Page: "Survey data — NPS calculation caveats"
+         ↓
+Permission check (Unity Catalog)
+  → user has read on nps_survey table? Yes
+  → column mask on respondent_id? Yes → masked at runtime
+         ↓
+Compute: Metric View SQL executed
+         ↓
+Answer with source citations from UC lineage</pre>
+    <p>Every agent answer inherits the governance and business meaning that data stewards built into UC.</p>
+  </div>
+
+  <div id="n5-vs" class="note-section">
+    <h2 class="section-title">UC vs. Standalone Semantic Tools</h2>
+    <h3 class="sub-title">vs. Traditional Data Catalogs (Collibra, Alation, Atlan)</h3>
+    <div class="callout green">
+      <div class="callout-label">The no-sync-lag argument</div>
+      Definitions live inside the same system as the data. No ETL of metadata, no catalog sync job, no "the catalog says X but the table does Y" problem. A Metric View definition is always consistent with the table it reads from.
+    </div>
+    <p><strong>Collibra/Alation's defense:</strong> For enterprises with heterogeneous stacks (Snowflake + Databricks + Oracle + Salesforce), UC only governs the Databricks portion. Catalog Federation is narrowing this gap for some external catalogs.</p>
+    <h3 class="sub-title">vs. dbt MetricFlow / Cube</h3>
+    <p><strong>The coexistence reality:</strong> Most Databricks customers have dbt. UC Metric Views and dbt MetricFlow are not mutually exclusive — dbt builds and tests the tables; UC Metric Views define business metrics <em>on top of</em> those tables. Apache Ossie (PR #152) is the portability bridge.</p>
+  </div>
+
+  <div id="n5-status" class="note-section">
+    <h2 class="section-title">GA vs. Preview Status (Oct 2026)</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Feature</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Technical catalog (tables/schemas/models/volumes)</td><td><span class="badge badge-ga">GA</span></td></tr>
+        <tr><td>Column-level + cross-cloud lineage</td><td><span class="badge badge-ga">GA</span></td></tr>
+        <tr><td>UC Metric Views</td><td><span class="badge badge-ga">GA Apr 2</span></td></tr>
+        <tr><td>Metric View materialization</td><td><span class="badge badge-preview">Preview</span></td></tr>
+        <tr><td>Domains</td><td><span class="badge badge-ga">GA Oct 8</span></td></tr>
+        <tr><td>Business Glossary</td><td><span class="badge badge-preview">Preview</span></td></tr>
+        <tr><td>UC Pages</td><td><span class="badge badge-ga">GA</span></td></tr>
+        <tr><td>Governance Hub</td><td><span class="badge badge-preview">Private Preview</span></td></tr>
+        <tr><td>Genie Ontology</td><td><span class="badge badge-preview">Public Preview</span></td></tr>
+        <tr><td>UC MCP Servers</td><td><span class="badge badge-ga">GA</span></td></tr>
+        <tr><td>Ossie UC Metric View converter</td><td><span class="badge badge-labs">PR #152 open</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     NOTE 6 — AgentOS & Agent Harness
+══════════════════════════════════════════════════════════ -->
+<section id="note6" class="note-view">
+  <div class="note-header">
+    <div class="note-eyebrow">Note 6 of 7 · October 2026</div>
+    <h1 class="note-title">AgentOS &amp; Agent Harness</h1>
+    <div class="note-meta">"AgentOS" = industry concept · Omnigent Apache 2.0 · Polly multi-agent pattern · DurableAgentServer · GEPA</div>
+  </div>
+
+  <div class="signals">
+    <span class="signal signal-red">"AgentOS" = Industry Concept · Not a Product</span>
+    <span class="signal signal-blue">Omnigent Apache 2.0 · Jun 2026</span>
+    <span class="signal signal-green">Policy Engine: Allow / Ask / Deny</span>
+    <span class="signal signal-orange">DurableAgentServer vs Legacy MLflow</span>
+    <span class="signal signal-purple">GEPA Automated Prompt Optimization</span>
+  </div>
+
+  <div class="section-jumps">
+    <span class="jump-label">Jump to</span>
+    <button class="jump" onclick="jumpTo('n6-framing')">AgentOS Framing</button>
+    <button class="jump" onclick="jumpTo('n6-stack')">4-Layer Stack</button>
+    <button class="jump" onclick="jumpTo('n6-omnigent')">Omnigent YAML</button>
+    <button class="jump" onclick="jumpTo('n6-policy')">Policy Engine</button>
+    <button class="jump" onclick="jumpTo('n6-polly')">Polly Pattern</button>
+    <button class="jump" onclick="jumpTo('n6-durable')">DurableAgentServer</button>
+    <button class="jump" onclick="jumpTo('n6-toml')">agent.toml</button>
+    <button class="jump" onclick="jumpTo('n6-lifecycle')">Full Lifecycle</button>
+    <button class="jump" onclick="jumpTo('n6-competitive')">vs. Frameworks</button>
+  </div>
+
+  <div id="n6-framing" class="note-section">
+    <h2 class="section-title">The "AgentOS" Framing</h2>
+    <p>"AgentOS" is <strong>not an official Databricks product name</strong>. It is an industry concept describing the idea that production AI agents need an OS-equivalent: something that handles identity, execution boundaries, memory, permissions, scheduling, and observability.</p>
+    <blockquote class="callout">
+      <div class="callout-label">Databricks framing</div>
+      <em>"Most teams focus on the core agent loop, but that is only 1% of what it actually takes to run agents in production."</em>
+    </blockquote>
+    <p>The remaining 99% — deployment, security, context grounding, evaluation, memory, cost control, governance, observability — is what Agent Bricks + Omnigent collectively provide.</p>
+  </div>
+
+  <div id="n6-stack" class="note-section">
+    <h2 class="section-title">Four-Layer Agent Infrastructure Stack</h2>
+    <div class="stack">
+      <div class="stack-layer layer-7"><div class="stack-layer-label">Layer 4 · Skills &amp; Context</div><div class="stack-layer-content">Agent Skills (open standard, skill YAML files) · UC MCP Tools · Genie Ontology · MemCurrent (Lakebase)</div></div>
+      <div class="stack-layer layer-5"><div class="stack-layer-label">Layer 3 · Harness (Omnigent)</div><div class="stack-layer-content">Meta-orchestrator above any agent CLI/SDK · YAML-declared agent definitions · Policy engine (allow/ask/deny) · Session sharing · Multi-agent composition</div></div>
+      <div class="stack-layer layer-4"><div class="stack-layer-label">Layer 2 · Runtime (Agent Bricks)</div><div class="stack-layer-content">DurableAgentServer (sync/stream/background) · Agent Runtime (hosting, identity, scaling) · Runtime Store (Lakebase) · Databricks Sandbox · Agent Bricks CLI + agent.toml</div></div>
+      <div class="stack-layer layer-3"><div class="stack-layer-label">Layer 1 · Platform Primitives</div><div class="stack-layer-content">Unity Catalog · Unity AI Gateway · Lakebase · MLflow · Lakehouse//RT + Delta Lake</div></div>
+    </div>
+    <p>Key design principle: <strong>every agent action is governed by Unity Catalog</strong>. A layer-3 policy that denies a git push is enforced before the action reaches the filesystem.</p>
+  </div>
+
+  <div id="n6-omnigent" class="note-section">
+    <h2 class="section-title">Omnigent — YAML-Declared Agent <span class="badge badge-alpha">Apache 2.0</span></h2>
+    <pre class="code-block">name: code-reviewer
+harness: claude-code       # swap to: codex, pi, openai-agents (zero other changes)
+model: claude-opus-5-5
+
+prompt: |
+  You are a careful code reviewer. Focus on correctness and security.
+
+tools:
+  - type: mcp
+    server: uc-functions    # Unity Catalog functions as MCP tools
+  - type: mcp
+    server: genie-space
+    space: risk-metrics
+
+sub_agents:
+  - name: test-writer
+    harness: codex
+  - name: security-scanner
+    harness: claude-code
+    skills: [databricks/security-review]
+
+policies:
+  spend:
+    warn_at: "$3"
+    hard_cap: "$5"
+  actions:
+    - pattern: "git push"
+      decision: ask          # pause for human approval
+    - pattern: "DROP TABLE *"
+      decision: deny         # non-negotiable block</pre>
+  </div>
+
+  <div id="n6-policy" class="note-section">
+    <h2 class="section-title">The Policy Engine — The Real Governance Innovation</h2>
+    <p>Traditional guard rails live in the prompt — which can be circumvented by clever multi-step plans. Omnigent intercepts <strong>every action before execution</strong>:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Decision</th><th>Behavior</th></tr></thead>
+      <tbody>
+        <tr><td><strong>allow</strong></td><td>Action proceeds immediately</td></tr>
+        <tr><td><strong>ask</strong></td><td>Session pauses; notification sent to owner; resumes on approval</td></tr>
+        <tr><td><strong>deny</strong></td><td>Action blocked; agent receives a clear refusal and must find another path</td></tr>
+      </tbody>
+    </table></div>
+    <p>Policies defined at three levels: agent YAML, session override, and platform-wide (Unity AI Gateway, workspace admins). This is the mechanism that lets enterprises say "AI at the helm, humans retain control over irreversible actions" — exactly what regulators in BFSI and HLS need.</p>
+  </div>
+
+  <div id="n6-polly" class="note-section">
+    <h2 class="section-title">The "Polly" Multi-Agent Pattern</h2>
+    <pre class="diagram">Polly (orchestrator — plans, delegates, writes NO code)
+  ├─ Sub-agent A in git worktree 1 (Claude Code) → implementation
+  ├─ Sub-agent B in git worktree 2 (Codex)       → tests
+  ├─ Sub-agent C (different vendor than writer)  → code review
+  └─ Policy gates applied before any merge/push</pre>
+    <p><strong>Key principles:</strong> orchestrator never writes code (avoids context window exhaustion on large tasks) · parallel isolation in git worktrees · <strong>cross-vendor review</strong> (reviewer uses different model family — correlated blind spots avoided) · spend checks and HITL before final output.</p>
+  </div>
+
+  <div id="n6-durable" class="note-section">
+    <h2 class="section-title">DurableAgentServer vs. Legacy MLflow</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Capability</th><th>Legacy MLflow AgentServer</th><th>DurableAgentServer</th></tr></thead>
+      <tbody>
+        <tr><td>Persistent run state</td><td>✗</td><td>✓ (Runtime Store on Lakebase)</td></tr>
+        <tr><td>Crash recovery</td><td>✗</td><td>✓ (resumable on restart)</td></tr>
+        <tr><td>Background async runs</td><td>✗</td><td>✓</td></tr>
+        <tr><td>Idempotent invocations</td><td>✗</td><td>✓</td></tr>
+        <tr><td>Stream resumption</td><td>✗</td><td>✓</td></tr>
+        <tr><td>Identity model</td><td>Service account</td><td>On-behalf-of user (credential held in memory only, never persisted)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div id="n6-toml" class="note-section">
+    <h2 class="section-title">Agent Bricks CLI + agent.toml</h2>
+    <pre class="code-block">[agent]
+name = "risk-analyst"
+description = "Answers risk questions over UC Metric Views"
+
+[[tools.mcp]]
+type = "managed"
+server = "uc-functions"
+
+[[tools.mcp]]
+type = "managed"
+server = "genie"
+space = "risk-metrics"
+
+[memory]
+type = "lakebase"          # MemCurrent-backed
+
+[sandbox]
+enabled = true
+catalog = "prod_catalog"   # scoped UC access (only this catalog)
+
+[tracing]
+enabled = true             # all tool calls → UC system tables</pre>
+    <p><strong>Three CLI commands:</strong> <code class="inline-code">agentbricks init</code> (scaffold) · <code class="inline-code">agentbricks dev</code> (local against live Databricks) · <code class="inline-code">agentbricks deploy</code> (to Agent Runtime on Databricks Apps)</p>
+  </div>
+
+  <div id="n6-lifecycle" class="note-section">
+    <h2 class="section-title">Full Agent Lifecycle on Databricks</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Phase</th><th>What happens</th></tr></thead>
+      <tbody>
+        <tr><td>1 Develop</td><td>agentbricks init · agent.toml declares tools/memory/sandbox · Omnigent YAML declares harness/policies/sub-agents</td></tr>
+        <tr><td>2 Iterate</td><td>agentbricks dev against live Databricks · MLflow auto-traces every call · GEPA optimize_prompts() against evaluation dataset</td></tr>
+        <tr><td>3 Evaluate</td><td>MLflow evaluation with custom LLM judges · ALHF feedback loop for routing improvement</td></tr>
+        <tr><td>4 Deploy</td><td>agentbricks deploy → Agent Runtime · DurableAgentServer endpoints live · Unity AI Gateway governs</td></tr>
+        <tr><td>5 Govern</td><td>Omnigent policy engine (allow/ask/deny) · AI Gateway cost attribution · MLflow traces → Lakewatch · UC RBAC on all data access</td></tr>
+        <tr><td>6 Remember</td><td>MemCurrent episodic traces → Lakebase · Dreaming: async distillation into derived knowledge</td></tr>
+      </tbody>
+    </table></div>
+    <p>Each step is on-platform. No separate tool needed for evaluation, secret store, observability, or memory database.</p>
+  </div>
+
+  <div id="n6-competitive" class="note-section">
+    <h2 class="section-title">vs. Standalone Agent Frameworks</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Dimension</th><th>LangGraph / CrewAI</th><th>Databricks (Agent Bricks + Omnigent)</th></tr></thead>
+      <tbody>
+        <tr><td>Governance</td><td>None built-in</td><td>UC RBAC on every tool call</td></tr>
+        <tr><td>Memory</td><td>BYO (Redis, Postgres)</td><td>MemCurrent on Lakebase (native)</td></tr>
+        <tr><td>Evaluation</td><td>LangSmith (separate) / custom</td><td>MLflow + GEPA (native)</td></tr>
+        <tr><td>Cost control</td><td>None</td><td>Omnigent policies + Unity AI Gateway budgets</td></tr>
+        <tr><td>HITL</td><td>Interrupt handlers (code)</td><td>Omnigent policy YAML (declarative)</td></tr>
+        <tr><td>Deployment</td><td>BYO infra</td><td>Agent Runtime (managed)</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout blue">
+      <div class="callout-label">Databricks pitch</div>
+      You can use LangGraph or CrewAI inside DurableAgentServer — framework choice is preserved. But once your agent is on Databricks, it gets governance, memory, evaluation, cost control, HITL, and observability for free. The framework is implementation detail; the platform governance is the enterprise requirement.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     NOTE 7 — Semantic Design Patterns
+══════════════════════════════════════════════════════════ -->
+<section id="note7" class="note-view">
+  <div class="note-header">
+    <div class="note-eyebrow">Note 7 of 7 · October 2026</div>
+    <h1 class="note-title">Five Semantic Foundation Design Patterns</h1>
+    <div class="note-meta">Cross-platform synthesis: Databricks · Snowflake · Microsoft Fabric · Original names for architecture community</div>
+  </div>
+
+  <div class="signals">
+    <span class="signal signal-red">Five Coined Patterns</span>
+    <span class="signal signal-blue">Cross-Platform Synthesis</span>
+    <span class="signal signal-green">Metric Sovereignty = Most Mature</span>
+    <span class="signal signal-orange">Open Semantic Covenant = Least Complete</span>
+    <span class="signal signal-amber">Each Pattern → Distinct SI Offering</span>
+  </div>
+
+  <div class="section-jumps">
+    <span class="jump-label">Jump to</span>
+    <button class="jump" onclick="jumpTo('n7-framing')">Framing</button>
+    <button class="jump" onclick="jumpTo('n7-patterns')">Five Patterns</button>
+    <button class="jump" onclick="jumpTo('n7-maturity')">Maturity Map</button>
+    <button class="jump" onclick="jumpTo('n7-comparison')">Comparison Table</button>
+    <button class="jump" onclick="jumpTo('n7-si')">SI Offerings</button>
+  </div>
+
+  <div id="n7-framing" class="note-section">
+    <h2 class="section-title">Why These Patterns Now</h2>
+    <p>Every major data platform in 2026 — Databricks, Snowflake, Microsoft Fabric — is building what they each call a "semantic layer." Beneath the marketing, they are converging on the same set of structural design patterns. Naming them gives architects and SIs a vocabulary to evaluate platform maturity, design engagements, and talk to customers without resorting to product brochure language.</p>
+    <p>These patterns are <strong>not product features</strong>. They are recurring architectural decisions that appear independently across all three platforms.</p>
+  </div>
+
+  <div id="n7-patterns" class="note-section">
+    <h2 class="section-title">The Five Patterns</h2>
+
+    <!-- Pattern 1 -->
+    <div class="pattern-card" id="pc1">
+      <div class="pattern-header" onclick="toggleCard('pc1')">
+        <div class="pattern-num">1</div>
+        <div class="pattern-summary">
+          <div class="pattern-name">Metric Sovereignty</div>
+          <div class="pattern-def">Business metric definitions exist as first-class governed objects inside the data platform — not buried in BI tools, SQL snippets, or Excel.</div>
+        </div>
+        <div class="pattern-toggle">▾</div>
+      </div>
+      <div class="pattern-body">
+        <div class="pattern-section">
+          <div class="pattern-section-title">The Pattern</div>
+          <p>The platform is the <em>sovereign</em> of what "revenue" means. Every downstream consumer — dashboards, SQL, agents, APIs — queries the definition from the platform. Sovereignty requires: (1) the definition lives in the platform as a versioned, owned, certifiable object; (2) the platform enforces access to it; (3) business sign-off (certification) is a platform workflow, not a post-it on Confluence.</p>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">Cross-Platform Implementations</div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Platform</th><th>Implementation</th><th>Maturity</th></tr></thead>
+            <tbody>
+              <tr><td>Databricks</td><td>UC Metric Views — YAML, certification flag, owned by UC principal, open-sourced (UC OSS v0.5)</td><td><span class="badge badge-ga">GA Apr 2026</span></td></tr>
+              <tr><td>Snowflake</td><td>Semantic Views — native schema objects; replaces earlier YAML-in-a-stage approach</td><td><span class="badge badge-ga">GA 2026</span></td></tr>
+              <tr><td>Microsoft Fabric</td><td>Power BI Semantic Model — DAX measures, hierarchies, roles; anchored in OneLake via Direct Lake</td><td><span class="badge badge-ga">GA (mature)</span></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">The Gap Before This Pattern</div>
+          <p>Same metric, five definitions: one in Tableau, one in Power BI, one in the warehouse, one in Python, one in the finance Excel model. Nobody agreed which was correct. Agents trained on all five hallucinated a sixth.</p>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">SI Implication</div>
+          <div class="callout">The entry point for every semantic engagement: <em>"Show me your revenue definition. Is it the same in your dashboard, your SQL, and your Genie answer?"</em> If not, Metric Sovereignty is the work to do. Agents built on an unsovereign metric foundation hallucinate with confidence.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pattern 2 -->
+    <div class="pattern-card" id="pc2">
+      <div class="pattern-header" onclick="toggleCard('pc2')">
+        <div class="pattern-num">2</div>
+        <div class="pattern-summary">
+          <div class="pattern-name">Behavioral Ontogenesis</div>
+          <div class="pattern-def">The semantic layer grows by observing how the organization uses data — every query and dashboard interaction enriches it. Formal and behavioral semantics blended at query time.</div>
+        </div>
+        <div class="pattern-toggle">▾</div>
+      </div>
+      <div class="pattern-body">
+        <div class="pattern-section">
+          <div class="pattern-section-title">The Pattern</div>
+          <p>The semantic layer doesn't spring fully-formed from human curation. It <em>develops</em> through behavior — hence <em>ontogenesis</em>, the biological term for an organism developing through its own lifecycle. The formal semantic layer (human-defined) and the behavioral layer (platform-inferred from usage) are maintained in parallel and combined at query time.</p>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">Cross-Platform Implementations</div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Platform</th><th>Formal layer</th><th>Behavioral layer</th><th>Combination</th></tr></thead>
+            <tbody>
+              <tr><td>Databricks</td><td>UC Metric Views, Domains, Glossary, UC Pages</td><td>Genie Ontology — OntoRank scores snippets from dashboards, SQL history, 50+ apps</td><td>Modeled + inferred context, OntoRank rank-blended</td></tr>
+              <tr><td>Snowflake</td><td>Semantic Views, custom instructions</td><td>Verified queries — operator-curated known-good (Q→SQL) pairs</td><td>Semantic View + verified queries at Cortex Analyst query time</td></tr>
+              <tr><td>Fabric</td><td>Power BI Semantic Model</td><td>Copilot Q&amp;A learning — repeated questions refine understanding</td><td>Implicit; least architecturally explicit of the three</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">The Architectural Insight</div>
+          <p><strong>Formal-only</strong>: misses the emergent vocabulary (e.g., "whale account" that your sales team uses, which nobody put in the glossary). <strong>Behavioral-only</strong>: no certified ground truth; agents hallucinate on low-confidence inferences. The pattern is always: <strong>two layers, one retrieval</strong>. The ranking function is the key design challenge.</p>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">SI Implication</div>
+          <div class="callout">When agents give inconsistent answers, first diagnostic: <em>"What is your platform's behavioral semantic state?"</em> Databricks customers can audit Genie Ontology for low-OntoRank inferred snippets and replace them with explicit Metric Views or Glossary entries. Recurring tune-up engagement, not a one-time build.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pattern 3 -->
+    <div class="pattern-card" id="pc3">
+      <div class="pattern-header" onclick="toggleCard('pc3')">
+        <div class="pattern-num">3</div>
+        <div class="pattern-summary">
+          <div class="pattern-name">Perimeter Isomorphism</div>
+          <div class="pattern-def">The data access boundary and the semantic access boundary are structurally identical — same permission model, same identity provider, same enforcement mechanism.</div>
+        </div>
+        <div class="pattern-toggle">▾</div>
+      </div>
+      <div class="pattern-body">
+        <div class="pattern-section">
+          <div class="pattern-section-title">The Pattern</div>
+          <p><em>Isomorphism</em> (from mathematics): same structure expressed differently. Access to the metric definition and access to the underlying data are the <strong>same permission check</strong>, not two separate gates. If you can't read the underlying table, you can't compute the metric — and you can't see its definition.</p>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">Cross-Platform Implementations</div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Platform</th><th>Isomorphism mechanism</th></tr></thead>
+            <tbody>
+              <tr><td>Databricks</td><td>UC Metric Views are UC objects → inherit RBAC. All MCP calls use on-behalf-of-user OAuth. Strong — one permission model throughout.</td></tr>
+              <tr><td>Snowflake</td><td>Semantic Views are schema-level objects → same RBAC. <strong>Caveat</strong>: raw SQL tool bypasses semantic view boundary (documented risk — remove raw SQL tool from production agents).</td></tr>
+              <tr><td>Microsoft Fabric</td><td>Purview sensitivity labels + OLS (object-level security) in semantic model. Dual enforcement, but requires careful configuration.</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">The Design Tension</div>
+          <p>Business glossary terms (which don't contain data but describe it) also inherit data permissions — a new employee may not see the definition of a metric they don't yet have access to compute. All three platforms are still working through this.</p>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">SI Implication</div>
+          <div class="callout">For any BFSI or HLS agent build: <em>"Does your semantic permission model match your data permission model?"</em> An audit comparing grant structure on UC Metric Views against the underlying tables surfaces misalignments before an agent does. 1–2 week governance engagement with a concrete permission gap report.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pattern 4 -->
+    <div class="pattern-card" id="pc4">
+      <div class="pattern-header" onclick="toggleCard('pc4')">
+        <div class="pattern-num">4</div>
+        <div class="pattern-summary">
+          <div class="pattern-name">Concept-Centric Accretion</div>
+          <div class="pattern-def">The platform's organizing unit shifts from technical objects (tables, schemas) to business concepts (Customer, Transaction, Risk Exposure) — which become gravitational centers that all related assets accrete around.</div>
+        </div>
+        <div class="pattern-toggle">▾</div>
+      </div>
+      <div class="pattern-body">
+        <div class="pattern-section">
+          <div class="pattern-section-title">The Pattern</div>
+          <p><em>Accretion</em> from astrophysics: a body gains mass by pulling in surrounding matter. Here: the "Customer" concept accumulates all the data, metrics, agents, dashboards, and definitions that relate to it, organized by the platform's catalog. This is not a new idea in enterprise architecture — it echoes domain-driven design (DDD) bounded contexts. What is new is that the <strong>data platform natively implements it</strong>.</p>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">Cross-Platform Implementations</div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Platform</th><th>Concept object</th><th>What accretes</th></tr></thead>
+            <tbody>
+              <tr><td>Databricks</td><td>Domain (GA Oct 8) + Business Glossary term + UC Pages</td><td>Tables, Metric Views, Genie Agents, dashboards, models all belong to a Domain; Glossary term links to implementing assets</td></tr>
+              <tr><td>Snowflake</td><td>Horizon Data Product (emerging) + Semantic View entity definitions</td><td>Entities model business objects (Customer, Transaction); Cortex Analyst routes through entity model</td></tr>
+              <tr><td>Microsoft Fabric</td><td>OneLake Data Hub item + Fabric Business Domains (preview)</td><td>Certified datasets, semantic models, reports, notebooks, pipelines browsable per domain</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">The DDD Connection</div>
+          <p>Databricks Domain ≈ DDD Bounded Context · Snowflake Semantic View entity ≈ DDD Aggregate Root · Fabric Business Domain ≈ DDD shared language. SI teams who know DDD can apply it directly to semantic platform design.</p>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">SI Implication</div>
+          <div class="callout">Domain design is NOT a technical task — it is organizational and semantic. <em>"Which tables belong to the Customer domain vs. the Order domain?"</em> requires business stakeholder input. A Domain Design Workshop (2–3 days, cross-functional, whiteboard → UC Domains + Glossary seed + Metric View inventory) is a high-margin, high-stickiness engagement that no vendor tooling automates.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pattern 5 -->
+    <div class="pattern-card" id="pc5">
+      <div class="pattern-header" onclick="toggleCard('pc5')">
+        <div class="pattern-num">5</div>
+        <div class="pattern-summary">
+          <div class="pattern-name">Open Semantic Covenant</div>
+          <div class="pattern-def">Platforms commit to meaning portability: business logic encoded in their platform will be expressible in open, vendor-neutral formats — and can travel with the data to any tool.</div>
+        </div>
+        <div class="pattern-toggle">▾</div>
+      </div>
+      <div class="pattern-body">
+        <div class="pattern-section">
+          <div class="pattern-section-title">The Pattern</div>
+          <p>A <em>covenant</em> (not just a contract) implies a mutual, long-term commitment with shared values. Platforms are committing that meaning will not be held hostage. This extends beyond data portability (open table formats) to <strong>meaning portability</strong>: the business definitions, metric formulas, entity relationships, and domain structures travel with the data.</p>
+          <p>The three instruments of the covenant: (1) <strong>Open table format</strong> (Delta/Iceberg — established); (2) <strong>Open semantic format</strong> (Apache Ossie — in progress 2025–2026); (3) <strong>Open catalog standard</strong> (Apache Polaris + Ossie YAML stored alongside Iceberg tables — emerging vision).</p>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">Cross-Platform Implementations</div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Platform</th><th>Export</th><th>Import</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Databricks</td><td>PR #152 (UC Metric View → Ossie YAML)</td><td>PR #152 (Ossie → UC Metric View)</td><td><span class="badge badge-labs">PR open · no native UI</span></td></tr>
+              <tr><td>Snowflake</td><td>SYSTEM$READ_OSSIE_YAML_FROM_SEMANTIC_VIEW</td><td>SYSTEM$CREATE_SEMANTIC_VIEW_FROM_OSSIE_YAML</td><td><span class="badge badge-ga">GA Aug 2026</span></td></tr>
+              <tr><td>Microsoft Fabric</td><td>TMDL export (open XML)</td><td>TMDL import + Ossie→TMDL converter</td><td><span class="badge badge-labs">TMDL GA · converter community</span></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">The Strategic Subtext</div>
+          <p>Snowflake originated Ossie to win the portability narrative. Databricks joined to defend against it. Microsoft joined to ensure TMDL isn't stranded. The Covenant is <strong>competitive strategy expressed as openness</strong>.</p>
+        </div>
+        <div class="pattern-section">
+          <div class="pattern-section-title">SI Implication</div>
+          <div class="callout">For any platform migration: <em>"How much of your existing semantic investment can travel?"</em> Running the Ossie converter and documenting fidelity gaps (clean ports vs. custom_extensions vs. manual rework) is a 1–2 week discovery engagement with high stickiness — it converts directly to the migration project. Especially relevant for Snowflake→Databricks with existing dbt MetricFlow definitions.</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /#n7-patterns -->
+
+  <div id="n7-maturity" class="note-section">
+    <h2 class="section-title">Maturity Across All Three Platforms</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Pattern</th><th>Databricks</th><th>Snowflake</th><th>Fabric</th><th>Overall Maturity</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1 · Metric Sovereignty</strong></td><td><span class="badge badge-ga">GA</span></td><td><span class="badge badge-ga">GA</span></td><td><span class="badge badge-ga">GA (mature)</span></td><td>Highest — all three in GA</td></tr>
+        <tr><td><strong>2 · Behavioral Ontogenesis</strong></td><td>Most explicit (OntoRank)</td><td>Verified queries (operator-curated)</td><td>Implicit (Copilot learning)</td><td>Medium — Databricks most advanced</td></tr>
+        <tr><td><strong>3 · Perimeter Isomorphism</strong></td><td>Strong (UC RBAC + on-behalf-of)</td><td>Good (Snowflake RBAC, raw SQL caveat)</td><td>Layered (Purview + OLS)</td><td>Medium-high</td></tr>
+        <tr><td><strong>4 · Concept-Centric Accretion</strong></td><td>UC Domains GA Oct 8 + Glossary preview</td><td>Horizon data products maturing</td><td>Fabric Business Domains preview</td><td>Emerging — all three in progress</td></tr>
+        <tr><td><strong>5 · Open Semantic Covenant</strong></td><td>PR #152 open, no native UI</td><td>Native GA SYSTEM$ functions (most complete)</td><td>TMDL GA, Ossie converter community</td><td>Lowest — Snowflake leads</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div id="n7-comparison" class="note-section">
+    <h2 class="section-title">Cross-Platform Pattern Comparison</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Pattern</th><th>Databricks</th><th>Snowflake</th><th>Microsoft Fabric</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1 · Metric Sovereignty</strong></td><td>UC Metric Views (GA, open-sourced)</td><td>Semantic Views (GA, native objects)</td><td>Power BI Semantic Model (mature, DAX)</td></tr>
+        <tr><td><strong>2 · Behavioral Ontogenesis</strong></td><td>Genie Ontology: formal + inferred, OntoRank blending</td><td>Verified queries: operator-curated corrections</td><td>Copilot Q&amp;A learning (implicit)</td></tr>
+        <tr><td><strong>3 · Perimeter Isomorphism</strong></td><td>UC RBAC on Metric Views + on-behalf-of MCP (strong)</td><td>Snowflake RBAC; raw SQL bypass risk (caveat)</td><td>Purview labels + OLS in semantic model (layered)</td></tr>
+        <tr><td><strong>4 · Concept-Centric Accretion</strong></td><td>Domains (GA Oct 8) + Glossary (preview)</td><td>Horizon data products + Semantic View entity model</td><td>OneLake Data Hub + Business Domains (preview)</td></tr>
+        <tr><td><strong>5 · Open Semantic Covenant</strong></td><td>Apache Ossie contributor; PR #152 (no native UI)</td><td>Originated Apache Ossie; native SYSTEM$ (GA)</td><td>TMDL GA; Ossie→TMDL converter (community)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div id="n7-si" class="note-section">
+    <h2 class="section-title">SI Service Offerings from the Five Patterns</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Pattern</th><th>Service Offering</th><th>Duration</th><th>Who buys it</th></tr></thead>
+      <tbody>
+        <tr><td>Metric Sovereignty</td><td><strong>Semantic Layer Buildout</strong> — author UC Metric Views for a business domain</td><td>4–8 weeks per domain</td><td>CDO, Head of Analytics, Finance/Risk domain lead</td></tr>
+        <tr><td>Behavioral Ontogenesis</td><td><strong>Ontology Quality Audit</strong> — review Genie Ontology inferred snippets; replace low-confidence with explicit definitions</td><td>2–3 weeks (recurring)</td><td>AI platform team, data governance</td></tr>
+        <tr><td>Perimeter Isomorphism</td><td><strong>Semantic Governance Alignment</strong> — audit grant structure; close permission gaps</td><td>1–2 weeks</td><td>CIO/CISO, data governance</td></tr>
+        <tr><td>Concept-Centric Accretion</td><td><strong>Domain Design Workshop + Implementation</strong> — DDD approach; UC Domains + Glossary seed + Metric View inventory</td><td>2–3 day workshop + 4–6 week build</td><td>CDO, business domain leads</td></tr>
+        <tr><td>Open Semantic Covenant</td><td><strong>Semantic Migration Assessment</strong> — run Ossie converter; document fidelity gaps; scope migration</td><td>1–2 weeks discovery</td><td>CTO, migration program lead</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<script>
+function switchNote(n) {
+  document.querySelectorAll('.note-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.note-pill').forEach(p => p.classList.remove('active'));
+  document.getElementById('note'+n).classList.add('active');
+  document.querySelectorAll('.note-pill')[n-1].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function jumpTo(id) {
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function toggleCard(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.querySelector('.theme-toggle');
+  if(html.dataset.theme === 'dark') {
+    html.dataset.theme = 'light';
+    btn.textContent = '☾ Dark';
+  } else {
+    html.dataset.theme = 'dark';
+    btn.textContent = '☀ Light';
+  }
+}
+</script>
+</body>
+</html>
