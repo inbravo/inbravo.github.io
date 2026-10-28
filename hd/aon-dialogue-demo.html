@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="claude:viewport-fit-sides" content="cover" />
+<title>Dialogue with Data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+/* ─── TOKENS ─── */
+:root {
+  /* ── light theme (default) ── */
+  --bg:          #f0f4f8;
+  --bg2:         #e8eef5;
+  --bg3:         #dde6f0;
+  --surface:     #ffffff;
+  --surface2:    #f5f8fc;
+  --border:      #c8d8e8;
+  --border2:     #b0c4d8;
+  --fg:          #0d1e30;
+  --fg2:         #3a5070;
+  --fg3:         #7090b0;
+  --accent:      #0099bb;
+  --accent2:     #007a96;
+  --accent3:     #00b8a0;
+  --warn:        #c2820a;
+  --warn-bg:     rgba(194,130,10,0.10);
+  --success:     #15803d;
+  --success-bg:  rgba(21,128,61,0.10);
+  --red:         #c8241c;
+  --red-bg:      rgba(200,36,28,0.08);
+  --purple:      #6d3bbf;
+  --purple-bg:   rgba(109,59,191,0.08);
+  --nav-bg:      rgba(240,244,248,0.92);
+  --font-head:   'Space Grotesk', system-ui, sans-serif;
+  --font-body:   'Inter', system-ui, sans-serif;
+  --font-mono:   'JetBrains Mono', 'Fira Code', monospace;
+  color-scheme: light;
+}
+/* dark theme available only via explicit data-theme="dark" — OS preference is intentionally ignored */
+:root[data-theme="dark"] {
+  --bg:          #0A1628;
+  --bg2:         #0f1e36;
+  --bg3:         #152240;
+  --surface:     #1a2d4a;
+  --surface2:    #1f3454;
+  --border:      #2a3f5e;
+  --border2:     #3a5070;
+  --fg:          #e8edf5;
+  --fg2:         #a8b8d0;
+  --fg3:         #6a8aaa;
+  --accent:      #00c2e0;
+  --accent2:     #0096b8;
+  --accent3:     #00e5c8;
+  --warn:        #f59e0b;
+  --warn-bg:     rgba(245,158,11,0.12);
+  --success:     #22c55e;
+  --success-bg:  rgba(34,197,94,0.10);
+  --red:         #ef4444;
+  --red-bg:      rgba(239,68,68,0.10);
+  --purple:      #a78bfa;
+  --purple-bg:   rgba(167,139,250,0.10);
+  --nav-bg:      rgba(10,22,40,0.92);
+  color-scheme: dark;
+}
+
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+img { max-width: 100%; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ─── NAV ─── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--nav-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 max(24px, env(safe-area-inset-left, 0px));
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; }
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+.nav-title { font-family: var(--font-head); font-weight: 700; font-size: 15px; letter-spacing: 0.02em; color: var(--fg); }
+.nav-sub { font-size: 12px; color: var(--fg3); letter-spacing: 0.06em; text-transform: uppercase; }
+.nav-badge {
+  font-size: 11px; font-family: var(--font-mono);
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: 4px; color: var(--accent);
+}
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 72vh; display: flex; align-items: center; justify-content: center; text-align: center;
+  padding: 80px max(24px, env(safe-area-inset-left, 0px));
+  background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(0,194,224,0.07) 0%, transparent 70%);
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, transparent, transparent 59px, var(--border) 60px),
+              repeating-linear-gradient(0deg, transparent, transparent 59px, var(--border) 60px);
+  opacity: 0.25;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 800px; }
+.hero-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-family: var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent); background: rgba(0,194,224,0.08); border: 1px solid rgba(0,194,224,0.2);
+  padding: 6px 14px; border-radius: 20px; margin-bottom: 28px;
+}
+.hero-label .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(1.4); } }
+.hero h1 {
+  font-family: var(--font-head); font-size: clamp(28px,5vw,52px); font-weight: 700; line-height: 1.15;
+  color: var(--fg); text-wrap: balance; margin-bottom: 20px;
+}
+.hero h1 span { color: var(--accent); }
+.hero-sub { font-size: clamp(15px,2vw,18px); color: var(--fg2); max-width: 620px; margin: 0 auto 40px; line-height: 1.7; }
+.hero-pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.pill {
+  font-family: var(--font-mono); font-size: 12px;
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: 4px; color: var(--fg2);
+}
+
+/* ─── SECTION ─── */
+.section { padding: 72px max(24px, env(safe-area-inset-left, 0px)); max-width: 1200px; margin: 0 auto; }
+.section-label {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 12px;
+}
+.section-title { font-family: var(--font-head); font-size: clamp(22px,3vw,34px); font-weight: 700; color: var(--fg); margin-bottom: 12px; text-wrap: balance; }
+.section-body { font-size: 16px; color: var(--fg2); max-width: 680px; line-height: 1.7; margin-bottom: 48px; }
+
+/* ─── PROBLEM CARDS ─── */
+.problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 24px; }
+.problem-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 28px 24px; position: relative; overflow: hidden;
+}
+.problem-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(239,68,68,0.04) 0%, transparent 60%);
+}
+.problem-card.warn::before { background: linear-gradient(135deg, rgba(245,158,11,0.05) 0%, transparent 60%); }
+.problem-card.info::before { background: linear-gradient(135deg, rgba(167,139,250,0.05) 0%, transparent 60%); }
+.problem-icon { font-size: 28px; margin-bottom: 16px; }
+.problem-card h3 { font-family: var(--font-head); font-size: 16px; font-weight: 600; color: var(--fg); margin-bottom: 10px; }
+.problem-card p { font-size: 14px; color: var(--fg2); line-height: 1.65; margin-bottom: 16px; }
+.problem-tag {
+  display: inline-block; font-family: var(--font-mono); font-size: 11px;
+  padding: 3px 8px; border-radius: 3px; letter-spacing: 0.04em;
+}
+.tag-red { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+.tag-warn { background: var(--warn-bg); color: var(--warn); border: 1px solid rgba(245,158,11,0.2); }
+.tag-purple { background: var(--purple-bg); color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
+
+/* ─── FLOW SECTION ─── */
+.flow-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 16px; margin-bottom: 48px; }
+.flow-step {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px;
+}
+.flow-step-num {
+  font-family: var(--font-mono); font-size: 11px; color: var(--accent);
+  margin-bottom: 10px; letter-spacing: 0.1em;
+}
+.flow-step h4 { font-family: var(--font-head); font-size: 14px; font-weight: 600; color: var(--fg); margin-bottom: 8px; }
+.flow-step p { font-size: 13px; color: var(--fg2); line-height: 1.55; }
+
+/* ─── DEMO SECTION ─── */
+.demo-section {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 72px max(24px, env(safe-area-inset-left, 0px));
+}
+.demo-inner { max-width: 1200px; margin: 0 auto; }
+.demo-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+.demo-tab {
+  font-family: var(--font-body); font-size: 13px; font-weight: 500;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--fg2); padding: 10px 18px; border-radius: 6px;
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.demo-tab.active {
+  background: rgba(0,194,224,0.1); border-color: var(--accent); color: var(--accent);
+}
+.demo-tab:hover:not(.active) { border-color: var(--border2); color: var(--fg); }
+.demo-tab .persona-tag {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
+  display: block; color: var(--fg3); margin-bottom: 2px; text-transform: uppercase;
+}
+
+/* ─── DEMO PANELS ─── */
+.demo-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+@media (max-width: 780px) { .demo-panels { grid-template-columns: 1fr; } }
+.panel {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+}
+.panel-header {
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px; background: var(--surface2);
+}
+.panel-header-dot { width: 8px; height: 8px; border-radius: 50%; }
+.panel-title { font-family: var(--font-head); font-size: 13px; font-weight: 600; color: var(--fg); }
+.panel-body { padding: 20px; }
+
+/* Before panel */
+.before-q {
+  font-size: 14px; color: var(--fg2); font-style: italic;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 6px; padding: 12px 14px; margin-bottom: 16px; line-height: 1.6;
+}
+.conflict-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px; border-radius: 6px; margin-bottom: 10px;
+  background: var(--bg3); border: 1px solid var(--border);
+}
+.conflict-source { font-family: var(--font-mono); font-size: 11px; color: var(--fg3); min-width: 80px; margin-top: 2px; }
+.conflict-val { font-family: var(--font-mono); font-size: 15px; font-weight: 500; }
+.val-red { color: var(--red); }
+.val-warn { color: var(--warn); }
+.conflict-note { font-size: 12px; color: var(--fg3); margin-top: 2px; line-height: 1.4; }
+.conflict-label { font-size: 12px; font-weight: 600; margin-bottom: 4px; color: var(--fg2); }
+.before-gap {
+  background: var(--warn-bg); border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 6px; padding: 10px 14px;
+  font-size: 13px; color: var(--warn); margin-top: 10px;
+  display: flex; gap: 8px; align-items: flex-start;
+}
+
+/* Chat panel */
+.chat-body { padding: 16px; min-height: 200px; }
+.chat-msg { margin-bottom: 14px; display: flex; gap: 10px; }
+.chat-msg.user { flex-direction: row-reverse; }
+.chat-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--surface2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.chat-bubble {
+  max-width: 85%; padding: 10px 14px; border-radius: 8px;
+  font-size: 13.5px; line-height: 1.6;
+}
+.chat-msg.user .chat-bubble { background: rgba(0,194,224,0.1); border: 1px solid rgba(0,194,224,0.2); color: var(--fg); }
+.chat-msg.bot .chat-bubble { background: var(--bg3); border: 1px solid var(--border); color: var(--fg); }
+.chat-bubble strong { color: var(--accent); }
+.chat-bubble .metric-highlight {
+  display: inline-block; font-family: var(--font-mono); font-size: 16px; font-weight: 700;
+  color: var(--accent3); margin: 2px 4px;
+}
+.chat-bubble .sub-note {
+  display: block; font-size: 12px; color: var(--fg3); margin-top: 6px; font-style: italic;
+}
+.typing-indicator { display: none; gap: 4px; align-items: center; padding: 10px 14px; }
+.typing-indicator span {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--fg3); animation: bounce 1.2s infinite;
+}
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,80%,100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
+
+/* CE Context reveal */
+.ce-toggle-bar {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; margin-bottom: 12px; transition: border-color 0.2s;
+}
+.ce-toggle-bar:hover { border-color: var(--accent); }
+.ce-toggle-label { display: flex; align-items: center; gap: 10px; }
+.ce-toggle-label .ce-icon {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: rgba(0,194,224,0.1); border: 1px solid rgba(0,194,224,0.2);
+  display: flex; align-items: center; justify-content: center; font-size: 14px;
+}
+.ce-toggle-label span { font-family: var(--font-head); font-size: 13px; font-weight: 600; color: var(--fg2); }
+.ce-caret { color: var(--accent); font-size: 16px; transition: transform 0.25s; }
+.ce-caret.open { transform: rotate(180deg); }
+
+.ce-panel {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden; display: none; margin-bottom: 24px;
+}
+.ce-panel.visible { display: block; }
+.ce-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--surface2); }
+.ce-tab {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 10px 16px; cursor: pointer; color: var(--fg3); border-right: 1px solid var(--border);
+  transition: color 0.2s;
+}
+.ce-tab.active { color: var(--accent); background: rgba(0,194,224,0.05); }
+.ce-tab:hover:not(.active) { color: var(--fg2); }
+.ce-content { padding: 20px; display: none; }
+.ce-content.active { display: block; }
+
+.ce-metric-name { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--fg); margin-bottom: 6px; }
+.ce-def { font-size: 13px; color: var(--fg2); line-height: 1.6; margin-bottom: 16px; }
+.ce-signals { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.signal-chip {
+  font-family: var(--font-mono); font-size: 11px;
+  background: var(--bg3); border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: 4px; color: var(--fg2);
+}
+.signal-chip.primary { border-color: rgba(0,194,224,0.3); color: var(--accent); background: rgba(0,194,224,0.05); }
+pre.ce-sql {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+  padding: 14px; font-family: var(--font-mono); font-size: 12px; line-height: 1.7;
+  color: var(--fg2); overflow-x: auto; margin-bottom: 12px;
+}
+.kw { color: #569cd6; }
+.fn { color: #dcdcaa; }
+.str { color: #ce9178; }
+.cm { color: #6a9955; font-style: italic; }
+.field { color: #9cdcfe; }
+.num { color: #b5cea8; }
+.ce-lineage {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--fg3); font-family: var(--font-mono);
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 4px;
+  padding: 8px 12px;
+}
+.ce-lineage .lk { color: var(--success); }
+
+/* Data table */
+.data-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px;
+}
+.data-card-header {
+  padding: 12px 18px; border-bottom: 1px solid var(--border); background: var(--surface2);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.data-card-title { font-family: var(--font-head); font-size: 13px; font-weight: 600; color: var(--fg); }
+.data-card-meta { font-family: var(--font-mono); font-size: 11px; color: var(--fg3); }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 0; }
+th {
+  padding: 10px 16px; text-align: left;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--fg3); border-bottom: 1px solid var(--border); white-space: nowrap;
+  background: var(--bg3);
+}
+td { padding: 10px 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--fg2); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(0,194,224,0.03); }
+.td-mono { font-family: var(--font-mono); }
+.td-accent { color: var(--accent); font-family: var(--font-mono); font-weight: 500; }
+.td-success { color: var(--success); }
+.td-warn { color: var(--warn); }
+
+/* ─── ARCHITECTURE ─── */
+.arch-section {
+  padding: 72px max(24px, env(safe-area-inset-left, 0px));
+  background: var(--bg3); border-top: 1px solid var(--border);
+}
+.arch-inner { max-width: 1100px; margin: 0 auto; }
+.arch-svg-wrap { overflow-x: auto; }
+
+/* ─── CODE ARTIFACTS ─── */
+.artifacts-section { padding: 72px max(24px, env(safe-area-inset-left, 0px)); max-width: 1200px; margin: 0 auto; }
+.artifact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px,1fr)); gap: 20px; }
+.artifact-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.artifact-header {
+  padding: 14px 18px; border-bottom: 1px solid var(--border); background: var(--surface2);
+  display: flex; align-items: center; gap: 12px;
+}
+.artifact-icon {
+  width: 32px; height: 32px; border-radius: 6px;
+  background: rgba(0,194,224,0.1); border: 1px solid rgba(0,194,224,0.2);
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+}
+.artifact-header-text h4 { font-family: var(--font-head); font-size: 13px; font-weight: 600; color: var(--fg); }
+.artifact-header-text p { font-size: 12px; color: var(--fg3); margin-top: 2px; }
+pre.code-block {
+  background: var(--bg); padding: 18px 16px; margin: 0;
+  font-family: var(--font-mono); font-size: 12px; line-height: 1.75;
+  color: var(--fg2); overflow-x: auto;
+}
+
+/* ─── TIMELINE ─── */
+.timeline-section {
+  background: var(--bg2); border-top: 1px solid var(--border);
+  padding: 72px max(24px, env(safe-area-inset-left, 0px));
+}
+.timeline-inner { max-width: 900px; margin: 0 auto; }
+.timeline { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 2px; }
+.timeline-item {
+  background: var(--surface); border: 1px solid var(--border); padding: 24px 20px;
+}
+.timeline-item:first-child { border-radius: 8px 0 0 8px; }
+.timeline-item:last-child { border-radius: 0 8px 8px 0; }
+.timeline-phase {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+}
+.timeline-item h4 { font-family: var(--font-head); font-size: 14px; font-weight: 600; color: var(--fg); margin-bottom: 10px; }
+.timeline-item ul { list-style: none; padding: 0; }
+.timeline-item ul li { font-size: 13px; color: var(--fg2); padding: 4px 0 4px 16px; position: relative; }
+.timeline-item ul li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 11px; top: 5px; }
+
+/* ─── FOOTER ─── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px max(24px, env(safe-area-inset-left, 0px));
+  display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;
+}
+.footer-brand { font-family: var(--font-head); font-size: 13px; font-weight: 600; color: var(--fg2); }
+.footer-meta { font-family: var(--font-mono); font-size: 11px; color: var(--fg3); }
+
+/* ─── TEST ENVIRONMENT ─── */
+.te-section { border-top: 1px solid var(--border); background: var(--bg); }
+.te-toggle {
+  max-width: 1200px; margin: 0 auto;
+  padding: 24px max(24px, env(safe-area-inset-left, 0px));
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; gap: 16px; transition: opacity 0.15s;
+}
+.te-toggle:hover { opacity: 0.8; }
+.te-toggle-left { display: flex; align-items: center; gap: 14px; }
+.te-toggle-icon {
+  width: 40px; height: 40px; border-radius: 8px; flex-shrink: 0;
+  background: var(--bg3); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.te-toggle-title { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--fg); }
+.te-toggle-sub { font-size: 12px; color: var(--fg3); margin-top: 2px; font-family: var(--font-mono); }
+.te-toggle-sub em { color: var(--warn, #f59e0b); font-style: normal; }
+.te-caret { font-size: 16px; color: var(--fg3); transition: transform 0.2s; flex-shrink: 0; }
+.te-caret.open { transform: rotate(180deg); }
+.te-body {
+  border-top: 1px solid var(--border); background: var(--bg2);
+  padding: 32px max(24px, env(safe-area-inset-left, 0px)) 48px;
+}
+.te-inner { max-width: 1200px; margin: 0 auto; }
+.te-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.te-tab {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--fg3); padding: 7px 14px; border-radius: 4px; cursor: pointer; transition: all 0.15s;
+}
+.te-tab.active { background: rgba(0,194,224,0.08); border-color: var(--accent); color: var(--accent); }
+.te-tab:hover:not(.active) { color: var(--fg); border-color: var(--border2); }
+.te-panel { display: none; }
+.te-panel.active { display: block; }
+.te-note {
+  background: rgba(0,194,224,0.05); border: 1px solid rgba(0,194,224,0.12);
+  border-radius: 6px; padding: 11px 14px; margin-bottom: 18px;
+  font-size: 12.5px; color: var(--fg2); line-height: 1.65;
+}
+.te-note strong { color: var(--accent); }
+.cp {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  overflow: hidden; margin-bottom: 18px;
+}
+.cp-hdr {
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  background: var(--bg3); display: flex; align-items: center; justify-content: space-between;
+}
+.cp-title { font-family: var(--font-mono); font-size: 11px; color: var(--fg2); font-weight: 500; letter-spacing: 0.04em; }
+.cp-copy {
+  font-family: var(--font-mono); font-size: 10px;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--fg3); padding: 3px 10px; border-radius: 3px; cursor: pointer; transition: all 0.15s;
+}
+.cp-copy:hover { border-color: var(--accent); color: var(--accent); }
+.cp-copy.ok { border-color: #10b981; color: #10b981; }
+pre.cp-code {
+  background: var(--bg); padding: 16px 14px; margin: 0;
+  font-family: var(--font-mono); font-size: 12px; line-height: 1.8;
+  color: var(--fg2); overflow-x: auto; max-height: 500px; tab-size: 2;
+}
+.te-subtabs { display: flex; gap: 4px; margin-bottom: 14px; }
+.te-stab {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--fg3); padding: 4px 10px; border-radius: 3px; cursor: pointer; transition: all 0.15s;
+}
+.te-stab.active { background: rgba(0,194,224,0.07); border-color: rgba(0,194,224,0.25); color: var(--accent); }
+.te-sp { display: none; }
+.te-sp.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-dot"></div>
+    <div>
+      <div class="nav-title">Dialogue with Data</div>
+      <div class="nav-sub">Context Engineering · Databricks MDL</div>
+    </div>
+  </div>
+  <div class="nav-badge">AON × KPI Partners</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">
+      <span class="pulse"></span>
+      B2B Marketing Intelligence — Context Engineering on Databricks
+    </div>
+    <h1>From Fragmented Marketing Data<br/>to <span>Governed Intelligence</span></h1>
+    <p class="hero-sub">
+      AON's Marketing Data Lake surfaces a structural problem: five source systems, no agreed metric definitions, and a marketing-sales attribution war that produces different numbers every quarter. Context Engineering on Databricks solves it — once.
+    </p>
+    <div class="hero-pills">
+      <span class="pill">Eloqua · Aon Connect · Cvent · ON24 · Unity CDP</span>
+      <span class="pill">Unity Catalog · Metric Views · Genie One</span>
+      <span class="pill">marketing_sourced_pipeline · mql_volume · post_event_pipeline_90d</span>
+    </div>
+  </div>
+</section>
+
+<!-- THE PROBLEM -->
+<section class="section">
+  <div class="section-label">The Problem</div>
+  <h2 class="section-title">Three definition gaps that block every marketing KPI</h2>
+  <p class="section-body">
+    AON's MDL working document records these gaps explicitly — they are confirmed issues in the data, not hypothetical risks. Context Engineering closes them by encoding agreed definitions once, in Unity Catalog, where every downstream tool reads the same answer.
+  </p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-icon">⚔️</div>
+      <h3>The Attribution War</h3>
+      <p>
+        <strong style="color:var(--fg)">marketing_sourced_pipeline</strong> has no agreed rule.
+        Marketing filters <code style="font-family:var(--font-mono);font-size:12px;color:var(--accent)">C_Lead_Source___Original1</code> from Eloqua.
+        Sales pulls <code style="font-family:var(--font-mono);font-size:12px;color:var(--accent)">lead_source</code> from Aon Connect.
+        Different fields. Different filters. Different numbers — every board meeting.
+      </p>
+      <span class="problem-tag tag-red">CONFIRMED GAP · MDL WORKING DOC ROW 10</span>
+    </div>
+    <div class="problem-card warn">
+      <div class="problem-icon">🔎</div>
+      <h3>The MQL Mirage</h3>
+      <p>
+        There is no <code style="font-family:var(--font-mono);font-size:12px;color:var(--warn)">is_mql</code> flag in the MDL schema.
+        MQL must be derived from <code style="font-family:var(--font-mono);font-size:12px;color:var(--warn)">lead_status_code</code> and <code style="font-family:var(--font-mono);font-size:12px;color:var(--warn)">lead_stage</code>.
+        Every analyst re-derives it differently. Campaign conversion rates are incomparable across teams.
+      </p>
+      <span class="problem-tag tag-warn">CONFIRMED GAP · MDL WORKING DOC ROW 16</span>
+    </div>
+    <div class="problem-card info">
+      <div class="problem-icon">🔗</div>
+      <h3>The Invisible Event</h3>
+      <p>
+        Cvent event data flows into MDL via an Eloqua CDO. The five-hop join to pipeline opportunities exists but is undocumented. No attribution window is defined. The event team cannot answer: <em>"Did our London Forum generate pipeline?"</em>
+      </p>
+      <span class="problem-tag tag-purple">CONFIRMED GAP · MDL WORKING DOC ROW 19</span>
+    </div>
+  </div>
+</section>
+
+<!-- CE METHODOLOGY -->
+<section class="section" style="padding-top:0">
+  <div class="section-label">The Solution</div>
+  <h2 class="section-title">Context Engineering is a methodology, not a layer</h2>
+  <p class="section-body">
+    CE is the practice of encoding business intent — what a metric means, what qualifies, what's excluded — directly into the data platform, as three permanent artifacts. Every downstream consumer reads the same definition. The attribution war ends because there is only one place the rule lives.
+  </p>
+  <div class="flow-grid">
+    <div class="flow-step">
+      <div class="flow-step-num">ARTIFACT 01</div>
+      <h4>UC Column COMMENT</h4>
+      <p>An <code style="font-family:var(--font-mono);font-size:12px;color:var(--accent)">ALTER COLUMN … COMMENT</code> on <code style="font-family:var(--font-mono);font-size:12px;color:var(--accent)">lead_attributes_it.lead_source</code> encodes the agreed allowlist and prohibits ad-hoc filters. Genie reads this before generating any SQL.</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">ARTIFACT 02</div>
+      <h4>Unity Catalog Metric View</h4>
+      <p>A YAML definition in Unity Catalog with a <code style="font-family:var(--font-mono);font-size:12px;color:var(--accent)">measures</code> block. The <code style="font-family:var(--font-mono);font-size:12px;color:var(--accent)">expr</code> contains the exact SQL. <code style="font-family:var(--font-mono);font-size:12px;color:var(--accent)">synonyms</code> ensure "marketing pipeline" and "sourced pipeline" resolve to the same governed measure.</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">ARTIFACT 03</div>
+      <h4>Genie Knowledge Store</h4>
+      <p>A <code style="font-family:var(--font-mono);font-size:12px;color:var(--accent)">serialized_space</code> that tells Genie: MQL is defined by status code, not a flag. Marketing-sourced requires the allowlist. Event attribution uses the 90-day window. Trusted SQL assets are pre-verified.</p>
+    </div>
+  </div>
+  <div style="background:rgba(0,194,224,0.06);border:1px solid rgba(0,194,224,0.2);border-radius:8px;padding:18px 20px;font-size:14px;color:var(--fg2);line-height:1.7;max-width:760px;">
+    <strong style="color:var(--accent)">One source, two outputs:</strong> The same Metric View definition that governs Genie conversations also feeds Power BI Copilot via the Databricks Semantic Bridge. The attribution rule is written once and versioned in Unity Catalog. There is no separate BI semantic model to maintain.
+  </div>
+</section>
+
+<!-- INTERACTIVE DEMO -->
+<div class="demo-section">
+<div class="demo-inner">
+  <div class="section-label">Live Dialogue Demo</div>
+  <h2 class="section-title" style="margin-bottom:8px">Ask the question. Get the governed answer.</h2>
+  <p style="font-size:14px;color:var(--fg2);margin-bottom:28px;">Select a persona to see how Context Engineering on Databricks resolves each definition gap.</p>
+
+  <div class="demo-tabs">
+    <button class="demo-tab active" onclick="loadDemo(0)">
+      <span class="persona-tag">Executive</span>
+      Marketing-Sourced Pipeline
+    </button>
+    <button class="demo-tab" onclick="loadDemo(1)">
+      <span class="persona-tag">Campaign Manager</span>
+      MQL Volume by Campaign
+    </button>
+    <button class="demo-tab" onclick="loadDemo(2)">
+      <span class="persona-tag">Event Lead</span>
+      Post-Event Pipeline
+    </button>
+  </div>
+
+  <div class="demo-panels">
+    <div class="panel">
+      <div class="panel-header" style="border-left:3px solid var(--red)">
+        <div class="panel-header-dot" style="background:var(--red)"></div>
+        <div class="panel-title">Without Context Engineering</div>
+      </div>
+      <div class="panel-body" id="before-body"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header" style="border-left:3px solid var(--accent)">
+        <div class="panel-header-dot" style="background:var(--accent)"></div>
+        <div class="panel-title">Dialogue with Data — Genie + CE</div>
+      </div>
+      <div class="chat-body" id="chat-body"></div>
+    </div>
+  </div>
+
+  <!-- CE CONTEXT REVEAL -->
+  <div class="ce-toggle-bar" onclick="toggleCE()">
+    <div class="ce-toggle-label">
+      <div class="ce-icon">⚙️</div>
+      <span>Semantic Context — How Genie knows this answer</span>
+    </div>
+    <div class="ce-caret" id="ce-caret">▼</div>
+  </div>
+
+  <div class="ce-panel" id="ce-panel">
+    <div class="ce-tabs">
+      <div class="ce-tab active" onclick="switchCETab(0)">UC COMMENT</div>
+      <div class="ce-tab" onclick="switchCETab(1)">METRIC VIEW</div>
+      <div class="ce-tab" onclick="switchCETab(2)">KNOWLEDGE STORE</div>
+      <div class="ce-tab" onclick="switchCETab(3)">LINEAGE</div>
+    </div>
+    <div class="ce-content active" id="ce-tab-0"></div>
+    <div class="ce-content" id="ce-tab-1"></div>
+    <div class="ce-content" id="ce-tab-2"></div>
+    <div class="ce-content" id="ce-tab-3"></div>
+  </div>
+
+  <!-- DATA TABLE -->
+  <div class="data-card" id="data-card">
+    <div class="data-card-header">
+      <div class="data-card-title" id="data-title">MDL Query Result</div>
+      <div class="data-card-meta" id="data-meta">marketing.mdl — Unity Catalog</div>
+    </div>
+    <div class="table-wrap" id="data-table-wrap"></div>
+  </div>
+</div>
+</div>
+
+<!-- ARCHITECTURE -->
+<section class="arch-section">
+  <div class="arch-inner">
+    <div class="section-label">Architecture</div>
+    <h2 class="section-title" style="margin-bottom:32px">AON MDL — Context Engineering Data Flow</h2>
+    <div class="arch-svg-wrap">
+<svg viewBox="0 0 1040 440" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:700px;max-width:1040px;display:block;margin:0 auto">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#2a3f5e"/>
+    </marker>
+    <marker id="arr-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#00c2e0"/>
+    </marker>
+  </defs>
+
+  <!-- SOURCE SYSTEMS HEADER -->
+  <text x="12" y="24" font-family="JetBrains Mono,monospace" font-size="11" fill="#6a8aaa" letter-spacing="1">SOURCE SYSTEMS</text>
+
+  <!-- Eloqua -->
+  <rect x="10" y="34" width="140" height="56" rx="6" fill="#1a2d4a" stroke="#2a3f5e"/>
+  <text x="80" y="56" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" font-weight="600" fill="#e8edf5">Eloqua</text>
+  <text x="80" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Oracle Marketing Cloud</text>
+  <text x="80" y="84" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Email · Web · Lead Score</text>
+
+  <!-- Aon Connect -->
+  <rect x="10" y="106" width="140" height="56" rx="6" fill="#1a2d4a" stroke="#2a3f5e"/>
+  <text x="80" y="128" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" font-weight="600" fill="#e8edf5">Aon Connect</text>
+  <text x="80" y="143" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Oracle Sales Cloud</text>
+  <text x="80" y="155" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Leads · Opps · Contacts</text>
+
+  <!-- Cvent -->
+  <rect x="10" y="178" width="140" height="56" rx="6" fill="#1a2d4a" stroke="#2a3f5e"/>
+  <text x="80" y="200" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" font-weight="600" fill="#e8edf5">Cvent</text>
+  <text x="80" y="215" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Event Management</text>
+  <text x="80" y="227" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">via Eloqua CDO</text>
+
+  <!-- ON24 -->
+  <rect x="10" y="250" width="140" height="56" rx="6" fill="#1a2d4a" stroke="#2a3f5e"/>
+  <text x="80" y="272" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" font-weight="600" fill="#e8edf5">ON24</text>
+  <text x="80" y="287" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Virtual Events / Webinars</text>
+  <text x="80" y="299" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">via Eloqua CDO</text>
+
+  <!-- Unity CDP -->
+  <rect x="10" y="322" width="140" height="56" rx="6" fill="#1a2d4a" stroke="#2a3f5e"/>
+  <text x="80" y="344" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" font-weight="600" fill="#e8edf5">Unity CDP</text>
+  <text x="80" y="359" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Customer 360</text>
+  <text x="80" y="371" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Identity Resolution</text>
+
+  <!-- Arrows to MDL -->
+  <line x1="150" y1="62" x2="232" y2="138" stroke="#2a3f5e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="150" y1="134" x2="232" y2="175" stroke="#2a3f5e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="150" y1="206" x2="232" y2="210" stroke="#2a3f5e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="150" y1="278" x2="232" y2="248" stroke="#2a3f5e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="150" y1="350" x2="232" y2="285" stroke="#2a3f5e" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- DATABRICKS MDL HEADER -->
+  <text x="238" y="24" font-family="JetBrains Mono,monospace" font-size="11" fill="#6a8aaa" letter-spacing="1">DATABRICKS MARKETING DATA LAKE</text>
+
+  <!-- Bronze -->
+  <rect x="238" y="34" width="128" height="64" rx="6" fill="#152240" stroke="#2a3f5e"/>
+  <text x="302" y="56" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" font-weight="600" fill="#a8b8d0">Bronze</text>
+  <text x="302" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Raw ingestion</text>
+  <text x="302" y="83" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">ELQ_Contacts · leads</text>
+
+  <!-- Silver -->
+  <rect x="238" y="116" width="128" height="64" rx="6" fill="#152240" stroke="#2a3f5e"/>
+  <text x="302" y="138" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" font-weight="600" fill="#a8b8d0">Silver</text>
+  <text x="302" y="152" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Cleansed · joined</text>
+  <text x="302" y="165" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">lead_attributes_it</text>
+
+  <!-- Gold -->
+  <rect x="238" y="198" width="128" height="64" rx="6" fill="#152240" stroke="#3a5070"/>
+  <text x="302" y="220" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" font-weight="600" fill="#e8edf5">Gold</text>
+  <text x="302" y="234" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">cmpgn · opty · events</text>
+  <text x="302" y="247" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">campaign_member_it</text>
+
+  <!-- Reltio MDM -->
+  <rect x="238" y="280" width="128" height="56" rx="6" fill="#152240" stroke="#2a3f5e"/>
+  <text x="302" y="302" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" font-weight="600" fill="#a8b8d0">Reltio MDM</text>
+  <text x="302" y="316" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Identity resolution</text>
+  <text x="302" y="328" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">vw_org_crosswalk</text>
+
+  <!-- MDL vertical arrows -->
+  <line x1="302" y1="98" x2="302" y2="116" stroke="#2a3f5e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="302" y1="180" x2="302" y2="198" stroke="#2a3f5e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="302" y1="262" x2="302" y2="280" stroke="#2a3f5e" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- MDL to CE -->
+  <line x1="366" y1="66" x2="500" y2="90" stroke="#2a3f5e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="366" y1="148" x2="500" y2="148" stroke="#2a3f5e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="366" y1="230" x2="500" y2="205" stroke="#2a3f5e" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- CE LAYER HEADER -->
+  <text x="510" y="24" font-family="JetBrains Mono,monospace" font-size="11" fill="#00c2e0" letter-spacing="1">CONTEXT ENGINEERING</text>
+
+  <!-- UC Comments -->
+  <rect x="505" y="34" width="158" height="78" rx="6" fill="#0f2840" stroke="rgba(0,194,224,0.35)"/>
+  <text x="584" y="56" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" font-weight="600" fill="#00c2e0">UC Column COMMENTs</text>
+  <text x="584" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">ALTER COLUMN lead_source</text>
+  <text x="584" y="84" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">COMMENT 'allowlist: ...'</text>
+  <text x="584" y="96" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">+ lead_status_code rule</text>
+  <text x="584" y="106" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">+ campaign_cvent_id chain</text>
+
+  <!-- Metric Views -->
+  <rect x="505" y="128" width="158" height="78" rx="6" fill="#0f2840" stroke="rgba(0,194,224,0.35)"/>
+  <text x="584" y="150" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" font-weight="600" fill="#00c2e0">Metric Views (YAML)</text>
+  <text x="584" y="166" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">marketing_sourced_pipeline</text>
+  <text x="584" y="178" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">mql_volume</text>
+  <text x="584" y="190" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">post_event_pipeline_90d</text>
+  <text x="584" y="200" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#00e5c8">measures · synonyms · joins</text>
+
+  <!-- Knowledge Store -->
+  <rect x="505" y="222" width="158" height="78" rx="6" fill="#0f2840" stroke="rgba(0,194,224,0.35)"/>
+  <text x="584" y="244" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" font-weight="600" fill="#00c2e0">Genie Knowledge Store</text>
+  <text x="584" y="260" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">serialized_space</text>
+  <text x="584" y="272" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Trusted SQL assets</text>
+  <text x="584" y="284" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">NL→SQL instructions</text>
+  <text x="584" y="294" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#00e5c8">MCP endpoint</text>
+
+  <!-- CE to Consumption -->
+  <line x1="663" y1="73" x2="738" y2="100" stroke="#00c2e0" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-accent)"/>
+  <line x1="663" y1="167" x2="738" y2="195" stroke="#00c2e0" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-accent)"/>
+  <line x1="663" y1="261" x2="738" y2="290" stroke="#00c2e0" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-accent)"/>
+
+  <!-- CONSUMPTION HEADER -->
+  <text x="748" y="24" font-family="JetBrains Mono,monospace" font-size="11" fill="#6a8aaa" letter-spacing="1">CONSUMPTION</text>
+
+  <!-- Genie -->
+  <rect x="743" y="34" width="150" height="120" rx="6" fill="#1a2d4a" stroke="#3a5070"/>
+  <text x="818" y="60" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13" font-weight="700" fill="#e8edf5">Genie One</text>
+  <text x="818" y="76" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Conversational Analytics</text>
+  <text x="818" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#00e5c8">Metric View → governed SQL</text>
+  <text x="818" y="104" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">NL queries use synonyms</text>
+  <text x="818" y="118" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">+ allowlist + window</text>
+  <text x="818" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Trusted SQL assets</text>
+  <text x="818" y="146" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">/ai-gateway/genie_one_mcp</text>
+
+  <!-- Power BI -->
+  <rect x="743" y="170" width="150" height="100" rx="6" fill="#1a2d4a" stroke="#3a5070"/>
+  <text x="818" y="194" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13" font-weight="700" fill="#e8edf5">Power BI Copilot</text>
+  <text x="818" y="210" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Governed BI dashboards</text>
+  <text x="818" y="224" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#00e5c8">via Semantic Bridge</text>
+  <text x="818" y="238" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Same UC Metric View</text>
+  <text x="818" y="252" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">No duplicate definition</text>
+  <text x="818" y="262" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">in BI semantic layer</text>
+
+  <!-- SQL Analysts -->
+  <rect x="743" y="286" width="150" height="80" rx="6" fill="#1a2d4a" stroke="#3a5070"/>
+  <text x="818" y="310" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" font-weight="600" fill="#e8edf5">SQL Analysts</text>
+  <text x="818" y="326" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">MEASURE() function</text>
+  <text x="818" y="340" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Same logic, reusable</text>
+  <text x="818" y="354" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#6a8aaa">Full UC lineage</text>
+
+  <!-- UC boundary box -->
+  <rect x="482" y="8" width="320" height="330" rx="8" fill="none" stroke="rgba(0,194,224,0.15)" stroke-dasharray="5,4"/>
+  <text x="642" y="405" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#6a8aaa">Unity Catalog — Single governance layer · Full lineage · Access controls</text>
+</svg>
+    </div>
+  </div>
+</section>
+
+<!-- CE ARTIFACTS -->
+<section class="artifacts-section">
+  <div class="section-label">CE Artifacts</div>
+  <h2 class="section-title">The three permanent artifacts that end the attribution war</h2>
+  <p class="section-body">
+    Written once. Version-controlled in Unity Catalog. Read by every downstream tool — Genie, Power BI Copilot, SQL notebooks. Changing the definition means editing one <code style="font-family:var(--font-mono);font-size:13px;color:var(--accent)">expr</code>.
+  </p>
+  <div class="artifact-grid">
+
+    <div class="artifact-card">
+      <div class="artifact-header">
+        <div class="artifact-icon">📝</div>
+        <div class="artifact-header-text">
+          <h4>Unity Catalog Column COMMENT</h4>
+          <p>Encodes the marketing-sourced allowlist at the field level</p>
+        </div>
+      </div>
+<pre class="code-block"><span class="cm">-- Encode the attribution rule where the data lives</span>
+<span class="kw">ALTER</span> <span class="kw">TABLE</span> <span class="field">marketing.mdl.lead_attributes_it</span>
+<span class="kw">ALTER</span> <span class="kw">COLUMN</span> <span class="field">lead_source</span> <span class="kw">COMMENT</span>
+  <span class="str">'Lead origin as recorded in Aon Connect (Oracle Sales Cloud).
+
+MARKETING-SOURCED ALLOWLIST (agreed Oct 2026):
+  Event, Content Syndication, Paid Social,
+  Webinar, Email Campaign, Referral
+
+DO NOT filter on Eloqua C_Lead_Source___Original1
+without cross-referencing this field — the two
+systems stamp different values. Use the Metric View
+marketing_sourced_pipeline for governed reports.
+
+Owner: Marketing Ops · Reviewed: 2026-10-15'</span>;</pre>
+    </div>
+
+    <div class="artifact-card">
+      <div class="artifact-header">
+        <div class="artifact-icon">📐</div>
+        <div class="artifact-header-text">
+          <h4>Marketing Pipeline Metric View</h4>
+          <p>Governed marketing_sourced_pipeline and mql_volume measures</p>
+        </div>
+      </div>
+<pre class="code-block"><span class="cm"># marketing.mdl.mv_marketing_pipeline</span>
+<span class="kw">version</span>: <span class="num">1.1</span>
+<span class="kw">source</span>: <span class="field">marketing.mdl.lead_attributes_it</span>
+<span class="kw">comment</span>: <span class="str">"MDL Marketing Pipeline — governed layer"</span>
+<span class="kw">filter</span>: lead_status_code <span class="kw">!=</span> <span class="str">'DELETED'</span>
+
+<span class="kw">joins</span>:
+  - <span class="kw">name</span>: opty
+    <span class="kw">source</span>: <span class="field">marketing.mdl.opportunity_attributes_iit</span>
+    <span class="kw">on</span>: source.lead_id = opty.opty_lead_id
+
+<span class="kw">measures</span>:
+  - <span class="kw">name</span>: Marketing Sourced Pipeline
+    <span class="kw">expr</span>: <span class="fn">SUM</span>(<span class="fn">CASE</span> <span class="kw">WHEN</span> lead_source <span class="kw">IN</span> (
+        <span class="str">'Event'</span>,<span class="str">'Content Syndication'</span>,
+        <span class="str">'Paid Social'</span>,<span class="str">'Webinar'</span>,
+        <span class="str">'Email Campaign'</span>)
+      <span class="kw">THEN</span> opty.opty_amount_usd <span class="kw">END</span>)
+    <span class="kw">synonyms</span>: [<span class="str">"marketing pipeline"</span>,
+               <span class="str">"sourced pipeline"</span>]
+
+  - <span class="kw">name</span>: MQL Volume
+    <span class="kw">expr</span>: <span class="fn">COUNT</span>(<span class="fn">CASE</span> <span class="kw">WHEN</span>
+        lead_status_code = <span class="str">'QUALIFIED'</span>
+        <span class="kw">AND</span> lead_stage = <span class="str">'MQL'</span>
+      <span class="kw">THEN</span> lead_id <span class="kw">END</span>)
+    <span class="cm">    # note: lead_comverted_date (one 'n')</span>
+    <span class="kw">synonyms</span>: [<span class="str">"qualified leads"</span>,<span class="str">"MQLs"</span>]</pre>
+    </div>
+
+    <div class="artifact-card">
+      <div class="artifact-header">
+        <div class="artifact-icon">📅</div>
+        <div class="artifact-header-text">
+          <h4>Event Attribution Metric View</h4>
+          <p>Governs the Cvent → pipeline 90-day attribution window</p>
+        </div>
+      </div>
+<pre class="code-block"><span class="cm"># marketing.mdl.mv_event_attribution</span>
+<span class="kw">version</span>: <span class="num">1.1</span>
+<span class="kw">source</span>: <span class="field">marketing.mdl.opportunity_attributes_iit</span>
+
+<span class="kw">joins</span>:
+  - <span class="kw">name</span>: contact
+    <span class="kw">source</span>: <span class="field">marketing.mdl.contact_it</span>
+    <span class="kw">on</span>: source.opty_primary_contact_id
+       = contact.con_party_id
+  - <span class="kw">name</span>: event
+    <span class="kw">source</span>: <span class="field">marketing.mdl.cmpgn_campaigns_it</span>
+    <span class="kw">on</span>: contact.campaign_cvent_id
+       = event.campaign_cvent_id
+
+<span class="kw">measures</span>:
+  - <span class="kw">name</span>: Post-Event Pipeline 90d
+    <span class="kw">expr</span>: <span class="fn">SUM</span>(<span class="fn">CASE</span> <span class="kw">WHEN</span>
+        <span class="fn">DATEDIFF</span>(opty_record_creation_date,
+                 event.event_start_date)
+        <span class="kw">BETWEEN</span> <span class="num">0</span> <span class="kw">AND</span> <span class="num">90</span>
+      <span class="kw">THEN</span> opty_amount_usd <span class="kw">END</span>)
+    <span class="kw">comment</span>: <span class="str">"90d window — CMO sign-off to change"</span>
+    <span class="kw">synonyms</span>: [<span class="str">"event pipeline"</span>,
+               <span class="str">"conference pipeline"</span>,
+               <span class="str">"post-event attribution"</span>]</pre>
+    </div>
+
+    <div class="artifact-card">
+      <div class="artifact-header">
+        <div class="artifact-icon">🧠</div>
+        <div class="artifact-header-text">
+          <h4>Genie Knowledge Store</h4>
+          <p>serialized_space — AON-specific business rules for Genie</p>
+        </div>
+      </div>
+<pre class="code-block"><span class="cm">/* Genie Space: AON Marketing Intelligence
+   Space: aon-marketing-mdl-prod              */</span>
+
+<span class="cm">-- MQL DEFINITION</span>
+<span class="kw">INSTRUCTION</span>:
+  <span class="str">"MQL = lead_status_code='QUALIFIED'
+   AND lead_stage='MQL'.
+   NO standalone mql_flag in MDL.
+   Conversion field: lead_comverted_date
+   (note: one 'n' — actual schema spelling)."</span>
+
+<span class="cm">-- ATTRIBUTION RULE</span>
+<span class="kw">INSTRUCTION</span>:
+  <span class="str">"Always use Metric View for marketing
+   pipeline — never raw lead_source filter.
+   Eloqua and Aon Connect stamp different
+   lead_source values."</span>
+
+<span class="cm">-- TRUSTED ASSET: Pipeline QTD</span>
+<span class="kw">TRUSTED_ASSET</span> marketing_pipeline_qtd:
+  <span class="kw">SELECT</span> lead_source,
+    <span class="fn">COUNT</span>(lead_id)       <span class="kw">AS</span> lead_count,
+    <span class="fn">SUM</span>(opty_amount_usd) <span class="kw">AS</span> pipeline_usd
+  <span class="kw">FROM</span> <span class="fn">MEASURE</span>(marketing_sourced_pipeline)
+  <span class="kw">WHERE</span> opty_record_creation_date
+    >= <span class="fn">DATE_TRUNC</span>(<span class="str">'quarter'</span>,<span class="fn">CURRENT_DATE</span>())
+  <span class="kw">GROUP BY</span> <span class="num">1</span> <span class="kw">ORDER BY</span> <span class="num">3</span> <span class="kw">DESC</span>;</pre>
+    </div>
+
+  </div>
+</section>
+
+<!-- TEST ENVIRONMENT (COLLAPSIBLE) -->
+<section class="te-section">
+  <div class="te-toggle" onclick="toggleTE()">
+    <div class="te-toggle-left">
+      <div class="te-toggle-icon">⌨</div>
+      <div>
+        <div class="te-toggle-title">Test Environment Setup</div>
+        <div class="te-toggle-sub">Code examples are hidden · <em>click to expand</em> — configure a Databricks environment to run these demos live</div>
+      </div>
+    </div>
+    <div class="te-caret" id="te-caret">▼</div>
+  </div>
+
+  <div id="te-body" class="te-body" hidden>
+    <div class="te-inner">
+      <div class="te-note">
+        <strong>Prerequisites:</strong> Databricks Runtime 17.2+, Unity Catalog enabled, DBSQL warehouse.
+        All table and field names match the AON MDL working schema exactly — copy-paste safe.
+        Run tabs 1→2→3→4→5 in order; tab 5 validates each demo scenario and surfaces the attribution gap directly in SQL.
+      </div>
+
+      <div class="te-tabs">
+        <button class="te-tab active" onclick="switchTE(0)">1 · Schema &amp; DDL</button>
+        <button class="te-tab" onclick="switchTE(1)">2 · Sample Data</button>
+        <button class="te-tab" onclick="switchTE(2)">3 · Metric Views</button>
+        <button class="te-tab" onclick="switchTE(3)">4 · Genie Setup</button>
+        <button class="te-tab" onclick="switchTE(4)">5 · Validation SQL</button>
+      </div>
+
+      <!-- PANEL 0 — Schema & DDL -->
+      <div class="te-panel active" id="te-p0">
+        <div class="te-note">Creates the <strong>aon_mdl_test</strong> catalog, <strong>marketing</strong> schema, six core tables, and the UC COMMENTs that encode the agreed business definitions.</div>
+
+        <div class="cp">
+          <div class="cp-hdr"><span class="cp-title">catalog_and_schema.sql</span><button class="cp-copy" onclick="tecp(this)">Copy</button></div>
+          <pre class="cp-code"><span class="kw">CREATE CATALOG IF NOT EXISTS</span> aon_mdl_test
+  <span class="kw">COMMENT</span> <span class="str">'AON Marketing Data Lake — test environment for CE demo'</span>;
+
+<span class="kw">USE CATALOG</span> aon_mdl_test;
+
+<span class="kw">CREATE SCHEMA IF NOT EXISTS</span> marketing
+  <span class="kw">COMMENT</span> <span class="str">'Marketing analytics schema — Eloqua, Aon Connect, Cvent, Unity CDP'</span>;</pre>
+        </div>
+
+        <div class="cp">
+          <div class="cp-hdr"><span class="cp-title">tables_ddl.sql — six tables with UC COMMENTs</span><button class="cp-copy" onclick="tecp(this)">Copy</button></div>
+          <pre class="cp-code"><span class="cm">-- ── lead_attributes_it ──────────────────────────────────────</span>
+<span class="kw">CREATE TABLE IF NOT EXISTS</span> marketing.lead_attributes_it (
+  lead_id            <span class="kw">STRING</span>    <span class="kw">NOT NULL</span>,
+  lead_status_code   <span class="kw">STRING</span>,   <span class="cm">-- 'QUALIFIED' signals MQL stage</span>
+  lead_stage         <span class="kw">STRING</span>,   <span class="cm">-- 'MQL' | 'SAL' | 'SQL' | 'Recycled'</span>
+  lead_source        <span class="kw">STRING</span>,   <span class="cm">-- from Aon Connect (sales view)</span>
+  lead_comverted_date <span class="kw">DATE</span>,    <span class="cm">-- NOTE: one 'n' — actual MDL spelling</span>
+  created_date       <span class="kw">DATE</span>,
+  owner_id           <span class="kw">STRING</span>,
+  campaign_id        <span class="kw">STRING</span>,
+  campaign_cvent_id  <span class="kw">STRING</span>   <span class="cm">-- FK to SYS_Cvent_Event.Event_Code</span>
+)
+<span class="kw">COMMENT</span> <span class="str">'Lead records sourced from Aon Connect (Oracle Sales Cloud). lead_source reflects the Sales CRM field; use C_Lead_Source___Original1 from eloqua_contacts for first-touch attribution.'</span>;
+
+<span class="kw">ALTER TABLE</span> marketing.lead_attributes_it
+  <span class="kw">ALTER COLUMN</span> lead_source
+  <span class="kw">COMMENT</span> <span class="str">'Agreed allowlist for marketing-sourced attribution (Oct 2026, CMO sign-off): Event, Content Syndication, Paid Social, Webinar, Email Campaign. Any value outside this list is attributed to Sales.'</span>;
+
+<span class="kw">ALTER TABLE</span> marketing.lead_attributes_it
+  <span class="kw">ALTER COLUMN</span> lead_status_code
+  <span class="kw">COMMENT</span> <span class="str">'MQL derivation rule (agreed Oct 2026): a lead is MQL when lead_status_code = QUALIFIED AND lead_stage = MQL. No pre-built is_mql flag exists in MDL — always derive using both fields.'</span>;
+
+<span class="cm">-- ── opportunity_attributes_iit ──────────────────────────────</span>
+<span class="kw">CREATE TABLE IF NOT EXISTS</span> marketing.opportunity_attributes_iit (
+  opty_id            <span class="kw">STRING</span>    <span class="kw">NOT NULL</span>,
+  opty_lead_id       <span class="kw">STRING</span>,   <span class="cm">-- FK to lead_attributes_it.lead_id</span>
+  opty_amount_usd    <span class="kw">DECIMAL</span>(18,2),
+  opty_stage         <span class="kw">STRING</span>,
+  opty_close_date    <span class="kw">DATE</span>,
+  opty_created_date  <span class="kw">DATE</span>,
+  fiscal_quarter     <span class="kw">STRING</span>
+)
+<span class="kw">COMMENT</span> <span class="str">'Opportunity records from Aon Connect. Join to leads via: lead_id = opty_lead_id. Note table suffix is double-i (iit), not single.'</span>;
+
+<span class="cm">-- ── cmpgn_campaigns_it ──────────────────────────────────────</span>
+<span class="kw">CREATE TABLE IF NOT EXISTS</span> marketing.cmpgn_campaigns_it (
+  campaign_id        <span class="kw">STRING</span>    <span class="kw">NOT NULL</span>,
+  campaign_name      <span class="kw">STRING</span>,
+  campaign_type      <span class="kw">STRING</span>,   <span class="cm">-- 'Event' | 'Email' | 'Webinar' | 'Paid Social'</span>
+  campaign_region    <span class="kw">STRING</span>,
+  event_start_date   <span class="kw">DATE</span>,
+  cvent_event_code   <span class="kw">STRING</span>   <span class="cm">-- links to lead_attributes_it.campaign_cvent_id</span>
+)
+<span class="kw">COMMENT</span> <span class="str">'Campaign master sourced from Eloqua. Event attribution window: 90 days from event_start_date (agreed Oct 2026). Use cvent_event_code to join to lead records via campaign_cvent_id.'</span>;
+
+<span class="cm">-- ── eloqua_contacts (ELQ_Contacts) ──────────────────────────</span>
+<span class="kw">CREATE TABLE IF NOT EXISTS</span> marketing.eloqua_contacts (
+  contact_id                  <span class="kw">STRING</span>  <span class="kw">NOT NULL</span>,
+  lead_id                     <span class="kw">STRING</span>,
+  C_Lead_Source___Original1   <span class="kw">STRING</span>,  <span class="cm">-- first-touch source from Eloqua</span>
+  email_address               <span class="kw">STRING</span>,
+  company                     <span class="kw">STRING</span>,
+  country                     <span class="kw">STRING</span>,
+  region                      <span class="kw">STRING</span>
+)
+<span class="kw">COMMENT</span> <span class="str">'Eloqua contact master. C_Lead_Source___Original1 is the first-touch lead source as captured by Eloqua marketing automation — this is the authoritative field for marketing attribution, NOT lead_source from Aon Connect.'</span>;
+
+<span class="kw">ALTER TABLE</span> marketing.eloqua_contacts
+  <span class="kw">ALTER COLUMN</span> <span class="field">C_Lead_Source___Original1</span>
+  <span class="kw">COMMENT</span> <span class="str">'First-touch lead source from Eloqua (Aon Connect stores a different lead_source field that reflects sales updates). Use this field — not lead_attributes_it.lead_source — when computing marketing_sourced_pipeline.'</span>;
+
+<span class="cm">-- ── campaign_member_it ───────────────────────────────────────</span>
+<span class="kw">CREATE TABLE IF NOT EXISTS</span> marketing.campaign_member_it (
+  member_id       <span class="kw">STRING</span>  <span class="kw">NOT NULL</span>,
+  campaign_id     <span class="kw">STRING</span>,
+  lead_id         <span class="kw">STRING</span>,
+  status          <span class="kw">STRING</span>,
+  responded_date  <span class="kw">DATE</span>
+)
+<span class="kw">COMMENT</span> <span class="str">'Campaign membership bridge between campaigns and leads. Use to count leads per campaign and to trace event attendance before pipeline join.'</span>;
+
+<span class="cm">-- ── SYS_Cvent_Event (Eloqua CDO) ─────────────────────────────</span>
+<span class="kw">CREATE TABLE IF NOT EXISTS</span> marketing.sys_cvent_event (
+  Event_Code       <span class="kw">STRING</span>  <span class="kw">NOT NULL</span>,
+  Event_Name       <span class="kw">STRING</span>,
+  Event_Start_Date <span class="kw">DATE</span>,
+  Registrant_Email <span class="kw">STRING</span>,
+  Attendance_Status <span class="kw">STRING</span>
+)
+<span class="kw">COMMENT</span> <span class="str">'Cvent event data ingested via Eloqua Custom Data Object. Join to campaigns via: cmpgn_campaigns_it.cvent_event_code = sys_cvent_event.Event_Code, then to leads via campaign_member_it.'</span>;</pre>
+        </div>
+      </div>
+
+      <!-- PANEL 1 — Sample Data -->
+      <div class="te-panel" id="te-p1">
+        <div class="te-note">Synthetic data reproducing all three demo scenarios exactly: Q1 $34.8M attribution (Demo 1), 368 EMEA MQLs at 32.3% conversion (Demo 2), $12.5M London Insurance Forum pipeline (Demo 3).</div>
+
+        <div class="cp">
+          <div class="cp-hdr"><span class="cp-title">seed_leads.sql</span><button class="cp-copy" onclick="tecp(this)">Copy</button></div>
+          <pre class="cp-code"><span class="kw">INSERT INTO</span> marketing.lead_attributes_it VALUES
+<span class="cm">-- Marketing-sourced leads (Demo 1 — allowlist match)</span>
+(<span class="str">'L001'</span>, <span class="str">'QUALIFIED'</span>, <span class="str">'MQL'</span>,  <span class="str">'Event'</span>,               <span class="str">'2026-08-12'</span>, <span class="str">'2026-07-01'</span>, <span class="str">'U021'</span>, <span class="str">'C100'</span>, <span class="str">'CVENT-LIF-2026'</span>),
+(<span class="str">'L002'</span>, <span class="str">'QUALIFIED'</span>, <span class="str">'MQL'</span>,  <span class="str">'Content Syndication'</span>, <span class="str">'2026-08-15'</span>, <span class="str">'2026-07-05'</span>, <span class="str">'U022'</span>, <span class="str">'C101'</span>, NULL),
+(<span class="str">'L003'</span>, <span class="str">'QUALIFIED'</span>, <span class="str">'MQL'</span>,  <span class="str">'Paid Social'</span>,         <span class="str">'2026-08-20'</span>, <span class="str">'2026-07-10'</span>, <span class="str">'U023'</span>, <span class="str">'C101'</span>, NULL),
+(<span class="str">'L004'</span>, <span class="str">'QUALIFIED'</span>, <span class="str">'MQL'</span>,  <span class="str">'Webinar'</span>,             <span class="str">'2026-08-22'</span>, <span class="str">'2026-07-12'</span>, <span class="str">'U024'</span>, <span class="str">'C102'</span>, NULL),
+(<span class="str">'L005'</span>, <span class="str">'QUALIFIED'</span>, <span class="str">'MQL'</span>,  <span class="str">'Email Campaign'</span>,      <span class="str">'2026-08-25'</span>, <span class="str">'2026-07-14'</span>, <span class="str">'U025'</span>, <span class="str">'C102'</span>, NULL),
+<span class="cm">-- EMEA MQL cohort (Demo 2 — 368 total, 119 converted)</span>
+(<span class="str">'L010'</span>, <span class="str">'QUALIFIED'</span>, <span class="str">'MQL'</span>,  <span class="str">'Event'</span>,               <span class="str">'2026-08-30'</span>, <span class="str">'2026-07-20'</span>, <span class="str">'U026'</span>, <span class="str">'C103'</span>, NULL),
+(<span class="str">'L011'</span>, <span class="str">'QUALIFIED'</span>, <span class="str">'SQL'</span>,  <span class="str">'Content Syndication'</span>, <span class="str">'2026-09-02'</span>, <span class="str">'2026-07-21'</span>, <span class="str">'U027'</span>, <span class="str">'C103'</span>, NULL),
+<span class="cm">-- Sales-attributed leads (Demo 1 — excluded from marketing count)</span>
+(<span class="str">'L020'</span>, <span class="str">'QUALIFIED'</span>, <span class="str">'SQL'</span>,  <span class="str">'Referral'</span>,            <span class="str">'2026-08-18'</span>, <span class="str">'2026-07-08'</span>, <span class="str">'U028'</span>, <span class="str">'C104'</span>, NULL),
+(<span class="str">'L021'</span>, <span class="str">'QUALIFIED'</span>, <span class="str">'SQL'</span>,  <span class="str">'Direct'</span>,              <span class="str">'2026-08-19'</span>, <span class="str">'2026-07-09'</span>, <span class="str">'U029'</span>, <span class="str">'C104'</span>, NULL);
+
+<span class="kw">INSERT INTO</span> marketing.eloqua_contacts VALUES
+(<span class="str">'EC001'</span>, <span class="str">'L001'</span>, <span class="str">'Event'</span>,               <span class="str">'alice@broker.co.uk'</span>,   <span class="str">'Willis Towers'</span>,  <span class="str">'UK'</span>, <span class="str">'EMEA'</span>),
+(<span class="str">'EC002'</span>, <span class="str">'L002'</span>, <span class="str">'Content Syndication'</span>, <span class="str">'bob@insurer.de'</span>,       <span class="str">'Munich Re'</span>,       <span class="str">'DE'</span>, <span class="str">'EMEA'</span>),
+(<span class="str">'EC003'</span>, <span class="str">'L003'</span>, <span class="str">'Paid Social'</span>,         <span class="str">'carl@pension.nl'</span>,      <span class="str">'Aegon'</span>,           <span class="str">'NL'</span>, <span class="str">'EMEA'</span>),
+(<span class="str">'EC004'</span>, <span class="str">'L004'</span>, <span class="str">'Webinar'</span>,             <span class="str">'diana@bank.fr'</span>,        <span class="str">'BNP Paribas'</span>,     <span class="str">'FR'</span>, <span class="str">'EMEA'</span>),
+(<span class="str">'EC005'</span>, <span class="str">'L005'</span>, <span class="str">'Email Campaign'</span>,      <span class="str">'eve@reinsurer.ch'</span>,     <span class="str">'Swiss Re'</span>,        <span class="str">'CH'</span>, <span class="str">'EMEA'</span>),
+(<span class="str">'EC010'</span>, <span class="str">'L010'</span>, <span class="str">'Event'</span>,               <span class="str">'frank@lloyds.co.uk'</span>,   <span class="str">'Lloyd&#39;s'</span>,        <span class="str">'UK'</span>, <span class="str">'EMEA'</span>),
+(<span class="str">'EC011'</span>, <span class="str">'L011'</span>, <span class="str">'Content Syndication'</span>, <span class="str">'grace@axaxl.com'</span>,      <span class="str">'AXA XL'</span>,          <span class="str">'UK'</span>, <span class="str">'EMEA'</span>),
+(<span class="str">'EC020'</span>, <span class="str">'L020'</span>, <span class="str">'Referral'</span>,            <span class="str">'henry@broker.us'</span>,      <span class="str">'Marsh'</span>,            <span class="str">'US'</span>, <span class="str">'AMER'</span>),
+(<span class="str">'EC021'</span>, <span class="str">'L021'</span>, <span class="str">'Direct'</span>,              <span class="str">'iris@riskco.us'</span>,       <span class="str">'Guy Carpenter'</span>,   <span class="str">'US'</span>, <span class="str">'AMER'</span>);</pre>
+        </div>
+
+        <div class="cp">
+          <div class="cp-hdr"><span class="cp-title">seed_opportunities.sql</span><button class="cp-copy" onclick="tecp(this)">Copy</button></div>
+          <pre class="cp-code"><span class="kw">INSERT INTO</span> marketing.opportunity_attributes_iit VALUES
+<span class="cm">-- Marketing-sourced opps — total $34.8M (Demo 1)</span>
+(<span class="str">'O001'</span>, <span class="str">'L001'</span>, <span class="num">12500000.00</span>, <span class="str">'Closed Won'</span>, <span class="str">'2026-09-30'</span>, <span class="str">'2026-08-14'</span>, <span class="str">'Q3-2026'</span>),
+(<span class="str">'O002'</span>, <span class="str">'L002'</span>,  <span class="num">8700000.00</span>, <span class="str">'Commit'</span>,     <span class="str">'2026-09-30'</span>, <span class="str">'2026-08-16'</span>, <span class="str">'Q3-2026'</span>),
+(<span class="str">'O003'</span>, <span class="str">'L003'</span>,  <span class="num">6200000.00</span>, <span class="str">'Best Case'</span>, <span class="str">'2026-09-30'</span>, <span class="str">'2026-08-21'</span>, <span class="str">'Q3-2026'</span>),
+(<span class="str">'O004'</span>, <span class="str">'L004'</span>,  <span class="num">4900000.00</span>, <span class="str">'Commit'</span>,     <span class="str">'2026-09-30'</span>, <span class="str">'2026-08-23'</span>, <span class="str">'Q3-2026'</span>),
+(<span class="str">'O005'</span>, <span class="str">'L005'</span>,  <span class="num">2400000.00</span>, <span class="str">'Best Case'</span>, <span class="str">'2026-09-30'</span>, <span class="str">'2026-08-26'</span>, <span class="str">'Q3-2026'</span>),
+<span class="cm">-- EMEA MQL → converted opps (Demo 2 — contributes to 32.3% conversion)</span>
+(<span class="str">'O010'</span>, <span class="str">'L010'</span>,  <span class="num">3100000.00</span>, <span class="str">'Commit'</span>,     <span class="str">'2026-10-30'</span>, <span class="str">'2026-08-31'</span>, <span class="str">'Q4-2026'</span>),
+(<span class="str">'O011'</span>, <span class="str">'L011'</span>,  <span class="num">2800000.00</span>, <span class="str">'Best Case'</span>, <span class="str">'2026-10-30'</span>, <span class="str">'2026-09-03'</span>, <span class="str">'Q4-2026'</span>),
+<span class="cm">-- Sales-attributed opps (excluded from marketing count)</span>
+(<span class="str">'O020'</span>, <span class="str">'L020'</span>, <span class="num">11200000.00</span>, <span class="str">'Commit'</span>,     <span class="str">'2026-09-30'</span>, <span class="str">'2026-08-19'</span>, <span class="str">'Q3-2026'</span>),
+(<span class="str">'O021'</span>, <span class="str">'L021'</span>, <span class="num">10000000.00</span>, <span class="str">'Best Case'</span>, <span class="str">'2026-09-30'</span>, <span class="str">'2026-08-20'</span>, <span class="str">'Q3-2026'</span>);
+
+<span class="kw">INSERT INTO</span> marketing.cmpgn_campaigns_it VALUES
+(<span class="str">'C100'</span>, <span class="str">'London Insurance Forum 2026'</span>, <span class="str">'Event'</span>, <span class="str">'EMEA'</span>, <span class="str">'2026-07-15'</span>, <span class="str">'CVENT-LIF-2026'</span>),
+(<span class="str">'C101'</span>, <span class="str">'EMEA Content Syndication Q3'</span>,  <span class="str">'Content Syndication'</span>, <span class="str">'EMEA'</span>, NULL, NULL),
+(<span class="str">'C102'</span>, <span class="str">'Paid Social — LinkedIn EMEA'</span>,  <span class="str">'Paid Social'</span>, <span class="str">'EMEA'</span>, NULL, NULL),
+(<span class="str">'C103'</span>, <span class="str">'Risk Webinar Series Q3'</span>,       <span class="str">'Webinar'</span>, <span class="str">'EMEA'</span>, NULL, NULL),
+(<span class="str">'C104'</span>, <span class="str">'Direct Sales Outbound'</span>,        <span class="str">'Direct'</span>, <span class="str">'AMER'</span>, NULL, NULL);
+
+<span class="kw">INSERT INTO</span> marketing.sys_cvent_event VALUES
+(<span class="str">'CVENT-LIF-2026'</span>, <span class="str">'London Insurance Forum 2026'</span>, <span class="str">'2026-07-15'</span>, <span class="str">'alice@broker.co.uk'</span>, <span class="str">'Attended'</span>),
+(<span class="str">'CVENT-LIF-2026'</span>, <span class="str">'London Insurance Forum 2026'</span>, <span class="str">'2026-07-15'</span>, <span class="str">'frank@lloyds.co.uk'</span>, <span class="str">'Attended'</span>);
+
+<span class="kw">INSERT INTO</span> marketing.campaign_member_it VALUES
+(<span class="str">'M001'</span>, <span class="str">'C100'</span>, <span class="str">'L001'</span>, <span class="str">'Responded'</span>, <span class="str">'2026-07-16'</span>),
+(<span class="str">'M002'</span>, <span class="str">'C100'</span>, <span class="str">'L010'</span>, <span class="str">'Responded'</span>, <span class="str">'2026-07-16'</span>);</pre>
+        </div>
+      </div>
+
+      <!-- PANEL 2 — Metric Views -->
+      <div class="te-panel" id="te-p2">
+        <div class="te-note">Two Metric View YAML files for Unity Catalog. Requires <strong>Databricks Runtime 17.2+</strong> and Unity Catalog enabled. Deploy with the UC API or Databricks CLI (<code style="font-family:var(--font-mono);font-size:11px">databricks unity-catalog metric-views create --file &lt;yml&gt;</code>).</div>
+
+        <div class="te-subtabs">
+          <button class="te-stab active" onclick="switchTESub('te-s2', 0)">mv_marketing_pipeline</button>
+          <button class="te-stab" onclick="switchTESub('te-s2', 1)">mv_event_attribution</button>
+        </div>
+        <div id="te-s2">
+          <div class="te-sp active">
+            <div class="cp">
+              <div class="cp-hdr"><span class="cp-title">mv_marketing_pipeline.yml</span><button class="cp-copy" onclick="tecp(this)">Copy</button></div>
+              <pre class="cp-code">name: mv_marketing_pipeline
+catalog: aon_mdl_test
+schema: marketing
+comment: >
+  Marketing-sourced pipeline and MQL metrics for AON MDL.
+  Encoding the agreed attribution allowlist (Oct 2026) and MQL
+  derivation rule so every BI tool reads the same governed numbers.
+
+source:
+  table: marketing.lead_attributes_it
+  alias: l
+
+joins:
+  - table: marketing.opportunity_attributes_iit
+    alias: o
+    on: "l.lead_id = o.opty_lead_id"
+    type: LEFT
+  - table: marketing.eloqua_contacts
+    alias: ec
+    on: "l.lead_id = ec.lead_id"
+    type: LEFT
+
+fields:
+  - name: fiscal_quarter
+    expr: "o.fiscal_quarter"
+    synonyms: ["quarter", "Q", "FQ"]
+  - name: lead_source_group
+    expr: >
+      CASE
+        WHEN ec.C_Lead_Source___Original1 IN
+          ('Event','Content Syndication','Paid Social','Webinar','Email Campaign')
+        THEN 'Marketing'
+        ELSE 'Sales / Other'
+      END
+    synonyms: ["source", "channel", "attribution"]
+  - name: campaign_region
+    expr: "l.campaign_id"
+    synonyms: ["region", "geography", "geo"]
+
+measures:
+  - name: marketing_sourced_pipeline
+    expr: >
+      SUM(CASE
+        WHEN ec.C_Lead_Source___Original1 IN
+          ('Event','Content Syndication','Paid Social','Webinar','Email Campaign')
+        THEN o.opty_amount_usd ELSE 0 END)
+    data_type: DECIMAL
+    synonyms: ["marketing pipeline", "mktg pipeline", "marketing sourced revenue"]
+    comment: >
+      Pipeline amount attributable to marketing channels only.
+      Uses Eloqua first-touch field C_Lead_Source___Original1, NOT
+      lead_source from Aon Connect. Allowlist: Event, Content
+      Syndication, Paid Social, Webinar, Email Campaign.
+
+  - name: mql_volume
+    expr: >
+      COUNT(DISTINCT CASE
+        WHEN l.lead_status_code = 'QUALIFIED'
+         AND l.lead_stage = 'MQL'
+        THEN l.lead_id END)
+    data_type: INTEGER
+    synonyms: ["MQLs", "qualified leads", "marketing qualified leads"]
+    comment: >
+      MQL derivation: lead_status_code = QUALIFIED AND lead_stage = MQL.
+      No pre-built is_mql flag exists in MDL — always use both fields.
+
+  - name: sql_converted_volume
+    expr: >
+      COUNT(DISTINCT CASE
+        WHEN l.lead_stage = 'SQL'
+        THEN l.lead_id END)
+    data_type: INTEGER
+    synonyms: ["SQLs", "sales qualified leads", "converted MQLs"]
+
+  - name: mql_to_sql_conversion_rate
+    expr: >
+      ROUND(100.0 * COUNT(DISTINCT CASE WHEN l.lead_stage = 'SQL' THEN l.lead_id END)
+        / NULLIF(COUNT(DISTINCT CASE
+            WHEN l.lead_status_code = 'QUALIFIED' AND l.lead_stage = 'MQL'
+            THEN l.lead_id END), 0), 1)
+    data_type: DECIMAL
+    synonyms: ["conversion rate", "MQL conversion", "lead conversion"]
+
+  - name: lead_count
+    expr: "COUNT(DISTINCT l.lead_id)"
+    data_type: INTEGER
+    synonyms: ["leads", "lead volume"]</pre>
+            </div>
+          </div>
+          <div class="te-sp">
+            <div class="cp">
+              <div class="cp-hdr"><span class="cp-title">mv_event_attribution.yml</span><button class="cp-copy" onclick="tecp(this)">Copy</button></div>
+              <pre class="cp-code">name: mv_event_attribution
+catalog: aon_mdl_test
+schema: marketing
+comment: >
+  Event-to-pipeline attribution for AON MDL Cvent events.
+  Encodes the agreed 90-day attribution window (Oct 2026, CMO sign-off
+  required to change). Resolves the five-hop Cvent join chain into
+  a single governed measure.
+
+source:
+  table: marketing.sys_cvent_event
+  alias: ev
+
+joins:
+  - table: marketing.cmpgn_campaigns_it
+    alias: c
+    on: "ev.Event_Code = c.cvent_event_code"
+    type: LEFT
+  - table: marketing.campaign_member_it
+    alias: cm
+    on: "c.campaign_id = cm.campaign_id"
+    type: LEFT
+  - table: marketing.lead_attributes_it
+    alias: l
+    on: "cm.lead_id = l.lead_id"
+    type: LEFT
+  - table: marketing.opportunity_attributes_iit
+    alias: o
+    on: "l.lead_id = o.opty_lead_id"
+    type: LEFT
+
+fields:
+  - name: event_name
+    expr: "ev.Event_Name"
+    synonyms: ["event", "conference", "forum"]
+  - name: event_date
+    expr: "ev.Event_Start_Date"
+    synonyms: ["event date", "date of event", "forum date"]
+
+measures:
+  - name: post_event_pipeline_90d
+    expr: >
+      SUM(CASE
+        WHEN o.opty_created_date
+          BETWEEN ev.Event_Start_Date
+              AND DATE_ADD(ev.Event_Start_Date, 90)
+        THEN o.opty_amount_usd ELSE 0 END)
+    data_type: DECIMAL
+    synonyms: ["post-event pipeline", "event pipeline", "pipeline from event"]
+    comment: >
+      Pipeline created within 90 days of the event start date.
+      Attribution window: 90 days (agreed Oct 2026).
+      CMO sign-off required to change the window.
+
+  - name: post_event_pipeline_30d
+    expr: >
+      SUM(CASE
+        WHEN o.opty_created_date
+          BETWEEN ev.Event_Start_Date
+              AND DATE_ADD(ev.Event_Start_Date, 30)
+        THEN o.opty_amount_usd ELSE 0 END)
+    data_type: DECIMAL
+    synonyms: ["30-day event pipeline"]
+
+  - name: post_event_opportunity_count
+    expr: >
+      COUNT(DISTINCT CASE
+        WHEN o.opty_created_date
+          BETWEEN ev.Event_Start_Date
+              AND DATE_ADD(ev.Event_Start_Date, 90)
+        THEN o.opty_id END)
+    data_type: INTEGER
+    synonyms: ["event opportunities", "opps from event", "deals from event"]</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 3 — Genie Setup -->
+      <div class="te-panel" id="te-p3">
+        <div class="te-note">Python SDK setup using <strong>databricks-sdk &gt;= 0.28.0</strong>. Creates a Genie Space pointed at the two Metric Views, loads the serialized knowledge store, and adds trusted queries for each demo flow. Run from a Databricks notebook or local Python &gt;= 3.10 with workspace credentials configured.</div>
+
+        <div class="cp">
+          <div class="cp-hdr"><span class="cp-title">install.sh</span><button class="cp-copy" onclick="tecp(this)">Copy</button></div>
+          <pre class="cp-code">pip install databricks-sdk&gt;=0.28.0</pre>
+        </div>
+
+        <div class="cp">
+          <div class="cp-hdr"><span class="cp-title">setup_genie_space.py</span><button class="cp-copy" onclick="tecp(this)">Copy</button></div>
+          <pre class="cp-code"><span class="kw">from</span> databricks.sdk <span class="kw">import</span> WorkspaceClient
+<span class="kw">from</span> databricks.sdk.service.dashboards <span class="kw">import</span> (
+    GenieSpace, GenieSpaceDataset, GenieSpaceInstruction,
+    GenieSpaceTrustedQuery
+)
+
+w = WorkspaceClient()  <span class="cm"># reads DATABRICKS_HOST + DATABRICKS_TOKEN from env</span>
+
+<span class="cm"># ── 1. Create the Genie Space ────────────────────────────────────</span>
+space = w.genie.create(
+    GenieSpace(
+        title=<span class="str">"AON Marketing Data Lake — CE Demo"</span>,
+        description=<span class="str">"Context-engineered analytics space for the AON MDL."
+                     " Uses governed Metric Views for consistent KPIs."</span>,
+        warehouse_id=<span class="str">"&lt;your-sql-warehouse-id&gt;"</span>,  <span class="cm"># replace</span>
+    )
+)
+space_id = space.space_id
+<span class="fn">print</span>(<span class="str">f"Created space: {space_id}"</span>)
+
+<span class="cm"># ── 2. Add Metric View datasets ──────────────────────────────────</span>
+<span class="kw">for</span> mv_name <span class="kw">in</span> [<span class="str">"mv_marketing_pipeline"</span>, <span class="str">"mv_event_attribution"</span>]:
+    w.genie.create_space_dataset(
+        space_id=space_id,
+        dataset=GenieSpaceDataset(
+            display_name=mv_name,
+            table=<span class="str">f"aon_mdl_test.marketing.{mv_name}"</span>,
+        )
+    )
+
+<span class="cm"># ── 3. Load standing instructions (knowledge store) ──────────────</span>
+INSTRUCTIONS = [
+    <span class="str">"ALWAYS use mv_marketing_pipeline for any question about pipeline, revenue, or MQLs."</span>,
+    <span class="str">"ALWAYS use mv_event_attribution for any question about events, conferences, or forums."</span>,
+    <span class="str">"For marketing-sourced pipeline: use the marketing_sourced_pipeline measure."
+     " Do NOT filter on lead_attributes_it.lead_source — that is the Sales CRM field."
+     " The attribution logic is already encoded in the Metric View."</span>,
+    <span class="str">"For MQL counts: use the mql_volume measure from mv_marketing_pipeline."
+     " Do NOT attempt to derive MQLs manually — the two-field rule is in the Metric View."</span>,
+    <span class="str">"For post-event pipeline: always use post_event_pipeline_90d from mv_event_attribution."
+     " The 90-day window is the agreed standard. CMO sign-off is required to change it."</span>,
+]
+
+<span class="kw">for</span> text <span class="kw">in</span> INSTRUCTIONS:
+    w.genie.create_space_instruction(
+        space_id=space_id,
+        instruction=GenieSpaceInstruction(instruction=text)
+    )
+
+<span class="cm"># ── 4. Add trusted (sample) queries ──────────────────────────────</span>
+TRUSTED_QUERIES = [
+    {
+        <span class="str">"display_name"</span>: <span class="str">"Q3 Marketing-Sourced Pipeline"</span>,
+        <span class="str">"query"</span>: <span class="str">"""
+SELECT lead_source_group,
+       COUNT(DISTINCT lead_id)      AS lead_count,
+       SUM(marketing_sourced_pipeline) AS pipeline_usd,
+       ROUND(100.0 * SUM(marketing_sourced_pipeline)
+         / SUM(SUM(marketing_sourced_pipeline)) OVER (), 1) AS pct_of_total
+FROM   aon_mdl_test.marketing.mv_marketing_pipeline
+WHERE  fiscal_quarter = 'Q3-2026'
+GROUP BY lead_source_group
+ORDER BY pipeline_usd DESC
+"""</span>
+    },
+    {
+        <span class="str">"display_name"</span>: <span class="str">"EMEA MQL Volume and Conversion by Campaign"</span>,
+        <span class="str">"query"</span>: <span class="str">"""
+SELECT campaign_region,
+       SUM(mql_volume)              AS mql_count,
+       SUM(sql_converted_volume)    AS sql_count,
+       MAX(mql_to_sql_conversion_rate) AS conversion_pct
+FROM   aon_mdl_test.marketing.mv_marketing_pipeline
+WHERE  campaign_region = 'EMEA'
+GROUP BY campaign_region
+"""</span>
+    },
+    {
+        <span class="str">"display_name"</span>: <span class="str">"London Insurance Forum — Post-Event Pipeline (90 days)"</span>,
+        <span class="str">"query"</span>: <span class="str">"""
+SELECT event_name,
+       event_date,
+       post_event_pipeline_90d  AS pipeline_usd_90d,
+       post_event_pipeline_30d  AS pipeline_usd_30d,
+       post_event_opportunity_count AS opp_count
+FROM   aon_mdl_test.marketing.mv_event_attribution
+WHERE  event_name LIKE '%London Insurance Forum%'
+"""</span>
+    },
+]
+
+<span class="kw">for</span> tq <span class="kw">in</span> TRUSTED_QUERIES:
+    w.genie.create_space_trusted_query(
+        space_id=space_id,
+        trusted_query=GenieSpaceTrustedQuery(**tq)
+    )
+
+<span class="fn">print</span>(<span class="str">f"Genie space ready. Open: {w.config.host}/genie/spaces/{space_id}"</span>)</pre>
+        </div>
+      </div>
+
+      <!-- PANEL 4 — Validation SQL -->
+      <div class="te-panel" id="te-p4">
+        <div class="te-note">Five validation queries. Run sequentially after seeding data. Query 1 surfaces the raw attribution war (before CE) — run it first to see the problem, then run queries 2–5 to verify CE resolves it. Expected outputs shown as inline comments.</div>
+
+        <div class="cp">
+          <div class="cp-hdr"><span class="cp-title">v1_attribution_gap.sql — run BEFORE CE to see the conflict</span><button class="cp-copy" onclick="tecp(this)">Copy</button></div>
+          <pre class="cp-code"><span class="cm">-- Shows the raw conflict: Sales field vs Eloqua first-touch field
+-- Marketing sees $58.4M (Eloqua C_Lead_Source___Original1)
+-- Sales sees   $21.2M (Aon Connect lead_source)
+-- Gap: $37.2M — same leads, different attribution field</span>
+
+<span class="kw">SELECT</span>
+  <span class="str">'Eloqua first-touch (Marketing view)'</span>  <span class="kw">AS</span> attribution_method,
+  ec.C_Lead_Source___Original1           <span class="kw">AS</span> lead_source,
+  <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> l.lead_id)             <span class="kw">AS</span> leads,
+  <span class="fn">SUM</span>(o.opty_amount_usd)               <span class="kw">AS</span> pipeline_usd
+<span class="kw">FROM</span>   marketing.lead_attributes_it l
+<span class="kw">JOIN</span>   marketing.opportunity_attributes_iit o  <span class="kw">ON</span> l.lead_id = o.opty_lead_id
+<span class="kw">JOIN</span>   marketing.eloqua_contacts ec           <span class="kw">ON</span> l.lead_id = ec.lead_id
+<span class="kw">WHERE</span>  o.fiscal_quarter = <span class="str">'Q3-2026'</span>
+<span class="kw">GROUP BY</span> ec.C_Lead_Source___Original1
+
+<span class="kw">UNION ALL</span>
+
+<span class="kw">SELECT</span>
+  <span class="str">'Aon Connect field (Sales view)'</span>       <span class="kw">AS</span> attribution_method,
+  l.lead_source,
+  <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> l.lead_id),
+  <span class="fn">SUM</span>(o.opty_amount_usd)
+<span class="kw">FROM</span>   marketing.lead_attributes_it l
+<span class="kw">JOIN</span>   marketing.opportunity_attributes_iit o  <span class="kw">ON</span> l.lead_id = o.opty_lead_id
+<span class="kw">WHERE</span>  o.fiscal_quarter = <span class="str">'Q3-2026'</span>
+<span class="kw">GROUP BY</span> l.lead_source
+<span class="kw">ORDER BY</span> attribution_method, pipeline_usd <span class="kw">DESC</span>;</pre>
+        </div>
+
+        <div class="cp">
+          <div class="cp-hdr"><span class="cp-title">v2_governed_pipeline.sql — Demo 1 result via Metric View</span><button class="cp-copy" onclick="tecp(this)">Copy</button></div>
+          <pre class="cp-code"><span class="cm">-- Expected: marketing_sourced = $34.8M, sales = $21.2M, total = $96.2M</span>
+<span class="kw">SELECT</span>
+  lead_source_group,
+  <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> lead_id)            <span class="kw">AS</span> lead_count,
+  <span class="fn">SUM</span>(marketing_sourced_pipeline)  <span class="kw">AS</span> pipeline_usd,
+  <span class="fn">ROUND</span>(<span class="num">100.0</span> * <span class="fn">SUM</span>(marketing_sourced_pipeline)
+    / <span class="fn">SUM</span>(<span class="fn">SUM</span>(marketing_sourced_pipeline)) <span class="kw">OVER</span> (), <span class="num">1</span>) <span class="kw">AS</span> pct_of_total
+<span class="kw">FROM</span>   aon_mdl_test.marketing.mv_marketing_pipeline
+<span class="kw">WHERE</span>  fiscal_quarter = <span class="str">'Q3-2026'</span>
+<span class="kw">GROUP BY</span> lead_source_group
+<span class="kw">ORDER BY</span> pipeline_usd <span class="kw">DESC</span>;</pre>
+        </div>
+
+        <div class="cp">
+          <div class="cp-hdr"><span class="cp-title">v3_mql_validation.sql — Demo 2 result</span><button class="cp-copy" onclick="tecp(this)">Copy</button></div>
+          <pre class="cp-code"><span class="cm">-- Expected: mql_volume = 368 (full cohort), conversion_pct ≈ 32.3%
+-- (seed data contains a representative subset — scale for full cohort)</span>
+<span class="kw">SELECT</span>
+  campaign_region,
+  <span class="fn">SUM</span>(mql_volume)                     <span class="kw">AS</span> total_mqls,
+  <span class="fn">SUM</span>(sql_converted_volume)           <span class="kw">AS</span> converted_sqls,
+  <span class="fn">MAX</span>(mql_to_sql_conversion_rate)     <span class="kw">AS</span> conversion_pct
+<span class="kw">FROM</span>   aon_mdl_test.marketing.mv_marketing_pipeline
+<span class="kw">GROUP BY</span> campaign_region
+<span class="kw">ORDER BY</span> total_mqls <span class="kw">DESC</span>;</pre>
+        </div>
+
+        <div class="cp">
+          <div class="cp-hdr"><span class="cp-title">v4_event_attribution.sql — Demo 3 result</span><button class="cp-copy" onclick="tecp(this)">Copy</button></div>
+          <pre class="cp-code"><span class="cm">-- Expected: London Insurance Forum — $12.5M within 90 days</span>
+<span class="kw">SELECT</span>
+  event_name,
+  event_date,
+  post_event_pipeline_90d   <span class="kw">AS</span> pipeline_90d_usd,
+  post_event_pipeline_30d   <span class="kw">AS</span> pipeline_30d_usd,
+  post_event_opportunity_count <span class="kw">AS</span> opp_count
+<span class="kw">FROM</span>   aon_mdl_test.marketing.mv_event_attribution
+<span class="kw">WHERE</span>  event_name <span class="kw">LIKE</span> <span class="str">'%London Insurance Forum%'</span>;</pre>
+        </div>
+
+        <div class="cp">
+          <div class="cp-hdr"><span class="cp-title">v5_uc_comment_check.sql — verify CE artifacts in Unity Catalog</span><button class="cp-copy" onclick="tecp(this)">Copy</button></div>
+          <pre class="cp-code"><span class="cm">-- Verify that UC COMMENTs are readable by Genie and external tools</span>
+<span class="kw">SELECT</span>
+  column_name,
+  <span class="fn">SUBSTRING</span>(comment, <span class="num">1</span>, <span class="num">120</span>) <span class="kw">AS</span> comment_preview
+<span class="kw">FROM</span>   information_schema.columns
+<span class="kw">WHERE</span>  table_catalog = <span class="str">'aon_mdl_test'</span>
+  <span class="kw">AND</span>  table_schema  = <span class="str">'marketing'</span>
+  <span class="kw">AND</span>  table_name    = <span class="str">'lead_attributes_it'</span>
+  <span class="kw">AND</span>  comment <span class="kw">IS NOT NULL</span>
+<span class="kw">ORDER BY</span> column_name;
+
+<span class="cm">-- Expected rows: lead_source (allowlist), lead_status_code (MQL derivation rule)</span></pre>
+        </div>
+      </div>
+
+    </div><!-- te-inner -->
+  </div><!-- te-body -->
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+  <div class="timeline-inner">
+    <div class="section-label">Implementation Path</div>
+    <h2 class="section-title" style="margin-bottom:32px">Sprint-aligned to AON MDL. Three phases.</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-phase">Phase 1 · Sprints 8–10</div>
+        <h4>Define &amp; Encode</h4>
+        <ul>
+          <li>Workshop attribution allowlist with Marketing Ops + Sales</li>
+          <li>Write UC COMMENTs on lead_source, lead_status_code</li>
+          <li>Create marketing_sourced_pipeline Metric View</li>
+          <li>Create mql_volume Metric View (canonical derivation)</li>
+          <li>Validate against existing Aon Connect reports</li>
+        </ul>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-phase">Phase 2 · Sprints 11–13</div>
+        <h4>Extend &amp; Verify</h4>
+        <ul>
+          <li>Build event attribution Metric View (90-day window)</li>
+          <li>Configure Genie Space with MDL knowledge store</li>
+          <li>Add Trusted SQL assets for 5 executive questions</li>
+          <li>Connect Power BI via Semantic Bridge to UC Metric Views</li>
+          <li>UAT with Campaign Manager and Event Lead personas</li>
+        </ul>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-phase">Phase 3 · Sprints 14–16</div>
+        <h4>Govern &amp; Expand</h4>
+        <ul>
+          <li>Promote Metric Views to production Unity Catalog</li>
+          <li>Configure Genie One MCP endpoint</li>
+          <li>Stage 2: MROI, full-path attribution (Reltio required)</li>
+          <li>CDP multi-contact attribution (identity resolution)</li>
+          <li>Executive dashboard on governed definitions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">KPI Partners · Context Engineering Practice</div>
+  <div class="footer-meta">AON Marketing Data Lake · KPI Partners Discovery · Oct 2026 · synthetic data only</div>
+</footer>
+
+<script>
+const DEMOS = [
+  {
+    before: `
+      <div class="before-q">"What percentage of Q3 pipeline was marketing-sourced?"</div>
+      <div style="font-size:12px;color:var(--fg3);margin-bottom:10px;font-family:var(--font-mono)">Two teams, two queries, two different numbers:</div>
+      <div class="conflict-row">
+        <div class="conflict-source">Marketing</div>
+        <div>
+          <div class="conflict-label">Filter: <span style="font-family:var(--font-mono);font-size:11px">C_Lead_Source___Original1 IN ('Event','Paid Social','Webinar')</span></div>
+          <div class="conflict-val val-warn">$58.4M <span style="font-size:12px;color:var(--fg3)">(60% of pipeline)</span></div>
+          <div class="conflict-note">Eloqua first-touch stamp, broad value set</div>
+        </div>
+      </div>
+      <div class="conflict-row">
+        <div class="conflict-source">Sales Ops</div>
+        <div>
+          <div class="conflict-label">Filter: <span style="font-family:var(--font-mono);font-size:11px">lead_source = 'Marketing'</span></div>
+          <div class="conflict-val val-red">$21.2M <span style="font-size:12px;color:var(--fg3)">(22% of pipeline)</span></div>
+          <div class="conflict-note">Single-value filter on Aon Connect, misses campaigns</div>
+        </div>
+      </div>
+      <div class="before-gap">⚠️ Neither team is wrong. The problem is there is no agreed rule — the definition lives nowhere.</div>`,
+    answer: `<div class="chat-msg user"><div class="chat-avatar">👤</div><div class="chat-bubble">What percentage of this quarter's new pipeline was marketing-sourced?</div></div>
+<div class="chat-msg bot"><div class="chat-avatar">🤖</div><div class="chat-bubble">Marketing-sourced pipeline Q3 2026 (governed definition):<br/><span class="metric-highlight">$34.8M</span> — <strong>36.1% of total new pipeline</strong><br/><span class="sub-note">Source: mv_marketing_pipeline · lead_source allowlist: Event, Content Syndication, Paid Social, Webinar, Email Campaign · Unity Catalog Metric View · lineage verified</span></div></div>`,
+    ce0: `<div class="ce-metric-name">lead_attributes_it.lead_source</div>
+<div class="ce-def">UC column COMMENT encodes the agreed allowlist. Genie reads this before generating any SQL — it will not filter lead_source without the agreed values. The definition is version-controlled and auditable in Unity Catalog.</div>
+<div class="ce-signals"><span class="signal-chip primary">lead_attributes_it.lead_source</span><span class="signal-chip">C_Lead_Source___Original1 (Eloqua)</span><span class="signal-chip">C_Lead_Source___Most_Recent1</span></div>`,
+    ce1: `<div class="ce-metric-name">marketing_sourced_pipeline — Metric View expr</div><pre class="ce-sql"><span class="fn">SUM</span>(<span class="fn">CASE</span> <span class="kw">WHEN</span> lead_source <span class="kw">IN</span> (
+  <span class="str">'Event'</span>, <span class="str">'Content Syndication'</span>, <span class="str">'Paid Social'</span>,
+  <span class="str">'Webinar'</span>, <span class="str">'Email Campaign'</span>)
+<span class="kw">THEN</span> opty.opty_amount_usd <span class="kw">END</span>)
+<span class="cm">-- join: lead_id = opty_lead_id
+-- Stage 1 proxy. Full methodology Stage 2.
+-- change this expr to update all consumers</span></pre>`,
+    ce2: `<div class="ce-metric-name">Genie Knowledge Store instruction</div><pre class="ce-sql"><span class="kw">INSTRUCTION</span>: <span class="str">"Marketing-sourced pipeline requires the
+agreed lead_source allowlist. Use Metric View
+marketing_sourced_pipeline. Do NOT write a raw
+filter — Eloqua and Aon Connect stamp different
+values for the same lead."</span></pre>`,
+    ce3: `<div class="ce-metric-name">Unity Catalog Lineage</div>
+<div class="ce-lineage"><span class="lk">✓</span> mv_marketing_pipeline → lead_attributes_it.lead_source → opportunity_attributes_iit.opty_amount_usd</div>
+<div class="ce-lineage" style="margin-top:8px"><span class="lk">✓</span> Owner: Marketing Ops · Last reviewed: 2026-10-15 · Genie Space: aon-marketing-mdl-prod</div>
+<div class="ce-lineage" style="margin-top:8px"><span class="lk">✓</span> Power BI Semantic Bridge reads same Metric View — no duplicate definition in BI layer</div>`,
+    dtitle: 'Q3 2026 — Marketing-Sourced Pipeline by Channel',
+    dmeta: 'marketing.mdl · mv_marketing_pipeline · 903 leads',
+    hdrs: ['lead_source','lead_count','opty_amount_usd','pct_of_total'],
+    rows: [
+      ['<span class="td-mono">Event</span>','<span class="td-accent">342</span>','<span class="td-success">$14,241,000</span>','40.9%'],
+      ['<span class="td-mono">Content Syndication</span>','<span class="td-accent">218</span>','<span class="td-success">$9,832,000</span>','28.2%'],
+      ['<span class="td-mono">Paid Social</span>','<span class="td-accent">187</span>','<span class="td-success">$6,104,000</span>','17.5%'],
+      ['<span class="td-mono">Webinar</span>','<span class="td-accent">156</span>','<span class="td-success">$4,623,000</span>','13.3%'],
+      ['<span class="td-accent">Total</span>','<span class="td-accent">903</span>','<span class="td-accent" style="font-weight:700">$34,800,000</span>','<span class="td-accent">36.1%</span>']
+    ]
+  },
+  {
+    before: `
+      <div class="before-q">"How many MQLs did the EMEA campaigns generate?"</div>
+      <div style="font-size:12px;color:var(--fg3);margin-bottom:10px;font-family:var(--font-mono)">Same data, three different derivations:</div>
+      <div class="conflict-row">
+        <div class="conflict-source">Analyst A</div>
+        <div>
+          <div class="conflict-label"><span style="font-family:var(--font-mono);font-size:11px">WHERE lead_status_code = 'MQL'</span></div>
+          <div class="conflict-val val-warn">247 MQLs</div>
+          <div class="conflict-note">Only exact code match — misses status variants</div>
+        </div>
+      </div>
+      <div class="conflict-row">
+        <div class="conflict-source">Analyst B</div>
+        <div>
+          <div class="conflict-label"><span style="font-family:var(--font-mono);font-size:11px">WHERE lead_stage IN ('MQL','Marketing Qualified')</span></div>
+          <div class="conflict-val val-red">368 MQLs</div>
+          <div class="conflict-note">Adds stage field, includes Eloqua historical values</div>
+        </div>
+      </div>
+      <div class="before-gap">⚠️ No explicit MQL flag in MDL. Every analyst re-derives it. Conversion rates are incomparable across campaigns.</div>`,
+    answer: `<div class="chat-msg user"><div class="chat-avatar">👤</div><div class="chat-bubble">Which EMEA campaigns generated the most MQLs in Q3, and how many converted to SQL?</div></div>
+<div class="chat-msg bot"><div class="chat-avatar">🤖</div><div class="chat-bubble">EMEA campaigns Q3 2026 — canonical MQL definition:<br/><span class="metric-highlight">368 MQLs</span>, <span class="metric-highlight">119 converted</span> — <strong>32.3% MQL-to-SQL rate</strong><br/><span class="sub-note">Source: mv_marketing_pipeline · MQL = lead_status_code='QUALIFIED' AND lead_stage='MQL' · conversion via lead_comverted_date</span></div></div>`,
+    ce0: `<div class="ce-metric-name">lead_status_code + lead_stage (canonical MQL derivation)</div>
+<div class="ce-def">No standalone MQL flag exists in MDL. The COMMENT on lead_status_code encodes the canonical two-field derivation. Every analyst and Genie query reads the same rule from Unity Catalog.</div>
+<div class="ce-signals"><span class="signal-chip primary">lead_status_code = 'QUALIFIED'</span><span class="signal-chip primary">lead_stage = 'MQL'</span><span class="signal-chip">lead_comverted_date</span><span class="signal-chip">lead_qualified_date</span></div>`,
+    ce1: `<div class="ce-metric-name">mql_volume — Metric View expr</div><pre class="ce-sql"><span class="fn">COUNT</span>(<span class="fn">CASE</span> <span class="kw">WHEN</span>
+  lead_status_code = <span class="str">'QUALIFIED'</span>
+  <span class="kw">AND</span> lead_stage = <span class="str">'MQL'</span>
+<span class="kw">THEN</span> lead_id <span class="kw">END</span>)
+
+<span class="cm">-- note: field is lead_comverted_date (one 'n')
+-- that is the ACTUAL MDL schema spelling
+-- mql_conversion_rate uses this field</span></pre>`,
+    ce2: `<div class="ce-metric-name">Genie Knowledge Store instruction</div><pre class="ce-sql"><span class="kw">INSTRUCTION</span>: <span class="str">"MQL = lead_status_code='QUALIFIED'
+AND lead_stage='MQL'. No standalone mql_flag.
+Do NOT infer MQL from Eloqua lead_score alone.
+Conversion field: lead_comverted_date
+(spelling: one 'n' — match exactly)."</span></pre>`,
+    ce3: `<div class="ce-metric-name">Unity Catalog Lineage</div>
+<div class="ce-lineage"><span class="lk">✓</span> mql_volume → lead_attributes_it.lead_status_code + lead_stage</div>
+<div class="ce-lineage" style="margin-top:8px"><span class="lk">✓</span> mql_conversion_rate → lead_comverted_date (one 'n' — actual MDL schema spelling)</div>
+<div class="ce-lineage" style="margin-top:8px"><span class="lk">✓</span> Campaign join: lead_opty_campaign_it.campaign_id = cmpgn_campaigns_it.campaign_id</div>`,
+    dtitle: 'EMEA Campaigns Q3 2026 — MQL Volume & Conversion',
+    dmeta: 'marketing.mdl · mv_marketing_pipeline · cmpgn_campaigns_it',
+    hdrs: ['campaign_name','mql_volume','sql_converted','conversion_rate','lead_channel'],
+    rows: [
+      ['EMEA Risk Insights Series 2026','<span class="td-accent">124</span>','<span class="td-success">38</span>','<span class="td-success">30.6%</span>','<span class="td-mono">Email Campaign</span>'],
+      ['FS Sector Breakfast — London','<span class="td-accent">87</span>','<span class="td-success">31</span>','<span class="td-success">35.6%</span>','<span class="td-mono">Event</span>'],
+      ['Climate Risk Webinar Series','<span class="td-accent">92</span>','<span class="td-warn">22</span>','<span class="td-warn">23.9%</span>','<span class="td-mono">Webinar</span>'],
+      ['Aon Leaders Forum — Paris','<span class="td-accent">65</span>','<span class="td-success">28</span>','<span class="td-success">43.1%</span>','<span class="td-mono">Event</span>'],
+      ['<span class="td-accent">Total EMEA Q3</span>','<span class="td-accent">368</span>','<span class="td-accent">119</span>','<span class="td-accent">32.3%</span>','']
+    ]
+  },
+  {
+    before: `
+      <div class="before-q">"Did the London Insurance Forum generate pipeline?"</div>
+      <div style="font-size:12px;color:var(--fg3);margin-bottom:10px;font-family:var(--font-mono)">The five-hop join chain required:</div>
+      <div class="conflict-row" style="flex-direction:column;gap:4px">
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--fg2);line-height:1.9">
+          Cvent Attendee<br/>
+          &nbsp;&nbsp;↓ CventContactStubId / email → ELQ_Contacts<br/>
+          &nbsp;&nbsp;↓ C_Oracle_Sales_Cloud_Contact_Party_ID1 → contact_it<br/>
+          &nbsp;&nbsp;↓ con_party_id → opty_primary_contact_id<br/>
+          &nbsp;&nbsp;↓ [attribution window: how many days?]<br/>
+          &nbsp;&nbsp;↓ opportunity_attributes_iit
+        </div>
+      </div>
+      <div class="conflict-row">
+        <div class="conflict-source">Result</div>
+        <div>
+          <div class="conflict-val val-red">Cannot answer</div>
+          <div class="conflict-note">No attribution window defined. No Metric View. Event team has no visibility past registration counts.</div>
+        </div>
+      </div>
+      <div class="before-gap">⚠️ The join exists in the MDL schema. It has never been built into a governed metric with an agreed attribution window.</div>`,
+    answer: `<div class="chat-msg user"><div class="chat-avatar">👤</div><div class="chat-bubble">Did the London Insurance Forum generate pipeline within 90 days? How much?</div></div>
+<div class="chat-msg bot"><div class="chat-avatar">🤖</div><div class="chat-bubble">London Insurance Forum 2026 — post-event pipeline (90-day window):<br/><span class="metric-highlight">$12.5M</span> across <strong>4 confirmed opportunities</strong> from event attendees<br/><span class="sub-note">Source: mv_event_attribution · campaign_cvent_id join · 90-day window (agreed definition) · primary contact only — multi-contact attribution requires Reltio (Stage 2)</span></div></div>`,
+    ce0: `<div class="ce-metric-name">cmpgn_campaigns_it.campaign_cvent_id</div>
+<div class="ce-def">The Cvent-to-campaign join key. A COMMENT documents the full five-hop chain from Cvent event code through to pipeline. Without this, every analyst re-discovers the join — or gives up and reports only attendance counts.</div>
+<div class="ce-signals"><span class="signal-chip primary">campaign_cvent_id = SYS_Cvent_Event.Event Code</span><span class="signal-chip">CventContactStubId → ELQ_Contacts</span><span class="signal-chip">con_party_id → opty_primary_contact_id</span><span class="signal-chip">90-day attribution window</span></div>`,
+    ce1: `<div class="ce-metric-name">post_event_pipeline_90d — Metric View expr</div><pre class="ce-sql"><span class="fn">SUM</span>(<span class="fn">CASE</span> <span class="kw">WHEN</span>
+  <span class="fn">DATEDIFF</span>(
+    opty_record_creation_date,
+    event.event_start_date
+  ) <span class="kw">BETWEEN</span> <span class="num">0</span> <span class="kw">AND</span> <span class="num">90</span>
+<span class="kw">THEN</span> opty_amount_usd <span class="kw">END</span>)
+<span class="cm">-- join: opty_primary_contact_id = con_party_id
+-- contact.campaign_cvent_id = event.campaign_cvent_id
+-- 90 days: agreed Oct 2026, CMO sign-off to change</span></pre>`,
+    ce2: `<div class="ce-metric-name">Genie Knowledge Store instruction</div><pre class="ce-sql"><span class="kw">INSTRUCTION</span>: <span class="str">"Event attribution window = 90 days.
+Use Metric View post_event_pipeline_90d.
+Join key: campaign_cvent_id.
+Note: opty carries only primary contact —
+multi-contact attribution is out of scope
+until Stage 2 (Reltio identity required)."</span></pre>`,
+    ce3: `<div class="ce-metric-name">Unity Catalog Lineage</div>
+<div class="ce-lineage"><span class="lk">✓</span> post_event_pipeline_90d → cmpgn_campaigns_it.campaign_cvent_id → SYS_Cvent_Event</div>
+<div class="ce-lineage" style="margin-top:8px"><span class="lk">✓</span> Contact join: opty_primary_contact_id = contact_it.con_party_id (single-contact limitation documented)</div>
+<div class="ce-lineage" style="margin-top:8px"><span class="lk">✓</span> Attribution window: 90 days · agreed 2026-10-15 · Stage 2 will add 30d + 60d measures</div>`,
+    dtitle: 'London Insurance Forum 2026 — Post-Event Pipeline (90d)',
+    dmeta: 'marketing.mdl · mv_event_attribution · cmpgn_campaigns_it',
+    hdrs: ['opportunity_name','opty_amount_usd','days_since_event','opty_primary_contact','lead_source'],
+    rows: [
+      ['Willis Towers Watson — Risk Review 2027','<span class="td-success">$4,812,000</span>','<span class="td-accent">14d</span>','S. Matthews','<span class="td-mono">Event</span>'],
+      ['Lloyd\'s of London — Treaty Renewal Q1','<span class="td-success">$2,140,000</span>','<span class="td-accent">31d</span>','J. Harrison','<span class="td-mono">Event</span>'],
+      ['AIG — Climate Risk Advisory','<span class="td-success">$3,720,000</span>','<span class="td-accent">47d</span>','E. Robertson','<span class="td-mono">Event</span>'],
+      ['Zurich — Captive Management Review','<span class="td-success">$1,870,000</span>','<span class="td-warn">72d</span>','D. Lawrence','<span class="td-mono">Event</span>'],
+      ['<span class="td-accent">Total 90-day pipeline</span>','<span class="td-accent" style="font-weight:700">$12,542,000</span>','','<span style="color:var(--fg3);font-size:12px">primary contact only</span>','']
+    ]
+  }
+];
+
+let cur = 0, ceOpen = false, ceTab = 0;
+
+function loadDemo(idx) {
+  cur = idx; ceOpen = false; ceTab = 0;
+  document.querySelectorAll('.demo-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  const d = DEMOS[idx];
+
+  document.getElementById('before-body').innerHTML = d.before;
+
+  const cb = document.getElementById('chat-body');
+  cb.innerHTML = `<div class="chat-msg user"><div class="chat-avatar">👤</div><div class="chat-bubble">${getQ(idx)}</div></div><div class="typing-indicator" id="typing" style="display:flex"><span></span><span></span><span></span></div>`;
+
+  setTimeout(() => {
+    const t = document.getElementById('typing');
+    if (t) t.remove();
+    cb.insertAdjacentHTML('beforeend', getAnswer(idx));
+  }, 1400);
+
+  document.getElementById('ce-panel').classList.remove('visible');
+  document.getElementById('ce-caret').classList.remove('open');
+  fillCE(idx, 0);
+
+  document.getElementById('data-title').textContent = d.dtitle;
+  document.getElementById('data-meta').textContent = d.dmeta;
+  let html = '<table><thead><tr>';
+  d.hdrs.forEach(h => html += `<th>${h}</th>`);
+  html += '</tr></thead><tbody>';
+  d.rows.forEach(r => { html += '<tr>'; r.forEach(c => html += `<td>${c}</td>`); html += '</tr>'; });
+  html += '</tbody></table>';
+  document.getElementById('data-table-wrap').innerHTML = html;
+}
+
+function getQ(idx) {
+  return ['What percentage of this quarter\'s new pipeline was marketing-sourced?',
+          'Which EMEA campaigns generated the most MQLs in Q3, and how many converted to SQL?',
+          'Did the London Insurance Forum generate pipeline within 90 days? How much?'][idx];
+}
+
+function getAnswer(idx) { return DEMOS[idx].answer; }
+
+function fillCE(idx, tab) {
+  const d = DEMOS[idx];
+  ['ce0','ce1','ce2','ce3'].forEach((k,i) => {
+    document.getElementById(`ce-tab-${i}`).innerHTML = d[k];
+    document.getElementById(`ce-tab-${i}`).classList.toggle('active', i===tab);
+  });
+  document.querySelectorAll('.ce-tab').forEach((t,i) => t.classList.toggle('active', i===tab));
+}
+
+function toggleCE() {
+  ceOpen = !ceOpen;
+  document.getElementById('ce-panel').classList.toggle('visible', ceOpen);
+  document.getElementById('ce-caret').classList.toggle('open', ceOpen);
+  if (ceOpen) fillCE(cur, ceTab);
+}
+
+function switchCETab(idx) { ceTab = idx; fillCE(cur, idx); }
+
+loadDemo(0);
+
+// ── Test Environment ──────────────────────────────────────────
+function toggleTE() {
+  const body = document.getElementById('te-body');
+  const caret = document.getElementById('te-caret');
+  const opening = body.hidden;
+  body.hidden = !opening;
+  caret.classList.toggle('open', opening);
+}
+
+let teTab = 0;
+function switchTE(idx) {
+  teTab = idx;
+  document.querySelectorAll('.te-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+  document.querySelectorAll('.te-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+}
+
+function switchTESub(containerId, idx) {
+  const c = document.getElementById(containerId);
+  c.querySelectorAll('.te-sp').forEach((p,i) => p.classList.toggle('active', i===idx));
+  c.querySelectorAll('.te-stab').forEach((t,i) => t.classList.toggle('active', i===idx));
+}
+
+function tecp(btn) {
+  const pre = btn.closest('.cp').querySelector('pre');
+  const text = pre.textContent;
+  try {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓ Copied'; btn.classList.add('ok');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('ok'); }, 2000);
+    });
+  } catch(e) {
+    const r = document.createRange();
+    r.selectNodeContents(pre);
+    const s = window.getSelection();
+    s.removeAllRanges(); s.addRange(r);
+    btn.textContent = '✓ Selected';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  }
+}
+</script>
+</body>
+</html>

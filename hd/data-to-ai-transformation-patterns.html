@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data to AI Transformation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+<style>
+  :root {
+    --bg:        #F5F8FC;
+    --surface:   #FFFFFF;
+    --surface2:  #EBF1F8;
+    --border:    #D5E2EE;
+    --text:      #0E1E30;
+    --muted:     #5A7A96;
+    --accent:    #1E7DD6;
+    --amber:     #D97706;
+    --green:     #16A34A;
+    --red:       #DC2626;
+    --teal:      #0D9488;
+    --purple:    #7C3AED;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 56px 24px 40px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    line-height: 1.12;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  h1 span { color: var(--accent); }
+  .subtitle {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  /* ── STAT BAR ── */
+  .stat-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    max-width: 1080px;
+    margin: 0 auto 48px;
+    padding: 0 24px;
+  }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    flex: 1;
+    min-width: 160px;
+  }
+  .stat-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    display: block;
+    line-height: 1.4;
+  }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    max-width: 1080px;
+    margin: 0 auto 20px;
+    padding: 0 24px;
+  }
+
+  /* ── PATTERN CARDS ── */
+  .patterns {
+    max-width: 1080px;
+    margin: 0 auto 48px;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pattern-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 24px;
+    align-items: start;
+    transition: border-color .2s;
+  }
+  .pattern-card:hover { border-color: var(--accent); }
+
+  .pattern-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+    margin-top: 4px;
+  }
+  .p1 .pattern-num { color: var(--accent); }
+  .p2 .pattern-num { color: var(--teal); }
+  .p3 .pattern-num { color: var(--purple); }
+  .p4 .pattern-num { color: var(--green); }
+  .p5 .pattern-num { color: var(--amber); }
+
+  .pattern-body {}
+  .pattern-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .pattern-tagline {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .pattern-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 18px;
+    max-width: 680px;
+  }
+
+  .companies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .company-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .company-chip .metric {
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  .ce-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 6px;
+    letter-spacing: .03em;
+  }
+  .p1 .ce-badge { background: rgba(59,158,255,.12); color: var(--accent); }
+  .p2 .ce-badge { background: rgba(45,212,191,.12); color: var(--teal); }
+  .p3 .ce-badge { background: rgba(167,139,250,.12); color: var(--purple); }
+  .p4 .ce-badge { background: rgba(34,199,122,.12); color: var(--green); }
+  .p5 .ce-badge { background: rgba(245,166,35,.12); color: var(--amber); }
+
+  /* ── FAILURE CARD ── */
+  .failure-section {
+    max-width: 1080px;
+    margin: 0 auto 48px;
+    padding: 0 24px;
+  }
+  .failure-card {
+    background: rgba(239,68,68,.06);
+    border: 1px solid rgba(239,68,68,.25);
+    border-radius: 14px;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 24px;
+  }
+  .failure-icon {
+    font-size: 32px;
+    line-height: 1;
+    margin-top: 4px;
+    color: var(--red);
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+  }
+  .failure-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--red);
+    margin-bottom: 4px;
+  }
+  .failure-tagline {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .failure-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 680px;
+    margin-bottom: 16px;
+  }
+  .failure-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .fail-chip {
+    background: rgba(239,68,68,.10);
+    border: 1px solid rgba(239,68,68,.20);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--red);
+  }
+
+  /* ── LANDSCAPE TABLE ── */
+  .landscape-section {
+    max-width: 1080px;
+    margin: 0 auto 48px;
+    padding: 0 24px;
+  }
+  .landscape-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    overflow-x: auto;
+    display: block;
+  }
+  .landscape-table th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .landscape-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .landscape-table tr:last-child td { border-bottom: none; }
+  .firm-name { font-weight: 600; font-size: 14px; }
+  .rev { font-variant-numeric: tabular-nums; color: var(--accent); font-weight: 600; }
+  .pattern-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .pt-platform { background: rgba(59,158,255,.15); color: var(--accent); }
+  .pt-eco { background: rgba(45,212,191,.15); color: var(--teal); }
+  .pt-semantic { background: rgba(167,139,250,.15); color: var(--purple); }
+  .pt-vertical { background: rgba(34,199,122,.15); color: var(--green); }
+  .pt-acq { background: rgba(245,166,35,.15); color: var(--amber); }
+  .pt-fail { background: rgba(239,68,68,.15); color: var(--red); }
+  .ce-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .yes { color: var(--green); font-weight: 600; }
+  .no { color: var(--muted); }
+  .partial { color: var(--amber); font-weight: 500; }
+  .growth-up { color: var(--green); font-weight: 500; font-size: 12px; }
+  .growth-flat { color: var(--muted); font-size: 12px; }
+  .growth-down { color: var(--red); font-weight: 500; font-size: 12px; }
+  .domain-tag { font-size: 12px; color: var(--text); line-height: 1.4; }
+  .cloud-tag { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  /* ── IMPLICATION BOX ── */
+  .implication {
+    max-width: 1080px;
+    margin: 0 auto 64px;
+    padding: 0 24px;
+  }
+  .implication-card {
+    background: linear-gradient(135deg, rgba(59,158,255,.08) 0%, rgba(45,212,191,.06) 100%);
+    border: 1px solid rgba(59,158,255,.25);
+    border-radius: 14px;
+    padding: 32px 36px;
+  }
+  .implication-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .implication-body {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--text);
+    max-width: 720px;
+  }
+  .implication-body strong { color: var(--accent); }
+  .moves {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .move {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+  }
+  .move-num {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  footer span { font-size: 12px; color: var(--muted); }
+
+  @media (max-width: 640px) {
+    .pattern-card, .failure-card {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .pattern-num, .failure-icon { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">Competitive Intelligence · October 2026</div>
+  <h1>Five patterns shaping the<br><span>data → AI → CE</span> transition</h1>
+  <p class="subtitle">How 15 IT services firms are repositioning from data analytics companies to AI companies — and where context engineering fits in each play.</p>
+</div>
+
+<div class="stat-bar">
+  <div class="stat">
+    <span class="stat-num">15</span>
+    <span class="stat-label">firms profiled across 3 research tracks</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">$3.3B</span>
+    <span class="stat-label">Capgemini paid for WNS (2.6× revenue) — CE-adjacent IP premium</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">12–24</span>
+    <span class="stat-label">months before Tredence or Tiger claims CE analyst recognition</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">0</span>
+    <span class="stat-label">firms have named a CE practice on Microsoft Fabric</span>
+  </div>
+</div>
+
+<!-- PATTERNS -->
+<div class="section-title">Five winning patterns</div>
+<div class="patterns">
+
+  <!-- P1: Platform IP Build -->
+  <div class="pattern-card p1">
+    <div class="pattern-num">01</div>
+    <div class="pattern-body">
+      <div class="pattern-name">Platform IP Build</div>
+      <div class="pattern-tagline">Own the product layer — CE as the product's semantic foundation</div>
+      <div class="pattern-desc">
+        The most capital-intensive path: build a named, branded AI platform that the firm can sell and license independently of headcount. Every successful platform in this set shares one trait — a CE-equivalent layer underneath, whether called a semantic layer, knowledge graph, or context architecture. The platforms that go to market without one (e.g., rebranded dashboards) fail to retain enterprise clients past the pilot.
+      </div>
+      <div class="companies">
+        <span class="company-chip">Fractal · Cogentiq + Fathom-R1 <span class="metric">IPO 2.66×</span></span>
+        <span class="company-chip">Persistent · iAURA 2.0 + Brickbuilder <span class="metric">BFSI +16% YoY</span></span>
+        <span class="company-chip">Quantiphi · baioniq VPC-native <span class="metric">Everest Star Performer</span></span>
+        <span class="company-chip">EPAM · DIAL open-source <span class="metric">$5.3B rev, +14%</span></span>
+      </div>
+      <span class="ce-badge">CE role → product's semantic architecture; agents ground via the platform's context layer</span>
+    </div>
+  </div>
+
+  <!-- P2: Ecosystem Anchor -->
+  <div class="pattern-card p2">
+    <div class="pattern-num">02</div>
+    <div class="pattern-body">
+      <div class="pattern-name">Ecosystem Anchor</div>
+      <div class="pattern-tagline">Become the hyperscaler's CE partner of record — co-sell drives pipeline</div>
+      <div class="pattern-desc">
+        Pick one hyperscaler's CE stack and become the #1 partner in it. The Databricks Elite tier + annual Partner of the Year award is the most visible signal: it puts the SI in the vendor's co-sell motion and earns it shelf space in the Genie/Unity Catalog ecosystem. The firms that win multiple consecutive years (Quantiphi/Google, Tiger/Databricks, NTT Data/Snowflake 5× APJ) compoundly improve their deal conversion because the hyperscaler's own sales team starts bringing them in. CE certification is the credential that unlocks the top tier.
+      </div>
+      <div class="companies">
+        <span class="company-chip">Tiger Analytics · Databricks Elite + 2025 EAPY <span class="metric">$350M → $1B target</span></span>
+        <span class="company-chip">Quantiphi · Google Cloud 4× Partner of Year <span class="metric">Gartner Emerging Leader</span></span>
+        <span class="company-chip">NTT Data · Microsoft GSGC + Snowflake Elite + Databricks $200M <span class="metric">$30B rev</span></span>
+        <span class="company-chip">ZS Associates · Premier Databricks + Premier Snowflake <span class="metric">Everest Leader Life Sciences 3×</span></span>
+      </div>
+      <span class="ce-badge">CE role → Databricks CE cert is the access credential; co-sell requires it</span>
+    </div>
+  </div>
+
+  <!-- P3: Semantic First -->
+  <div class="pattern-card p3">
+    <div class="pattern-num">03</div>
+    <div class="pattern-body">
+      <div class="pattern-name">Semantic First</div>
+      <div class="pattern-tagline">Claim CE vocabulary before the market solidifies — first mover on the label</div>
+      <div class="pattern-desc">
+        A small number of firms have begun claiming the CE vocabulary explicitly — in analyst publications, product names, or regulatory filings — while larger peers still use proprietary language. ThoughtWorks coined data mesh in 2019 and built a decade of thought leadership from it; the same window is open for CE in 2026. The firms making this move are doing so through publications and frameworks, not product launches — which means the moat is still buildable without a $50M R&D budget.
+      </div>
+      <div class="companies">
+        <span class="company-chip">Tredence · "decision catalog" + Atlan joint CE demo <span class="metric">Forrester Wave #1 Leader</span></span>
+        <span class="company-chip">ThoughtWorks · Tech Radar "semantic layer as Trial" + CE article <span class="metric">Forrester AI Services Leader</span></span>
+        <span class="company-chip">ZS Associates · AIESC product (4-layer semantic model on AWS) <span class="metric">AIESC named on AWS Marketplace</span></span>
+        <span class="company-chip">Coforge · "Intent Engineering" BSE exchange filing Oct 2026 <span class="metric">First BSE-filed CE framework</span></span>
+      </div>
+      <span class="ce-badge">CE role → CE is the category name, not just a technique; own the vocabulary first</span>
+    </div>
+  </div>
+
+  <!-- P4: Vertical + Regulatory Moat -->
+  <div class="pattern-card p4">
+    <div class="pattern-num">04</div>
+    <div class="pattern-body">
+      <div class="pattern-name">Vertical + Regulatory Moat</div>
+      <div class="pattern-tagline">Own one industry's CE layer — compliance framing locks in the budget</div>
+      <div class="pattern-desc">
+        The fastest-growing firms in this set are not the most horizontally ambitious — they're the ones that went deep into one vertical and connected their AI/CE layer directly to a regulatory mandate. EXL's insurance/F&A CE work is framed as operational resilience. ZS's AIESC is built on pharma commercial data standards. Persistent's iAURA BFSI frames CE as the mechanism for BCBS 239 lineage. Compliance doesn't just accelerate the deal — it survives budget cuts and makes the SI indispensable rather than interchangeable.
+      </div>
+      <div class="companies">
+        <span class="company-chip">EXL Service · Insurance/F&A CE, 60% Data-AI rev <span class="metric">+28–31% YoY Data-AI segment</span></span>
+        <span class="company-chip">ZS Associates · AIESC pharma semantic stack, AWS Marketplace <span class="metric">Everest Life Sciences Leader 3×</span></span>
+        <span class="company-chip">Persistent · iAURA BFSI + BCBS 239 alignment <span class="metric">BFSI revenue +16.2% YoY</span></span>
+        <span class="company-chip">Genpact · F&A/supply chain "industry-specific semantic layer" <span class="metric">HFS Market Leader Insurance</span></span>
+      </div>
+      <span class="ce-badge">CE role → CE delivers the compliance evidence (BCBS 239 lineage, FHIR, FIBO); regulator is the forcing function</span>
+    </div>
+  </div>
+
+  <!-- P5: Acquisition -->
+  <div class="pattern-card p5">
+    <div class="pattern-num">05</div>
+    <div class="pattern-body">
+      <div class="pattern-name">Acquisition</div>
+      <div class="pattern-tagline">Buy CE capability rather than build it — compress the timeline to 12–24 months</div>
+      <div class="pattern-desc">
+        Building a CE practice organically takes 3–5 years to reach analyst recognition. Acquisition compresses this to 12–24 months — and the exit multiples confirm the market is pricing CE-adjacent IP at a premium. The Capgemini/WNS deal is the clearest evidence: WNS had flat revenue growth yet commanded 2.6× revenue because of domain AI in F&A and insurance. LatentView's Beagle GPT acquisition directly drove +23% revenue growth in the following quarter. Tredence's KMK acquisition added pharma/life sciences coverage in a single step.
+      </div>
+      <div class="companies">
+        <span class="company-chip">WNS → Capgemini $3.3B <span class="metric">2.6× revenue multiple</span></span>
+        <span class="company-chip">LatentView → Decision Point/Beagle GPT $39.1M <span class="metric">+23% revenue next quarter</span></span>
+        <span class="company-chip">Tredence → KMK Consulting (pharma) <span class="metric">Pharma → 25% of rev by 2028</span></span>
+        <span class="company-chip">NTT Data → WinWire (Fabric/Azure AI Foundry) <span class="metric">May 2026</span></span>
+      </div>
+      <span class="ce-badge">CE role → acquire a firm with domain ontology + CE delivery track record; IP survives the integration</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- FAILURE PATTERN -->
+<div class="section-title">The failure pattern</div>
+<div class="failure-section">
+  <div class="failure-card">
+    <div class="failure-icon">✕</div>
+    <div>
+      <div class="failure-name">The Label Swap</div>
+      <div class="failure-tagline">Rename the product. Don't rebuild the company.</div>
+      <div class="failure-desc">
+        Mu Sigma is the clearest case study: "decision sciences" became "AI-enabled decision intelligence" with new product names (muAoPS, Akashic Architecture, muTalos). The vocabulary changed. The platform didn't. No hyperscaler anchor was established. No named AI product gained analyst coverage. No CE or semantic layer work appeared in any public material. The result: India entity revenue fell 16.1% in FY24 (₹857.7Cr → ₹719.5Cr), headcount declined ~6%, and the firm dropped out of every major analyst recognition list in 2024–2026.
+        <br><br>
+        The pattern recurs in smaller ways across firms that rebrand data services as "AI-powered" without building the underlying context layer — initial client interest followed by high churn when pilots don't scale.
+      </div>
+      <div class="failure-metrics">
+        <span class="fail-chip">Revenue −16.1% FY24</span>
+        <span class="fail-chip">Zero Gartner / ISG / Everest recognition 2024–2026</span>
+        <span class="fail-chip">No hyperscaler partnership tier</span>
+        <span class="fail-chip">No named CE/AI platform</span>
+        <span class="fail-chip">Headcount shrinking −6% YoY</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPANY LANDSCAPE TABLE -->
+<div class="section-title">Company landscape at a glance</div>
+<div class="landscape-section">
+  <p style="font-size:11px; color:var(--muted); margin-bottom:10px; font-style:italic;">Sorted by estimated revenue (ascending). Growth figures are approximate; private company data is estimated from secondary sources.</p>
+  <table class="landscape-table">
+    <thead>
+      <tr>
+        <th>Firm</th>
+        <th>Revenue (est.)</th>
+        <th>3–5yr Growth Trend</th>
+        <th>Primary Domain</th>
+        <th>Cloud / Hyperscaler Focus</th>
+        <th>CE Pattern</th>
+        <th>Analyst Recognition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="firm-name">Sigmoid</span></td>
+        <td><span class="rev">~$75M est.</span></td>
+        <td><span class="growth-flat">~15–20% est. CAGR (limited public data)</span></td>
+        <td><span class="domain-tag">Retail / CPG · BFSI</span></td>
+        <td><span class="cloud-tag">Databricks · Snowflake</span></td>
+        <td><span class="pattern-tag pt-semantic">Semantic First</span></td>
+        <td>Not yet covered</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">Mu Sigma</span></td>
+        <td><span class="rev">~$86M FY24</span></td>
+        <td><span class="growth-down">−16.1% FY24 (declining)</span></td>
+        <td><span class="domain-tag">Retail · BFSI · Insurance</span></td>
+        <td><span class="cloud-tag">No prominent hyperscaler partnership</span></td>
+        <td><span class="pattern-tag pt-fail">Label Swap ✕</span></td>
+        <td>Zero 2024–2026 coverage</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">LatentView</span></td>
+        <td><span class="rev">~$125M FY26</span></td>
+        <td><span class="growth-up">+23% after Decision Point acquisition</span></td>
+        <td><span class="domain-tag">BFSI · Technology · Analytics</span></td>
+        <td><span class="cloud-tag">Databricks · Snowflake</span></td>
+        <td><span class="pattern-tag pt-acq">Acquisition</span></td>
+        <td>NSE listed</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">Impetus</span></td>
+        <td><span class="rev">~$180M est.</span></td>
+        <td><span class="growth-up">~15–20% est. CAGR; CE practice forming</span></td>
+        <td><span class="domain-tag">Data Engineering · Analytics · BFSI · Healthcare</span></td>
+        <td><span class="cloud-tag">Databricks · Microsoft Azure · AWS</span></td>
+        <td><span class="pattern-tag pt-semantic">Semantic First</span></td>
+        <td>Not yet covered (opportunity)</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">Quantiphi</span></td>
+        <td><span class="rev">~$200M+ est.</span></td>
+        <td><span class="growth-up">~35–40%+ CAGR (high-growth phase)</span></td>
+        <td><span class="domain-tag">Healthcare · Retail · Media / Entertainment</span></td>
+        <td><span class="cloud-tag">Google Cloud 4× Partner of Year · Databricks</span></td>
+        <td><span class="pattern-tag pt-eco">Ecosystem Anchor</span></td>
+        <td>Gartner Emerging Leader, Everest SP</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">Fractal Analytics</span></td>
+        <td><span class="rev">~$290M FY25</span></td>
+        <td><span class="growth-up">~20–25% CAGR; IPO pipeline active</span></td>
+        <td><span class="domain-tag">BFSI · CPG · Insurance</span></td>
+        <td><span class="cloud-tag">Azure · Google Cloud · AWS</span></td>
+        <td><span class="pattern-tag pt-platform">Platform Build</span></td>
+        <td>Forrester Leader, Everest Leader</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">Tiger Analytics</span></td>
+        <td><span class="rev">~$350M 2024</span></td>
+        <td><span class="growth-up">~30%+ CAGR</span></td>
+        <td><span class="domain-tag">Retail / CPG · BFSI · Healthcare</span></td>
+        <td><span class="cloud-tag">Databricks Elite (EAPY 2025) · OpenAI Select</span></td>
+        <td><span class="pattern-tag pt-eco">Ecosystem Anchor</span></td>
+        <td>Everest Leader, ISG Leader</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">Tredence</span></td>
+        <td><span class="rev">~$350M 2025</span></td>
+        <td><span class="growth-up">~40%+ CAGR (VC-backed growth phase)</span></td>
+        <td><span class="domain-tag">Retail / CPG · BFSI</span></td>
+        <td><span class="cloud-tag">Databricks Elite · Snowflake · Atlan</span></td>
+        <td><span class="pattern-tag pt-semantic">Semantic First</span></td>
+        <td>Forrester Wave #1 Leader</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">ThoughtWorks</span></td>
+        <td><span class="rev">~$1.0B TTM 2024</span></td>
+        <td><span class="growth-down">−11% FY24; restructuring underway</span></td>
+        <td><span class="domain-tag">Tech Consulting · Retail · BFSI</span></td>
+        <td><span class="cloud-tag">Multi-cloud (AWS · GCP · Azure)</span></td>
+        <td><span class="pattern-tag pt-semantic">Semantic First</span></td>
+        <td>Forrester Leader AI Services</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">Persistent Systems</span></td>
+        <td><span class="rev">~$1.1B FY25</span></td>
+        <td><span class="growth-up">+30%+ YoY (recent); BFSI vertical +16.2%</span></td>
+        <td><span class="domain-tag">BFSI · Healthcare · Technology</span></td>
+        <td><span class="cloud-tag">Databricks Brickbuilder BFSI · AWS · Azure</span></td>
+        <td><span class="pattern-tag pt-vertical">Vertical + Regulatory</span></td>
+        <td>Databricks Brickbuilder BFSI</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">ZS Associates</span></td>
+        <td><span class="rev">~$1.5B est.</span></td>
+        <td><span class="growth-up">~15–20% est. CAGR (private)</span></td>
+        <td><span class="domain-tag">Pharma / Life Sciences · Healthcare</span></td>
+        <td><span class="cloud-tag">Databricks Premier · Snowflake Premier · AWS Marketplace (AIESC)</span></td>
+        <td><span class="pattern-tag pt-eco">Ecosystem Anchor</span> <span class="pattern-tag pt-semantic">Semantic First</span></td>
+        <td>Everest Leader Life Sciences 3×</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">EXL Service</span></td>
+        <td><span class="rev">$2.09B FY25</span></td>
+        <td><span class="growth-up">+15% overall CAGR; Data-AI segment +28–31% YoY</span></td>
+        <td><span class="domain-tag">Insurance · BFSI · Healthcare</span></td>
+        <td><span class="cloud-tag">Azure · Databricks · Snowflake</span></td>
+        <td><span class="pattern-tag pt-vertical">Vertical + Regulatory</span></td>
+        <td>Everest Leader, HFS Leader</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">Genpact</span></td>
+        <td><span class="rev">~$5.0B 2024</span></td>
+        <td><span class="growth-up">+8–10% overall; Data-Tech-AI segment +20%+</span></td>
+        <td><span class="domain-tag">F&amp;A · Insurance · Supply Chain · Healthcare</span></td>
+        <td><span class="cloud-tag">Azure (Cora AI platform) · Google · Salesforce</span></td>
+        <td><span class="pattern-tag pt-vertical">Vertical + Regulatory</span></td>
+        <td>HFS Leader, Everest Leader</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">EPAM Systems</span></td>
+        <td><span class="rev">~$5.3B LTM 2025</span></td>
+        <td><span class="growth-flat">+9% recovering (Ukraine revenue impact 2022–23)</span></td>
+        <td><span class="domain-tag">Tech / Software Eng. · BFSI · Healthcare</span></td>
+        <td><span class="cloud-tag">Multi-cloud (AWS · Azure · GCP); DIAL open-source</span></td>
+        <td><span class="pattern-tag pt-platform">Platform Build</span></td>
+        <td>Forrester Leader App Dev</td>
+      </tr>
+      <tr>
+        <td><span class="firm-name">NTT Data</span></td>
+        <td><span class="rev">~$30B</span></td>
+        <td><span class="growth-up">~8–10% org. CAGR; inorganic via WinWire (2026)</span></td>
+        <td><span class="domain-tag">BFSI · Telco · Manufacturing · Public Sector</span></td>
+        <td><span class="cloud-tag">Microsoft GSGC 2025 · Snowflake Elite · Databricks $200M partnership</span></td>
+        <td><span class="pattern-tag pt-eco">Ecosystem Anchor</span></td>
+        <td>Microsoft GSGC 2025</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:16px; padding:16px 20px; background:var(--surface2); border:1px solid var(--border); border-radius:10px;">
+    <span style="font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:12px;">CE Pattern legend</span>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;">
+        <span class="pattern-tag pt-platform" style="flex-shrink:0;">Platform Build</span>
+        <span style="font-size:12px; color:var(--muted);">Built a named AI product sold independently of delivery headcount. CE sits as the semantic foundation underneath it.</span>
+      </div>
+      <div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;">
+        <span class="pattern-tag pt-eco" style="flex-shrink:0;">Ecosystem Anchor</span>
+        <span style="font-size:12px; color:var(--muted);">Became the preferred CE/AI partner within a hyperscaler's ecosystem (Databricks Elite, Google Cloud PoY, Microsoft GSGC). Co-sell motion drives pipeline.</span>
+      </div>
+      <div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;">
+        <span class="pattern-tag pt-semantic" style="flex-shrink:0;">Semantic First</span>
+        <span style="font-size:12px; color:var(--muted);">Claimed CE vocabulary explicitly — in analyst publications, product names, tech radar entries, or filings — before the category has a dominant owner.</span>
+      </div>
+      <div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;">
+        <span class="pattern-tag pt-vertical" style="flex-shrink:0;">Vertical + Regulatory</span>
+        <span style="font-size:12px; color:var(--muted);">Owns one industry's CE layer and ties it to a compliance mandate (BCBS 239, FHIR, EU AI Act). Regulatory framing makes the engagement indispensable rather than interchangeable.</span>
+      </div>
+      <div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;">
+        <span class="pattern-tag pt-acq" style="flex-shrink:0;">Acquisition</span>
+        <span style="font-size:12px; color:var(--muted);">Acquired CE-adjacent IP or domain capability instead of building it — compressing the practice timeline from 3–5 years to 12–24 months.</span>
+      </div>
+      <div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;">
+        <span class="pattern-tag pt-fail" style="flex-shrink:0;">Label Swap ✕</span>
+        <span style="font-size:12px; color:var(--muted);">Rebranded existing services as AI without platform investment, hyperscaler anchor, or CE depth. Revenue declined as clients recognised the gap between claim and delivery.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IMPLICATION -->
+<div class="section-title">What this means for KPI Partners</div>
+<div class="implication">
+
+  <!-- Headline card -->
+  <div class="implication-card" style="margin-bottom:20px;">
+    <div class="implication-title">The category has no owner. The window is 12–24 months.</div>
+    <div class="implication-body">
+      Across 15 firms and three research tracks, <strong>few have formally claimed the CE category on Microsoft Fabric or Azure AI Foundry</strong>. Tredence is closest (Semantic First pattern, Atlan partnership), but their positioning is still methodology-level. A firm that combines ecosystem anchor + semantic vocabulary claim + vertical regulatory framing in a coherent package would have a meaningful early-mover position.
+    </div>
+  </div>
+
+  <!-- Which patterns to adopt -->
+  <div style="background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:28px 32px; margin-bottom:16px;">
+    <div style="font-family:'Inter',sans-serif; font-size:15px; font-weight:700; color:var(--text); margin-bottom:16px;">Patterns to adopt — and which to skip</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div style="background:rgba(34,199,122,.07); border:1px solid rgba(34,199,122,.2); border-radius:10px; padding:16px;">
+        <div style="font-size:12px; font-weight:700; color:var(--green); letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px;">✓ Adopt these</div>
+        <div style="font-size:13px; color:var(--text); line-height:1.7;">
+          <strong>Ecosystem Anchor</strong> — Databricks CE cert cohort is the fastest path to Elite co-sell. Microsoft co-sell follows the same logic on Fabric.<br><br>
+          <strong>Semantic First</strong> — Claim CE vocabulary explicitly on Fabric and in BFSI/healthcare compliance framing. ThoughtWorks coined data mesh in 2019 and spent a decade on it. This window is shorter.<br><br>
+          <strong>Vertical + Regulatory Moat</strong> — Pick one industry (BFSI or healthcare), map CE deliverables to its specific regulation, and make that the packaged accelerator. Compliance framing locks in the budget and makes the engagement indispensable.
+        </div>
+      </div>
+      <div style="background:rgba(239,68,68,.06); border:1px solid rgba(239,68,68,.18); border-radius:10px; padding:16px;">
+        <div style="font-size:12px; font-weight:700; color:var(--red); letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px;">✗ Skip or defer</div>
+        <div style="font-size:13px; color:var(--text); line-height:1.7;">
+          <strong>Platform IP Build</strong> — Requires $20–50M R&D and 3–5 years. Fractal and Persistent spent this on iAURA and Cogentiq. KPI Partners can partner for platform instead of building.<br><br>
+          <strong>Acquisition</strong> — Capital-intensive and execution-heavy. The right play after CE practice is established and there's a specific IP gap to fill (e.g., a BFSI ontology vendor or a FHIR specialist).<br><br>
+          <strong>Label Swap</strong> — The Mu Sigma failure pattern. Renaming "data analytics" as "AI-powered CE" without building the underlying platform or earning analyst recognition generates zero durable advantage.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Industry AI spending -->
+  <div style="background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:28px 32px; margin-bottom:16px;">
+    <div style="font-family:'Inter',sans-serif; font-size:15px; font-weight:700; color:var(--text); margin-bottom:6px;">Which industries are spending most in AI — and why CE wins the budget</div>
+    <div style="font-size:13px; color:var(--muted); margin-bottom:20px;">Global enterprise AI services spend 2026 (est.). CE accelerators capture the governed-AI share of this — the deployment budget, not the model budget.</div>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:grid; grid-template-columns:180px 1fr 100px; gap:12px; align-items:center;">
+        <span style="font-size:13px; font-weight:600; color:var(--text);">Financial Services</span>
+        <div style="height:10px; background:var(--surface2); border-radius:100px; overflow:hidden;"><div style="height:100%; width:88%; background:linear-gradient(90deg,var(--accent),#3B82F6); border-radius:100px;"></div></div>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--accent);">~$45B</span>
+      </div>
+      <div style="font-size:12px; color:var(--muted); padding-left:192px; margin-top:-6px; margin-bottom:4px;">BCBS 239 enforcement, EU AI Act Annex III mandatory, model risk governance (SR 11-7). 29 G-SIBs spending; CDO + CRO are economic buyers.</div>
+
+      <div style="display:grid; grid-template-columns:180px 1fr 100px; gap:12px; align-items:center;">
+        <span style="font-size:13px; font-weight:600; color:var(--text);">Healthcare &amp; Pharma</span>
+        <div style="height:10px; background:var(--surface2); border-radius:100px; overflow:hidden;"><div style="height:100%; width:78%; background:linear-gradient(90deg,var(--green),#059669); border-radius:100px;"></div></div>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--green);">~$35B</span>
+      </div>
+      <div style="font-size:12px; color:var(--muted); padding-left:192px; margin-top:-6px; margin-bottom:4px;">CMS FHIR prior auth Jan 2027 deadline, ONC HTI-1 AI risk disclosure rule. UnitedHealth alone: $3B AI budget 2026–2027. NHS: £900M. Healthcare KG market 16% CAGR.</div>
+
+      <div style="display:grid; grid-template-columns:180px 1fr 100px; gap:12px; align-items:center;">
+        <span style="font-size:13px; font-weight:600; color:var(--text);">Retail &amp; CPG</span>
+        <div style="height:10px; background:var(--surface2); border-radius:100px; overflow:hidden;"><div style="height:100%; width:58%; background:linear-gradient(90deg,var(--amber),#D97706); border-radius:100px;"></div></div>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--amber);">~$25B</span>
+      </div>
+      <div style="font-size:12px; color:var(--muted); padding-left:192px; margin-top:-6px; margin-bottom:4px;">Commercial urgency (no regulation), but "missing semantic layer" is the buyer's own vocabulary for the CE problem. Carrefour: €100M/yr target. Market crowded — differentiate on GS1 + Genie Space.</div>
+
+      <div style="display:grid; grid-template-columns:180px 1fr 100px; gap:12px; align-items:center;">
+        <span style="font-size:13px; font-weight:600; color:var(--text);">Manufacturing</span>
+        <div style="height:10px; background:var(--surface2); border-radius:100px; overflow:hidden;"><div style="height:100%; width:45%; background:linear-gradient(90deg,var(--teal),#0D9488); border-radius:100px;"></div></div>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--teal);">~$20B</span>
+      </div>
+      <div style="font-size:12px; color:var(--muted); padding-left:192px; margin-top:-6px; margin-bottom:4px;">Siemens already has a commercial KG product with pre-sales hiring. Predictive maintenance, supply chain ontology, digital twin context layers. Under-served by Indian SIs today.</div>
+
+      <div style="display:grid; grid-template-columns:180px 1fr 100px; gap:12px; align-items:center;">
+        <span style="font-size:13px; font-weight:600; color:var(--text);">Energy &amp; Utilities</span>
+        <div style="height:10px; background:var(--surface2); border-radius:100px; overflow:hidden;"><div style="height:100%; width:30%; background:linear-gradient(90deg,var(--purple),#7C3AED); border-radius:100px;"></div></div>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--purple);">~$12B</span>
+      </div>
+      <div style="font-size:12px; color:var(--muted); padding-left:192px; margin-top:-6px; margin-bottom:4px;">CSRD reporting (EU), carbon accounting ontologies, grid optimization context layers. Early-stage CE buying — first-mover advantage available. EU Taxonomy regulation creates compliance framing.</div>
+    </div>
+  </div>
+
+  <!-- Industry use cases by pattern -->
+  <div style="background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:28px 32px; margin-bottom:16px;">
+    <div style="font-family:'Inter',sans-serif; font-size:15px; font-weight:700; color:var(--text); margin-bottom:16px;">Industry use cases to build — by pattern × vertical</div>
+    <table style="width:100%; border-collapse:collapse; font-size:13px; display:block; overflow-x:auto;">
+      <thead>
+        <tr style="border-bottom:2px solid var(--border);">
+          <th style="text-align:left; padding:8px 12px; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); white-space:nowrap;">Vertical</th>
+          <th style="text-align:left; padding:8px 12px; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); white-space:nowrap;">Pattern</th>
+          <th style="text-align:left; padding:8px 12px; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--muted);">Use case</th>
+          <th style="text-align:left; padding:8px 12px; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); white-space:nowrap;">Platform</th>
+          <th style="text-align:left; padding:8px 12px; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); white-space:nowrap;">Deal size</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:10px 12px; font-weight:600;">BFSI</td>
+          <td style="padding:10px 12px;"><span style="background:rgba(34,199,122,.1); color:var(--green); font-size:11px; font-weight:600; padding:2px 8px; border-radius:4px;">Vertical + Regulatory</span></td>
+          <td style="padding:10px 12px; color:var(--muted);">BCBS 239 CE compliance accelerator — maps Unity Catalog lineage to all 14 principles with FIBO alignment. CDO gets a regulator-ready evidence pack.</td>
+          <td style="padding:10px 12px; font-size:12px; color:var(--accent);">Databricks + Fabric</td>
+          <td style="padding:10px 12px; font-size:12px; color:var(--green); font-weight:600;">$300K–1.2M</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:10px 12px; font-weight:600;">BFSI</td>
+          <td style="padding:10px 12px;"><span style="background:rgba(59,158,255,.1); color:var(--accent); font-size:11px; font-weight:600; padding:2px 8px; border-radius:4px;">Semantic First</span></td>
+          <td style="padding:10px 12px; color:var(--muted);">EU AI Act Annex III explainability layer — structured context delivery for credit scoring and fraud models, producing audit evidence by design.</td>
+          <td style="padding:10px 12px; font-size:12px; color:var(--accent);">Fabric + Azure AI Foundry</td>
+          <td style="padding:10px 12px; font-size:12px; color:var(--green); font-weight:600;">$150K–600K</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:10px 12px; font-weight:600;">Healthcare</td>
+          <td style="padding:10px 12px;"><span style="background:rgba(34,199,122,.1); color:var(--green); font-size:11px; font-weight:600; padding:2px 8px; border-radius:4px;">Vertical + Regulatory</span></td>
+          <td style="padding:10px 12px; color:var(--muted);">FHIR R4 → OMOP CDM context accelerator — payer prior auth API compliance by Jan 2027; SNOMED/LOINC normalization + MCP server for clinical AI agents.</td>
+          <td style="padding:10px 12px; font-size:12px; color:var(--accent);">Azure Health Data Services + Databricks</td>
+          <td style="padding:10px 12px; font-size:12px; color:var(--green); font-weight:600;">$400K–1.5M</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:10px 12px; font-weight:600;">Retail / CPG</td>
+          <td style="padding:10px 12px;"><span style="background:rgba(45,212,191,.1); color:var(--teal); font-size:11px; font-weight:600; padding:2px 8px; border-radius:4px;">Ecosystem Anchor</span></td>
+          <td style="padding:10px 12px; color:var(--muted);">GS1-native demand signal context layer — product ontology + RGM semantic model delivered as a Databricks Genie Space; co-sell through Databricks Elite channel.</td>
+          <td style="padding:10px 12px; font-size:12px; color:var(--accent);">Databricks Genie</td>
+          <td style="padding:10px 12px; font-size:12px; color:var(--green); font-weight:600;">$200K–800K</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:10px 12px; font-weight:600;">Manufacturing</td>
+          <td style="padding:10px 12px;"><span style="background:rgba(167,139,250,.1); color:var(--purple); font-size:11px; font-weight:600; padding:2px 8px; border-radius:4px;">White Space</span></td>
+          <td style="padding:10px 12px; color:var(--muted);">Digital twin context layer — supply chain entity graph + predictive maintenance ontology. Snowflake Cortex Analyst or Fabric Copilot as the query surface. No Indian SI owns this.</td>
+          <td style="padding:10px 12px; font-size:12px; color:var(--accent);">Snowflake + Fabric</td>
+          <td style="padding:10px 12px; font-size:12px; color:var(--green); font-weight:600;">$250K–900K</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Tech space investments -->
+  <div style="background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:28px 32px; margin-bottom:16px;">
+    <div style="font-family:'Inter',sans-serif; font-size:15px; font-weight:700; color:var(--text); margin-bottom:16px;">Tech spaces to invest in — ranked by KPI Partners' leverage</div>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <div style="display:flex; gap:14px; align-items:flex-start; padding:12px; background:var(--surface2); border-radius:8px; border-left:3px solid var(--accent);">
+        <span style="font-size:20px; flex-shrink:0;">①</span>
+        <div>
+          <div style="font-size:13px; font-weight:700; color:var(--text);">Databricks CE certification + Unity Catalog governance</div>
+          <div style="font-size:12px; color:var(--muted); margin-top:3px;">Cost: $200/person, 3 months part-time study. Return: Elite tier co-sell, $5–10M pipeline per certified cohort. No competing Indian SI has announced a cohort. The cert covers Unity Catalog, AI Search, MCP integrations, multi-agent context, and context window management — the complete CE delivery stack.</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:14px; align-items:flex-start; padding:12px; background:var(--surface2); border-radius:8px; border-left:3px solid var(--teal);">
+        <span style="font-size:20px; flex-shrink:0;">②</span>
+        <div>
+          <div style="font-size:13px; font-weight:700; color:var(--text);">Microsoft Fabric IQ + Semantic Models + Azure AI Foundry</div>
+          <div style="font-size:12px; color:var(--muted); margin-top:3px;">An underused CE substrate for Microsoft-anchor enterprises. Every Power BI customer already has a semantic model that can be converted into a CE asset in a 6-week engagement. Fabric IQ + MCP + Azure Health Data Services forms a coherent FHIR compliance stack. A published reference architecture naming this a CE platform would give KPI Partners a concrete Fabric CE story in the market.</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:14px; align-items:flex-start; padding:12px; background:var(--surface2); border-radius:8px; border-left:3px solid var(--green);">
+        <span style="font-size:20px; flex-shrink:0;">③</span>
+        <div>
+          <div style="font-size:13px; font-weight:700; color:var(--text);">Neo4j + GraphRAG for domain knowledge graphs</div>
+          <div style="font-size:12px; color:var(--muted); margin-top:3px;">Neo4j GraphAcademy has free certification paths. GraphRAG (retrieval over a knowledge graph instead of flat vector search) delivers 3× accuracy improvements in production (per Cognizant and Microsoft Research data). For BFSI (FIBO), healthcare (FHIR ontology), and manufacturing (asset hierarchy), a Neo4j knowledge graph is the semantic substrate every other accelerator runs on.</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:14px; align-items:flex-start; padding:12px; background:var(--surface2); border-radius:8px; border-left:3px solid var(--amber);">
+        <span style="font-size:20px; flex-shrink:0;">④</span>
+        <div>
+          <div style="font-size:13px; font-weight:700; color:var(--text);">MCP (Model Context Protocol) connector engineering</div>
+          <div style="font-size:12px; color:var(--muted); margin-top:3px;">MCP is now table-stakes for every enterprise AI agent framework. The scarcest skill is building pre-certified MCP context connectors for vertical domain data — FHIR clinical data, FIBO financial entities, SAP ERP entities. Corvera built MCP-native CPG connectors and signed 12 brands in 5 weeks. An SI that ships 5 pre-built domain MCP servers owns the context delivery layer for its verticals.</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:14px; align-items:flex-start; padding:12px; background:var(--surface2); border-radius:8px; border-left:3px solid var(--purple);">
+        <span style="font-size:20px; flex-shrink:0;">⑤</span>
+        <div>
+          <div style="font-size:13px; font-weight:700; color:var(--text);">Atlan CE control plane as platform-agnostic differentiator</div>
+          <div style="font-size:12px; color:var(--muted); margin-top:3px;">Atlan sits above Databricks, Snowflake, and Fabric simultaneously. A KPI Partners CE practice built around Atlan as the metadata and governance layer is platform-agnostic — which matters for the 40% of enterprises running multi-cloud. Tredence already has an Atlan joint demo. The move is to go deeper: build a named BFSI or healthcare CE accelerator on Atlan rather than just referencing it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mental model shift -->
+  <div style="background:linear-gradient(120deg, rgba(59,158,255,.07) 0%, rgba(45,212,191,.05) 100%); border:1px solid rgba(59,158,255,.22); border-radius:14px; padding:28px 32px;">
+    <div style="font-family:'Inter',sans-serif; font-size:15px; font-weight:700; color:var(--accent); margin-bottom:16px;">The mental model shift — from delivery shop to CE product company</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;">
+      <div style="background:rgba(239,68,68,.06); border:1px solid rgba(239,68,68,.15); border-radius:10px; padding:16px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--red); margin-bottom:10px;">Current mental model</div>
+        <div style="font-size:13px; color:var(--muted); line-height:1.8;">
+          "We deliver data engineering projects on Databricks/Snowflake/Fabric."<br>
+          "Our value is implementation capacity."<br>
+          "We're measured by hours delivered and certifications held."<br>
+          "We position against other Indian SIs on price and team size."<br>
+          "AI is the client's strategy; we execute their roadmap."
+        </div>
+      </div>
+      <div style="background:rgba(34,199,122,.07); border:1px solid rgba(34,199,122,.18); border-radius:10px; padding:16px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--green); margin-bottom:10px;">CE product company mental model</div>
+        <div style="font-size:13px; color:var(--muted); line-height:1.8;">
+          "We own the CE layer that makes enterprise AI work on any cloud."<br>
+          "Our value is the IP we bring, not the hours we sell."<br>
+          "We're measured by AI accuracy improvement in client production."<br>
+          "We position against compliance risk and AI failure — not other SIs."<br>
+          "We bring the AI strategy through the CE accelerator we pre-built."
+        </div>
+      </div>
+    </div>
+    <div class="moves">
+      <div class="move">
+        <div class="move-num">1</div>
+        <span>Build a certified cohort — Databricks CE Associate is GA (July 2026, $200/exam). A named certified cohort constitutes a practice. CE cert cohorts are still rare among mid-size SIs, and certification evidence is increasingly relevant to Databricks Elite co-sell conversations.</span>
+      </div>
+      <div class="move">
+        <div class="move-num">2</div>
+        <span>Publish a Fabric CE reference architecture — a document naming Fabric IQ + Semantic Models + Azure AI Foundry + MCP as an enterprise CE stack. This gives KPI Partners a concrete technical story for Fabric-anchor accounts and a basis for Microsoft co-sell alignment. Cost: 2 weeks of architect time.</span>
+      </div>
+      <div class="move">
+        <div class="move-num">3</div>
+        <span>Launch the BCBS 239 CE Compliance Accelerator — a packaged offering that maps CE deliverables to the 14 BCBS 239 principles with FIBO alignment. The CDO gets a regulator-ready evidence pack. Only 2 of 31 G-SIBs pass all 14 principles. ECB has named it the #2 supervisory priority through 2027. The first SI to package this wins the BFSI CE lane.</span>
+      </div>
+      <div class="move">
+        <div class="move-num">4</div>
+        <span>Ship a named domain MCP context server — one pre-built MCP server for FHIR clinical data or FIBO financial entities, published open-source. The distribution is every LLM framework integrating MCP. Corvera got 12 CPG brand clients in 5 weeks with an MCP-native product. KPI Partners can replicate this in BFSI or healthcare with domain depth no CPG startup has.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>KPI Partners — Context Engineering Competitive Intelligence</span>
+  <span>Research compiled October 2026 · 15 firms · 3 research tracks</span>
+</footer>
+
+</body>
+</html>

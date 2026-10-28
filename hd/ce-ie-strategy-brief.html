@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CE/IE Strategy Brief</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* ── LIGHT (default) ── */
+  :root {
+    --bg: #F5F7FA;
+    --surface: #FFFFFF;
+    --surface-2: #EEF2F8;
+    --surface-3: #E2EAF4;
+    --border: #CDD7E8;
+    --border-light: #B8C8DC;
+    --text: #0F172A;
+    --text-muted: #475569;
+    --text-dim: #94A3B8;
+    --accent: #2563EB;
+    --accent-bright: #1D4ED8;
+    --accent-glow: rgba(37, 99, 235, 0.1);
+    --green: #059669;
+    --green-dim: rgba(5, 150, 105, 0.1);
+    --amber: #B45309;
+    --amber-dim: rgba(180, 83, 9, 0.1);
+    --red: #DC2626;
+    --red-dim: rgba(220, 38, 38, 0.08);
+    --purple: #6D28D9;
+    --purple-dim: rgba(109, 40, 217, 0.1);
+    --teal: #0E7490;
+    --teal-dim: rgba(14, 116, 144, 0.1);
+    --heading: #0F172A;
+    --nav-bg: rgba(245, 247, 250, 0.92);
+    --hero-bg: linear-gradient(160deg, #EBF3FF 0%, #EEF6FF 60%, #E8F2FF 100%);
+    --feature-bg: linear-gradient(135deg, #EBF3FF, #E4EEFF);
+    --emerging-bg: linear-gradient(135deg, #F0EAFF, #EAE0FF);
+    --callout-bg: linear-gradient(135deg, #ECFDF5, #E8FBF2);
+    --callout-border: rgba(5, 150, 105, 0.25);
+    color-scheme: light;
+  }
+
+  /* ── DARK (system preference) ── */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #080F1A; --surface: #0E1B2E; --surface-2: #152238; --surface-3: #1C2E47;
+      --border: #1E3250; --border-light: #2A4470;
+      --text: #D8E6F8; --text-muted: #6B89B0; --text-dim: #3D5878;
+      --accent: #3B82F6; --accent-bright: #60A5FA; --accent-glow: rgba(59,130,246,0.15);
+      --green: #10B981; --green-dim: rgba(16,185,129,0.12);
+      --amber: #F59E0B; --amber-dim: rgba(245,158,11,0.12);
+      --red: #EF4444; --red-dim: rgba(239,68,68,0.1);
+      --purple: #8B5CF6; --purple-dim: rgba(139,92,246,0.12);
+      --teal: #06B6D4; --teal-dim: rgba(6,182,212,0.12);
+      --heading: #F0F7FF; --nav-bg: rgba(8,15,26,0.92);
+      --hero-bg: linear-gradient(160deg,#0B1624 0%,#081220 60%,#0A1930 100%);
+      --feature-bg: linear-gradient(135deg,#0F1E35,#0B1728);
+      --emerging-bg: linear-gradient(135deg,#130E25,#0F0B1E);
+      --callout-bg: linear-gradient(135deg,#0A1E14,#081610);
+      --callout-border: rgba(16,185,129,0.25);
+      color-scheme: dark;
+    }
+  }
+
+  /* ── DARK (explicit toggle) ── */
+  :root[data-theme="dark"] {
+    --bg: #080F1A; --surface: #0E1B2E; --surface-2: #152238; --surface-3: #1C2E47;
+    --border: #1E3250; --border-light: #2A4470;
+    --text: #D8E6F8; --text-muted: #6B89B0; --text-dim: #3D5878;
+    --accent: #3B82F6; --accent-bright: #60A5FA; --accent-glow: rgba(59,130,246,0.15);
+    --green: #10B981; --green-dim: rgba(16,185,129,0.12);
+    --amber: #F59E0B; --amber-dim: rgba(245,158,11,0.12);
+    --red: #EF4444; --red-dim: rgba(239,68,68,0.1);
+    --purple: #8B5CF6; --purple-dim: rgba(139,92,246,0.12);
+    --teal: #06B6D4; --teal-dim: rgba(6,182,212,0.12);
+    --heading: #F0F7FF; --nav-bg: rgba(8,15,26,0.92);
+    --hero-bg: linear-gradient(160deg,#0B1624 0%,#081220 60%,#0A1930 100%);
+    --feature-bg: linear-gradient(135deg,#0F1E35,#0B1728);
+    --emerging-bg: linear-gradient(135deg,#130E25,#0F0B1E);
+    --callout-bg: linear-gradient(135deg,#0A1E14,#081610);
+    --callout-border: rgba(16,185,129,0.25);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 max(24px, env(safe-area-inset-left, 0px));
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    height: 48px;
+    flex-shrink: 0;
+  }
+  nav::-webkit-scrollbar { display: none; }
+
+  nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    transition: color 0.15s, background 0.15s;
+  }
+  nav a:hover { color: var(--text); background: var(--surface-2); }
+  nav .nav-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--accent-bright);
+    letter-spacing: 0.02em;
+    margin-right: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  nav .nav-sep { color: var(--border-light); font-size: 12px; padding: 0 2px; }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--hero-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 64px max(32px, env(safe-area-inset-left, 0px)) 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-meta {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--accent-bright);
+    text-wrap: balance;
+    margin-bottom: 10px;
+    letter-spacing: -0.025em;
+  }
+  .hero-brief-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.01em;
+    margin-bottom: 20px;
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin-bottom: 32px;
+  }
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+  .tag-blue { color: var(--accent-bright); border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.06); }
+  .tag-green { color: var(--green); border-color: rgba(16,185,129,0.3); background: var(--green-dim); }
+  .tag-amber { color: var(--amber); border-color: rgba(245,158,11,0.3); background: var(--amber-dim); }
+  .tag-purple { color: var(--purple); border-color: rgba(139,92,246,0.3); background: var(--purple-dim); }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 max(24px, env(safe-area-inset-left, 0px));
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 56px 0 0;
+  }
+  .section:last-of-type { padding-bottom: 80px; }
+
+  .section-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(20px, 3vw, 26px);
+    font-weight: 700;
+    color: var(--heading);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin-bottom: 8px;
+  }
+  .section-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    max-width: 660px;
+    margin-bottom: 28px;
+    line-height: 1.65;
+  }
+
+  /* ── SHOCK STATS ── */
+  .shock-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .shock-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    border-left: 3px solid var(--red);
+  }
+  .shock-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--red);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .shock-label {
+    font-size: 12.5px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .shock-src {
+    font-size: 10.5px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* ── POSITIONING BOX ── */
+  .position-box {
+    background: var(--feature-bg);
+    border: 1px solid rgba(59,130,246,0.3);
+    border-radius: 10px;
+    padding: 32px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .position-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--teal));
+  }
+  .position-line {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 700;
+    color: var(--heading);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .position-line em {
+    font-style: normal;
+    color: var(--accent-bright);
+  }
+  .position-sub {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    max-width: 560px;
+    line-height: 1.6;
+  }
+  .pillars {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .pillar {
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-bright);
+  }
+  .pillar span {
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* ── ERA STACK ── */
+  .era-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 12px;
+  }
+  .era-item {
+    display: grid;
+    grid-template-columns: 72px 20px 1fr;
+    gap: 0;
+    position: relative;
+  }
+  .era-item:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    left: 82px;
+    transform: translateX(-50%);
+    top: 0;
+    height: 20px;
+    width: 1px;
+    background: var(--border-light);
+  }
+  .era-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 82px;
+    transform: translateX(-50%);
+    top: 20px;
+    bottom: 0;
+    width: 1px;
+    background: var(--border-light);
+  }
+  .era-year {
+    padding: 18px 8px 16px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.4;
+    text-align: right;
+  }
+  .era-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--border-light);
+    background: var(--bg);
+    margin: 15px auto 0;
+    position: relative;
+    z-index: 1;
+  }
+  .era-item.active .era-dot {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: 0 0 8px rgba(59,130,246,0.5);
+  }
+  .era-item.emerging .era-dot {
+    border-color: var(--purple);
+    background: var(--purple);
+    box-shadow: 0 0 8px rgba(139,92,246,0.4);
+  }
+  .era-body {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 8px 0;
+    margin-left: 16px;
+  }
+  .era-item.active .era-body {
+    border-color: rgba(59,130,246,0.3);
+    background: var(--feature-bg);
+  }
+  .era-item.emerging .era-body {
+    border-color: rgba(139,92,246,0.3);
+    background: var(--emerging-bg);
+  }
+  .era-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .era-item.active .era-name { color: var(--accent-bright); }
+  .era-item.emerging .era-name { color: var(--purple); }
+  .era-question {
+    font-size: 12px;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .era-desc {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .era-cost {
+    font-size: 11px;
+    color: var(--green);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* ── METHODOLOGY CARDS ── */
+  .method-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .method-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .method-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .method-card.ce::before { background: linear-gradient(90deg, #3B82F6, #06B6D4); }
+  .method-card.ie::before { background: linear-gradient(90deg, #8B5CF6, #EC4899); }
+  .method-card.se::before { background: linear-gradient(90deg, #10B981, #3B82F6); }
+  .method-card.rt::before { background: linear-gradient(90deg, #F59E0B, #EF4444); }
+  .method-icon {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .method-card.ce .method-icon { color: var(--teal); }
+  .method-card.ie .method-icon { color: var(--purple); }
+  .method-card.se .method-icon { color: var(--green); }
+  .method-card.rt .method-icon { color: var(--amber); }
+  .method-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .method-tagline {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 14px;
+  }
+  .method-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .method-list li {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.45;
+  }
+  .method-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--text-dim);
+  }
+  .method-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-top: 12px;
+  }
+  .method-card.ce .method-badge { background: var(--teal-dim); color: var(--teal); }
+  .method-card.ie .method-badge { background: var(--purple-dim); color: var(--purple); }
+  .method-card.se .method-badge { background: var(--green-dim); color: var(--green); }
+  .method-card.rt .method-badge { background: var(--amber-dim); color: var(--amber); }
+
+  /* ── BI DISRUPTION ── */
+  .bi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 640px) { .bi-grid { grid-template-columns: 1fr; } }
+
+  .bi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .bi-card-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .bifurcation {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .bifurcation-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .bifurcation-src {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+  .bifur-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+  }
+  .bifur-icon {
+    width: 20px; height: 20px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .bifur-icon.yes { background: var(--green-dim); color: var(--green); }
+  .bifur-icon.no { background: var(--red-dim); color: var(--red); }
+  .bifur-icon.new { background: var(--amber-dim); color: var(--amber); }
+  .bifur-text { font-size: 13px; color: var(--text-muted); }
+  .bifur-text strong { color: var(--text); font-weight: 600; }
+
+  .callout {
+    background: var(--callout-bg);
+    border: 1px solid var(--callout-border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .callout-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 6px;
+  }
+  .callout p {
+    font-size: 13.5px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .callout p em { font-style: normal; color: var(--green); font-weight: 600; }
+
+  .quote-block {
+    border-left: 3px solid var(--border-light);
+    padding: 12px 16px;
+    margin: 12px 0;
+    background: var(--surface);
+    border-radius: 0 6px 6px 0;
+  }
+  .quote-text {
+    font-size: 13px;
+    color: var(--text);
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 4px;
+  }
+  .quote-src {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ── MARKET INTEL ── */
+  .intel-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 10px;
+  }
+  .intel-firm {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .intel-product {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .intel-body {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin-bottom: 8px;
+  }
+  .intel-quote {
+    font-size: 12px;
+    font-style: italic;
+    color: var(--text);
+    border-left: 2px solid var(--border-light);
+    padding-left: 10px;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+  .intel-gap {
+    font-size: 11.5px;
+    color: var(--amber);
+    margin-top: 8px;
+    font-weight: 500;
+  }
+
+  /* ── COMPETITOR TABLE ── */
+  .table-wrap { overflow-x: auto; margin-bottom: 16px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    min-width: 600px;
+  }
+  thead th {
+    background: var(--surface-2);
+    color: var(--text-muted);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+  tbody tr:hover { background: var(--surface-2); }
+  tbody td {
+    padding: 10px 12px;
+    color: var(--text-muted);
+    vertical-align: top;
+  }
+  tbody td:first-child { color: var(--text); font-weight: 600; }
+  .depth-hi { color: var(--red); font-weight: 600; }
+  .depth-med { color: var(--amber); font-weight: 600; }
+  .depth-low { color: var(--text-dim); }
+  .check-yes { color: var(--green); font-weight: 700; }
+  .check-no { color: var(--text-dim); }
+  .check-part { color: var(--amber); }
+  .insight-box {
+    background: var(--surface);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-size: 12.5px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-top: 12px;
+  }
+  .insight-box strong { color: var(--accent-bright); }
+
+  /* ── WHITE SPACE LANES ── */
+  .lane-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .lane {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .lane-num {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .lane:nth-child(1) .lane-num { background: rgba(59,130,246,0.1); color: var(--accent-bright); }
+  .lane:nth-child(2) .lane-num { background: rgba(16,185,129,0.1); color: var(--green); }
+  .lane:nth-child(3) .lane-num { background: rgba(245,158,11,0.1); color: var(--amber); }
+  .lane:nth-child(4) .lane-num { background: rgba(6,182,212,0.1); color: var(--teal); }
+  .lane:nth-child(5) .lane-num { background: rgba(139,92,246,0.1); color: var(--purple); }
+  .lane:nth-child(6) .lane-num { background: rgba(239,68,68,0.1); color: var(--red); }
+  .lane-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .lane-target {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .lane-body {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+  .lane-kpi {
+    font-size: 11.5px;
+    color: var(--accent-bright);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  /* ── ACCELERATORS ── */
+  .accel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .accel-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .accel-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .accel-card:nth-child(1)::after { background: linear-gradient(90deg, #3B82F6, #06B6D4); }
+  .accel-card:nth-child(2)::after { background: linear-gradient(90deg, #F59E0B, #EF4444); }
+  .accel-card:nth-child(3)::after { background: linear-gradient(90deg, #06B6D4, #8B5CF6); }
+  .accel-card:nth-child(4)::after { background: linear-gradient(90deg, #10B981, #3B82F6); }
+  .accel-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .accel-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .accel-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .accel-list li {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding-left: 12px;
+    position: relative;
+  }
+  .accel-list li::before { content: '→'; position: absolute; left: 0; color: var(--text-dim); font-size: 10px; top: 2px; }
+  .accel-model {
+    font-size: 11px;
+    color: var(--amber);
+    font-weight: 600;
+    background: var(--amber-dim);
+    border-radius: 4px;
+    padding: 3px 8px;
+    display: inline-block;
+    margin-top: 4px;
+  }
+  .accel-diff {
+    font-size: 11px;
+    color: var(--green);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  /* ── QUICK STARTS ── */
+  .qs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .qs-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .qs-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .qs-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .qs-duration {
+    font-size: 11px;
+    color: var(--accent-bright);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .qs-question {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    border-left: 2px solid var(--border-light);
+  }
+  .qs-deliver {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .qs-deliver strong { color: var(--text); font-weight: 600; }
+
+  .not-to-do {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+  .not-to-do-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+  .not-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .not-list li {
+    list-style: none;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.45;
+  }
+  .not-list li::before {
+    content: '✗';
+    position: absolute;
+    left: 0;
+    color: var(--red);
+    font-size: 11px;
+    top: 2px;
+  }
+
+  /* ── SOURCES ── */
+  .sources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .source-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+  .source-group-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .source-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .source-list li {
+    font-size: 11.5px;
+    color: var(--text-dim);
+    padding-left: 10px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .source-list li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--border-light);
+  }
+  .source-list li strong { color: var(--text-muted); font-weight: 500; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px max(24px, env(safe-area-inset-left, 0px));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 100%;
+  }
+  footer span {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  footer .footer-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  @media (max-width: 600px) {
+    .era-item { grid-template-columns: 60px 1fr; }
+    .lane { grid-template-columns: 1fr; }
+    .lane-num { width: 32px; height: 32px; font-size: 14px; }
+  }
+
+  /* ── THEME TOGGLE ── */
+  .theme-toggle {
+    margin-left: auto;
+    flex-shrink: 0;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 4px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .theme-toggle:hover { background: var(--surface-3); color: var(--text); }
+</style>
+
+<script>
+  (function() {
+    try {
+      var saved = localStorage.getItem('kpi-brief-theme');
+      if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    } catch(e) {}
+  })();
+</script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-title">CE/IE Strategy Brief</span>
+  <span class="nav-sep">|</span>
+  <a href="#pitch">Pitch</a>
+  <a href="#methodology">Methodology</a>
+  <a href="#bi">BI Disruption</a>
+  <a href="#competitive">Landscape</a>
+  <a href="#whitespace">White Space</a>
+  <a href="#quickstarts">Quick Starts</a>
+  <a href="#sources">Sources</a>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+    <span id="themeIcon">🌙</span> Dark
+  </button>
+</nav>
+
+<script>
+  function toggleTheme() {
+    var root = document.documentElement;
+    var isDark = root.getAttribute('data-theme') === 'dark';
+    var next = isDark ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    document.getElementById('themeIcon').textContent = next === 'dark' ? '☀' : '🌙';
+    document.getElementById('themeToggle').lastChild.textContent = ' ' + (next === 'dark' ? 'Light' : 'Dark');
+    try { localStorage.setItem('kpi-brief-theme', next); } catch(e) {}
+  }
+  // Sync icon to saved preference on load
+  (function() {
+    try {
+      var saved = localStorage.getItem('kpi-brief-theme');
+      if (saved === 'dark') {
+        document.getElementById('themeIcon').textContent = '☀';
+        document.getElementById('themeToggle').lastChild.textContent = ' Light';
+      }
+    } catch(e) {}
+  })();
+</script>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-meta">Context &amp; Intent Engineering · October 2026</div>
+  <h1>Accountable AI, by design.</h1>
+  <div class="hero-brief-title">The CE/IE Strategy Brief</div>
+  <p class="hero-sub">Research-backed positioning for your entry into the Context Engineering and Intent Engineering market. Structure for collective brainstorming.</p>
+  <div class="hero-tags">
+    <span class="tag tag-blue">CE · IE · Spec Engineering</span>
+    <span class="tag tag-green">Databricks + Fabric</span>
+    <span class="tag tag-amber">6 White Space Lanes</span>
+    <span class="tag tag-purple">4 Door-Openers</span>
+  </div>
+</header>
+
+<div class="main">
+
+<!-- ── §1 THE PITCH ── -->
+<section class="section" id="pitch">
+  <div class="section-label">§1</div>
+  <div class="section-title">Your Ideal Market Pitch</div>
+  <p class="section-desc">Open with the shock, land the positioning line, then walk the four-era stack. Three minutes of facts, two minutes of your answer.</p>
+
+  <!-- Shock stats -->
+  <div class="shock-grid">
+    <div class="shock-card">
+      <div class="shock-num">50%</div>
+      <div class="shock-label">of GenAI projects will exceed their budgets through 2028</div>
+      <div class="shock-src">Gartner, March 2026</div>
+    </div>
+    <div class="shock-card">
+      <div class="shock-num">40%</div>
+      <div class="shock-label">of agentic AI projects will be cancelled by end of 2027 — cost overruns, unclear ROI, weak risk controls</div>
+      <div class="shock-src">Gartner Hype Cycle, 2026</div>
+    </div>
+    <div class="shock-card">
+      <div class="shock-num">5–30×</div>
+      <div class="shock-label">more compute than a chatbot call — what a single agentic workload costs</div>
+      <div class="shock-src">Gartner, 2026</div>
+    </div>
+  </div>
+
+  <!-- Bridge -->
+  <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.6; padding: 12px 16px; background: var(--surface); border-left: 2px solid var(--border-light); border-radius: 0 4px 4px 0; margin-bottom: 20px;">
+    Each failure maps to a specific gap: the <strong style="color:var(--teal)">5–30× cost</strong> is a Context Engineering failure (bloated context → expensive retries). The <strong style="color:var(--purple)">40% cancellations</strong> are an Intent Engineering failure (no stop rules → agents wander). The <strong style="color:var(--green)">50% overruns</strong> are a Specification Engineering failure (no auditable specs → no budget guardrails). <em>Accountability is not a platform feature. It is a practice.</em>
+  </div>
+
+  <!-- Positioning -->
+  <div class="position-box">
+    <div class="position-line">The platform ships AI.<br><em>We ship accountability.</em></div>
+    <p class="position-sub">Every Databricks and Fabric customer gets AI capability from the platform. What they don't get is the engineering discipline that makes that AI cost-governed, audit-ready, and outcome-aligned. That's the gap you fill.</p>
+    <div class="pillars">
+      <div class="pillar">Context Engineering <span>— Know the right things</span></div>
+      <div class="pillar">Intent Engineering <span>— Achieve the right outcomes</span></div>
+      <div class="pillar">Specification Engineering <span>— Prove it at every step</span></div>
+    </div>
+  </div>
+
+  <!-- Era stack -->
+  <div class="section-title" style="font-size:17px; margin-bottom:16px;">The Four-Era Methodology Stack</div>
+  <div class="era-stack">
+
+    <div class="era-item">
+      <div class="era-year">2022–23</div>
+      <div class="era-dot"></div>
+      <div class="era-body">
+        <div class="era-name">Prompt Engineering</div>
+        <div class="era-question">"What to say to the model"</div>
+        <div class="era-desc">Tactical. Model-specific. Ephemeral. Prompts as one-off instructions, no governance, no reuse.</div>
+      </div>
+    </div>
+
+    <div class="era-item active">
+      <div class="era-year">2024–25</div>
+      <div class="era-dot"></div>
+      <div class="era-body">
+        <div class="era-name">Context Engineering</div>
+        <div class="era-question">"What the model needs to know"</div>
+        <div class="era-desc">Methodology for making enterprise data AI-consumable. AI-available ≠ AI-consumable — CE closes that gap. Platforms are now shipping the semantic layer (Genie Ontology, Horizon Context, Fabric Semantic Models). CE is the practice that makes it YOUR semantic layer.</div>
+        <div class="era-cost">↓ Fewer wasted agent calls = materially lower token spend</div>
+      </div>
+    </div>
+
+    <div class="era-item active">
+      <div class="era-year">2026</div>
+      <div class="era-dot"></div>
+      <div class="era-body">
+        <div class="era-name">Intent Engineering</div>
+        <div class="era-question">"What the model must achieve — and within what limits"</div>
+        <div class="era-desc">Methodology for encoding organizational goals, constraints, and stop rules. The Klarna case: context was perfect, intent was never encoded → $60M later, they had to rehire. IE's Stop Rules become runtime enforcement policies on Databricks Unity AI Gateway.</div>
+        <div class="era-cost">↓ Agents that don't wander = predictable compute budgets</div>
+      </div>
+    </div>
+
+    <div class="era-item emerging">
+      <div class="era-year">Emerging</div>
+      <div class="era-dot"></div>
+      <div class="era-body">
+        <div class="era-name">Specification Engineering</div>
+        <div class="era-question">"What can be proved — and at what cost"</div>
+        <div class="era-desc">Versioned, auditable agent intent specifications. Spec files are model-agnostic — switch from Opus to Haiku under budget pressure without re-engineering. Spec files ARE the regulatory audit artifacts: BCBS 239 Principle 6 (lineage), Principle 11 (accuracy), DORA Article 8 (ICT risk documentation).</div>
+        <div class="era-cost">↓ Reproducible, testable, debuggable = no mystery costs</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── §2 METHODOLOGY ── -->
+<section class="section" id="methodology">
+  <div class="section-label">§2</div>
+  <div class="section-title">The Methodology — Where Cost &amp; Governance Enter</div>
+  <p class="section-desc">Not a layer. A practice. Three disciplines that produce accountability as an engineered outcome — with the Databricks runtime that enforces it.</p>
+
+  <div class="method-grid">
+
+    <div class="method-card ce">
+      <div class="method-icon">Context Engineering</div>
+      <div class="method-title">Know the right things</div>
+      <div class="method-tagline">"AI-available ≠ AI-consumable"</div>
+      <ul class="method-list">
+        <li>Makes the platform's semantic layer specific to your business context</li>
+        <li>Right context = fewer agent retries = lower token spend directly</li>
+        <li>dbt validation: 83% NL accuracy with semantic layer vs ~40% on raw SQL</li>
+        <li>Atlan distinction: Semantic Layer = dictionary; Context Layer = judgment ("which of 14 definitions applies to THIS query?")</li>
+      </ul>
+      <span class="method-badge">Platform gives you the layer. CE makes it yours.</span>
+    </div>
+
+    <div class="method-card ie">
+      <div class="method-icon">Intent Engineering</div>
+      <div class="method-title">Achieve the right outcomes</div>
+      <div class="method-tagline">"The Klarna case: perfect context, zero intent"</div>
+      <ul class="method-list">
+        <li>Huryn's 8 components: Strategy · Objective · Desired Outcomes · Health Metrics · Org Context · Steering Constraints · Hard Constraints · Autonomy Boundaries · Stop Rules</li>
+        <li>Stop Rules → runtime enforcement policies (Unity AI Gateway)</li>
+        <li>Autonomy Boundaries → explainability artifacts for regulators</li>
+        <li>"Model intelligence commoditises. Encoded org intent becomes the moat." — Conny Lazo, Feb 2026</li>
+      </ul>
+      <span class="method-badge">Coforge filed India's first IE framework — Oct 5, 2026. No product yet.</span>
+    </div>
+
+    <div class="method-card se">
+      <div class="method-icon">Specification Engineering</div>
+      <div class="method-title">Prove it at every step</div>
+      <div class="method-tagline">"Can you explain your AI's decision?"</div>
+      <ul class="method-list">
+        <li>Versioned intent specs: reproducible, testable, auditable by design</li>
+        <li>Model-agnostic: swap Haiku for Opus under budget pressure, zero re-engineering</li>
+        <li>BCBS 239 Principles 6 &amp; 11 — spec files close the lineage and accuracy gap</li>
+        <li>DORA Article 8 — spec files ARE the ICT risk documentation</li>
+      </ul>
+      <span class="method-badge">Apache Ossie: cross-platform portability standard, 12–24 months out</span>
+    </div>
+
+    <div class="method-card rt">
+      <div class="method-icon">Runtime Enforcement</div>
+      <div class="method-title">Databricks Unity AI Gateway</div>
+      <div class="method-tagline">"The methodology defines the policies. The gateway enforces them."</div>
+      <ul class="method-list">
+        <li>Hard spend caps at 4 levels: user · use-case · workspace · account</li>
+        <li>Smart model routing: 30%+ cost reduction (Databricks internal, DAIS 2026)</li>
+        <li>RouteLLM (UC Berkeley, ICLR 2025): 2× cost reduction validated independently</li>
+        <li>IE Stop Rules → Unity AI Gateway policies: nobody else has packaged this workflow</li>
+      </ul>
+      <span class="method-badge">Your differentiator: CE/IE methodology → Gateway enforcement = no SI has done this</span>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── §3 BI DISRUPTION ── -->
+<section class="section" id="bi">
+  <div class="section-label">§3</div>
+  <div class="section-title">The BI Disruption — Next 18 Months</div>
+  <p class="section-desc">Every AI BI surface is only as trustworthy as the semantic foundation underneath it. This is the demand signal for CE methodology.</p>
+
+  <!-- Convergence frame -->
+  <div style="background: var(--surface-2); border: 1px solid var(--border-light); border-left: 3px solid var(--teal); border-radius: 8px; padding: 20px 24px; margin-bottom: 24px;">
+    <div style="font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; color: var(--teal); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;">The Convergence Argument</div>
+    <p style="font-size: 13.5px; color: var(--text); line-height: 1.65; margin-bottom: 14px;"><strong>Agentic data engineering is the synthesis of two simultaneous disruptions</strong> — not one. Understanding both is what makes the CE + IE methodology argument commercially precise rather than generic AI hype.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 14px;">
+      <div style="background: var(--surface-3); border-radius: 6px; padding: 14px 16px;">
+        <div style="font-size: 11px; font-weight: 600; color: var(--accent-bright); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px;">Disruption 1 — DE Workflows</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.55;"><span style="color: var(--text-dim);">2023–24:</span> AI-assisted DE — LLMs writing SQL, dbt models, documentation. Human still in the loop.<br><span style="color: var(--text);">2025→:</span> Agentic DE — agents autonomously orchestrating, repairing, and adapting pipelines without human steering.</div>
+      </div>
+      <div style="background: var(--surface-3); border-radius: 6px; padding: 14px 16px;">
+        <div style="font-size: 11px; font-weight: 600; color: var(--purple); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px;">Disruption 2 — BI Consumption</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.55;"><span style="color: var(--text);">2025–26:</span> The output contract for data engineers has changed. Data is no longer built for dashboards — it is built for AI-native interfaces (Genie, Claude Dashboards, Cortex Analyst). AI-available ≠ AI-consumable.</div>
+      </div>
+      <div style="background: var(--surface-3); border-radius: 6px; padding: 14px 16px;">
+        <div style="font-size: 11px; font-weight: 600; color: var(--green); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px;">Enabling Force — Semantic Infra</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.55;"><span style="color: var(--text);">2025–26:</span> Semantic layers are becoming cloud defaults (Unity Catalog, Snowflake Horizon, Fabric Semantic Models). The substrate exists. CE is the practice that makes it <em>your</em> semantic layer, not the platform's generic one.</div>
+      </div>
+    </div>
+    <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.6; border-top: 1px solid var(--border); padding-top: 12px;"><strong style="color: var(--text);">The implication:</strong> Every client on Databricks or Fabric is sitting at this intersection — agentic DE is arriving from above, BI disruption is arriving from below. The engineering discipline that connects them is CE + IE. That is your white space.</p>
+  </div>
+
+  <div class="bi-grid">
+    <div class="bi-card">
+      <div class="bi-card-title" style="color: var(--accent-bright);">AI BI Tools — Live Now</div>
+      <ul class="method-list" style="margin-top: 4px;">
+        <li><strong style="color:var(--text)">Claude Dashboards</strong> (Anthropic, beta Oct 9, 2026) — connects Databricks/Snowflake/BigQuery/Salesforce via MCP, generates reactive visualizations from natural language</li>
+        <li><strong style="color:var(--text)">Databricks Genie Agents</strong> — chat + dashboard + NL query, integrated. Metric views + semantic layer.</li>
+        <li><strong style="color:var(--text)">Snowflake Cortex Analyst</strong> — NL-to-SQL on YAML semantic views</li>
+        <li><strong style="color:var(--text)">Copilot in Fabric</strong> — "a report author you collaborate with"</li>
+        <li>ThoughtSpot Spotter · Tableau Pulse · AWS QuickSight Q</li>
+      </ul>
+    </div>
+    <div class="bi-card">
+      <div class="bi-card-title" style="color: var(--purple);">"Vibe Analytics" — The Emerging Category</div>
+      <div style="font-size:12.5px; color: var(--text-muted); line-height:1.55; margin-bottom:10px;">Coined by MIT Sloan's Michael Schrage. AI surfaces insights without the user asking. No query. No dashboard. Proactive anomaly detection + narrative explanation.</div>
+      <div class="quote-block">
+        <div class="quote-text">"MotherDuck/Vercel framing: MCP tools gave agents a standard way to discover schemas and run queries — vibe analytics as MCP-native analytics."</div>
+        <div class="quote-src">MotherDuck blog, 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bifurcation">
+    <div class="bifurcation-title">The Gartner Bifurcation (Market Guide, 2026)</div>
+    <div class="bifurcation-src">"By 2028, 60% of self-service analytics users will use general-purpose LLMs for ad hoc analysis, while production reporting stays on traditional BI platforms." — Gartner via ThoughtSpot Market Guide</div>
+    <div class="bifur-row">
+      <div class="bifur-icon yes">✓</div>
+      <div class="bifur-text"><strong>Survives:</strong> Certified dashboards — executive scorecards, regulated reporting (BCBS 239, SOX, IFRS), customer-embedded analytics. Governance and auditability requirements demand a controlled definition layer.</div>
+    </div>
+    <div class="bifur-row">
+      <div class="bifur-icon new">★</div>
+      <div class="bifur-text"><strong>New category:</strong> AI-generated ephemeral dashboards ("vibe analytics") — proactive, no-ask, MCP-native. Claude Dashboards is the first entrant.</div>
+    </div>
+    <div class="bifur-row">
+      <div class="bifur-icon no">✗</div>
+      <div class="bifur-text"><strong>Being replaced:</strong> Ad hoc Power BI/Tableau/Looker report building. Business users asking one-off questions will go to NL interfaces, not open a report editor.</div>
+    </div>
+  </div>
+
+  <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:12px;">Today: Only <strong style="color:var(--text)">8% of new enterprise reports use GenAI</strong> (Gartner, 2026). The acceleration is ahead, not behind.</div>
+
+  <div class="callout">
+    <div class="callout-label">The Critical Constraint — Your Opening</div>
+    <p>BI development is not being eliminated. It is being <em>redirected</em>: from building dashboards → to building semantic models that AI surfaces automatically. An enterprise that deployed AI analytics without CE governance saw <em>adoption collapse to 12% in six months</em> as conflicting metric definitions destroyed user trust. CE practice is the most valuable BI investment of the next three years.</p>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+
+<!-- ── §5 COMPETITIVE LANDSCAPE ── -->
+<section class="section" id="competitive">
+  <div class="section-label">§4</div>
+  <div class="section-title">Competitive Landscape — Indian SI CE/IE Positioning</div>
+  <p class="section-desc">12 Indian IT firms assessed. Nobody has the quadruple combination you can claim.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Firm</th>
+          <th>Vehicle</th>
+          <th>CE Depth</th>
+          <th>IE Depth</th>
+          <th>BFSI?</th>
+          <th>Databricks Native?</th>
+          <th>Packaged Sprint?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>TCS</td>
+          <td>Context Fabric WP (VP-authored)</td>
+          <td><span class="depth-hi">High</span></td>
+          <td><span class="depth-low">No</span></td>
+          <td><span class="check-yes">✓</span></td>
+          <td><span class="check-no">Agnostic</span></td>
+          <td><span class="check-no">No</span></td>
+        </tr>
+        <tr>
+          <td>Coforge</td>
+          <td>CE White Paper + IE BSE filing</td>
+          <td><span class="depth-hi">High (SDLC)</span></td>
+          <td><span class="check-part">FW only</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-no">Agnostic</span></td>
+          <td><span class="check-no">No</span></td>
+        </tr>
+        <tr>
+          <td>Tech Mahindra</td>
+          <td>SEMARA — DAIS 2026 keynote</td>
+          <td><span class="depth-hi">High (ontology)</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-part">Partial</span></td>
+          <td><span class="check-no">Agnostic</span></td>
+          <td><span class="check-no">No</span></td>
+        </tr>
+        <tr>
+          <td>Persistent</td>
+          <td>iAURA 2.0 + BFSI Brickbuilder</td>
+          <td><span class="depth-med">Medium</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-yes">✓</span></td>
+          <td><span class="check-yes">Yes</span></td>
+          <td><span class="check-yes">Yes</span></td>
+        </tr>
+        <tr>
+          <td>LTIMindtree</td>
+          <td>"Context Intelligence" POV</td>
+          <td><span class="depth-med">Medium</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-part">Partial</span></td>
+          <td><span class="check-part">Snowflake</span></td>
+          <td><span class="check-no">No</span></td>
+        </tr>
+        <tr>
+          <td>Infosys</td>
+          <td>Topaz Fabric ontology</td>
+          <td><span class="depth-low">Low</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-part">Partial</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-no">No</span></td>
+        </tr>
+        <tr>
+          <td>Mphasis</td>
+          <td>Ontosphere (NeoIP)</td>
+          <td><span class="depth-low">Low</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-part">Partial</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-no">No</span></td>
+        </tr>
+        <tr>
+          <td>HCLTech</td>
+          <td>Context blog (Mfg focus)</td>
+          <td><span class="depth-low">Low</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-no">No</span></td>
+        </tr>
+        <tr>
+          <td>Wipro</td>
+          <td>Intro CE blog (Medium)</td>
+          <td><span class="depth-low">Minimal</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-no">No</span></td>
+          <td><span class="check-no">No</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="insight-box">
+    <strong>The quadruple gap nobody has closed:</strong> No Indian SI has a CE/IE methodology that is simultaneously (a) explicitly named CE or IE, (b) packaged for Databricks, (c) connected to BFSI regulatory requirements, and (d) includes cost governance. That four-way combination is your entry point.
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── §6 WHITE SPACE ── -->
+<section class="section" id="whitespace">
+  <div class="section-label">§5</div>
+  <div class="section-title">Confirmed White Space — 6 Lanes for You</div>
+  <p class="section-desc">Each lane is a genuine gap in the current market — evidence-backed, not hypothetical. Lane 6 is the fastest door-opener.</p>
+
+  <div class="lane-grid">
+
+    <div class="lane">
+      <div class="lane-num">1</div>
+      <div>
+        <div class="lane-target">Target: Enterprises on Fabric + Databricks</div>
+        <div class="lane-title">Cross-Platform Semantic Governance</div>
+        <div class="lane-body">No SI has a named CE methodology for dual-platform governance (Fabric + Databricks). Apache Ossie (cross-platform semantic portability YAML spec) is 12–24 months from production — first SI to build the bridge before the standard arrives owns the position when it does.</div>
+        <div class="lane-kpi">→ Your unique angle: deep expertise on both platforms; no Databricks-only limitation</div>
+      </div>
+    </div>
+
+    <div class="lane">
+      <div class="lane-num">2</div>
+      <div>
+        <div class="lane-target">Target: Mid-market insurers on Databricks</div>
+        <div class="lane-title">Insurance CE/Agent Layer on Databricks</div>
+        <div class="lane-body">Slalom Insurance 360 (Databricks Brickbuilder, 2026 Insurance Partner of Year) covers the data foundation — policyholder 360, underwriting, fraud detection. It has no CE or agent reasoning layer. Nobody has built "Insurance 360 + agent-consumable semantic layer."</div>
+        <div class="lane-kpi">→ Your angle: Insurance domain semantics + CE practice + agentic layer = the CE layer Slalom doesn't have</div>
+      </div>
+    </div>
+
+    <div class="lane">
+      <div class="lane-num">3</div>
+      <div>
+        <div class="lane-target">Target: BFSI under BCBS 239, IFRS 9, Solvency II, DORA</div>
+        <div class="lane-title">Regulatory Intelligence on Databricks</div>
+        <div class="lane-body">No named Databricks-native accelerator from any SI covers BCBS 239 + IFRS 9 + Solvency II + DORA as a package. Persistent mentions "regulatory readiness" in passing. Databricks posted a Jan 2026 blog claiming 90% manual effort reduction on BCBS 239 — no partner has built the accelerator.</div>
+        <div class="lane-kpi">→ Your angle: Spec Engineering produces BCBS 239/DORA audit artifacts by design. Buying trigger = regulatory mandate = pre-funded budget.</div>
+      </div>
+    </div>
+
+    <div class="lane">
+      <div class="lane-num">4</div>
+      <div>
+        <div class="lane-target">Target: Azure-first insurers with Fabric investment</div>
+        <div class="lane-title">Insurance Intelligence on Microsoft Fabric</div>
+        <div class="lane-body">Slalom Insurance 360 is Databricks-only. No named packaged accelerator exists for insurance on Microsoft Fabric. The Fabric vertical accelerator landscape is sparse across all SIs — no equivalent of Databricks Brickbuilder Industry Specializations for Fabric.</div>
+        <div class="lane-kpi">→ Your angle: Build on existing Fabric Semantic Intelligence capability. Microsoft partner co-sell angle. Zero competition.</div>
+      </div>
+    </div>
+
+    <div class="lane">
+      <div class="lane-num">5</div>
+      <div>
+        <div class="lane-target">Target: Any enterprise deploying agentic AI</div>
+        <div class="lane-title">Certified CE Workforce — First Mover</div>
+        <div class="lane-body">Databricks Certified Context Engineer Associate launched July 29, 2026 — 2.5 months ago. Zero Indian SIs have publicly announced a certified cohort or promoted it to their workforce. First SI to build a certified CE bench gets a verifiable, quantifiable differentiator in enterprise RFPs ("we have X certified Context Engineers").</div>
+        <div class="lane-kpi">→ Your angle: Announce a certified CE cohort. Win the RFP checkbox nobody else has.</div>
+      </div>
+    </div>
+
+    <div class="lane">
+      <div class="lane-num">6</div>
+      <div>
+        <div class="lane-target">Target: Any enterprise with live agents and rising AI invoices</div>
+        <div class="lane-title">Agent Cost Governance — "The AgentOS Layer"</div>
+        <div class="lane-body">No SI has packaged the workflow: IE intent specs → Databricks Unity AI Gateway policies. The Unity AI Gateway (DAIS June 2026) has hard spend caps at 4 levels, smart model routing (30%+ cost reduction), automatic failover to cheaper models under budget pressure. The methodology defines the policies. The gateway enforces them. RouteLLM (UC Berkeley, ICLR 2025) validates: 2× cost reduction via intelligent routing — peer reviewed.</div>
+        <div class="lane-kpi">→ Your angle: EVERY enterprise with live agents has this problem. Fastest time-to-value. Vertical agnostic. The "AgentOS" concept — OS-like resource management for agents — is the positioning language for this lane.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<div class="divider"></div>
+
+<!-- ── §8 QUICK STARTS ── -->
+<section class="section" id="quickstarts">
+  <div class="section-label">§6</div>
+  <div class="section-title">Quick Starts — Four Door-Openers</div>
+  <p class="section-desc">Each exposes a specific gap the client hasn't yet quantified. Maximum 2 weeks. QS-3 is the strongest — every regulated enterprise fails it on first pass. QS-4 can run before a deal is even close.</p>
+
+  <div class="qs-grid">
+
+    <div class="qs-card">
+      <div class="qs-num">QS-1</div>
+      <div class="qs-title">Semantic Debt Scorecard</div>
+      <div class="qs-duration">2 weeks · Fixed fee</div>
+      <div class="qs-question">"What percentage of your metric definitions will Genie or Claude Dashboards get wrong?"</div>
+      <div class="qs-deliver"><strong>Deliverable:</strong> Scored conflict map of metric definitions across your Databricks estate. Benchmark: dbt semantic layer achieves 83% NL accuracy vs ~40% without it — clients see exactly where they sit. Every enterprise with Databricks + Power BI has this gap today. Natural lead into Accelerators A, B, or C.</div>
+    </div>
+
+    <div class="qs-card">
+      <div class="qs-num">QS-2</div>
+      <div class="qs-title">AI Cost-per-Answer Benchmark</div>
+      <div class="qs-duration">2 weeks · Fixed fee</div>
+      <div class="qs-question">"Do you know your cost-per-business-answer from your AI investments?"</div>
+      <div class="qs-deliver"><strong>Deliverable:</strong> Cost-per-answer baseline for top 3 AI use cases + model routing recommendation + Unity AI Gateway config baseline. The CFO question nobody has answered. Gartner: agentic workloads cost 5–30× more than chatbot calls — this diagnostic makes that visible. No vertical bias, qualifies every enterprise with live agents.</div>
+    </div>
+
+    <div class="qs-card" style="border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow);">
+      <div class="qs-num" style="color: var(--accent-bright);">QS-3</div>
+      <div class="qs-title">Accountability Gap Audit</div>
+      <div class="qs-duration">2 weeks · Fixed fee · <span style="color: var(--accent-bright); font-weight: 600;">Strongest door-opener</span></div>
+      <div class="qs-question">"If your AI agent made a wrong decision today — who would know, and by when?"</div>
+      <div class="qs-deliver"><strong>Deliverable:</strong> Accountability Gap Map — which AI decisions are auditable, which have stop rules, which have cost visibility, and which have nothing. For BFSI: scored against BCBS 239 and DORA requirements. Every regulated enterprise fails this audit on first pass. Directly mirrors your positioning. Natural lead into IE Sprint and Spec Engineering.</div>
+    </div>
+
+    <div class="qs-card">
+      <div class="qs-num">QS-4</div>
+      <div class="qs-title">Intent Map Workshop</div>
+      <div class="qs-duration">2 days · Fixed fee · <span style="color: var(--green); font-weight: 600;">Pre-sale viable</span></div>
+      <div class="qs-question">"Can you describe what 'done' looks like for each of your AI agents?"</div>
+      <div class="qs-deliver"><strong>Deliverable:</strong> Intent Gap Heat Map for top 3 agents — surfaces missing stop rules, undefined success criteria, unbounded autonomy. Opens with the Klarna case: perfect context, zero intent encoded → $60M later, had to rehire. Two days means this can run before a deal is even close. Fastest foot in the door you have.</div>
+    </div>
+
+  </div>
+
+  <div class="not-to-do">
+    <div class="not-to-do-title">What NOT to Lead With — Research-Backed Caution</div>
+    <ul class="not-list">
+      <li><strong>Don't lead with "we do semantic layers"</strong> — cloud vendors ship this as infrastructure now. Genie Ontology, Horizon Context, Fabric Semantic Models are all GA in 2026.</li>
+      <li><strong>Don't lead with "we help you migrate to Databricks"</strong> — short-lived story; soon all customers will be migrated. Target those already on cloud who need the layer above the platform.</li>
+      <li><strong>Don't lead with generic "agentic AI"</strong> — Wipro, TCS, and every large SI says this. It is table stakes noise in October 2026.</li>
+      <li><strong>Don't describe CE or IE as a "layer"</strong> — they are methodologies. A methodology cannot be commoditized; a layer can.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── §9 SOURCES ── -->
+<section class="section" id="sources">
+  <div class="section-label">§7</div>
+  <div class="section-title">Intel Sources</div>
+  <p class="section-desc">35+ sources across six research streams. Verified Oct 15, 2026.</p>
+
+  <div class="sources-grid">
+
+    <div class="source-group">
+      <div class="source-group-title">CE / IE Methodology</div>
+      <ul class="source-list">
+        <li><strong>arXiv 2603.09619</strong> — Vishnyakova 4-level maturity framework</li>
+        <li><strong>Paweł Huryn</strong> — 8-component Intent Engineering model</li>
+        <li><strong>Coforge</strong> — "CE for Agentic SDLC: Why Context is the New Code" (SVP Ram Mamidanna)</li>
+        <li><strong>Coforge + BSE filing</strong> — India's first IE framework (Oct 5, 2026)</li>
+        <li><strong>Conny Lazo</strong> — "Intent Race" thesis (Feb 2026)</li>
+        <li><strong>Igor Rikalo, Forbes</strong> — OKRs/IE timeline comparison (Apr 2026)</li>
+        <li><strong>TCS</strong> — "Context Fabric: Backbone of Agentic AI in BFSI" (VP-authored)</li>
+        <li><strong>LTIMindtree</strong> — "Context Intelligence: The Next Competitive Frontier"</li>
+        <li><strong>HCLTech</strong> — Context in Engineering blog (Sep 1, 2026)</li>
+        <li><strong>Wipro Tech Blogs</strong> — "The Art of Context Engineering" (Medium, Aug 2025)</li>
+      </ul>
+    </div>
+
+    <div class="source-group">
+      <div class="source-group-title">Platform &amp; Commoditization</div>
+      <ul class="source-list">
+        <li><strong>Databricks Genie Ontology</strong> — GA April 2026</li>
+        <li><strong>Snowflake Horizon Context</strong> — GA June 2026</li>
+        <li><strong>Apache Ossie</strong> — YAML spec, Snowflake-initiated, Jan 2026</li>
+        <li><strong>Databricks Unity AI Gateway</strong> — DAIS June 2026</li>
+        <li><strong>Databricks 2026 Global Partner Awards</strong> — industry vertical ownership</li>
+        <li><strong>Databricks Certified Context Engineer Associate</strong> — launched July 29, 2026</li>
+      </ul>
+    </div>
+
+    <div class="source-group">
+      <div class="source-group-title">BI Disruption</div>
+      <ul class="source-list">
+        <li><strong>Gartner Magic Quadrant Analytics &amp; BI</strong> — June 29, 2026</li>
+        <li><strong>Gartner Market Guide Agentic Analytics</strong> — 60% bifurcation prediction 2028</li>
+        <li><strong>Anthropic Claude Dashboards</strong> — beta launch Oct 9, 2026</li>
+        <li><strong>MIT Sloan / Michael Schrage</strong> — "Vibe Analytics" concept</li>
+        <li><strong>dbt MetricFlow</strong> — 83% NL accuracy with semantic layer vs ~40%</li>
+        <li><strong>IDC blog</strong> — "Dashboards Are Dead: Intelligence in the Workflow" (July 2026)</li>
+        <li><strong>Forbes Tech Council</strong> — "Death of the Dashboard Factory" (Aug 31, 2026)</li>
+        <li><strong>Gartner</strong> — only 8% of new reports use GenAI today</li>
+      </ul>
+    </div>
+
+    <div class="source-group">
+      <div class="source-group-title">Cost Governance &amp; AgentOS</div>
+      <ul class="source-list">
+        <li><strong>Gartner (Mar 2026)</strong> — 50% GenAI projects over budget through 2028</li>
+        <li><strong>Gartner Hype Cycle 2026</strong> — 40% agentic AI cancelled by end 2027</li>
+        <li><strong>Gartner</strong> — agentic workloads 5–30× chatbot cost</li>
+        <li><strong>RouteLLM (UC Berkeley)</strong> — arXiv 2406.18665; 2× cost reduction; ICLR 2025</li>
+        <li><strong>Budget-Aware Agentic Routing</strong> — arXiv 2602.21227 (Feb 2026)</li>
+        <li><strong>Databricks Unity AI Gateway blog</strong> — DAIS 2026; 30%+ cost reduction claim</li>
+        <li><strong>AIOS (Rutgers)</strong> — LLM Agent OS academic precursor</li>
+        <li><strong>AG2 (AutoGen fork)</strong> — "open-source AgentOS" branding (Chi Wang)</li>
+        <li><strong>Forrester</strong> — "State of Agentic AI, 2026" — orchestration and governance lag</li>
+      </ul>
+    </div>
+
+    <div class="source-group">
+      <div class="source-group-title">Competitive &amp; Accelerators</div>
+      <ul class="source-list">
+        <li><strong>DAIS 2026 session catalog</strong> — Impetus 2 CE-branded sessions (only Indian SI)</li>
+        <li><strong>Persistent</strong> — BFSI Brickbuilder Specialization (Sep 21, 2026)</li>
+        <li><strong>Tech Mahindra SEMARA</strong> — DAIS 2026 keynote; ontology + KG</li>
+        <li><strong>Slalom Insurance 360</strong> — Databricks 2026 Insurance Partner of Year</li>
+        <li><strong>Tredence ATOM.AI</strong> — Retail / Telco / Mfg Brickbuilder; no Insurance</li>
+        <li><strong>Tiger Analytics Always-ON Brand Equity</strong> — Retail/CPG Brickbuilder</li>
+        <li><strong>Lovelytics</strong> — Energy; Brickbuilder Partner of Year 2026</li>
+        <li><strong>EY / Deloitte</strong> — Financial Services Brickbuilder Specializations</li>
+      </ul>
+    </div>
+
+    <div class="source-group">
+      <div class="source-group-title">Market Size</div>
+      <ul class="source-list">
+        <li>Agentic AI + semantic layer: <strong>$1.07B in 2026 → $3.21B by 2031</strong> (CAGR 24.57%)</li>
+        <li>Enterprise agent infrastructure: <strong>$0.55B, CAGR 52%</strong></li>
+        <li>Klarna case: context perfect, intent absent → $60M saved, then rehired</li>
+        <li>Governance failure: 12% adoption after conflicting metric definitions</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+</div><!-- /main -->
+
+<footer>
+  <span>CE/IE Strategy Brief · October 2026</span>
+  <span class="footer-tag">Accountable AI, by design.</span>
+</footer>
+
+</body>
+</html>

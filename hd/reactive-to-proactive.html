@@ -1,0 +1,470 @@
+<title>Reactive to Proactive</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* layout: header + per-company transformation rows + cross-company pattern grid */
+:root {
+  color-scheme: light;
+  --bg:      #EDF1F7;
+  --surf:    #FFFFFF;
+  --bdr:     #DCE3ED;
+  --bdr2:    #BFC9D6;
+  --tx1:     #0B1826;
+  --tx2:     #3A4F66;
+  --tx3:     #8899AE;
+
+  --r-bg:    #FEE2E2;
+  --r-bdr:   #FECACA;
+  --r-tx:    #7F1D1D;
+  --r-dot:   #DC2626;
+
+  --t-bg:    #FEF3C7;
+  --t-bdr:   #FDE68A;
+  --t-tx:    #78350F;
+  --t-dot:   #D97706;
+
+  --p-bg:    #D1FAE5;
+  --p-bdr:   #6EE7B7;
+  --p-tx:    #064E3B;
+  --p-dot:   #059669;
+
+  --pat-bg:  #DBEAFE;
+  --pat-bdr: #BFDBFE;
+  --pat-tx:  #1E3A8A;
+}
+
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--tx1);
+  line-height: 1.55;
+  padding-left:  max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+  padding-block: 44px 80px;
+}
+
+.wrap { max-width: 1040px; margin: 0 auto; }
+
+/* ─── HEADER ─── */
+.eye {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--tx3); margin-bottom: 10px;
+}
+h1 {
+  font-size: clamp(21px, 2.8vw, 34px);
+  font-weight: 700; line-height: 1.15; letter-spacing: -0.015em;
+  color: var(--tx1); margin-bottom: 12px; text-wrap: balance;
+}
+.sub {
+  font-size: 14px; color: var(--tx2); max-width: 600px;
+  line-height: 1.75; margin-bottom: 28px;
+}
+
+/* ─── LEGEND ─── */
+.legend {
+  display: flex; gap: 18px; flex-wrap: wrap;
+  align-items: center; margin-bottom: 40px;
+  padding: 12px 16px;
+  background: var(--surf); border: 1px solid var(--bdr); border-radius: 8px;
+}
+.leg { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--tx2); font-weight: 500; }
+.leg-swatch {
+  width: 32px; height: 14px; border-radius: 3px; flex-shrink: 0;
+}
+.leg-r { background: var(--r-bg); border: 1px solid var(--r-bdr); }
+.leg-t { background: var(--t-bg); border: 1px solid var(--t-bdr); }
+.leg-p { background: var(--p-bg); border: 1px solid var(--p-bdr); }
+.leg-div { width: 1px; height: 16px; background: var(--bdr2); flex-shrink: 0; }
+
+/* ─── SECTION LABEL ─── */
+.sec-lbl {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--tx3);
+  margin-bottom: 14px; margin-top: 48px;
+}
+
+/* ─── COMPANY CARD ─── */
+.co-card {
+  background: var(--surf); border: 1px solid var(--bdr);
+  border-radius: 10px; margin-bottom: 12px; overflow: hidden;
+}
+.co-head {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 11px 18px; border-bottom: 1px solid var(--bdr);
+  background: var(--surf);
+}
+.co-name { font-size: 13.5px; font-weight: 600; color: var(--tx1); }
+.co-scale { font-size: 11px; color: var(--tx3); margin-left: auto; white-space: nowrap; }
+.co-badge {
+  font-size: 9.5px; font-weight: 700; padding: 2px 8px;
+  border-radius: 3px; letter-spacing: 0.04em; white-space: nowrap;
+  background: var(--p-bg); color: var(--p-tx); border: 1px solid var(--p-bdr);
+}
+
+.co-body {
+  display: grid;
+  grid-template-columns: 1fr 26px 1fr 26px 1fr;
+}
+@media (max-width: 660px) {
+  .co-body { grid-template-columns: 1fr; }
+  .co-arrow { display: none; }
+}
+
+.co-col { padding: 16px 18px; min-width: 0; }
+.col-r { background: var(--r-bg); }
+.col-t { background: var(--t-bg); }
+.col-p { background: var(--p-bg); }
+
+.col-lbl {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.13em;
+  text-transform: uppercase; margin-bottom: 11px;
+}
+.col-r .col-lbl { color: var(--r-tx); }
+.col-t .col-lbl { color: var(--t-tx); }
+.col-p .col-lbl { color: var(--p-tx); }
+
+.co-arrow {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--tx3); align-self: stretch;
+  background: var(--bg);
+  border-left: 1px solid var(--bdr); border-right: 1px solid var(--bdr);
+  user-select: none;
+}
+
+.pts { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.pt { display: flex; gap: 7px; align-items: flex-start; min-width: 0; }
+.pt-dot {
+  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+}
+.col-r .pt-dot { background: var(--r-dot); }
+.col-t .pt-dot { background: var(--t-dot); }
+.col-p .pt-dot { background: var(--p-dot); }
+.pt-tx { font-size: 12px; color: var(--tx2); line-height: 1.55; min-width: 0; }
+.pt-tx strong { color: var(--tx1); font-weight: 600; }
+
+/* ─── PATTERN GRID ─── */
+.pats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+@media (max-width: 660px)  { .pats { grid-template-columns: 1fr; } }
+@media (max-width: 880px) and (min-width: 661px) { .pats { grid-template-columns: 1fr 1fr; } }
+
+.pat {
+  background: var(--pat-bg); border: 1px solid var(--pat-bdr);
+  border-radius: 8px; padding: 16px 18px;
+}
+.pat-n {
+  font-size: 20px; font-weight: 700; color: var(--pat-bdr);
+  line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums;
+}
+.pat-title { font-size: 12.5px; font-weight: 600; color: var(--tx1); margin-bottom: 7px; line-height: 1.4; }
+.pat-body  { font-size: 12px; color: var(--tx2); line-height: 1.6; }
+.pat-eg    { margin-top: 8px; font-size: 11px; color: var(--pat-tx); line-height: 1.55; font-style: italic; }
+
+/* ─── DIVIDER ─── */
+.div { height: 1px; background: var(--bdr); margin-block: 48px 0; }
+</style>
+
+<div class="wrap">
+
+  <p class="eye">Analytics SI — Growth Pattern Analysis · October 2026</p>
+  <h1>Reactive to Proactive — How Six Firms Changed Their Commercial Motion</h1>
+  <p class="sub">Each firm started as a delivery-first, inbound-dependent consultancy. The transformation into a high-growth engine happened when they changed how they generated demand — not just how they delivered. This maps the specific before/after states and the documented triggers for each company.</p>
+
+  <div class="legend">
+    <div class="leg"><span class="leg-swatch leg-r"></span>Reactive state</div>
+    <div class="leg-div"></div>
+    <div class="leg"><span class="leg-swatch leg-t"></span>Trigger events</div>
+    <div class="leg-div"></div>
+    <div class="leg"><span class="leg-swatch leg-p"></span>Proactive state</div>
+  </div>
+
+  <!-- ══ COMPANIES ══ -->
+  <p class="sec-lbl">Six company transformations</p>
+
+  <!-- FRACTAL -->
+  <div class="co-card">
+    <div class="co-head">
+      <span class="co-name">Fractal Analytics</span>
+      <span class="co-badge">Bootstrapped 13 yrs pre-PE</span>
+      <span class="co-scale">~$80–130M (2018 est.) → ~$373M (FY26)</span>
+    </div>
+    <div class="co-body">
+      <div class="co-col col-r">
+        <p class="col-lbl">Reactive state</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Proposal-driven — responded to RFPs from any large enterprise; no defined filter on which accounts to pursue</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Founder-led sales: Velamakanni and Krishnan carried the senior client relationships; no dedicated outbound commercial function</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Generalist analytics consulting — served CPG, BFSI, healthcare, telecom without a named vertical priority or ICP screen</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Project-based billing; no managed services or subscription revenue</span></li>
+        </ul>
+      </div>
+      <div class="co-arrow">→</div>
+      <div class="co-col col-t">
+        <p class="col-lbl">Trigger events</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>10-20-30 ICP filter defined</strong> (pre-2013) — prospects must have ≥$10B revenue, ≥$20B market cap, or ≥30M consumers. Bootstrapped decision; predates TA Associates' $25M</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Pranay Agrawal installed as operating CEO</strong> (2016) — Velamakanni moves to Group CEO/Vice-Chair, stays client-facing. First CEO separation from founder</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Dedicated "CXO hunter" roles created</strong> — job descriptions explicitly for "managing CXO relations and generating C-level leads through professional networking," not delivery</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Apax Partners $200M (Jan 2019) funded scale; discipline was already in place</span></li>
+        </ul>
+      </div>
+      <div class="co-arrow">→</div>
+      <div class="co-col col-p">
+        <p class="col-lbl">Proactive state</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>122 named "Must Win Clients"</strong> — a declared list of target accounts, each assigned a relationship owner. Hunting is systematic, not reactive</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>114% net revenue retention</strong> — deliberate land-and-expand model: first engagement scoped to build trust; growth comes from expansion, not new logos</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">AWS Premier Partner (Feb 2025, 200+ certifications); Databricks Gold — platform co-sell channels replacing cold outreach</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">IPO Feb 2026 — market visibility generating inbound analyst and enterprise awareness at scale</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TREDENCE -->
+  <div class="co-card">
+    <div class="co-head">
+      <span class="co-name">Tredence</span>
+      <span class="co-badge">Bootstrapped 7 yrs, then CPF + Advent</span>
+      <span class="co-scale">~$15–40M (2018 est.) → ~$250M (2025)</span>
+    </div>
+    <div class="co-body">
+      <div class="co-col col-r">
+        <p class="col-lbl">Reactive state</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>"Technology-agnostic" positioning</strong> (stated publicly until ~2021) — responded to any analytics project, no platform affiliation, no vertical-specific GTM</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Retail/CPG concentration by default, not by strategy — first clients were CPG, not a declared vertical focus</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Founder-led business development: co-founders Shashank Dubey and Rahul Singh carried all enterprise relationships</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Headcount-based T&M billing; no accelerator catalogue, no platform co-sell motion</span></li>
+        </ul>
+      </div>
+      <div class="co-arrow">→</div>
+      <div class="co-col col-t">
+        <p class="col-lbl">Trigger events</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Vertical AI pivot in 2021</strong> — management reoriented to vertical-specific AI delivery between Series A (CPF, Dec 2020) and Series B (Advent, Dec 2022). Operating model change, not PE-induced</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>"Beyond Possible" rebrand (2022)</strong> — external signal of internal repositioning from delivery firm to AI outcomes company</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>ATOM.AI launch at NRF January 2023</strong> — five-module accelerator ecosystem on Databricks Lakehouse; 50+ vertical accelerators by 2024; listed in Databricks Brickbuilder catalog</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Advent International $175M Series B (Dec 2022) — capital earmarked for IP repository and channel partner development</span></li>
+        </ul>
+      </div>
+      <div class="co-arrow">→</div>
+      <div class="co-col col-p">
+        <p class="col-lbl">Proactive state</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Databricks Retail & CPG Partner of Year — four consecutive years (2022–2025)</strong> — platform award stage presence drives inbound from Databricks field team referrals</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">NRF (National Retail Federation) annual presence — vertical conference as a proactive demand channel, not just a marketing event</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">COO Munjay Singh hired May 2024; CBO UK&Europe Shriharsha Imrapur hired August 2025 — professional commercial layer running geo expansion independently</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Shift toward outcome-based pricing (post-Advent) — decoupling revenue from headcount as a proactive deal differentiation</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIGER ANALYTICS -->
+  <div class="co-card">
+    <div class="co-head">
+      <span class="co-name">Tiger Analytics</span>
+      <span class="co-badge">Fully bootstrapped — no PE confirmed</span>
+      <span class="co-scale">~$30–50M (2018 est.) → ~$600–750M (2026 est.)</span>
+    </div>
+    <div class="co-body">
+      <div class="co-col col-r">
+        <p class="col-lbl">Reactive state</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Boutique ML consultancy — known in CPG circles but no formal analyst recognition, no industry conference visibility</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Project-based delivery, no named accelerators, no platform tier, no marketplace listing</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Co-founder-led sales (Mahesh Kumar, Pradeep Gulipalli) — no external commercial or delivery leadership until 2026</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Client referrals and reputation-based inbound; no systematic outbound motion documented</span></li>
+        </ul>
+      </div>
+      <div class="co-arrow">→</div>
+      <div class="co-col col-t">
+        <p class="col-lbl">Trigger events</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Forrester Wave and Everest Group PEAK Matrix recognition (2023)</strong> — first analyst placements; clients researching AI vendors start finding Tiger in independent reports</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Google Cloud Premier Partnership with Data Analytics Specialization</strong> (November 2023) — co-sell channel activated; Databricks partnerships formalised same period</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Snowflake Premier (Feb 2024) → Snowflake Elite (Nov 2024)</strong> — top tier in under 10 months, no capital event required, certifications are training cost and time</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Databricks Migration Partner of Year 2024; CSI Retail/Travel Partner of Year 2026 — award stage conference visibility</span></li>
+        </ul>
+      </div>
+      <div class="co-arrow">→</div>
+      <div class="co-col col-p">
+        <p class="col-lbl">Proactive state</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Analyst-driven inbound replacing cold outreach</strong> — Forrester, Everest, ISG placement means enterprise procurement teams find Tiger before Tiger finds them</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Platform conference presence (DAIS 2024, 2026) — partner award stage at 20,000-attendee events generates qualified pipeline without direct sales spend</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">AgentFlow (2025–26) — agentic orchestration platform listed on platform marketplaces as searchable, demo-able IP</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">First external operations hire — Prakash Arunachalam as Global Head of Operations (August 2026) — professional layer enabling the founder to focus on strategic client relationships</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- LATENTVIEW -->
+  <div class="co-card">
+    <div class="co-head">
+      <span class="co-name">LatentView Analytics</span>
+      <span class="co-badge">Bootstrapped 15 yrs to IPO (326× oversubscribed)</span>
+      <span class="co-scale">~$37M (FY21) → ~$120M (FY26)</span>
+    </div>
+    <div class="co-body">
+      <div class="co-col col-r">
+        <p class="col-lbl">Reactive state</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>CEO-level selling</strong> — pitching the top of client organisations; the CEO is the relationship owner but not the budget owner or problem owner</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Transactional project billing — 40% managed services, 60% project-based; churn risk on every engagement ending</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">US technology sector concentration at 93% of revenue — growth completely dependent on a single sector's demand cycle</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Staff augmentation revenue included in mix — lowest-margin, highest-churn work crowding out IP-led delivery</span></li>
+        </ul>
+      </div>
+      <div class="co-arrow">→</div>
+      <div class="co-col col-t">
+        <p class="col-lbl">Trigger events</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Functional buyer pivot (pre-IPO, bootstrapped)</strong> — shifted targeting from CEOs to CMOs, CROs, and risk heads; the functional leader owns the problem, controls the budget line, and can commit without a board vote</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Staff aug exit</strong> — deliberately stopped staff augmentation work; caused 2-year revenue stagnation (FY19–FY21) while new outcome-based engagements replaced it. Stagnation was the cost of the exit</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Managed services push: 40% → 65%</strong> — systematic conversion of project accounts to retainers, completed before IPO, entirely while bootstrapped</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">IPO November 2021 (326× oversubscribed) — institutional credibility generates inbound from analysts and enterprise procurement shortlists</span></li>
+        </ul>
+      </div>
+      <div class="co-arrow">→</div>
+      <div class="co-col col-p">
+        <p class="col-lbl">Proactive state</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>45 Fortune 500 accounts at 65% managed services</strong> — retainer model means the client relationship is self-renewing; commercial energy goes to expanding scope, not re-winning the account</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Chief Growth Officer hire + 12 GTM hires (FY23) — first formal proactive commercial layer; dedicated team hunting new accounts outside the founding team's network</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Decision Point acquisition (March 2024, $39.1M, 70% stake) — added CPG RGM capability and LATAM footprint; M&A as vertical expansion rather than waiting for organic traction</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Anthropic certification program (200+ staff) — proactive positioning in the CE/AI space before client demand is fully formed</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUANTIPHI -->
+  <div class="co-card">
+    <div class="co-head">
+      <span class="co-name">Quantiphi</span>
+      <span class="co-badge">Platform bet before Series A</span>
+      <span class="co-scale">~$30–50M (2018 est.) → ~$110–115M India entity (FY25)</span>
+    </div>
+    <div class="co-body">
+      <div class="co-col col-r">
+        <p class="col-lbl">Reactive state</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">ML/AI services delivery — bidding on AI and ML project RFPs; known in certain healthcare and CPG circles but no systematic demand generation</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">No marketplace presence — IP existed internally but was not published or searchable by procurement teams</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Co-founder-led sales (Asif Hasan, Addi Patel) — no external commercial leadership, commercial reach bounded by founder networks</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Services-first positioning — no differentiation from other AI delivery firms in the competitive set</span></li>
+        </ul>
+      </div>
+      <div class="co-arrow">→</div>
+      <div class="co-col col-t">
+        <p class="col-lbl">Trigger events</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Google Cloud partnership (2016) — 5 dedicated team members</strong>, one of five global GCP ML launch partners (March 2017). Happened before Series A ($20M Multiples, December 2019). The co-sell channel predates the capital event</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>ML Partner of Year 2017 and 2018</strong> — early award stage visibility makes Quantiphi findable by any enterprise buying committee researching Google Cloud AI vendors</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Marketplace listings</strong>: Dociphi (IDP SaaS) on Google Cloud Marketplace and Snowflake Marketplace; baioniq (GenAI platform); QDox on AWS Marketplace — IP becomes discoverable, not just deliverable</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Jim Reesing appointed CEO (2026)</strong> — ex-Accenture Senior MD, AI-enabled enterprise reinventions; founders move to customer engagement and strategy</span></li>
+        </ul>
+      </div>
+      <div class="co-arrow">→</div>
+      <div class="co-col col-p">
+        <p class="col-lbl">Proactive state</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>21 Google Cloud Partner of Year awards (2017–2026)</strong> across ML, public sector, data analytics, and vertical categories — every award is a published signal to every procurement team evaluating Google Cloud AI vendors</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Marketplace-sourced pipeline — Dociphi and baioniq on cloud marketplaces mean buyers find Quantiphi through platform search, not through cold outreach or RFP response</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Multi-year Google Cloud strategic partnership with joint channel teams covering Benelux, DACH, Turkey, Africa, ANZ, and Middle East (October 2024) — platform-funded geo expansion</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">"Services-as-software" / "Tech Services as a Software" positioning — outcome-based delivery framing that differentiates from per-head T&M competition</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGMOID -->
+  <div class="co-card">
+    <div class="co-head">
+      <span class="co-name">Sigmoid</span>
+      <span class="co-badge">Sequoia India — first commercial hire in year 10</span>
+      <span class="co-scale">~$2–5M (2018 est.) → ~$100–130M (2026 est.)</span>
+    </div>
+    <div class="co-body">
+      <div class="co-col col-r">
+        <p class="col-lbl">Reactive state</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Founder-led sales (Rahul Agrawal, Bikram Dahal) — commercial reach bounded by three IIT Kharagpur co-founders' personal networks; no systematic outbound</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">AdTech SaaS attempt (SigView, 2015) never reached scale — inbound-dependent services business without a co-sell channel</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">T&M and staff augmentation billing — high-churn engagement model, commodity signal to enterprise buyers</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">No analyst recognition, no named vertical practice, no platform tier — invisible to enterprise procurement research processes</span></li>
+        </ul>
+      </div>
+      <div class="co-arrow">→</div>
+      <div class="co-col col-t">
+        <p class="col-lbl">Trigger events</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>COVID CPG demand (2020)</strong> — automated data ingestion from online retail channels created 3–4 repeatable CPG reference clients; first vertical concentration by accident, then by design</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Accelerator launches (2020)</strong>: MediaIQ, SupplyIQ, DemandIQ — named IP for specific industry problems; Sigmoid DataGuard (Databricks data governance); RAPID framework for GenAI governance (2023)</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>Shankar Viswanathan hired as CCO (October 2023)</strong> — 30+ years at P&G, direct Fortune 500 CPG relationships; first external commercial leader in Sigmoid's 10-year history. The most explicit reactive-to-proactive org move in the cohort</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Sequoia India $12M Series B (September 2022) — capital for headcount to support CCO-led enterprise hunting</span></li>
+        </ul>
+      </div>
+      <div class="co-arrow">→</div>
+      <div class="co-col col-p">
+        <p class="col-lbl">Proactive state</p>
+        <ul class="pts">
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx"><strong>CCO with P&G Fortune 500 relationships hunting CPG accounts directly</strong> — the first time Sigmoid's commercial capacity extends beyond what its founders can personally reach</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Fixed-bid outcome-based engagement model — pricing structure that forces buyer commitment and differentiates from commodity staff aug</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">Forrester AI Consultancies and Everest Group PEAK Matrix Major Contender recognition — analyst placement making Sigmoid visible in enterprise RFP research processes without Sigmoid initiating anything</span></li>
+          <li class="pt"><span class="pt-dot"></span><span class="pt-tx">25–30 Fortune 500 clients from 1,300 staff (~50 people per client) — deep managed engagement model; no staff aug, no transactional work</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PATTERNS ══ -->
+  <div class="div"></div>
+  <p class="sec-lbl" style="margin-top: 48px;">Five cross-company patterns</p>
+
+  <div class="pats">
+
+    <div class="pat">
+      <p class="pat-n">01</p>
+      <p class="pat-title">Platform award stage replaces cold outreach</p>
+      <p class="pat-body">A Partner of Year win in a specific vertical category — not a general award — means every enterprise buyer researching that platform's ecosystem finds the firm before the firm calls them. The platform's own field team starts referring deals.</p>
+      <p class="pat-eg">Tredence: 4 consecutive Databricks Retail & CPG awards. Tiger: Snowflake Elite in 10 months. Quantiphi: 21 Google Cloud PoY wins starting pre-Series A. None required PE capital — only certifications and named accelerators.</p>
+    </div>
+
+    <div class="pat">
+      <p class="pat-n">02</p>
+      <p class="pat-title">Skip the CEO — find the functional buyer</p>
+      <p class="pat-body">The CEO is a close, not an entry. The CMO, CRO, Chief Risk Officer, or VP Analytics owns the problem, controls the budget line, and can commit. LatentView made this pivot explicitly before its IPO and credits it for the quality of its managed-services base.</p>
+      <p class="pat-eg">LatentView: redirected all outreach from CEO to functional leaders (pre-IPO, bootstrapped). Fractal: CXO hunter roles target named buyers by function, not seniority. This requires knowing which functional leader feels the pain — a vertical knowledge problem, not a headcount problem.</p>
+    </div>
+
+    <div class="pat">
+      <p class="pat-n">03</p>
+      <p class="pat-title">External commercial hire formalises the shift</p>
+      <p class="pat-body">The first non-founder CCO, CRO, or commercial VP is the org-chart signal of proactive GTM. Before this hire, commercial reach is bounded by the founders' personal networks. After it, hunting becomes systematic and independent of any single relationship.</p>
+      <p class="pat-eg">Sigmoid: Shankar Viswanathan (P&G, 30 yrs) as CCO, October 2023, year 10. Quantiphi: Jim Reesing (Accenture) as CEO, 2026. LatentView: CGO + 12 GTM hires, FY23. Tredence: COO Singh + CBO Imrapur, 2024–25. In every case, founders moved to client strategy and stopped carrying pipeline.</p>
+    </div>
+
+    <div class="pat">
+      <p class="pat-n">04</p>
+      <p class="pat-title">Analyst placement creates structural inbound</p>
+      <p class="pat-body">A Forrester Wave or Everest Group PEAK Matrix mention puts the firm into every enterprise buyer's research stack — without the firm initiating contact. This is not a marketing campaign; it is infrastructure. One analyst mention compounds for 18–24 months.</p>
+      <p class="pat-eg">Tiger Analytics: Forrester Wave appearance in 2023 correlated with the firm's fastest growth phase. Sigmoid: Forrester AI Consultancies and Everest Group placements arrived alongside CCO hire. LatentView: Gartner and ISG recognition post-IPO opened European enterprise procurement. Submittal and briefing process requires 1–2 completed reference engagements, not capital.</p>
+    </div>
+
+    <div class="pat">
+      <p class="pat-n">05</p>
+      <p class="pat-title">ICP discipline makes specialisation visible</p>
+      <p class="pat-body">No firm announced "we are a specialist." The specialisation shows in deal patterns — which accounts they pursued, which they declined, where their certifications are. Buyers in the target vertical notice the concentration and self-select. ICP filters create the appearance of specialisation that draws the right buyers in.</p>
+      <p class="pat-eg">Fractal: 10-20-30 ICP filter, defined before TA Associates' $25M. Tiger: 90% of revenue in 4 verticals with no documented client refusals. Sigmoid: 50 people per client on average — ratio itself signals non-commodity positioning. In every case, the filter predates the growth phase it enabled. The work of declining wrong-fit accounts is not visible to the market; only the resulting concentration is.</p>
+    </div>
+
+  </div>
+
+</div>

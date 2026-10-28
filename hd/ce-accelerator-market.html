@@ -1,0 +1,1757 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CE Accelerator Market</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg:        #EFF5FB;
+    --surface:   #FFFFFF;
+    --surface2:  #E3ECF5;
+    --border:    #C5D8EC;
+    --border2:   #A8C5E0;
+    --text:      #0A1828;
+    --muted:     #4A7090;
+    --dim:       #8AAAC8;
+    --accent:    #0284C7;
+    --green:     #16A34A;
+    --amber:     #D97706;
+    --red:       #DC2626;
+    --violet:    #7C3AED;
+    --pink:      #DB2777;
+    --teal:      #0D9488;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  code, .mono { font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 52px 24px 36px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .header-left {}
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background: var(--accent);
+  }
+  h1 {
+    font-size: clamp(24px, 4vw, 42px);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text);
+    text-wrap: balance;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+  .tagline {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 10px;
+    max-width: 520px;
+  }
+  .header-stats {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .h-stat {
+    text-align: right;
+  }
+  .h-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--accent);
+    display: block;
+  }
+  .h-label {
+    font-size: 11px;
+    color: var(--muted);
+    display: block;
+  }
+
+  /* ── NAV PILLS ── */
+  .nav {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav a {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 5px 12px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    transition: all .15s;
+  }
+  .nav a:hover { color: var(--text); border-color: var(--border2); }
+
+  /* ── SHARED LAYOUT ── */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-of-type { border-bottom: none; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+    font-weight: 500;
+    min-width: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+    max-width: 640px;
+  }
+
+  /* ── ACCELERATOR TYPE CARDS ── */
+  .acc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
+  .acc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color .2s;
+  }
+  .acc-card:hover { border-color: var(--border2); }
+  .acc-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .acc-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .ic1 { background: rgba(56,189,248,.12); }
+  .ic2 { background: rgba(52,211,153,.12); }
+  .ic3 { background: rgba(167,139,250,.12); }
+  .ic4 { background: rgba(251,191,36,.12); }
+  .ic5 { background: rgba(244,114,182,.12); }
+  .acc-title {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text);
+  }
+  .acc-tagline {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: .02em;
+  }
+  .acc-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+  .acc-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+  .meta-item {}
+  .meta-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--dim);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .meta-val {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .acc-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-top: 4px;
+  }
+  .example-chip {
+    font-size: 11px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 8px;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .deal-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .d1 { background: rgba(56,189,248,.12); color: var(--accent); }
+  .d2 { background: rgba(52,211,153,.12); color: var(--green); }
+  .d3 { background: rgba(167,139,250,.12); color: var(--violet); }
+  .d4 { background: rgba(251,191,36,.12); color: var(--amber); }
+  .d5 { background: rgba(244,114,182,.12); color: var(--pink); }
+
+  /* ── INDUSTRY CARDS ── */
+  .industry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+  .ind-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .ind-header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .ind-icon {
+    font-size: 22px;
+    line-height: 1;
+    margin-top: 2px;
+  }
+  .ind-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .ind-catalyst {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+  .ind-body {
+    padding: 16px 20px;
+  }
+  .ind-kv {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+  }
+  .ind-kv:last-child { border-bottom: none; }
+  .kv-key {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .kv-val {
+    font-size: 12px;
+    color: var(--text);
+    text-align: right;
+    font-weight: 500;
+  }
+  .kv-val.green { color: var(--green); }
+  .kv-val.amber { color: var(--amber); }
+  .kv-val.blue { color: var(--accent); }
+  .ind-buyers {
+    padding: 12px 20px 16px;
+    border-top: 1px solid var(--border);
+  }
+  .buyer-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .buyer-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .buyer-chip {
+    font-size: 11px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 3px 10px;
+    color: var(--text);
+  }
+
+  /* ── CLOUD PLATFORM COMPARISON ── */
+  .platform-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 720px) {
+    .platform-grid { grid-template-columns: 1fr; }
+  }
+  .plat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .plat-header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .plat-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .plat-sub {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .plat-bar {
+    height: 3px;
+    border-radius: 2px;
+    margin-bottom: 12px;
+  }
+  .pb-databricks { background: linear-gradient(90deg, #FF6B35, #FF9500); }
+  .pb-snowflake  { background: linear-gradient(90deg, #29B5E8, #00A9D4); }
+  .pb-fabric     { background: linear-gradient(90deg, #3B5EAB, #7B2AFF); }
+  .plat-body {
+    padding: 14px 20px;
+  }
+  .plat-row {
+    display: flex;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .plat-row:last-child { border-bottom: none; }
+  .plat-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .dot-databricks { background: #FF6B35; }
+  .dot-snowflake  { background: #29B5E8; }
+  .dot-fabric     { background: #7B2AFF; }
+  .plat-row-text {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .plat-row-text strong { color: var(--text); font-weight: 600; }
+  .plat-footer {
+    padding: 12px 20px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .plat-verdict {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .plat-verdict strong { color: var(--text); }
+  .cert-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 100px;
+    margin-top: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .cb-yes { background: rgba(52,211,153,.12); color: var(--green); border: 1px solid rgba(52,211,153,.2); }
+  .cb-no  { background: rgba(106,144,176,.08); color: var(--muted); border: 1px solid var(--border); }
+  .cb-partial { background: rgba(251,191,36,.1); color: var(--amber); border: 1px solid rgba(251,191,36,.2); }
+
+  /* ── REGION MAP ── */
+  .region-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .region-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .region-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .region-flag { font-size: 18px; }
+  .region-share {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .region-label { font-size: 11px; color: var(--muted); }
+  .region-drivers {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .driver {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .driver::before {
+    content: '→';
+    color: var(--dim);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .region-accounts {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .ra-chip {
+    font-size: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 7px;
+    color: var(--dim);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ── DEAL STRUCTURE TABLE ── */
+  .deal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    overflow-x: auto;
+    display: block;
+  }
+  .deal-table th {
+    text-align: left;
+    padding: 9px 14px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--dim);
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+  }
+  .deal-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .deal-table tr:last-child td { border-bottom: none; }
+  .deal-table tr:hover td { background: var(--surface2); }
+  .phase {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .price-range {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--green);
+  }
+
+  /* ── COVERAGE MAP ── */
+  .cov-wrap { overflow-x: auto; }
+  .cov-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    min-width: 680px;
+  }
+  .cov-table th {
+    padding: 8px 14px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--dim);
+    border-bottom: 2px solid var(--border);
+    background: var(--surface2);
+    text-align: left;
+  }
+  .cov-table th.plat-h { text-align: center; }
+  .cov-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .cov-table tr:last-child td { border-bottom: none; }
+  .cov-type {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--text);
+  }
+  .cov-cell { text-align: center; }
+  .cov-names {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+  }
+  .cov-chip {
+    font-size: 10px;
+    background: rgba(52,211,153,.1);
+    color: var(--green);
+    border: 1px solid rgba(52,211,153,.2);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-family: 'IBM Plex Mono', monospace;
+    white-space: nowrap;
+  }
+  .gap-chip {
+    font-size: 10px;
+    background: rgba(251,191,36,.1);
+    color: var(--amber);
+    border: 1px solid rgba(251,191,36,.3);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+  }
+  .thin-chip {
+    font-size: 10px;
+    background: var(--surface2);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-style: italic;
+  }
+
+  /* ── GAP CARDS ── */
+  .gap-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .gap-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .gap-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 22px 16px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .gap-num {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    font-size: 11px;
+    min-width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .gap-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .gap-platform {
+    margin-top: 4px;
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .gp-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-family: 'IBM Plex Mono', monospace;
+    border: 1px solid;
+  }
+  .gpb-fabric  { background: rgba(123,42,255,.08); color: #7B2AFF; border-color: rgba(123,42,255,.2); }
+  .gpb-snow    { background: rgba(41,181,232,.08); color: #0EA5E9; border-color: rgba(41,181,232,.2); }
+  .gpb-dbx     { background: rgba(255,107,53,.08); color: #D94A1A; border-color: rgba(255,107,53,.2); }
+  .gpb-multi   { background: rgba(106,144,176,.08); color: var(--muted); border-color: var(--border2); }
+  .gap-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+  }
+  @media (max-width: 680px) {
+    .gap-body { grid-template-columns: 1fr; }
+  }
+  .gap-col {
+    padding: 14px 20px;
+    border-right: 1px solid var(--border);
+  }
+  .gap-col:last-child { border-right: none; }
+  .gap-col-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--dim);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .gap-col-text {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+  .gap-col-text strong { color: var(--text); }
+  .gap-footer {
+    padding: 10px 22px 12px;
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+  .gap-footer-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+  .watcher-chip {
+    font-size: 11px;
+    background: rgba(56,189,248,.08);
+    color: var(--accent);
+    border: 1px solid rgba(56,189,248,.2);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ── MARKET SIZE BAR ── */
+  .mkt-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .mkt-bar-row {
+    display: grid;
+    grid-template-columns: 160px 1fr 80px;
+    gap: 12px;
+    align-items: center;
+    font-size: 12px;
+  }
+  .mkt-bar-label { color: var(--muted); white-space: nowrap; font-weight: 500; }
+  .mkt-bar-track {
+    height: 8px;
+    background: var(--surface2);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .mkt-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    transition: width .4s ease;
+  }
+  .mkt-bar-val { color: var(--text); font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 12px; text-align: right; }
+  .mb1 { background: linear-gradient(90deg, var(--accent), #0EA5E9); }
+  .mb2 { background: linear-gradient(90deg, var(--violet), #818CF8); }
+  .mb3 { background: linear-gradient(90deg, var(--green), #059669); }
+  .mb4 { background: linear-gradient(90deg, var(--amber), #D97706); }
+  .mb5 { background: linear-gradient(90deg, var(--pink), #EC4899); }
+
+  footer {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  footer span { font-size: 11px; color: var(--dim); font-family: 'IBM Plex Mono', monospace; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="eyebrow">CE Accelerator Market · October 2026</div>
+    <h1>Five accelerator types.<br>Three industries buying.</h1>
+    <p class="tagline">Where the context engineering market is, where each platform is going, and which gaps in the competitor field KPI Partners can claim first.</p>
+  </div>
+  <div class="header-stats">
+    <div class="h-stat">
+      <span class="h-num">44%</span>
+      <span class="h-label">D&A leaders have a<br>semantic layer today</span>
+    </div>
+    <div class="h-stat">
+      <span class="h-num">48%</span>
+      <span class="h-label">plan one by 2027<br>(Gartner D&A Summit)</span>
+    </div>
+    <div class="h-stat">
+      <span class="h-num">0</span>
+      <span class="h-label">named CE practices<br>on Microsoft Fabric</span>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <a href="#types">Accelerator types</a>
+  <a href="#industries">Buying industries</a>
+  <a href="#platforms">Platform directions</a>
+  <a href="#regions">Market regions</a>
+  <a href="#deals">Deal structure</a>
+  <a href="#whitespace">Open lane</a>
+</nav>
+
+<!-- SECTION 1: ACCELERATOR TYPES -->
+<section class="section" id="types">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <div>
+      <h2>Five accelerator types</h2>
+      <p class="section-sub">Not all CE accelerators are the same product. These five types have distinct buyers, build requirements, and platform homes.</p>
+    </div>
+  </div>
+  <div class="acc-grid">
+
+    <div class="acc-card">
+      <div class="acc-top">
+        <div class="acc-icon ic1">⚖️</div>
+        <div>
+          <div class="acc-title">Regulatory Compliance Context Layer</div>
+          <div class="acc-tagline">Lineage + evidence + auditability</div>
+        </div>
+      </div>
+      <div class="acc-desc">Delivers machine-verifiable evidence for BCBS 239 (data lineage, accuracy), FHIR prior auth APIs (payer compliance), and EU AI Act Annex III (explainability for credit/fraud/insurance AI). The regulatory mandate IS the accelerator's value prop — CDOs don't need convincing; they need the build partner. Highest deal size of any type.</div>
+      <div class="acc-meta">
+        <div class="meta-item">
+          <span class="meta-label">Primary buyers</span>
+          <span class="meta-val">G-SIBs, payers, EU/UK insurers</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Compliance anchor</span>
+          <span class="meta-val">BCBS 239, FHIR Jan-2027, EU AI Act Aug-2026</span>
+        </div>
+      </div>
+      <div>
+        <div class="meta-label" style="margin-bottom:6px; font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--dim);">Named examples</div>
+        <div class="acc-examples">
+          <span class="example-chip">Persistent iAURA</span>
+          <span class="example-chip">Coforge Nexa</span>
+          <span class="example-chip">ZS AIESC</span>
+          <span class="example-chip">Atlan CE</span>
+        </div>
+      </div>
+      <span class="deal-badge d1">$300K–$1.5M build + $200–600K/yr managed</span>
+    </div>
+
+    <div class="acc-card">
+      <div class="acc-top">
+        <div class="acc-icon ic2">💬</div>
+        <div>
+          <div class="acc-title">Conversational Analytics / NL-to-SQL</div>
+          <div class="acc-tagline">Certified semantic layer → text-to-SQL → Genie/Cortex</div>
+        </div>
+      </div>
+      <div class="acc-desc">A governed semantic layer over a cloud data platform exposed as natural language. The platform delivery channel matters: Databricks Genie, Snowflake Cortex Analyst, or Microsoft Fabric IQ each have native text-to-SQL — the accelerator is the certified semantic model underneath, not the LLM on top. Only 8% of retail/CPG firms have scaled AI analytics; "missing semantic layer" is how buyers describe the problem.</div>
+      <div class="acc-meta">
+        <div class="meta-item">
+          <span class="meta-label">Primary buyers</span>
+          <span class="meta-val">Retail CDAO, supply chain VP, RGM head</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Distribution channel</span>
+          <span class="meta-val">Databricks Genie Space, Snowflake Cortex, Fabric Copilot</span>
+        </div>
+      </div>
+      <div>
+        <div class="meta-label" style="margin-bottom:6px; font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--dim);">Named examples</div>
+        <div class="acc-examples">
+          <span class="example-chip">Tredence ATOM.AI</span>
+          <span class="example-chip">Tiger Genie builds</span>
+          <span class="example-chip">Hakkoda Cortex</span>
+          <span class="example-chip">LatentView Genie</span>
+        </div>
+      </div>
+      <span class="deal-badge d2">$75–200K assessment + $300K–800K build</span>
+    </div>
+
+    <div class="acc-card">
+      <div class="acc-top">
+        <div class="acc-icon ic3">🤖</div>
+        <div>
+          <div class="acc-title">Agentic Grounding & MCP Context Fabric</div>
+          <div class="acc-tagline">MCP server + tool definitions + structured context for AI agents</div>
+        </div>
+      </div>
+      <div class="acc-desc">The newest accelerator type. Agents hallucinate when they lack grounded context; this accelerator provides it — an MCP-compatible server that exposes enterprise data as structured context for multi-agent systems. MCP is now table-stakes for every AI agent framework (LangChain, Claude, OpenAI Assistants). The SI that builds pre-certified MCP context connectors for CRM, ERP, and domain data wins the agentic wave. IMO Health launched an MCP clinical context server in April 2026; Corvera signed 12+ CPG brands in five weeks with MCP-native product context.</div>
+      <div class="acc-meta">
+        <div class="meta-item">
+          <span class="meta-label">Primary buyers</span>
+          <span class="meta-val">Any enterprise deploying AI agents</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Fastest-growing type</span>
+          <span class="meta-val">MCP GA'd Q4 2024; Corvera $4.2M seed May 2026</span>
+        </div>
+      </div>
+      <div>
+        <div class="meta-label" style="margin-bottom:6px; font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--dim);">Named examples</div>
+        <div class="acc-examples">
+          <span class="example-chip">EPAM DIAL</span>
+          <span class="example-chip">IMO Health MCP</span>
+          <span class="example-chip">Corvera CPG</span>
+          <span class="example-chip">Anthropic MCP</span>
+        </div>
+      </div>
+      <span class="deal-badge d3">$150–500K; expanding as agent adoption grows</span>
+    </div>
+
+    <div class="acc-card">
+      <div class="acc-top">
+        <div class="acc-icon ic4">🕸️</div>
+        <div>
+          <div class="acc-title">Domain Knowledge Graph</div>
+          <div class="acc-tagline">Industry-specific entity graph — FIBO, FHIR/OMOP, GS1</div>
+        </div>
+      </div>
+      <div class="acc-desc">A knowledge graph built around the ontologies that already govern the industry. In BFSI it's FIBO (OWL-based financial ontology by EDM Council). In healthcare it's FHIR R4 + OMOP CDM + SNOMED/LOINC. In retail/CPG it's GS1 product taxonomy. The graph is the substrate for every other accelerator type — compliance evidence runs over it, NL-to-SQL queries it, agents use it as grounding. JPMorgan Chase's Semantic Layer program, AstraZeneca's OKF with Neo4j, Siemens's commercial KG product: all examples of the pattern.</div>
+      <div class="acc-meta">
+        <div class="meta-item">
+          <span class="meta-label">Primary buyers</span>
+          <span class="meta-val">CDOs at data-complex enterprises</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Healthcare KG market</span>
+          <span class="meta-val">$1.71B 2025 → $7.5B 2035 at 16% CAGR</span>
+        </div>
+      </div>
+      <div>
+        <div class="meta-label" style="margin-bottom:6px; font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--dim);">Named examples</div>
+        <div class="acc-examples">
+          <span class="example-chip">JPMorgan Semantic Layer</span>
+          <span class="example-chip">AZ OKF / Neo4j</span>
+          <span class="example-chip">Siemens KG product</span>
+          <span class="example-chip">Open Targets</span>
+        </div>
+      </div>
+      <span class="deal-badge d4">$200K–1M+ build; recurring graph maintenance</span>
+    </div>
+
+    <div class="acc-card">
+      <div class="acc-top">
+        <div class="acc-icon ic5">📦</div>
+        <div>
+          <div class="acc-title">AI-Ready Data Catalog & Lineage</div>
+          <div class="acc-tagline">Metadata enrichment → active context source</div>
+        </div>
+      </div>
+      <div class="acc-desc">Converts a passive data catalog (Atlan, DataHub, OpenMetadata) into an active context source for AI. The accelerator pre-populates domain glossary terms, maps lineage, and publishes catalog metadata as a queryable context layer. The $330B AUM case study (22 approval workflows eliminated; data access from 2 weeks to instant) demonstrates the enterprise ROI without framing it as AI at all. Atlan's CE control plane positioned itself as the cross-cloud CE layer — usable across Databricks, Snowflake, and Fabric simultaneously, which makes it the only platform-agnostic play.</div>
+      <div class="acc-meta">
+        <div class="meta-item">
+          <span class="meta-label">Primary buyers</span>
+          <span class="meta-val">CDO, Data Governance function</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Platform-agnostic signal</span>
+          <span class="meta-val">Atlan works across Databricks + Snowflake + Fabric</span>
+        </div>
+      </div>
+      <div>
+        <div class="meta-label" style="margin-bottom:6px; font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--dim);">Named examples</div>
+        <div class="acc-examples">
+          <span class="example-chip">Atlan CE platform</span>
+          <span class="example-chip">Tredence "decision catalog"</span>
+          <span class="example-chip">Alation + Databricks</span>
+          <span class="example-chip">DataHub OSS</span>
+        </div>
+      </div>
+      <span class="deal-badge d5">$100–400K; often entry to larger build</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION 2: INDUSTRIES -->
+<section class="section" id="industries">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <div>
+      <h2>Top 3 buying industries</h2>
+      <p class="section-sub">Each vertical has a different urgency driver, buyer persona, and deployment window. The compliance clock isn't the same one.</p>
+    </div>
+  </div>
+  <div class="industry-grid">
+
+    <div class="ind-card">
+      <div class="ind-header">
+        <div class="ind-icon">🏦</div>
+        <div>
+          <div class="ind-name">BFSI</div>
+          <div class="ind-catalyst">BCBS 239 + EU AI Act Annex III (mandatory Aug 2026)</div>
+        </div>
+      </div>
+      <div class="ind-body">
+        <div class="ind-kv">
+          <span class="kv-key">Urgency driver</span>
+          <span class="kv-val amber">Regulatory enforcement</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">G-SIB compliance rate</span>
+          <span class="kv-val">2 of 31 fully compliant</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Context assembly burden</span>
+          <span class="kv-val">40–50% of AI build time</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Primary economic buyer</span>
+          <span class="kv-val">CDO + CRO co-sponsor</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Gating credential</span>
+          <span class="kv-val">FIBO alignment + BCBS 239 mapping</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Assessment deal size</span>
+          <span class="kv-val green">$75K–$200K</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Build deal size</span>
+          <span class="kv-val green">$300K–$1.5M</span>
+        </div>
+      </div>
+      <div class="ind-buyers">
+        <span class="buyer-label">Named accounts</span>
+        <div class="buyer-chips">
+          <span class="buyer-chip">JPMorgan Chase</span>
+          <span class="buyer-chip">Mastercard</span>
+          <span class="buyer-chip">BNP Paribas</span>
+          <span class="buyer-chip">Barclays</span>
+          <span class="buyer-chip">HSBC</span>
+          <span class="buyer-chip">CME Group</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ind-card">
+      <div class="ind-header">
+        <div class="ind-icon">🏥</div>
+        <div>
+          <div class="ind-name">Healthcare & Pharma</div>
+          <div class="ind-catalyst">CMS FHIR prior auth API deadline — Jan 1, 2027</div>
+        </div>
+      </div>
+      <div class="ind-body">
+        <div class="ind-kv">
+          <span class="kv-key">Urgency driver</span>
+          <span class="kv-val amber">Hard regulatory deadline</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">KG market size</span>
+          <span class="kv-val">$1.71B → $7.5B (16% CAGR)</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Interoperability prerequisite</span>
+          <span class="kv-val">85% of leaders cite it</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Innovaccer benchmark ARR</span>
+          <span class="kv-val blue">$200M+ (July 2026)</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Primary economic buyer</span>
+          <span class="kv-val">CDIO / VP Clinical Informatics</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Technical requirement</span>
+          <span class="kv-val">FHIR R4 → OMOP CDM pipeline</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">UnitedHealth AI budget</span>
+          <span class="kv-val green">$3B (2026–2027)</span>
+        </div>
+      </div>
+      <div class="ind-buyers">
+        <span class="buyer-label">Named accounts</span>
+        <div class="buyer-chips">
+          <span class="buyer-chip">UnitedHealth / Optum</span>
+          <span class="buyer-chip">NHS</span>
+          <span class="buyer-chip">AstraZeneca</span>
+          <span class="buyer-chip">Novartis</span>
+          <span class="buyer-chip">Emids (delivery)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ind-card">
+      <div class="ind-header">
+        <div class="ind-icon">🛒</div>
+        <div>
+          <div class="ind-name">Retail & CPG</div>
+          <div class="ind-catalyst">AI performance gap — only 8% scaled analytics</div>
+        </div>
+      </div>
+      <div class="ind-body">
+        <div class="ind-kv">
+          <span class="kv-key">Urgency driver</span>
+          <span class="kv-val">Commercial (no regulatory clock)</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Multi-dept AI scale rate</span>
+          <span class="kv-val">8% achieved it</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Carrefour AI target</span>
+          <span class="kv-val blue">€100M/year by 2030</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Distribution channel</span>
+          <span class="kv-val">Databricks Genie Space</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Primary economic buyer</span>
+          <span class="kv-val">CIO / Chief Data & AI Officer</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Internal champion</span>
+          <span class="kv-val">Head RGM / VP Supply Chain</span>
+        </div>
+        <div class="ind-kv">
+          <span class="kv-key">Competitive density</span>
+          <span class="kv-val amber">High (Tredence, Tiger, LatentView)</span>
+        </div>
+      </div>
+      <div class="ind-buyers">
+        <span class="buyer-label">Named accounts</span>
+        <div class="buyer-chips">
+          <span class="buyer-chip">Kroger / 84.51°</span>
+          <span class="buyer-chip">Carrefour</span>
+          <span class="buyer-chip">P&G</span>
+          <span class="buyer-chip">Unilever</span>
+          <span class="buyer-chip">Metro Digital</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION 3: CLOUD PLATFORMS -->
+<section class="section" id="platforms">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <div>
+      <h2>Where each cloud platform is heading</h2>
+      <p class="section-sub">CE accelerators ship on a platform. Each cloud's CE roadmap dictates which accelerator types win on it, and which certification gets you into co-sell.</p>
+    </div>
+  </div>
+
+  <div class="platform-grid">
+
+    <div class="plat-card">
+      <div class="plat-header">
+        <div class="plat-bar pb-databricks"></div>
+        <div class="plat-name">Databricks</div>
+        <div class="plat-sub">Governed AI query + agentic grounding. CE cert GA July 2026.</div>
+      </div>
+      <div class="plat-body">
+        <div class="plat-row">
+          <div class="plat-dot dot-databricks"></div>
+          <div class="plat-row-text"><strong>Genie AI/BI</strong> — NL-to-SQL over certified semantic models; the distribution channel for conversational analytics accelerators</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-dot dot-databricks"></div>
+          <div class="plat-row-text"><strong>Unity Catalog</strong> — governance layer for AI governance; Brickbuilder specializations by vertical (BFSI: Persistent, Sept 2026); gating for co-sell</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-dot dot-databricks"></div>
+          <div class="plat-row-text"><strong>Mosaic AI Gateway</strong> — model routing + observability; the CE layer for multi-model agentic workloads</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-dot dot-databricks"></div>
+          <div class="plat-row-text"><strong>Delta Sharing + Databricks Apps</strong> — context distribution and embedded application delivery</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-dot dot-databricks"></div>
+          <div class="plat-row-text"><strong>Heading:</strong> Deep agentic grounding; CE cert becomes the partnership admission requirement for Elite tier co-sell; vertical Brickbuilder specs expanding</div>
+        </div>
+      </div>
+      <div class="plat-footer">
+        <div class="plat-verdict"><strong>Databricks CE cert is available</strong> — Databricks Certified Context Engineer Associate, GA July 29 2026. $200/exam, 45 questions, 2-year validity. Tests Unity Catalog governance, MCP integrations, and multi-agent context strategies.</div>
+        <span class="cert-badge cb-yes">✓ Cert available — $200 · 45Qs</span>
+      </div>
+    </div>
+
+    <div class="plat-card">
+      <div class="plat-header">
+        <div class="plat-bar pb-snowflake"></div>
+        <div class="plat-name">Snowflake</div>
+        <div class="plat-sub">Text-to-SQL via semantic views. Cortex Analyst as primary CE surface.</div>
+      </div>
+      <div class="plat-body">
+        <div class="plat-row">
+          <div class="plat-dot dot-snowflake"></div>
+          <div class="plat-row-text"><strong>Cortex Analyst</strong> — text-to-SQL over semantic models; an accelerator here is a certified domain semantic model (Novartis: pharma conversational analytics)</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-dot dot-snowflake"></div>
+          <div class="plat-row-text"><strong>Semantic Views</strong> (GA Oct 2025) — CE substrate; defines governed metrics and entities once, consumed by all Cortex services</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-dot dot-snowflake"></div>
+          <div class="plat-row-text"><strong>Horizon governance</strong> — column-level security, tagging, and lineage; the compliance evidence layer for BCBS 239 accelerators</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-dot dot-snowflake"></div>
+          <div class="plat-row-text"><strong>Cortex Search + Arctic Embed</strong> — hybrid retrieval for knowledge graphs; context-aware search over enterprise content</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-dot dot-snowflake"></div>
+          <div class="plat-row-text"><strong>Heading:</strong> Snowflake Intelligence (announced 2026) — unified AI assistant over enterprise data; Snowpark Container Services for custom model hosting</div>
+        </div>
+      </div>
+      <div class="plat-footer">
+        <div class="plat-verdict"><strong>No CE certification yet.</strong> Partner specializations exist but no vendor-certified CE practitioner program as of Oct 2026. Cortex Analyst is the primary CE delivery surface.</div>
+        <span class="cert-badge cb-no">No CE cert yet</span>
+      </div>
+    </div>
+
+    <div class="plat-card">
+      <div class="plat-header">
+        <div class="plat-bar pb-fabric"></div>
+        <div class="plat-name">Microsoft Fabric</div>
+        <div class="plat-sub">Integrated CE for Microsoft shops. Strongest in regulated industries via Azure Health Data Services.</div>
+      </div>
+      <div class="plat-body">
+        <div class="plat-row">
+          <div class="plat-dot dot-fabric"></div>
+          <div class="plat-row-text"><strong>Fabric IQ</strong> — natural language to DAX/KQL; CE accelerator is the governed Semantic Model that Fabric IQ queries</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-dot dot-fabric"></div>
+          <div class="plat-row-text"><strong>Power BI Semantic Models</strong> — the CE substrate for Microsoft shops; the semantic layer already in use by most enterprise BI teams</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-dot dot-fabric"></div>
+          <div class="plat-row-text"><strong>Azure AI Foundry + Copilot Studio</strong> — agent orchestration layer; MCP server support announced at Microsoft Build 2025; CE accelerators exposed as Copilot extensions</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-dot dot-fabric"></div>
+          <div class="plat-row-text"><strong>Azure Health Data Services</strong> — FHIR R4 native; the fastest path to a healthcare CE accelerator for Fabric-anchored payers</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-dot dot-fabric"></div>
+          <div class="plat-row-text"><strong>Heading:</strong> Fabric as the CE substrate for M365-anchored enterprises; strongest in BFSI/healthcare compliance via Azure Health Data Services and Purview lineage</div>
+        </div>
+      </div>
+      <div class="plat-footer">
+        <div class="plat-verdict">Fabric + AI Foundry + Azure Health Data Services is an already-built CE substrate for regulated industries. A Fabric-specific CE practice has not yet emerged prominently in the market — the reference architecture and named offering remain to be claimed.</div>
+        <span class="cert-badge cb-partial">Fabric DP-600 exists — not CE-specific</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Market size bars -->
+  <div style="margin-top:28px; padding:20px 24px; background:var(--surface); border:1px solid var(--border); border-radius:12px;">
+    <div class="meta-label" style="margin-bottom:14px; font-size:11px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--muted);">CE accelerator market size by platform ecosystem (est. 2026 addressable)</div>
+    <div class="mkt-bars">
+      <div class="mkt-bar-row">
+        <span class="mkt-bar-label">Databricks ecosystem</span>
+        <div class="mkt-bar-track"><div class="mkt-bar-fill mb1" style="width:72%"></div></div>
+        <span class="mkt-bar-val">$3.1B TAM</span>
+      </div>
+      <div class="mkt-bar-row">
+        <span class="mkt-bar-label">Microsoft Fabric + Azure</span>
+        <div class="mkt-bar-track"><div class="mkt-bar-fill mb4" style="width:65%"></div></div>
+        <span class="mkt-bar-val">$2.8B TAM</span>
+      </div>
+      <div class="mkt-bar-row">
+        <span class="mkt-bar-label">Snowflake ecosystem</span>
+        <div class="mkt-bar-track"><div class="mkt-bar-fill mb2" style="width:48%"></div></div>
+        <span class="mkt-bar-val">$2.1B TAM</span>
+      </div>
+      <div class="mkt-bar-row">
+        <span class="mkt-bar-label">Multi-cloud / Atlan layer</span>
+        <div class="mkt-bar-track"><div class="mkt-bar-fill mb3" style="width:30%"></div></div>
+        <span class="mkt-bar-val">$1.3B TAM</span>
+      </div>
+    </div>
+    <p style="font-size:11px; color:var(--dim); margin-top:10px;">TAM estimates derived from Gartner D&A 2026 semantic layer planning data, cloud partner co-sell multiples, and CE deal-size benchmarks. Treat as order-of-magnitude.</p>
+  </div>
+</section>
+
+<!-- SECTION 4: REGIONS -->
+<section class="section" id="regions">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <div>
+      <h2>Market regions</h2>
+      <p class="section-sub">Three regions with distinct regulatory pressure, platform mix, and named accounts. A fourth is emerging.</p>
+    </div>
+  </div>
+  <div class="region-grid">
+
+    <div class="region-card">
+      <div class="region-name"><span class="region-flag">🇺🇸</span> North America</div>
+      <span class="region-share">~65%</span>
+      <span class="region-label">of global CE accelerator spend</span>
+      <div class="region-drivers">
+        <div class="driver">Databricks and Snowflake co-sell programs based here; hyperscaler-driven demand</div>
+        <div class="driver">BCBS 239 Fed SR 11-7 and OCC expectations apply to US G-SIBs and regionals</div>
+        <div class="driver">CMS FHIR prior auth Jan 2027 deadline: all US payers are live targets right now</div>
+        <div class="driver">Retail/CPG: Kroger, P&G, Unilever US — largest addressable accounts globally</div>
+      </div>
+      <div class="region-accounts">
+        <span class="ra-chip">JPMorgan Chase</span>
+        <span class="ra-chip">Mastercard</span>
+        <span class="ra-chip">CME Group</span>
+        <span class="ra-chip">UnitedHealth</span>
+        <span class="ra-chip">Kroger</span>
+        <span class="ra-chip">P&G</span>
+      </div>
+    </div>
+
+    <div class="region-card">
+      <div class="region-name"><span class="region-flag">🇪🇺</span> European Union</div>
+      <span class="region-share">~22%</span>
+      <span class="region-label">of global CE accelerator spend</span>
+      <div class="region-drivers">
+        <div class="driver">EU AI Act Annex III mandatory Aug 1, 2026 for credit scoring, fraud, insurance AI</div>
+        <div class="driver">BCBS 239: ECB names it #2 supervisory priority for 2025–2027; fines expected</div>
+        <div class="driver">GDPR data residency: on-prem or EU-hosted CE stacks required by most G-SIBs</div>
+        <div class="driver">Pharma: AstraZeneca, Novartis, Bayer, Pfizer — Open Targets consortium signals shared infra investment</div>
+      </div>
+      <div class="region-accounts">
+        <span class="ra-chip">BNP Paribas</span>
+        <span class="ra-chip">AstraZeneca</span>
+        <span class="ra-chip">Novartis</span>
+        <span class="ra-chip">Carrefour</span>
+        <span class="ra-chip">Siemens</span>
+      </div>
+    </div>
+
+    <div class="region-card">
+      <div class="region-name"><span class="region-flag">🇬🇧</span> United Kingdom</div>
+      <span class="region-share">~8%</span>
+      <span class="region-label">of global CE accelerator spend</span>
+      <div class="region-drivers">
+        <div class="driver">PRA/FCA expected to adopt EU AI Act equivalence by Q1 2027; timeline compressing</div>
+        <div class="driver">BCBS 239 enforcement via PRA already in force for UK G-SIBs (Barclays, HSBC, StanChart)</div>
+        <div class="driver">NHS £900M healthcare AI budget: FHIR-native platforms required</div>
+        <div class="driver">London: 6 of 16 UK CE job postings; £100K–£124K benchmark rate</div>
+      </div>
+      <div class="region-accounts">
+        <span class="ra-chip">Barclays</span>
+        <span class="ra-chip">HSBC</span>
+        <span class="ra-chip">NHS</span>
+        <span class="ra-chip">Lloyds</span>
+      </div>
+    </div>
+
+    <div class="region-card">
+      <div class="region-name"><span class="region-flag">🌏</span> APAC (emerging)</div>
+      <span class="region-share">~5%</span>
+      <span class="region-label">of global spend; delivery hub</span>
+      <div class="region-drivers">
+        <div class="driver">India: primary CE delivery hub — Cognizant 1,000 CE engineers, Emids 1,000 HC specialists</div>
+        <div class="driver">Japan: NTT Data triple-Elite partnerships; domestic CE build accelerating</div>
+        <div class="driver">Singapore/ANZ: BFSI CE early adopters; MAS-driven governance requirements</div>
+        <div class="driver">India IT labor rate advantage: $160K US KG engineer vs. $30–40K India equivalent</div>
+      </div>
+      <div class="region-accounts">
+        <span class="ra-chip">NTT Data Japan</span>
+        <span class="ra-chip">Cognizant India</span>
+        <span class="ra-chip">Emids India</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION 5: DEAL STRUCTURE -->
+<section class="section" id="deals">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <div>
+      <h2>Deal structure by phase</h2>
+      <p class="section-sub">CE engagements follow a consistent three-phase model across all verticals. Regulated industries compress the assessment phase.</p>
+    </div>
+  </div>
+  <table class="deal-table">
+    <thead>
+      <tr>
+        <th>Phase</th>
+        <th>Price range</th>
+        <th>Duration</th>
+        <th>What's delivered</th>
+        <th>Who approves</th>
+        <th>Trigger to next phase</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="phase">1 · Assessment</span></td>
+        <td><span class="price-range">$75K–$200K</span></td>
+        <td>6–10 weeks</td>
+        <td>CE maturity score, semantic layer gap analysis, one proof-of-context with real data, vendor shortlist</td>
+        <td>CDO / VP Data</td>
+        <td>PoC demonstrates measurable accuracy improvement over raw LLM</td>
+      </tr>
+      <tr>
+        <td><span class="phase">2 · Build</span></td>
+        <td><span class="price-range">$300K–$1.5M</span></td>
+        <td>3–9 months</td>
+        <td>Domain knowledge graph, platform-native semantic layer, MCP context server, agent grounding layer, governance framework</td>
+        <td>CIO / CDO + CFO threshold</td>
+        <td>First agent use case in production with measurable ROI (hallucination rate, latency, accuracy)</td>
+      </tr>
+      <tr>
+        <td><span class="phase">3 · Managed Context</span></td>
+        <td><span class="price-range">$200K–$600K/yr</span></td>
+        <td>Ongoing</span></td>
+        <td>CE platform operations, ontology maintenance, new domain onboarding, model re-grounding, compliance reporting</td>
+        <td>CDAO annual renewal</td>
+        <td>Agent program scaling to additional functions or regions</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px; color:var(--muted); margin-top:12px; font-style:italic;">Benchmarks derived from adjacent data governance consulting (Getmonetizely, Gartner D&A). BFSI/healthcare compliance urgency compresses assessment to 4–6 weeks and removes CFO threshold.</p>
+</section>
+
+<!-- SECTION 6: COMPETITOR FIELD GAPS -->
+<section class="section" id="whitespace">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <div>
+      <h2>Where the competitor field is open</h2>
+      <p class="section-sub">A coverage scan across accelerator type × platform shows five positions where named players have not yet claimed the space — each with a specific reason it's still empty and a bounded entry path.</p>
+    </div>
+  </div>
+
+  <!-- Coverage map -->
+  <div style="margin-bottom:8px; font-size:11px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--muted);">Coverage map — who has claimed what</div>
+  <div class="cov-wrap">
+    <table class="cov-table">
+      <thead>
+        <tr>
+          <th>Accelerator type</th>
+          <th class="plat-h">Databricks</th>
+          <th class="plat-h">Snowflake</th>
+          <th class="plat-h">Microsoft Fabric</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="cov-type">Regulatory Compliance CE</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">BCBS 239 · EU AI Act · FHIR</div>
+          </td>
+          <td class="cov-cell">
+            <div class="cov-names">
+              <span class="cov-chip">Persistent iAURA</span>
+              <span class="cov-chip">Coforge Nexa</span>
+            </div>
+          </td>
+          <td class="cov-cell"><span class="thin-chip">Partial — Atlan</span></td>
+          <td class="cov-cell"><span class="gap-chip">GAP ↗</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cov-type">Conversational Analytics / NL-to-SQL</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">Semantic layer → Genie / Cortex / IQ</div>
+          </td>
+          <td class="cov-cell">
+            <div class="cov-names">
+              <span class="cov-chip">Tredence ATOM.AI</span>
+              <span class="cov-chip">Tiger Analytics</span>
+              <span class="cov-chip">Sigmoid</span>
+            </div>
+          </td>
+          <td class="cov-cell">
+            <div class="cov-names">
+              <span class="cov-chip">Hakkoda</span>
+            </div>
+            <div style="margin-top:4px;"><span class="gap-chip">CPG: GAP ↗</span></div>
+          </td>
+          <td class="cov-cell"><span class="gap-chip">GAP ↗</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cov-type">Agentic Grounding / MCP Fabric</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">MCP servers · context connectors for ERP/CRM</div>
+          </td>
+          <td class="cov-cell">
+            <div class="cov-names">
+              <span class="cov-chip">EPAM DIAL</span>
+              <span class="cov-chip">Corvera (CPG)</span>
+            </div>
+          </td>
+          <td class="cov-cell"><span class="thin-chip">Emerging</span></td>
+          <td class="cov-cell">
+            <div class="cov-names"><span class="thin-chip">Copilot Studio only</span></div>
+            <div style="margin-top:4px;"><span class="gap-chip">ERP connectors: GAP ↗</span></div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cov-type">Domain Knowledge Graph</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">FIBO · FHIR/OMOP · GS1 ontologies</div>
+          </td>
+          <td class="cov-cell">
+            <div class="cov-names">
+              <span class="cov-chip">Quantiphi (HC)</span>
+              <span class="cov-chip">AZ OKF / Neo4j</span>
+            </div>
+          </td>
+          <td class="cov-cell"><span class="thin-chip">Limited</span></td>
+          <td class="cov-cell"><span class="gap-chip">GAP ↗</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cov-type">AI-Ready Data Catalog & Lineage</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">Active context source from passive catalog</div>
+          </td>
+          <td class="cov-cell">
+            <div class="cov-names">
+              <span class="cov-chip">Tredence catalog</span>
+              <span class="cov-chip">Alation + DBX</span>
+            </div>
+          </td>
+          <td class="cov-cell">
+            <div class="cov-names"><span class="cov-chip">Atlan platform</span></div>
+          </td>
+          <td class="cov-cell"><span class="thin-chip">Purview only</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Five gap cards -->
+  <div class="gap-grid">
+
+    <div class="gap-card">
+      <div class="gap-header">
+        <div class="gap-num">G1</div>
+        <div style="flex:1">
+          <div class="gap-title">Microsoft Fabric CE Practice — any type, any vertical</div>
+          <div class="gap-platform">
+            <span class="gp-badge gpb-fabric">Microsoft Fabric</span>
+            <span class="gp-badge gpb-multi">All verticals</span>
+          </div>
+        </div>
+      </div>
+      <div class="gap-body">
+        <div class="gap-col">
+          <span class="gap-col-label">Why it's empty</span>
+          <div class="gap-col-text">All named CE practices (Persistent, Coforge, Tredence, Tiger) launched Databricks- or Snowflake-first. Fabric GA'd November 2023 — the partner ecosystem is ~18 months behind in CE-specific offerings. <strong>Avanade</strong>, the largest Microsoft SI (~50,000 staff), does Fabric implementation but has no named CE product. <strong>Hitachi Solutions, Slalom,</strong> and <strong>Softchoice</strong> are active on Fabric — none have a published CE reference architecture. Fabric DP-600 cert exists but is not a CE-specific credential.</div>
+        </div>
+        <div class="gap-col">
+          <span class="gap-col-label">Evidence the gap is real</span>
+          <div class="gap-col-text">Header stat: <strong>0 named CE practices on Microsoft Fabric</strong> — sourced from a scan of Fabric marketplace listings and partner solution pages, Oct 2026. Fabric has ~30,000+ enterprise customers in the Microsoft 365 ecosystem. The CE TAM estimate for Fabric + Azure is <strong>$2.8B</strong> — the second-largest pool after Databricks and the least contested.</div>
+        </div>
+        <div class="gap-col">
+          <span class="gap-col-label">Entry path</span>
+          <div class="gap-col-text"><strong>2–3 weeks</strong> of architect time to publish a Fabric CE Reference Architecture: Purview lineage + Power BI Semantic Model + Azure AI Foundry + Copilot Studio + MCP connector. One named client pattern in any vertical makes this the first Fabric CE published reference globally. Enters the Microsoft co-sell conversation as a named solution.</div>
+        </div>
+      </div>
+      <div class="gap-footer">
+        <span class="gap-footer-label">Who to watch</span>
+        <span class="watcher-chip">Avanade</span>
+        <span class="watcher-chip">Hitachi Solutions</span>
+        <span class="watcher-chip">Slalom</span>
+        <span class="watcher-chip">Data#3</span>
+      </div>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-header">
+        <div class="gap-num">G2</div>
+        <div style="flex:1">
+          <div class="gap-title">Healthcare Payer CE — FHIR Prior Auth (CMS deadline Jan 1, 2027)</div>
+          <div class="gap-platform">
+            <span class="gp-badge gpb-fabric">Azure Health Data Services</span>
+            <span class="gp-badge gpb-dbx">Databricks</span>
+          </div>
+        </div>
+      </div>
+      <div class="gap-body">
+        <div class="gap-col">
+          <span class="gap-col-label">Why it's empty</span>
+          <div class="gap-col-text">Healthcare CE is dominated by <strong>pharma and clinical (provider-side)</strong> focus — Emids, Quantiphi, and IMO Health all target hospital systems or pharmaceutical companies. The CMS FHIR prior authorization API deadline is payer-specific: it requires insurers to expose PA decision logic via FHIR R4 APIs. The payer data model (claims, formulary, PA rules) is structurally different from clinical EHR. <strong>Edifecs</strong> and <strong>Availity</strong> handle EDI translation but not AI context layers over it.</div>
+        </div>
+        <div class="gap-col">
+          <span class="gap-col-label">Evidence the gap is real</span>
+          <div class="gap-col-text">CMS final rule published January 2024; compliance date <strong>January 1, 2027</strong> — 10 weeks from today. Applies to all MA plans, Medicaid, CHIP, and QHP payers: UnitedHealth (84M members), Humana (17M), Cigna (18M), Centene (28M). <strong>No SI has published a named payer CE accelerator</strong> for FHIR PA compliance as of Oct 2026. Hard deadline creates compressed, non-discretionary budget.</div>
+        </div>
+        <div class="gap-col">
+          <span class="gap-col-label">Entry path</span>
+          <div class="gap-col-text"><strong>4–6 weeks</strong> with a payer data SME. Build a FHIR Prior Auth CE Accelerator: claims semantic model + PA rules context layer + Azure Health Data Services or Databricks delivery. The deadline eliminates the "do we need this" conversation — every large US payer is a live target right now. Bill at assessment tier ($75–120K) for speed; the build follows.</div>
+        </div>
+      </div>
+      <div class="gap-footer">
+        <span class="gap-footer-label">Who to watch</span>
+        <span class="watcher-chip">Edifecs</span>
+        <span class="watcher-chip">Availity</span>
+        <span class="watcher-chip">Change Healthcare SIs</span>
+        <span class="watcher-chip">Cognizant HC</span>
+      </div>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-header">
+        <div class="gap-num">G3</div>
+        <div style="flex:1">
+          <div class="gap-title">Insurance CE — P&C and Life Underwriting AI (EU AI Act Annex III)</div>
+          <div class="gap-platform">
+            <span class="gp-badge gpb-multi">Platform-agnostic</span>
+            <span class="gp-badge gpb-dbx">Databricks</span>
+          </div>
+        </div>
+      </div>
+      <div class="gap-body">
+        <div class="gap-col">
+          <span class="gap-col-label">Why it's empty</span>
+          <div class="gap-col-text">EU AI Act Annex III covers high-risk AI in <strong>insurance underwriting, pricing, and fraud scoring</strong>. BCBS 239 work has absorbed BFSI SI capacity for banking. Duck Creek's 2026 SI leadership panel (Accenture, Capgemini, Coforge, Cognizant, EY, LTIMindtree, Xceedance) — <strong>none have a named CE product</strong>. Only <strong>Convr</strong>, a startup, has a Risk Context Engine for commercial P&C with MCP support — but no established SI has entered this space. Insurance uses ACORD schema, not FIBO, keeping banking-first SIs out.</div>
+        </div>
+        <div class="gap-col">
+          <span class="gap-col-label">Evidence the gap is real</span>
+          <div class="gap-col-text"><strong>Allianz, AXA, Zurich, Aviva,</strong> and <strong>Generali</strong> are deploying AI pricing models that fall under Annex III. <em>Note: EU Omnibus proposals may extend the Annex III enforcement timeline to Dec 2027 — monitor for updates.</em> Even if delayed, early movers gain 12–18 months of uncontested pipeline. ISG 2026 Insurance AI survey shows 73% of carriers are actively deploying underwriting AI — demand is not contingent on the regulatory clock.</div>
+        </div>
+        <div class="gap-col">
+          <span class="gap-col-label">Entry path</span>
+          <div class="gap-col-text"><strong>3–4 weeks</strong> to map Annex III requirements to CE deliverables for insurance underwriting AI (explainability, data lineage, model documentation). Build on ACORD schema as the domain ontology. Differentiated credential: partner with a Guidewire or Duck Creek SI for install base access. Entry deal targets EU mid-market insurers ($25–75K assessment).</div>
+        </div>
+      </div>
+      <div class="gap-footer">
+        <span class="gap-footer-label">Who to watch</span>
+        <span class="watcher-chip">Convr (startup)</span>
+        <span class="watcher-chip">Xceedance</span>
+        <span class="watcher-chip">EY Wavespace</span>
+        <span class="watcher-chip">Guidewire SIs</span>
+      </div>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-header">
+        <div class="gap-num">G4</div>
+        <div style="flex:1">
+          <div class="gap-title">CPG CE on Snowflake — Cortex Analyst + Semantic Views (no named player)</div>
+          <div class="gap-platform">
+            <span class="gp-badge gpb-snow">Snowflake</span>
+            <span class="gp-badge gpb-multi">CPG vertical</span>
+          </div>
+        </div>
+      </div>
+      <div class="gap-body">
+        <div class="gap-col">
+          <span class="gap-col-label">Why it's empty</span>
+          <div class="gap-col-text">Every major CPG CE accelerator launched <strong>Databricks-first</strong> — Tredence ATOM.AI, Tiger Analytics Genie builds, Sigmoid, LatentView are all on the Databricks platform. <strong>Hakkoda</strong> is the best Snowflake-native CPG SI but focuses on broader data engineering, not CE specifically. <strong>Snowflake Semantic Views GA'd October 2025</strong> — the partner ecosystem has not yet built named domain accelerators on it. Cortex Analyst is the NL-to-SQL delivery surface, but no SI has published a CPG semantic model for it.</div>
+        </div>
+        <div class="gap-col">
+          <span class="gap-col-label">Evidence the gap is real</span>
+          <div class="gap-col-text"><strong>Unilever, Nestlé, Henkel,</strong> and <strong>AB InBev</strong> are major Snowflake CPG accounts — not Databricks shops. Snowflake's CPG named accounts in partner listings run 40+ enterprise brands. As of Oct 2026, <strong>no SI has a named CPG CE accelerator on Snowflake Cortex Analyst + Semantic Views</strong> in the Snowflake Marketplace. The pattern recognition: Hakkoda's acquisition activity signals Snowflake retail is heating up.</div>
+        </div>
+        <div class="gap-col">
+          <span class="gap-col-label">Entry path</span>
+          <div class="gap-col-text"><strong>4–6 weeks.</strong> Build a CPG Revenue Growth Management CE accelerator on Snowflake Cortex Analyst: GS1 taxonomy-backed semantic model for promotion effectiveness, mix optimization, and trade spend. Publish to Snowflake Marketplace as a listing. The RGM use case is a proven Databricks pattern — port the semantic model, not the architecture. First mover gets the Snowflake co-sell pull on the Unilever/Nestlé tier.</div>
+        </div>
+      </div>
+      <div class="gap-footer">
+        <span class="gap-footer-label">Who to watch</span>
+        <span class="watcher-chip">Hakkoda</span>
+        <span class="watcher-chip">Snowflake PS</span>
+        <span class="watcher-chip">dbt Labs SIs</span>
+      </div>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-header">
+        <div class="gap-num">G5</div>
+        <div style="flex:1">
+          <div class="gap-title">Mid-Market BFSI CE — Regional Banks and Credit Unions (below G-SIB tier)</div>
+          <div class="gap-platform">
+            <span class="gp-badge gpb-fabric">Microsoft Fabric</span>
+            <span class="gp-badge gpb-dbx">Databricks</span>
+          </div>
+        </div>
+      </div>
+      <div class="gap-body">
+        <div class="gap-col">
+          <span class="gap-col-label">Why it's empty</span>
+          <div class="gap-col-text"><strong>Persistent iAURA</strong> and <strong>EXL Data Aureus™</strong> are built and priced for G-SIBs ($300K–1.5M). Regional banks ($5–50B assets) face equivalent governance obligations under <strong>OCC AI Risk Management guidance (June 2024), Fed SR 11-7, and FFIEC AI guidance</strong> — and ECB-equivalent RDARR for EU regional banks — without G-SIB budgets. No packaged CE offering exists at the $50–150K price point. Finastra and Jack Henry (core banking for this tier) have no CE partner ecosystem.</div>
+        </div>
+        <div class="gap-col">
+          <span class="gap-col-label">Evidence the gap is real</span>
+          <div class="gap-col-text">~4,200 FDIC-insured commercial banks and 5,000+ credit unions. Only ~100 are G-SIBs. The other 9,000+ face OCC AI risk scrutiny — June 2024 guidance applies to all national bank charters. EXL Data Aureus™ (the nearest named product) is G-SIB focused. <em>Note: The buyer education gap is real — regional banks may not yet self-identify as CE buyers.</em> This gap is the hardest near-term sell but builds a durable template market.</div>
+        </div>
+        <div class="gap-col">
+          <span class="gap-col-label">Entry path</span>
+          <div class="gap-col-text"><strong>3–5 weeks.</strong> Re-scope BCBS 239 to the OCC AI guidance core principles (explainability, model risk management, data lineage). Price at $50–100K fixed-fee on Fabric or Databricks. The entry pitch is model risk governance, not BCBS — the OCC framing resonates with US regional bank CROs. Partner with a Jack Henry or nCino reseller to source the accounts.</div>
+        </div>
+      </div>
+      <div class="gap-footer">
+        <span class="gap-footer-label">Who to watch</span>
+        <span class="watcher-chip">EXL Service</span>
+        <span class="watcher-chip">Finastra SIs</span>
+        <span class="watcher-chip">Jack Henry & Assoc</span>
+        <span class="watcher-chip">nCino implementers</span>
+      </div>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-header">
+        <div class="gap-num">G6</div>
+        <div style="flex:1">
+          <div class="gap-title">SAP / Oracle MCP Semantic Layer — No SI has built the enrichment middleware</div>
+          <div class="gap-platform">
+            <span class="gp-badge gpb-multi">Cross-platform</span>
+            <span class="gp-badge gpb-fabric">Azure AI Foundry</span>
+            <span class="gp-badge gpb-dbx">Databricks</span>
+          </div>
+        </div>
+      </div>
+      <div class="gap-body">
+        <div class="gap-col">
+          <span class="gap-col-label">Why it's empty</span>
+          <div class="gap-col-text">SAP and Oracle ERP are the source of truth for most enterprise operational data — but raw MCP connections to ERP systems produce poor AI context. <strong>SAP's own Architecture Center documentation</strong> states: wiring MCP to SAP "without semantic enrichment leads to poor entity discovery." NetSuite (Oracle) has published an MCP Connector — but it is transactional only. No SI has productized the <strong>semantic enrichment middleware</strong> that maps SAP CDS Views or Oracle Fusion data models to structured, agent-safe context objects.</div>
+        </div>
+        <div class="gap-col">
+          <span class="gap-col-label">Evidence the gap is real</span>
+          <div class="gap-col-text">SAP runs in <strong>~87% of Fortune 500 companies</strong>. Oracle Fusion ERP is the other anchor. Every enterprise AI deployment that touches operational data — supply chain, finance, HR, procurement — hits this problem. The ABAP community has point tools but no enterprise-grade semantic layer product. <strong>SAP's own docs naming the gap</strong> is the strongest possible signal that the market exists and no incumbent has filled it.</div>
+        </div>
+        <div class="gap-col">
+          <span class="gap-col-label">Entry path</span>
+          <div class="gap-col-text"><strong>5–8 weeks.</strong> Build a pre-packaged MCP semantic context connector for SAP S/4HANA: CDS Views → semantic entity map → MCP server that exposes named business objects (Customer, PurchaseOrder, FinancialDocument) as agent-safe context. Publish as open source on GitHub to drive inbound from the SAP developer community, then sell the managed deployment. Replicable pattern for Oracle Fusion as v2.</div>
+        </div>
+      </div>
+      <div class="gap-footer">
+        <span class="gap-footer-label">Who to watch</span>
+        <span class="watcher-chip">SAP BTP partners</span>
+        <span class="watcher-chip">Accenture SAP practice</span>
+        <span class="watcher-chip">LTIMindtree SAP</span>
+        <span class="watcher-chip">Avantra</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <span>KPI Partners · CE Accelerator Market Intelligence</span>
+  <span>Research: Oct 2026 · 3 verticals · 4 platforms · 14+ named accounts</span>
+</footer>
+
+</body>
+</html>
