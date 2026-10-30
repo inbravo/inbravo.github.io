@@ -1,0 +1,1120 @@
+<title>KAM — KPI Asset Manager</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
+
+<style>
+/* ── Token system ───────────────────────────────────── */
+:root {
+  color-scheme: light;
+  --bg:   #EDF1F7;
+  --surf: #FFFFFF;
+  --surf2:#F4F7FB;
+  --tx1:  #0B1826;
+  --tx2:  #4B6280;
+  --tx3:  #8A9BB0;
+  --bd:   #D1D9E6;
+  --bd2:  #E8EEF5;
+  --t1:   #2563EB;
+  --t1s:  #EFF6FF;
+  /* dark demo band */
+  --dk:   #0B1826;
+  --dk2:  #111F30;
+  --dk3:  #1A2E45;
+  --dkt:  #C5D5E8;
+  --dkt2: #7A95B4;
+  --dka:  #4B90D9;
+  /* asset type badge tokens */
+  --c-case:#059669; --bg-case:#ECFDF5;
+  --c-prop:#0F766E; --bg-prop:#F0FDFA;
+  --c-sow: #D97706; --bg-sow: #FFFBEB;
+  --c-play:#7C3AED; --bg-play:#F5F3FF;
+  --c-deck:#2563EB; --bg-deck:#EFF6FF;
+  --c-bat: #DC2626; --bg-bat: #FEF2F2;
+  --c-disc:#0891B2; --bg-disc:#ECFEFF;
+  --c-arch:#9333EA; --bg-arch:#FAF5FF;
+  --c-know:#64748B; --bg-know:#F8FAFC;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+body {
+  background: var(--bg);
+  color: var(--tx1);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* Full-bleed helper (escapes body gutter) */
+.full-bleed {
+  margin-left:  calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  padding-left:  max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ── Typography ─────────────────────────────────────── */
+h1 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--t1);
+  margin-bottom: 10px;
+}
+.sec-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--tx1);
+  margin-bottom: 5px;
+  letter-spacing: -0.01em;
+}
+.sec-sub {
+  font-size: 0.875rem;
+  color: var(--tx2);
+  margin-bottom: 24px;
+  max-width: 580px;
+}
+
+/* ── Sections ───────────────────────────────────────── */
+.section {
+  padding-block: 52px;
+  border-bottom: 1px solid var(--bd2);
+}
+.section:last-of-type { border-bottom: none; }
+
+.section-white {
+  background: var(--surf);
+  border-top: 1px solid var(--bd2);
+  border-bottom: 1px solid var(--bd2);
+}
+
+/* ── Nav ────────────────────────────────────────────── */
+.nav {
+  background: var(--surf);
+  border-bottom: 1px solid var(--bd);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.nav-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; }
+.nav-pill {
+  background: var(--dk);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.nav-name { font-size: 0.875rem; font-weight: 500; }
+.nav-badge {
+  font-size: 0.72rem;
+  color: var(--tx3);
+}
+
+/* ── Hero ───────────────────────────────────────────── */
+.hero-body {
+  color: var(--tx2);
+  max-width: 600px;
+  margin-top: 14px;
+  margin-bottom: 32px;
+  font-size: 0.95rem;
+}
+.stats {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.stat { display: flex; flex-direction: column; gap: 3px; }
+.stat-n {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--t1);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.stat-l {
+  font-size: 0.68rem;
+  color: var(--tx3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+/* ── Role cards ─────────────────────────────────────── */
+.three-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 14px;
+}
+@media (max-width: 620px) { .three-grid { grid-template-columns: 1fr; } }
+
+.role-card {
+  background: var(--surf);
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.role-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background: var(--t1s);
+  color: var(--t1);
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.role-label { font-weight: 600; font-size: 0.92rem; }
+.role-desc  { font-size: 0.83rem; color: var(--tx2); flex: 1; }
+.role-chip {
+  align-self: flex-start;
+  font-size: 0.68rem;
+  font-weight: 600;
+  background: var(--t1s);
+  color: var(--t1);
+  padding: 2px 9px;
+  border-radius: 20px;
+}
+
+/* ── Asset type badges ──────────────────────────────── */
+.badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 20px;
+  line-height: 1.7;
+  white-space: nowrap;
+}
+.b-case { background:var(--bg-case); color:var(--c-case); }
+.b-prop { background:var(--bg-prop); color:var(--c-prop); }
+.b-sow  { background:var(--bg-sow);  color:var(--c-sow);  }
+.b-play { background:var(--bg-play); color:var(--c-play); }
+.b-deck { background:var(--bg-deck); color:var(--c-deck); }
+.b-bat  { background:var(--bg-bat);  color:var(--c-bat);  }
+.b-disc { background:var(--bg-disc); color:var(--c-disc); }
+.b-arch { background:var(--bg-arch); color:var(--c-arch); }
+.b-know { background:var(--bg-know); color:var(--c-know); }
+
+/* ── Folder cards ───────────────────────────────────── */
+.folder-card {
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  padding: 20px;
+  background: var(--surf2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.folder-lbl {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tx2);
+}
+.folder-desc { font-size: 0.83rem; color: var(--tx2); }
+.badge-row   { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ── Column table ───────────────────────────────────── */
+.tbl-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  min-width: 520px;
+}
+thead th {
+  text-align: left;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--tx3);
+  padding: 8px 12px;
+  border-bottom: 2px solid var(--bd);
+}
+tbody td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--bd2);
+  color: var(--tx2);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: none; }
+.td-name { font-weight: 600; color: var(--tx1) !important; white-space: nowrap; }
+.td-type { color: var(--t1) !important; font-size: 0.8rem !important; white-space: nowrap; }
+.td-key  { font-weight: 600; color: var(--tx1) !important; }
+
+/* ── Summary examples ───────────────────────────────── */
+.summ-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.summ-row  { display: flex; gap: 12px; align-items: flex-start; }
+.summ-lbl  {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  margin-top: 4px;
+}
+.lbl-g { background:#ECFDF5; color:#059669; }
+.lbl-b { background:#FEF2F2; color:#DC2626; }
+.summ-box {
+  border-radius: 8px;
+  padding: 14px 16px;
+  flex: 1;
+  min-width: 0;
+}
+.summ-good { background:#ECFDF5; border:1px solid #A7F3D0; }
+.summ-bad  { background:#FEF2F2; border:1px solid #FECACA; }
+.summ-box blockquote {
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--tx1);
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+.summ-ann { font-size: 0.72rem; color: var(--tx2); }
+.summ-rule {
+  background: var(--t1s);
+  border-left: 3px solid var(--t1);
+  border-radius: 0 6px 6px 0;
+  padding: 12px 16px;
+  font-size: 0.875rem;
+}
+
+/* ── Steps ──────────────────────────────────────────── */
+.steps { display: flex; flex-direction: column; }
+.step {
+  display: flex;
+  gap: 18px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--bd2);
+  align-items: flex-start;
+}
+.step:last-child { border-bottom: none; }
+.step-n {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--dk);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.step-title { font-weight: 600; font-size: 0.92rem; margin-bottom: 4px; }
+.step-desc  { font-size: 0.875rem; color: var(--tx2); }
+
+/* ── Demo section ───────────────────────────────────── */
+.demo-band {
+  background: var(--dk);
+  padding-block: 52px;
+}
+.demo-ey   { font-size:0.68rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--dka); margin-bottom:8px; }
+.demo-h    { font-size:1.15rem; font-weight:600; color:#fff; margin-bottom:6px; }
+.demo-sub  { font-size:0.875rem; color:var(--dkt2); margin-bottom:28px; }
+
+/* Suggestion chips */
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+.chip {
+  background: var(--dk3);
+  border: 1px solid #243A54;
+  color: var(--dkt);
+  font-size: 0.775rem;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .15s, border-color .15s;
+  line-height: 1;
+}
+.chip:hover { background:#1F344D; border-color:#375470; }
+
+/* Input row */
+.input-row { display:flex; gap:10px; margin-bottom:24px; }
+.q-input {
+  flex: 1;
+  min-width: 0;
+  background: var(--dk3);
+  border: 1px solid #243A54;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 10px 14px;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color .15s;
+}
+.q-input::placeholder { color: var(--dkt2); }
+.q-input:focus { border-color: var(--dka); }
+.ask-btn {
+  background: var(--t1);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s;
+}
+.ask-btn:hover { background: #1D4ED8; }
+
+/* Results */
+.results { min-height: 48px; }
+.r-meta {
+  font-size: 0.72rem;
+  color: var(--dkt2);
+  margin-bottom: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.r-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--dka);
+  margin-bottom: 12px;
+}
+.r-cards { display:flex; flex-direction:column; gap:10px; }
+.r-card {
+  background: var(--dk2);
+  border: 1px solid #1C3351;
+  border-radius: 9px;
+  padding: 16px;
+}
+.r-card-hd {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.r-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #fff;
+  flex: 1;
+  min-width: 0;
+}
+.r-tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px; }
+.r-tag {
+  font-size: 0.65rem;
+  background: var(--dk3);
+  color: var(--dkt2);
+  padding: 1px 8px;
+  border-radius: 4px;
+}
+.r-summ {
+  font-size: 0.83rem;
+  color: var(--dkt);
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+.r-link {
+  font-size: 0.75rem;
+  color: var(--dka);
+  opacity: .7;
+  cursor: default;
+}
+.no-match-card {
+  background: var(--dk2);
+  border: 1px solid #2A3F55;
+  border-radius: 9px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.no-match-lbl {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #F59E0B;
+  margin-bottom: 4px;
+}
+.no-match-txt { font-size:0.83rem; color:var(--dkt2); }
+
+/* Loading */
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dkt2);
+  font-size: 0.83rem;
+  padding: 8px 0;
+}
+.ld { width:6px; height:6px; border-radius:50%; background:var(--dka); animation:ld 1.2s infinite; }
+.ld:nth-child(2){animation-delay:.2s;}
+.ld:nth-child(3){animation-delay:.4s;}
+@keyframes ld {
+  0%,80%,100%{opacity:.25;transform:scale(.8);}
+  40%{opacity:1;transform:scale(1);}
+}
+
+/* ── Folder tree ────────────────────────────────────── */
+.tree-wrap {
+  overflow-x: auto;
+  background: var(--surf2);
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+.tree {
+  font-family: 'DM Mono', 'Fira Mono', 'Courier New', monospace;
+  font-size: 0.8rem;
+  line-height: 1.75;
+  color: var(--tx1);
+  white-space: pre;
+}
+.tree .t-folder { color: var(--t1); font-weight: 600; }
+.tree .t-file   { color: var(--tx2); }
+.tree .t-note   { color: var(--tx3); font-style: italic; }
+.tree-note {
+  font-size: 0.8rem;
+  color: var(--tx2);
+  padding: 10px 14px;
+  background: var(--t1s);
+  border-radius: 6px;
+  border-left: 3px solid var(--t1);
+}
+
+/* ── Route cards (Copilot section) ─────────────────── */
+.route-card {
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  padding: 20px;
+  background: var(--surf2);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.route-num   { font-size:.65rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--tx3); }
+.route-name  { font-weight:600; font-size:.92rem; color:var(--tx1); }
+.effort-chip { align-self:flex-start; font-size:.68rem; font-weight:600; padding:2px 9px; border-radius:20px; }
+.effort-zero { background:#ECFDF5; color:#059669; }
+.effort-low  { background:#EFF6FF; color:#2563EB; }
+.route-desc  { font-size:.83rem; color:var(--tx2); flex:1; }
+.route-limit { font-size:.78rem; color:var(--tx3); border-top:1px solid var(--bd2); padding-top:8px; }
+/* Comparison table cell states */
+.td-yes { color:#059669 !important; font-weight:500; }
+.td-mid { color:#D97706 !important; font-weight:500; }
+.td-no  { color:#DC2626 !important; font-weight:500; }
+</style>
+
+<!-- ── Nav ────────────────────────────────────────────── -->
+<nav class="nav full-bleed">
+  <div class="nav-inner wrap">
+    <div class="nav-brand">
+      <span class="nav-pill">KAM</span>
+      <span class="nav-name">KPI Asset Manager</span>
+    </div>
+    <span class="nav-badge">Internal · KPI Partners</span>
+  </div>
+</nav>
+
+<!-- ── What is KAM ────────────────────────────────────── -->
+<section class="section">
+  <div class="wrap">
+    <div class="eyebrow">What is KAM?</div>
+    <h1>The firm's CE knowledge,<br>retrieved in seconds.</h1>
+    <p class="hero-body">KPI Asset Manager connects sellers to every proposal, case study, playbook, and battle card the firm has ever produced — through a natural language interface powered by Claude. Instead of navigating SharePoint folders manually, a seller types a question and gets the right asset back with a link. KAM lives on SharePoint; Claude is the retrieval layer on top of it.</p>
+    <div class="stats">
+      <div class="stat"><span class="stat-n">3</span><span class="stat-l">Folders</span></div>
+      <div class="stat"><span class="stat-n">9</span><span class="stat-l">Asset Types</span></div>
+      <div class="stat"><span class="stat-n">6</span><span class="stat-l">Verticals</span></div>
+      <div class="stat"><span class="stat-n">5</span><span class="stat-l">Platforms</span></div>
+      <div class="stat"><span class="stat-n">6</span><span class="stat-l">Columns</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Who uses it ────────────────────────────────────── -->
+<section class="section section-white full-bleed">
+  <div class="wrap">
+    <div class="sec-title">Who uses it</div>
+    <p class="sec-sub">Three roles, three different relationships with KAM.</p>
+    <div class="three-grid">
+      <div class="role-card">
+        <div class="role-icon">S</div>
+        <div class="role-label">Sellers</div>
+        <p class="role-desc">Ask Claude a question before a call, an RFP, or a proposal. Get assets back without opening SharePoint. No upload access.</p>
+        <span class="role-chip">Read only</span>
+      </div>
+      <div class="role-card">
+        <div class="role-icon">SA</div>
+        <div class="role-label">SAs &amp; Directors</div>
+        <p class="role-desc">Upload assets after every engagement. Write a plain-text Summary before requesting Approved status. The quality of KAM is the quality of these summaries.</p>
+        <span class="role-chip">Contribute</span>
+      </div>
+      <div class="role-card">
+        <div class="role-icon">PL</div>
+        <div class="role-label">Practice Leads</div>
+        <p class="role-desc">Approve assets and own the taxonomy. Decide what reaches sellers. Enforce the Summary gate and remove stale or duplicate entries.</p>
+        <span class="role-chip">Govern</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── What's inside ──────────────────────────────────── -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-title">What's inside</div>
+    <p class="sec-sub">Three folders for navigation. Nine asset types across them. All tagged and searchable by Claude.</p>
+    <div class="three-grid">
+      <div class="folder-card">
+        <div class="folder-lbl">External</div>
+        <p class="folder-desc">Customer-facing assets and partner materials. Anonymised by default. The most-retrieved folder during pre-sales.</p>
+        <div class="badge-row">
+          <span class="badge b-case">Case Study</span>
+          <span class="badge b-prop">Proposal</span>
+          <span class="badge b-sow">SOW</span>
+        </div>
+      </div>
+      <div class="folder-card">
+        <div class="folder-lbl">Internal</div>
+        <p class="folder-desc">Sales enablement, vertical playbooks, and delivery assets. Delivery-only assets are hidden from seller queries.</p>
+        <div class="badge-row">
+          <span class="badge b-play">Playbook</span>
+          <span class="badge b-deck">Capability Deck</span>
+          <span class="badge b-bat">Battle Card</span>
+          <span class="badge b-disc">Discovery Questions</span>
+        </div>
+      </div>
+      <div class="folder-card">
+        <div class="folder-lbl">Knowledge</div>
+        <p class="folder-desc">Regulatory reference, platform notes, and competitive intelligence. Carries a ValidUntil date so stale intel is flagged automatically.</p>
+        <div class="badge-row">
+          <span class="badge b-arch">Architecture Pattern</span>
+          <span class="badge b-know">Knowledge Doc</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Folder structure ───────────────────────────────── -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-title">Folder structure</div>
+    <p class="sec-sub">Folders are for human navigation only. Claude queries across all folders using column filters — subfolder depth does not affect retrieval.</p>
+    <div class="tree-wrap">
+      <div class="tree"><span class="t-folder">kam/</span>  <span class="t-note">← one SharePoint document library</span>
+│
+<span class="t-folder">├── external/</span>  <span class="t-note">← three subcategories: customer work · events · partner</span>
+│   │
+│   ├── <span class="t-folder">customer_artifacts/</span>  <span class="t-note">← account-specific, one folder per engagement</span>
+│   │   ├── <span class="t-folder">[2026]-[insurance]-[wtw]-[marketing-data-lake-on-databricks]-[data-engineering]/</span>
+│   │   │   ├── estimates/
+│   │   │   ├── proposals/
+│   │   │   ├── sow/
+│   │   │   ├── case_study/    <span class="t-note">← added post-delivery, anonymised before tagging approved</span>
+│   │   │   └── delivered_decks/
+│   │   ├── <span class="t-folder">[2026]-[banking]-[barclays]-[bcbs239-compliance]-[data-engineering]/</span>
+│   │   │   ├── estimates/
+│   │   │   ├── proposals/
+│   │   │   ├── sow/
+│   │   │   └── delivered_decks/
+│   │   └── <span class="t-note">[year]-[domain]-[customer]-[requirements]-[practice]/  ← one per engagement</span>
+│   │
+│   ├── <span class="t-folder">events_artifacts/</span>  <span class="t-note">← market-facing content, brand and lead generation</span>
+│   │   ├── <span class="t-folder">webinars/</span>
+│   │   │   ├── <span class="t-folder">[2026]-[ce-on-databricks]-[kpi-databricks-joint]/</span>
+│   │   │   │   ├── slide_deck/
+│   │   │   │   ├── recording_link.md
+│   │   │   │   └── follow_up_assets/
+│   │   │   └── <span class="t-note">[year]-[topic]-[partner-or-solo]/</span>
+│   │   ├── <span class="t-folder">white_papers/</span>
+│   │   │   ├── <span class="t-folder">[2026]-[context-engineering-in-fsi]/</span>
+│   │   │   └── <span class="t-note">[year]-[topic]/</span>
+│   │   ├── <span class="t-folder">conference_talks/</span>
+│   │   │   ├── <span class="t-folder">[2026]-[databricks-summit]-[ce-for-fsi-session]/</span>
+│   │   │   │   ├── speaking_proposal/
+│   │   │   │   ├── session_deck/
+│   │   │   │   └── recording_link.md
+│   │   │   └── <span class="t-note">[year]-[event]-[session-title]/</span>
+│   │   ├── <span class="t-folder">blog_posts/</span>
+│   │   │   └── <span class="t-note">[year]-[topic]-[platform-or-solo]/</span>
+│   │   └── <span class="t-folder">awards_submissions/</span>
+│   │       └── <span class="t-note">[year]-[award-body]-[category]/</span>
+│   │
+│   └── <span class="t-folder">partner_artifacts/</span>  <span class="t-note">← co-sell and alliance materials</span>
+│       ├── databricks/
+│       ├── snowflake/
+│       ├── microsoft_fabric/
+│       ├── anthropic/
+│       └── aws_bedrock/
+│
+<span class="t-folder">├── internal/</span>  <span class="t-note">← sales enablement and delivery assets</span>
+│   ├── <span class="t-folder">capability_decks/</span>
+│   │   ├── ce_on_databricks/
+│   │   ├── ce_on_snowflake/
+│   │   ├── ce_on_fabric/
+│   │   ├── ce_on_bedrock/
+│   │   └── ce_on_anthropic/
+│   ├── <span class="t-folder">vertical_playbooks/</span>
+│   │   ├── banking/
+│   │   ├── insurance/
+│   │   ├── healthcare/
+│   │   ├── wealth_management/
+│   │   └── capital_markets/
+│   ├── <span class="t-folder">sales_enablement/</span>
+│   │   ├── battle_cards/
+│   │   ├── discovery_questions/
+│   │   ├── objection_handling/
+│   │   ├── icp_profiles/
+│   │   └── pricing_models/
+│   └── <span class="t-folder">delivery_assets/</span>
+│       ├── architecture_patterns/
+│       ├── sprint_templates/
+│       ├── assessment_framework/
+│       └── project_governance/
+│
+<span class="t-folder">└── knowledge/</span>  <span class="t-note">← regulatory reference and competitive intel</span>
+    ├── <span class="t-folder">regulatory/</span>
+    │   ├── bcbs_239/
+    │   ├── dora/
+    │   ├── eu_ai_act/
+    │   └── sr_26-2/
+    ├── <span class="t-folder">platform_knowledge/</span>
+    │   ├── databricks/
+    │   ├── snowflake/
+    │   ├── microsoft_fabric/
+    │   └── aws_bedrock/
+    └── <span class="t-folder">competitive_intelligence/</span></div>
+    </div>
+    <div class="tree-note">
+      <strong>Customer_Artifacts naming:</strong>&nbsp;&nbsp;<code>[year]-[domain]-[customer]-[requirements]-[kpi-practice-at-work]</code><br>
+      Mirrors the workbench naming in the my-agent-foundry repo. Each KAM engagement folder maps one-to-one to a workbench — create both at the same time. Subfolders: <code>Estimates/</code> · <code>Proposals/</code> · <code>SOW/</code> · <code>Case_Study/</code> · <code>Delivered_Decks/</code>. <code>Case_Study/</code> is added post-delivery and must be anonymised before Status is set to Approved.<br><br>
+      <strong>Events_Artifacts naming:</strong>&nbsp;&nbsp;<code>[year]-[topic]-[partner-or-event]/</code> for webinars and conference talks &nbsp;·&nbsp; <code>[year]-[topic]/</code> for white papers and blogs. Each event folder holds slide decks, recording links, and follow-up assets together so the full context of a market moment stays in one place.<br><br>
+      <strong>Claude ignores folder path.</strong> A webinar deck inside <code>events_artifacts/webinars/[2026]-[ce-on-databricks]-[…]/</code> is retrieved by a query for <code>AssetType: Capability Deck · Technology: Databricks</code> regardless of where it sits. Columns drive retrieval; folders drive human navigation.
+    </div>
+  </div>
+</section>
+
+<!-- ── The six columns ────────────────────────────────── -->
+<section class="section section-white full-bleed">
+  <div class="wrap">
+    <div class="sec-title">How assets are tagged</div>
+    <p class="sec-sub">Every asset carries six columns. Claude filters by them; people browse by them. Nothing else is required.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Column</th><th>Type</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-name">Vertical</td>
+            <td class="td-type">Choice (multi)</td>
+            <td>The FS vertical this asset covers. Insurance · Banking · Capital Markets · Healthcare · Wealth · RegTech</td>
+          </tr>
+          <tr>
+            <td class="td-name">Technology</td>
+            <td class="td-type">Choice (multi)</td>
+            <td>The platform the asset is built on. Databricks · Snowflake · Fabric · Bedrock · Anthropic · Multi-Model</td>
+          </tr>
+          <tr>
+            <td class="td-name">AssetType</td>
+            <td class="td-type">Choice (single)</td>
+            <td>What kind of asset this is. One of the nine types across the three folders above.</td>
+          </tr>
+          <tr>
+            <td class="td-name">Status</td>
+            <td class="td-type">Choice</td>
+            <td>Draft → Review → Approved → Archived. Claude retrieves only Approved assets.</td>
+          </tr>
+          <tr>
+            <td class="td-name">Audience</td>
+            <td class="td-type">Choice</td>
+            <td>Sellers · Delivery · Both. Delivery-only assets are excluded from all seller-facing queries.</td>
+          </tr>
+          <tr>
+            <td class="td-key">Summary</td>
+            <td class="td-type">Text (300 chars)</td>
+            <td>The plain-text description Claude reads when deciding relevance. The most important field in KAM — see below.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── The Summary field ──────────────────────────────── -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-title">The Summary field</div>
+    <p class="sec-sub">This is the only field Claude reads when deciding which asset is most relevant to a seller's question. Plain text, two to three sentences, under 300 characters.</p>
+    <div class="summ-grid">
+      <div class="summ-row">
+        <span class="summ-lbl lbl-g">Good</span>
+        <div class="summ-box summ-good">
+          <blockquote>"CE build on Databricks Unity Catalog for a UK retail bank. Reduced report generation time 60%. BCBS 239 lineage captured as a byproduct. Anonymised, reference-ready."</blockquote>
+          <div class="summ-ann">What it does · Outcome · Regulatory angle · Reference status — Claude can match this to five different seller questions.</div>
+        </div>
+      </div>
+      <div class="summ-row">
+        <span class="summ-lbl lbl-b">Avoid</span>
+        <div class="summ-box summ-bad">
+          <blockquote>"Big bank project on Databricks — great outcome, check it out."</blockquote>
+          <div class="summ-ann">No vertical. No outcome metric. No regulatory or use-case context. Claude cannot match this to any structured seller query.</div>
+        </div>
+      </div>
+    </div>
+    <div class="summ-rule">
+      <strong>The gate:</strong> Status cannot be set to Approved unless the Summary field is filled. An asset without a Summary never reaches sellers, regardless of how well the other columns are tagged.
+    </div>
+  </div>
+</section>
+
+<!-- ── How Claude retrieves ───────────────────────────── -->
+<section class="section section-white full-bleed">
+  <div class="wrap">
+    <div class="sec-title">How Claude retrieves</div>
+    <p class="sec-sub">Three steps on every query. The same pattern regardless of how the seller phrases the question.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <div>
+          <div class="step-title">Parse the query</div>
+          <p class="step-desc">Claude reads the seller's question and maps it to column values: vertical, technology, asset type. If the query is open-ended ("anything on BCBS 239?"), it skips the column filter and does a full-text keyword scan across all Summaries instead.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div>
+          <div class="step-title">Filter by columns via Graph API</div>
+          <p class="step-desc">Claude queries the KAM SharePoint library through Microsoft Graph API, filtering to Approved assets that match the inferred column values. Delivery-only assets are always excluded.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div>
+          <div class="step-title">Read Summaries and return results</div>
+          <p class="step-desc">Claude reads the Summary of each matching asset, ranks by relevance to the original question, and returns the top results with a SharePoint link. If nothing matches exactly, it tells the seller and suggests the closest alternatives — it never returns a blank response.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Copilot comparison ─────────────────────────────── -->
+<section class="section section-white full-bleed">
+  <div class="wrap">
+    <div class="sec-title">Can Copilot do the same?</div>
+    <p class="sec-sub">Yes — Microsoft offers three routes to the same KAM access patterns. Each has different effort and precision trade-offs.</p>
+
+    <div class="three-grid" style="margin-bottom:28px;">
+      <div class="route-card">
+        <div class="route-num">Route 1</div>
+        <div class="route-name">SharePoint Agent</div>
+        <span class="effort-chip effort-zero">Zero dev · ~30 min</span>
+        <p class="route-desc">Scope a native SharePoint agent to the KAM library in one click. It appears as a chat interface in SharePoint and Teams. Sellers ask questions and it searches column values, document titles, the Summary field, and file content.</p>
+        <div class="route-limit">Less precise — reads all content, not just Summary. Results are ranked semantically rather than by structured column filter.</div>
+      </div>
+      <div class="route-card">
+        <div class="route-num">Route 2</div>
+        <div class="route-name">M365 Copilot Chat</div>
+        <span class="effort-chip effort-zero">Zero dev · already there</span>
+        <p class="route-desc">If KPI has M365 Copilot licences, sellers already have this. Copilot Chat searches all M365 content the user can access — SharePoint, Teams, Outlook — and surfaces KAM assets alongside everything else.</p>
+        <div class="route-limit">Too broad. Searches the entire tenant, not just KAM. Loses the precision of a library-scoped query.</div>
+      </div>
+      <div class="route-card">
+        <div class="route-num">Route 3</div>
+        <div class="route-name">Copilot Studio Agent</div>
+        <span class="effort-chip effort-low">1–2 days</span>
+        <p class="route-desc">A custom agent in Copilot Studio that calls Microsoft Graph API directly — the same API the Claude MCP design uses. You define exact column filters, read only the Summary field, and exclude Delivery-only assets.</p>
+        <div class="route-limit">Requires a Copilot Studio licence. Functionally identical to the Claude MCP approach; the only difference is the model (GPT-4o vs Claude).</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap" style="margin-bottom:22px;">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>SharePoint Agent</th>
+            <th>M365 Copilot</th>
+            <th>Copilot Studio</th>
+            <th>Claude MCP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-key">Dev effort</td>
+            <td class="td-yes">None</td>
+            <td class="td-yes">None</td>
+            <td class="td-mid">1–2 days</td>
+            <td class="td-mid">1–2 days</td>
+          </tr>
+          <tr>
+            <td class="td-key">Retrieval precision</td>
+            <td class="td-mid">Medium</td>
+            <td class="td-no">Low</td>
+            <td class="td-yes">High</td>
+            <td class="td-yes">High</td>
+          </tr>
+          <tr>
+            <td class="td-key">Column filtering</td>
+            <td class="td-mid">Partial</td>
+            <td class="td-no">No</td>
+            <td class="td-yes">Yes</td>
+            <td class="td-yes">Yes</td>
+          </tr>
+          <tr>
+            <td class="td-key">Summary-only read</td>
+            <td class="td-no">No</td>
+            <td class="td-no">No</td>
+            <td class="td-yes">Yes</td>
+            <td class="td-yes">Yes</td>
+          </tr>
+          <tr>
+            <td class="td-key">Where it appears</td>
+            <td>SP + Teams</td>
+            <td>All M365</td>
+            <td>Teams + SP</td>
+            <td>Anywhere</td>
+          </tr>
+          <tr>
+            <td class="td-key">Licence needed</td>
+            <td>SharePoint</td>
+            <td>M365 Copilot</td>
+            <td>Copilot Studio</td>
+            <td>Claude API</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="summ-rule">
+      <strong>Practical recommendation:</strong> Start with a <strong>SharePoint Agent</strong> on the KAM library — 30 minutes, zero cost, gives sellers something usable immediately. If retrieval precision is a problem, build the <strong>Copilot Studio agent</strong> with structured column logic. The <strong>Claude MCP</strong> approach is right when KAM is part of a broader Claude workflow — drafting proposals, summarising case studies, generating discovery packs — not just retrieval. Either way: build the schema once, choose the front end later.
+    </div>
+  </div>
+</section>
+
+<!-- ── Demo: Option A ─────────────────────────────────── -->
+<section class="demo-band full-bleed">
+  <div class="wrap">
+    <div class="demo-ey">Live sample</div>
+    <div class="demo-h">Ask KAM</div>
+    <p class="demo-sub">Select an example below or type your own question. Claude queries the asset library and returns matching results with the filter it applied.</p>
+
+    <div class="chips" id="chips"></div>
+
+    <div class="input-row">
+      <input type="text" class="q-input" id="qInput" placeholder="Ask about CE assets — verticals, platforms, asset types…" autocomplete="off">
+      <button class="ask-btn" id="askBtn">Ask</button>
+    </div>
+
+    <div class="results" id="results"></div>
+  </div>
+</section>
+
+<script>
+const QS = [
+  {
+    chip: "Case study · bank · Databricks",
+    query: "Case study for a bank on Databricks",
+    filter: "Vertical: Banking  ·  Technology: Databricks  ·  AssetType: Case Study  ·  Status: Approved",
+    status: "2 Approved assets found",
+    results: [
+      { title:"UK Retail Bank — CE on Databricks Unity Catalog", type:"Case Study", bCls:"b-case", tags:["Banking","Databricks"],
+        summ:"CE context layer on Databricks Unity Catalog for a UK retail bank. Reduced report generation time 60%. BCBS 239 lineage captured as a byproduct. Anonymised, reference-ready." },
+      { title:"European Investment Bank — Multi-model CE Architecture", type:"Case Study", bCls:"b-case", tags:["Banking","Databricks","Anthropic"],
+        summ:"Multi-model CE for an EU investment bank's trading desk. Claude + Databricks Vector Search. Reduced analyst data-prep time by 4 hours per day. Anonymised." }
+    ]
+  },
+  {
+    chip: "Battle card · Accenture",
+    query: "Battle card against Accenture",
+    filter: "AssetType: Battle Card  ·  Status: Approved  ·  Summary keyword: Accenture",
+    status: "1 Approved asset found",
+    results: [
+      { title:"KPI vs Accenture FDE — CE Battle Card", type:"Battle Card", bCls:"b-bat", tags:["All Verticals"],
+        summ:"Head-to-head on CE delivery speed, FS reference depth, and MCP architecture expertise. Key KPI differentiator: no offshore handoff, SA stays on account, faster time-to-value." }
+    ]
+  },
+  {
+    chip: "Discovery questions · CDO · bank",
+    query: "Discovery questions for a CDO at a bank",
+    filter: "Vertical: Banking  ·  AssetType: Discovery Questions  ·  Status: Approved",
+    status: "1 Approved asset found",
+    results: [
+      { title:"Banking CDO Discovery Question Bank", type:"Discovery Questions", bCls:"b-disc", tags:["Banking"],
+        summ:"32 questions across data strategy maturity, LLM experiments, governance blockers, and CE readiness. Organised by stage: opening → pain → vision → consequence." }
+    ]
+  },
+  {
+    chip: "Anything on BCBS 239?",
+    query: "Anything on BCBS 239?",
+    filter: "Full-text scan across all Summaries  ·  Keywords: BCBS 239, data lineage, risk aggregation",
+    status: "2 Approved assets matched",
+    results: [
+      { title:"Banking Vertical Playbook", type:"Playbook", bCls:"b-play", tags:["Banking"],
+        summ:"Full FS banking playbook. BCBS 239 positioned as the primary regulatory urgency driver. CE architecture pattern for risk reporting lineage included." },
+      { title:"CE on Databricks — BCBS 239 Architecture Pattern", type:"Architecture Pattern", bCls:"b-arch", tags:["Banking","Databricks"],
+        summ:"Unity Catalog lineage capture pattern designed to satisfy BCBS 239 requirements as a byproduct of a CE build. Includes reference diagram and deployment runbook." }
+    ]
+  },
+  {
+    chip: "SOW · diagnostic sprint",
+    query: "SOW template for a diagnostic sprint",
+    filter: "AssetType: SOW  ·  Status: Approved  ·  Summary keyword: diagnostic",
+    status: "1 Approved asset found",
+    results: [
+      { title:"CE Diagnostic Sprint SOW Template", type:"SOW", bCls:"b-sow", tags:["All Verticals"],
+        summ:"2-week scoping engagement. CE readiness assessment, platform fit analysis, 3 prioritised use cases, rough effort estimate. $15–25K range. Editable DOCX." }
+    ]
+  },
+  {
+    chip: "Healthcare · Fabric (no exact match)",
+    query: "Healthcare case study on Fabric",
+    filter: "Vertical: Healthcare  ·  Technology: Microsoft Fabric  ·  AssetType: Case Study  ·  Status: Approved",
+    status: "0 exact matches — closest alternatives shown",
+    noMatch: "No Healthcare case study on Microsoft Fabric exists yet.",
+    results: [
+      { title:"CE on Microsoft Fabric — Capability Deck", type:"Capability Deck", bCls:"b-deck", tags:["Microsoft Fabric"],
+        summ:"CE architecture patterns on Microsoft Fabric: Copilot integration, OneLake context layer, FS use cases including private banking and payer analytics." },
+      { title:"Healthcare Vertical Playbook", type:"Playbook", bCls:"b-play", tags:["Healthcare"],
+        summ:"CE playbook for healthcare. Payer and provider use cases: member auth, prior auth, clinical documentation. Platform-agnostic; includes Bedrock and Fabric patterns." }
+    ]
+  },
+  {
+    chip: "Create proposal · insurance · Databricks",
+    query: "Create a proposal for an insurance company on Databricks",
+    filter: "Vertical: Insurance  ·  Technology: Databricks  ·  AssetType: Proposal  ·  Status: Approved",
+    status: "3 Approved assets found — drafting proposal outline",
+    results: [
+      { title:"Insurance CE Assessment Proposal — WTW (Anonymised)", type:"Proposal", bCls:"b-prop", tags:["Insurance","Databricks"],
+        summ:"4-week CE Readiness Assessment for a global insurance broker. Covers P&C claims ontology design, MCP server on Databricks, and 3 quick-win use cases. Scope, pricing, and SOW structure reusable as-is." },
+      { title:"P&C Claims Context Layer — Estimation Template", type:"SOW", bCls:"b-sow", tags:["Insurance","Databricks"],
+        summ:"Effort and cost model for a CE build on Databricks targeting P&C claims intelligence. Includes team structure (1 SA + 1 DE + 0.5 PM), 6-week delivery, and a £60–80K indicative range." },
+      { title:"Insurance Vertical Playbook", type:"Playbook", bCls:"b-play", tags:["Insurance","Databricks","Snowflake"],
+        summ:"Full CE playbook for insurance. Sections: regulatory context (Solvency II, IFRS 17), platform patterns on Databricks and Snowflake, claims and underwriting use cases, KPI differentiators vs Accenture and Capgemini." }
+    ]
+  },
+  {
+    chip: "Objection handling · Snowflake",
+    query: "Objection handling questions for Snowflake",
+    filter: "Technology: Snowflake  ·  AssetType: Battle Card  ·  Status: Approved  ·  Summary keyword: objection",
+    status: "2 Approved assets found",
+    results: [
+      { title:"Snowflake CE — Objection Handling Guide", type:"Battle Card", bCls:"b-bat", tags:["All Verticals","Snowflake"],
+        summ:"12 objections commonly raised when selling CE on Snowflake, with tested responses. Covers: 'We already have Cortex AI', 'dbt handles our semantics', 'Snowflake partner can do this cheaper', and 'We're not ready for agents yet'. Each objection includes the underlying concern, a redirect, and a proof point." },
+      { title:"KPI vs Snowflake Native AI — Positioning Card", type:"Battle Card", bCls:"b-bat", tags:["All Verticals","Snowflake"],
+        summ:"When prospects ask why they need KPI if Snowflake has Cortex. Positions CE as the layer above the platform — Snowflake provides compute and storage; KPI builds the semantic and context layer that makes Cortex actually useful for domain questions." }
+    ]
+  },
+  {
+    chip: "Vocabulary · WTW conversation · underwriting",
+    query: "Give me vocabulary for a conversation with a WTW manager about insurance underwriting",
+    filter: "Vertical: Insurance  ·  AssetType: Knowledge Base  ·  Status: Approved  ·  Summary keyword: underwriting WTW",
+    status: "2 Approved assets found — domain vocabulary compiled",
+    results: [
+      { title:"Insurance Underwriting — Domain Vocabulary Card", type:"Knowledge Base", bCls:"b-know", tags:["Insurance"],
+        summ:"35 terms an SA must know before an underwriting conversation: loss ratio, combined ratio, risk appetite, facultative vs treaty reinsurance, FNOL, bordereaux, cession rate, exposure management, cat modelling, UW authority. Each term has a one-line plain-English definition and a CE relevance note — e.g. 'Combined ratio: the core KPI underwriters track; a CE context layer that surfaces it in real time is the natural entry point.'" },
+      { title:"WTW Account Context — Insurance Broker Model", type:"Knowledge Base", bCls:"b-know", tags:["Insurance"],
+        summ:"WTW-specific context for seller conversations: broker vs carrier distinction, WTW's Willis Towers Watson heritage, key P&C and specialty lines, their Technology business unit, and how their data estate (largely Guidewire + SQL Server) maps to KPI's CE capabilities. Includes 4 opener questions aligned to WTW priorities: data modernisation, underwriter productivity, and claims cycle time." }
+    ]
+  }
+];
+
+// Build chips
+const chipsEl = document.getElementById('chips');
+QS.forEach((q, i) => {
+  const b = document.createElement('button');
+  b.className = 'chip';
+  b.textContent = q.chip;
+  b.addEventListener('click', () => {
+    document.getElementById('qInput').value = q.query;
+    run(i);
+  });
+  chipsEl.appendChild(b);
+});
+
+document.getElementById('askBtn').addEventListener('click', handleSend);
+document.getElementById('qInput').addEventListener('keydown', e => { if (e.key === 'Enter') handleSend(); });
+
+function handleSend() {
+  const v = document.getElementById('qInput').value.trim();
+  if (!v) return;
+  const idx = QS.findIndex(q => q.query.toLowerCase() === v.toLowerCase());
+  idx !== -1 ? run(idx) : runFree();
+}
+
+function run(i) {
+  const q = QS[i];
+  const el = document.getElementById('results');
+  el.innerHTML = `<div class="loading"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span>Querying KAM Assets…</span></div>`;
+
+  setTimeout(() => {
+    let h = `<div class="r-meta">Filter applied: ${q.filter}</div>`;
+    h += `<div class="r-status">${q.status}</div>`;
+    if (q.noMatch) {
+      h += `<div class="no-match-card"><div class="no-match-lbl">No exact match</div><div class="no-match-txt">${q.noMatch} Showing closest alternatives:</div></div>`;
+    }
+    h += '<div class="r-cards">';
+    q.results.forEach(r => {
+      const tags = r.tags.map(t => `<span class="r-tag">${t}</span>`).join('');
+      h += `<div class="r-card">
+        <div class="r-card-hd">
+          <span class="badge ${r.bCls}">${r.type}</span>
+          <span class="r-title">${r.title}</span>
+        </div>
+        <div class="r-tags">${tags}</div>
+        <div class="r-summ">${r.summ}</div>
+        <span class="r-link">↗ Open in SharePoint</span>
+      </div>`;
+    });
+    h += '</div>';
+    el.innerHTML = h;
+  }, 850);
+}
+
+function runFree() {
+  const el = document.getElementById('results');
+  el.innerHTML = `<div class="loading"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span>Querying KAM Assets…</span></div>`;
+  setTimeout(() => {
+    el.innerHTML = `<div class="r-meta">Full-text scan across all Summaries</div>
+      <div class="no-match-card">
+        <div class="no-match-lbl">Demo only</div>
+        <div class="no-match-txt">This page is pre-loaded with 6 sample queries. Click one of the chips above, or type it exactly.</div>
+      </div>`;
+  }, 700);
+}
+</script>

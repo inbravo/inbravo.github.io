@@ -22,6 +22,7 @@
   --t5: #D97706;
   --t6: #C42020;
   --t7: #1E293B;
+  --t8: #0F766E;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -100,6 +101,7 @@ body {
 .card[data-t="5"]::before { background: var(--t5); }
 .card[data-t="6"]::before { background: var(--t6); }
 .card[data-t="7"]::before { background: var(--t7); }
+.card[data-t="8"]::before { background: var(--t8); }
 
 .card-top {
   display: flex; justify-content: space-between; align-items: flex-start;
@@ -116,6 +118,7 @@ body {
 .card[data-t="5"] .card-tn { color: var(--t5); }
 .card[data-t="6"] .card-tn { color: var(--t6); }
 .card[data-t="7"] .card-tn { color: var(--t7); }
+.card[data-t="8"] .card-tn { color: var(--t8); }
 .card-title { font-size: 14px; font-weight: 600; line-height: 1.3; }
 
 .badge {
@@ -124,6 +127,26 @@ body {
 }
 .b-yours { background: #EFF6FF; color: #1D4ED8; }
 .b-new   { background: #FFF7ED; color: #C2410C; }
+
+/* ── TRACK GROUP LABELS ── */
+.track-group { margin-bottom: 6px; }
+.track-group + .track-group { margin-top: 22px; }
+.tg-lbl {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--tx3);
+  padding: 5px 0 10px;
+  border-bottom: 1px solid var(--bdr);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.tg-lbl::before {
+  content: ""; display: inline-block; width: 28px; height: 2px;
+  border-radius: 1px;
+}
+.tg-outward .tg-lbl { color: #1D4ED8; }
+.tg-outward .tg-lbl::before { background: #2563EB; }
+.tg-inward  .tg-lbl { color: #065F46; }
+.tg-inward  .tg-lbl::before { background: #059669; }
 
 /* ── MILESTONE LIST ── */
 .ml { list-style: none; display: flex; flex-direction: column; gap: 8px; }
@@ -155,7 +178,7 @@ body {
 .gantt {
   display: grid;
   grid-template-columns: 150px repeat(12, 1fr);
-  grid-template-rows: 20px 24px repeat(7, 44px) repeat(4, 60px);
+  grid-template-rows: 20px 24px 44px 88px 44px 44px 44px 44px 44px 44px 60px 60px 60px 60px;
   min-width: 1000px;
 }
 .g-q {
@@ -188,6 +211,7 @@ body {
 .g-lbl[data-t="5"] { border-left-color: var(--t5); }
 .g-lbl[data-t="6"] { border-left-color: var(--t6); }
 .g-lbl[data-t="7"] { border-left-color: var(--t7); }
+.g-lbl[data-t="8"] { border-left-color: var(--t8); }
 .g-lbl[data-t="h"] { border-left-color: #7C3AED; }
 .g-lbl[data-t="e"] { border-left-color: #D97706; }
 .g-lbl[data-t="w"]  { border-left-color: #16A34A; }
@@ -200,6 +224,21 @@ body {
   white-space: normal; word-break: break-word; line-height: 1.25;
   align-self: center; margin: 0 1px;
 }
+/* ── SPLIT-LANE bars (T2 two-line row) ── */
+.lane-top {
+  align-self: start; margin-top: 5px;
+  height: 36px; min-height: unset;
+  font-style: italic;
+}
+.lane-bot {
+  align-self: end; margin-bottom: 5px;
+  height: 36px; min-height: unset;
+}
+.lane-dot-top { display:flex; align-items:center; justify-content:center; align-self:start; margin-top:14px; color:#B45309; font-size:13px; font-weight:900; }
+.lane-dot-bot { display:flex; align-items:center; justify-content:center; align-self:end;  margin-bottom:14px; color:#F59E0B; font-size:13px; font-weight:900; }
+/* migration bar colours */
+.mg-a { background: #F5EDDA; color: #7A5C2E; }
+.mg-b { background: #C9A55A; color: #fff; }
 .g-dot {
   display: flex; align-items: center; justify-content: center;
   align-self: center; color: #F59E0B; font-size: 13px; font-weight: 900;
@@ -252,6 +291,63 @@ body {
 }
 .cad-dot {
   width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+}
+
+/* ── INTERNAL MECHANISMS ── */
+.int-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+}
+@media (max-width: 680px) { .int-grid { grid-template-columns: 1fr; } }
+.int-card {
+  background: var(--surf); border: 1px solid var(--bdr);
+  border-radius: 10px; padding: 20px 20px 16px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.int-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--tx3); margin-bottom: 2px;
+}
+.int-title {
+  font-size: 15px; font-weight: 800; color: var(--tx1); line-height: 1.2;
+}
+.int-sub {
+  font-size: 10.5px; color: var(--tx3); margin-top: 1px; font-weight: 500;
+}
+.int-body {
+  font-size: 11.5px; color: var(--tx2); line-height: 1.6;
+}
+.int-body strong { color: var(--tx1); font-weight: 700; }
+.int-table {
+  width: 100%; border-collapse: collapse; font-size: 11px;
+}
+.int-table th {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--tx3); padding: 5px 8px; text-align: left;
+  border-bottom: 1px solid var(--bdr);
+}
+.int-table td {
+  padding: 7px 8px; color: var(--tx2); border-bottom: 1px solid var(--bdr);
+  vertical-align: top; line-height: 1.4;
+}
+.int-table tr:last-child td { border-bottom: none; }
+.int-table td:first-child { font-weight: 700; color: var(--tx1); white-space: nowrap; }
+.int-table td:nth-child(2) { font-weight: 600; color: var(--tx3); white-space: nowrap; }
+.int-rule {
+  font-size: 11px; color: var(--tx2); line-height: 1.55;
+  background: var(--bg); border-radius: 6px; padding: 10px 12px;
+  border-left: 3px solid var(--t1);
+}
+.int-rule strong { color: var(--tx1); }
+.int-output {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.int-output li {
+  font-size: 11px; color: var(--tx2); line-height: 1.4;
+  display: flex; gap: 8px; align-items: flex-start;
+}
+.int-output li::before {
+  content: "→"; color: var(--tx3); flex-shrink: 0; font-weight: 700;
 }
 
 /* ── WEBINAR PROGRAMME ── */
@@ -335,6 +431,8 @@ body {
 .t7a { background: #E2E8F0; color: #334155; }
 .t7b { background: #64748B; color: #fff; }
 .t7c { background: #1E293B; color: #fff; }
+.t8a { background: #CCFBF1; color: #134E4A; }
+.t8b { background: #0F766E; color: #fff; }
 
 /* ── KAM SCENARIOS ── */
 .kam-wrap {
@@ -389,10 +487,11 @@ body {
 <header class="hdr">
   <p class="hdr-eye">Strategic Plan · KPI Partners · January – December 2027 · USA · UK · Europe</p>
   <h1>Becoming a <em>Context Engineering</em> company</h1>
-  <p class="hdr-sub">Seven parallel tracks to build the GTM motion, delivery capability, and market identity KPI needs to own the CE space before the window closes — across US, UK, and European markets.</p>
+  <p class="hdr-sub">Eight parallel tracks — four Outward (market-facing) and four Inward (capability-building) — to build the GTM motion, delivery capability, and market identity KPI needs to own the CE space before the window closes — across US, UK, and European markets.</p>
   <div class="hdr-chips">
     <span class="hdr-chip">Tracks 1–3 · your pillars</span>
     <span class="hdr-chip">Tracks 4–7 · suggested additions</span>
+    <span class="hdr-chip">Track 8 · always-on mechanisms</span>
     <span class="hdr-chip">One accelerator sprint per quarter</span>
     <span class="hdr-chip">Kill if no pilot traction in 6 weeks</span>
     <span class="hdr-chip" style="background:#DBEAFE;color:#1E40AF;border-color:#93C5FD;">Markets — USA · UK · Europe</span>
@@ -403,7 +502,9 @@ body {
 
 <!-- ══ TRACKS ══ -->
 <section class="sec">
-  <p class="sec-lbl">Seven parallel tracks</p>
+  <p class="sec-lbl">Eight parallel tracks — Outward &amp; Inward</p>
+  <div class="track-group tg-inward">
+    <p class="tg-lbl">Inward — capability building &amp; practice discipline</p>
   <div class="cards">
 
     <div class="card" data-t="1">
@@ -463,12 +564,19 @@ body {
         <span class="badge b-yours">Your idea</span>
       </div>
       <ul class="ml">
-        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Insurance sprint — 4-week build → pilot. P&amp;C claims ontology, MCP server on Databricks. Kill rule: 0 qualified pilot conversations in 6 weeks = retired, no exceptions. <span class="tag go">Sprint 1</span></span></li>
+        <li class="mi"><span class="mi-q">Now</span><span class="mi-t"><strong>Existing migration accelerators (EDW · ETL · BI):</strong> KPI already has proven migration accelerators in production. These are the commercial anchor for 2027 — they fund the CE sprint cycle and provide the customer relationships to test CE against. CE sprints are additive, not replacement.</span></li>
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Insurance CE sprint — 4-week build → pilot. P&amp;C claims ontology, MCP server on Databricks. Kill rule: 0 qualified pilot conversations in 6 weeks = retired, no exceptions. <span class="tag go">Sprint 1</span></span></li>
         <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Banking sprint — 4 weeks, independent of Insurance outcome. BCBS/RDARR angle aligns with Barclays/Danske relationships. Start with a customer conversation before writing a line of code. <span class="tag go">Sprint 2</span></span></li>
         <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">Healthcare or CPG sprint — whichever has an active KPI customer relationship to test against. The market picks the vertical, not the strategy deck. <span class="tag go">Sprint 3</span></span></li>
         <li class="mi"><span class="mi-q">Q4</span><span class="mi-t">Kill review: formally retire accelerators with no pipeline. Double investment on the 1–2 that got traction. Nothing carries into 2028 without a named pilot customer behind it. <span class="tag go">Kill / Scale</span></span></li>
       </ul>
     </div>
+
+  </div></div><!-- /inward T1-T2 -->
+
+  <div class="track-group tg-outward">
+    <p class="tg-lbl">Outward — market-facing GTM &amp; delivery</p>
+  <div class="cards">
 
     <div class="card" data-t="3">
       <div class="card-top">
@@ -490,8 +598,8 @@ body {
         <span class="badge b-new">Suggested</span>
       </div>
       <ul class="ml">
-        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Register CE positioning in Databricks, Snowflake, and Microsoft co-sell programs — not as a generic SI, but as a Context Engineering specialist. Platform field reps need to know KPI by name when a CE deal comes up.</span></li>
-        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Joint solution brief with each platform: "KPI + Databricks for Insurance CE". These are the one-pagers platform AEs hand to customers asking about CE.</span></li>
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Register CE positioning in Databricks, Snowflake, Microsoft Fabric, and AWS co-sell programs — not as a generic SI, but as a Context Engineering specialist. Platform field reps need to know KPI by name when a CE deal comes up.</span></li>
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Joint solution brief with each platform: "KPI + Databricks for Insurance CE", "KPI + Snowflake for CE", "KPI + Microsoft Fabric for CE". These are the one-pagers platform AEs hand to customers asking about CE.</span></li>
         <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">First co-sell pipeline: 3 warm leads from platform partners by end of Q2. Platform AEs are incentivised to close — use that.</span></li>
         <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">Databricks Marketplace listing for the CE Assessment SKU. Formalise Anthropic partnership (CE builds on Claude — Anthropic has a certified partner program). <span class="tag go">Milestone</span></span></li>
       </ul>
@@ -518,10 +626,16 @@ body {
       <ul class="ml">
         <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Publish KPI's CE positioning paper — "Why CE is the new Data Strategy". One clear point of view that becomes the narrative behind all external content.</span></li>
         <li class="mi"><span class="mi-q">Q1–2</span><span class="mi-t">LinkedIn content engine: 2 posts/week on CE practice-building. Customers Google the name they heard at a conference — you need to show up. <span class="tag go">Brand</span></span></li>
-        <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Submit speaking proposals: Databricks Summit and Snowflake Summit (both June 2027). These need 3–4 months lead time — submit in Q1.</span></li>
+        <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Submit speaking proposals: Databricks Summit and Snowflake Summit (both June 2027) and Microsoft Fabric Community Conference (Mar 2027). These need 3–4 months lead time — submit in Q1.</span></li>
         <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">First analyst briefing (Gartner or Forrester) with a live reference customer. Target inclusion in a 2028 Hype Cycle — one analyst mention outweighs 10 webinars. <span class="tag go">Milestone</span></span></li>
       </ul>
     </div>
+
+  </div></div><!-- /outward T3-T6 -->
+
+  <div class="track-group tg-inward">
+    <p class="tg-lbl">Inward — practice discipline &amp; always-on mechanisms</p>
+  <div class="cards">
 
     <div class="card full" data-t="7">
       <div class="card-top">
@@ -529,7 +643,7 @@ body {
         <span class="badge b-new">Suggested</span>
       </div>
       <ul class="ml two">
-        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Define ICP: the customer KPI is building CE for. Minimum criteria — large data estate on Databricks or Snowflake, a CDO or analytics VP, operates in insurance, banking, or healthcare. Turn down work that doesn't fit.</span></li>
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Define ICP: the customer KPI is building CE for. Minimum criteria — large data estate on Databricks, Snowflake, or Microsoft Fabric, a CDO or analytics VP, operates in insurance, banking, or healthcare. Turn down work that doesn't fit.</span></li>
         <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Publish kill criteria for accelerators in writing: 0 qualified pilot conversations in 6 weeks = retired. No exceptions. This protects engineering bandwidth and forces honest signal from the market.</span></li>
         <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Quarterly accelerator review: active, paused, or killed. One slide per accelerator reviewed with the CE lead and a sponsor. Killing early is the discipline — not the failure. <span class="tag go">Cadence</span></span></li>
         <li class="mi"><span class="mi-q">Q2–3</span><span class="mi-t">Say no to staff augmentation requests in CE-adjacent areas. Tredence and LatentView both exited aug pricing deliberately — it crowds out IP build and signals commodity positioning.</span></li>
@@ -538,12 +652,80 @@ body {
       </ul>
     </div>
 
-  </div>
+    <div class="card full" data-t="8">
+      <div class="card-top">
+        <div><p class="card-tn">Track 8</p><p class="card-title">Always-on Mechanisms — Internal Team</p></div>
+        <span class="badge b-yours">Your idea</span>
+      </div>
+
+      <div style="background:var(--bg);border-radius:8px;padding:14px 16px;margin-bottom:18px;border-left:3px solid var(--t8);">
+        <p style="font-size:12px;color:var(--tx2);line-height:1.65;">Both mechanisms close the gap between technical delivery and commercial awareness. <strong>[Syntax to Semantics]</strong> builds business vocabulary — architects who read market signals stop thinking like engineers and start thinking like advisors. <strong>Live Wire</strong> is the practice surface — presenting real work to a room of sellers, handling commercial questions live, distilling a complex build into three slides. These are the skills that turn a great architect into someone who can open doors, shape a deal, and eventually lead a practice.</p>
+      </div>
+
+      <div class="int-grid">
+
+        <!-- Syntax to Semantics -->
+        <div class="int-card">
+          <div>
+            <p class="int-eyebrow">MS Teams Channel</p>
+            <p class="int-title">KPI [Syntax to Semantics]</p>
+            <p class="int-sub">SA · Principal Architect · Directors · Always open</p>
+          </div>
+          <p class="int-body">
+            The channel where KPI's senior delivery community tracks what is moving in the semantic and agentic space — before it reaches a client conversation. Platform releases, patterns that worked on engagements, papers worth ten minutes, failures that saved a project.
+          </p>
+          <div>
+            <p class="int-eyebrow" style="margin-bottom:8px;">Who is in it</p>
+            <p class="int-body"><strong>SA and above · Directors only.</strong> No sellers. No leadership. Invite-only, stays that way. Anyone in the group posts when they have something worth sharing — no curation gate, no assigned owner.</p>
+          </div>
+          <ul class="int-output">
+            <li>Ambient awareness across the senior technical team</li>
+            <li>Searchable record of what KPI was tracking and building</li>
+            <li>Direct feed into Live Wire — best channel signals become the Current segment each session</li>
+            <li>After every Live Wire, the presenting architect drops a 3-line summary and slides here</li>
+          </ul>
+        </div>
+
+        <!-- Live Wire -->
+        <div class="int-card">
+          <div>
+            <p class="int-eyebrow">Bi-weekly · 45 min</p>
+            <p class="int-title">KPI Live Wire</p>
+            <p class="int-sub">All architects · All sellers · Practice lead facilitates</p>
+          </div>
+          <p class="int-body">
+            The session where real client and pilot work is presented to the full team — delivery and sellers in the same room. Turns internal builds into market offers. Surfaces the architects who can sell.
+          </p>
+          <table class="int-table">
+            <thead>
+              <tr><th>Slot</th><th>Time</th><th>What happens</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Current</td><td>5 min</td><td>Practice lead: 2–3 live signals from the agentic space. No slides.</td></tr>
+              <tr><td>Wire</td><td>30 min</td><td>1–2 architects present real client or pilot work with full technical depth. Sellers ask questions live.</td></tr>
+              <tr><td>Distil</td><td>5 min</td><td>Same architect produces a 3-slide seller summary on the spot. This is the test.</td></tr>
+              <tr><td>Spark</td><td>5 min</td><td>Sellers: "I have a prospect with this pain." Architects respond. Practice lead notes every match.</td></tr>
+            </tbody>
+          </table>
+          <div class="int-rule">
+            <strong>The 3-slide rule:</strong> Full technical depth in the Wire. Three seller-ready slides in the Distil. The ability to distil your own work into three slides is the signal that an architect is ready for client-facing responsibility.
+          </div>
+          <ul class="int-output">
+            <li>Live Wire Log in [Syntax to Semantics]: every session logged with seller interest and packaging status — <em>Unpackaged → In progress → Offer ready</em></li>
+            <li>Items that reach Offer Ready go into KAM and into the CCO seller kit</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+  </div></div><!-- /inward T7-T8 -->
+
 </section>
 
 <!-- ══ GANTT ══ -->
 <section class="sec">
-  <p class="sec-lbl">12-month roadmap · Jan → Dec 2027</p>
+  <p class="sec-lbl">12-month roadmap · Jan → Dec 2027 · 8 tracks</p>
   <div class="gantt-wrap">
     <p class="gantt-note">◆ = sprint review (kill or continue) &nbsp;·&nbsp; lighter shade = build phase &nbsp;·&nbsp; full colour = live / active</p>
     <div class="gantt">
@@ -576,15 +758,23 @@ body {
       <div style="grid-column:4/8;grid-row:3"  class="g-bar t1b">ICP library — 50 accounts + deck templates</div>
       <div style="grid-column:8/14;grid-row:3" class="g-bar t1c">3 sellers live → expand to full team</div>
 
-      <!-- T2 Accelerators (row 4) -->
-      <div style="grid-column:1;grid-row:4"     class="g-lbl" data-t="2">T2 · Accelerators</div>
-      <div style="grid-column:2/4;grid-row:4"   class="g-bar t2a">Insurance CX — context POC</div>
-      <div style="grid-column:4/5;grid-row:4"   class="g-dot">◆</div>
-      <div style="grid-column:5/7;grid-row:4"   class="g-bar t2a">Banking AML — context POC</div>
-      <div style="grid-column:7/8;grid-row:4"   class="g-dot">◆</div>
-      <div style="grid-column:8/10;grid-row:4"  class="g-bar t2b">Health Claims — context POC</div>
-      <div style="grid-column:10/11;grid-row:4" class="g-dot">◆</div>
-      <div style="grid-column:11/14;grid-row:4" class="g-bar t2c">Scale 2 survivors — productize</div>
+      <!-- T2 Accelerators (row 4) — split lane: migration top / CE sprints bottom -->
+      <div style="grid-column:1;grid-row:4;white-space:normal;flex-direction:column;align-items:flex-start;gap:1px;" class="g-lbl" data-t="2">
+        <span style="font-size:11px;font-weight:700;color:var(--tx2);">T2 · Accelerators</span>
+        <span style="font-size:9.5px;color:#9A6B20;font-weight:600;">▴ Migration</span>
+        <span style="font-size:9.5px;color:var(--t2);font-weight:600;">▾ CE Sprints</span>
+      </div>
+      <!-- top lane: migration accelerators (existing, scaling) -->
+      <div style="grid-column:2/7;grid-row:4"  class="g-bar mg-a lane-top">EDW · ETL · BI migration — established &amp; active</div>
+      <div style="grid-column:7/14;grid-row:4" class="g-bar mg-b lane-top">Scaling to Databricks · Snowflake · Fabric — new platform plays</div>
+      <!-- bottom lane: new CE sprints -->
+      <div style="grid-column:2/4;grid-row:4"   class="g-bar t2a lane-bot">Insurance CE POC</div>
+      <div style="grid-column:4/5;grid-row:4"   class="lane-dot-bot">◆</div>
+      <div style="grid-column:5/7;grid-row:4"   class="g-bar t2a lane-bot">Banking AML CE POC</div>
+      <div style="grid-column:7/8;grid-row:4"   class="lane-dot-bot">◆</div>
+      <div style="grid-column:8/10;grid-row:4"  class="g-bar t2b lane-bot">Health Claims CE POC</div>
+      <div style="grid-column:10/11;grid-row:4" class="lane-dot-bot">◆</div>
+      <div style="grid-column:11/14;grid-row:4" class="g-bar t2c lane-bot">Scale 2 CE survivors</div>
 
       <!-- T3 Delivery (row 5) -->
       <div style="grid-column:1;grid-row:5"    class="g-lbl" data-t="3">T3 · Delivery</div>
@@ -594,7 +784,7 @@ body {
 
       <!-- T4 Partners (row 6) -->
       <div style="grid-column:1;grid-row:6"    class="g-lbl" data-t="4">T4 · Partners</div>
-      <div style="grid-column:2/4;grid-row:6"  class="g-bar t4a">Register Databricks + Snowflake</div>
+      <div style="grid-column:2/4;grid-row:6"  class="g-bar t4a">Register Databricks + Snowflake + Fabric</div>
       <div style="grid-column:4/14;grid-row:6" class="g-bar t4b">Co-sell — 5+ opps in partner portal</div>
 
       <!-- T5 CE SKU (row 7) -->
@@ -613,34 +803,39 @@ body {
       <div style="grid-column:5/11;grid-row:9" class="g-bar t7b">Quarterly pipeline kill/scale review</div>
       <div style="grid-column:11/14;grid-row:9" class="g-bar t7c">2027 retro + CE 2.0 roadmap</div>
 
-      <!-- Hires (row 10) -->
-      <div style="grid-column:1;grid-row:10"    class="g-lbl" data-t="h">Hires</div>
-      <div style="grid-column:2/3;grid-row:10"  class="g-hire">CE Lead</div>
-      <div style="grid-column:4/5;grid-row:10"  class="g-hire">CCO / GTM</div>
-      <div style="grid-column:6/8;grid-row:10"  class="g-hire">Domain Spec</div>
+      <!-- T8 Always-on Mechanisms (row 10) -->
+      <div style="grid-column:1;grid-row:10"    class="g-lbl" data-t="8">T8 · Always-on</div>
+      <div style="grid-column:2/6;grid-row:10"  class="g-bar t8a">Syntax→Semantics channel launched + Live Wire cadence set</div>
+      <div style="grid-column:6/14;grid-row:10" class="g-bar t8b">Bi-weekly Live Wire · ongoing · talent surfaced for client-facing roles</div>
 
-      <!-- External Events (row 11) -->
-      <div style="grid-column:1;grid-row:11"     class="g-lbl" data-t="e">Events · US</div>
-      <div style="grid-column:3/4;grid-row:11"   class="g-evt">DB Summit sub.</div>
-      <div style="grid-column:6/7;grid-row:11"   class="g-evt">Snflk Summit</div>
-      <div style="grid-column:7/8;grid-row:11"   class="g-evt">DAIS 2027</div>
-      <div style="grid-column:9/10;grid-row:11"  class="g-evt">re:Invent sub.</div>
-      <div style="grid-column:10/11;grid-row:11" class="g-evt">Analyst brief.</div>
-      <div style="grid-column:11/12;grid-row:11" class="g-evt">Gartner sub.</div>
-      <div style="grid-column:13/14;grid-row:11" class="g-evt">AWS re:Invent</div>
+      <!-- Hires (row 11) -->
+      <div style="grid-column:1;grid-row:11"    class="g-lbl" data-t="h">Hires</div>
+      <div style="grid-column:2/3;grid-row:11"  class="g-hire">CE Lead</div>
+      <div style="grid-column:4/5;grid-row:11"  class="g-hire">CCO / GTM</div>
+      <div style="grid-column:6/8;grid-row:11"  class="g-hire">Domain Spec</div>
 
-      <!-- Webinars (row 12) -->
-      <div style="grid-column:1;grid-row:12"    class="g-lbl" data-t="w">Webinars</div>
-      <div style="grid-column:2/14;grid-row:12" class="g-bar" style="background:#DCFCE7;color:#14532D;font-weight:700;">Monthly CE webinar series — 12 webinars Jan → Dec 2027 · dual sessions US (ET) + UK/EU (GMT/CET)</div>
+      <!-- External Events (row 12) -->
+      <div style="grid-column:1;grid-row:12"     class="g-lbl" data-t="e">Events · US</div>
+      <div style="grid-column:3/4;grid-row:12"   class="g-evt">DB Summit sub.</div>
+      <div style="grid-column:6/7;grid-row:12"   class="g-evt">Snflk Summit</div>
+      <div style="grid-column:7/8;grid-row:12"   class="g-evt">DAIS 2027</div>
+      <div style="grid-column:9/10;grid-row:12"  class="g-evt">re:Invent sub.</div>
+      <div style="grid-column:10/11;grid-row:12" class="g-evt">Analyst brief.</div>
+      <div style="grid-column:11/12;grid-row:12" class="g-evt">Gartner sub.</div>
+      <div style="grid-column:13/14;grid-row:12" class="g-evt">AWS re:Invent</div>
 
-      <!-- EU/UK Events (row 13) -->
-      <div style="grid-column:1;grid-row:13"     class="g-lbl" data-t="eu">Events · EU/UK</div>
-      <div style="grid-column:5/6;grid-row:13"   class="g-evt">AWS Summit London</div>
-      <div style="grid-column:6/7;grid-row:13"   class="g-evt">Gartner D&amp;A London</div>
-      <div style="grid-column:7/8;grid-row:13"   class="g-evt">Money20/20 EU</div>
-      <div style="grid-column:9/10;grid-row:13"  class="g-evt">Corinium CDO UK</div>
-      <div style="grid-column:12/13;grid-row:13" class="g-evt">Data+AI EU Summit</div>
-      <div style="grid-column:13/14;grid-row:13" class="g-evt">FinTech Connect</div>
+      <!-- Webinars (row 13) -->
+      <div style="grid-column:1;grid-row:13"    class="g-lbl" data-t="w">Webinars</div>
+      <div style="grid-column:2/14;grid-row:13" class="g-bar" style="background:#DCFCE7;color:#14532D;font-weight:700;">Monthly CE webinar series — 12 webinars Jan → Dec 2027 · dual sessions US (ET) + UK/EU (GMT/CET)</div>
+
+      <!-- EU/UK Events (row 14) -->
+      <div style="grid-column:1;grid-row:14"     class="g-lbl" data-t="eu">Events · EU/UK</div>
+      <div style="grid-column:5/6;grid-row:14"   class="g-evt">AWS Summit London</div>
+      <div style="grid-column:6/7;grid-row:14"   class="g-evt">Gartner D&amp;A London</div>
+      <div style="grid-column:7/8;grid-row:14"   class="g-evt">Money20/20 EU</div>
+      <div style="grid-column:9/10;grid-row:14"  class="g-evt">Corinium CDO UK</div>
+      <div style="grid-column:12/13;grid-row:14" class="g-evt">Data+AI EU Summit</div>
+      <div style="grid-column:13/14;grid-row:14" class="g-evt">FinTech Connect</div>
 
     </div>
   </div>
@@ -690,12 +885,12 @@ body {
       <div class="cad-head">
         <div class="cad-icon" style="background:#FFF7ED;">✍️</div>
         <div>
-          <p class="cad-ttl">Databricks &amp; Snowflake Joint Blogs</p>
+          <p class="cad-ttl">Databricks, Snowflake &amp; Fabric Joint Blogs</p>
           <p class="cad-freq">Monthly · 12 co-authored posts Jan → Dec</p>
         </div>
       </div>
       <ul class="cad-items">
-        <li class="cad-item"><span class="cad-dot" style="background:#D97706"></span>Co-authored with Databricks or Snowflake partner team</li>
+        <li class="cad-item"><span class="cad-dot" style="background:#D97706"></span>Co-authored with Databricks, Snowflake, or Microsoft Fabric partner team</li>
         <li class="cad-item"><span class="cad-dot" style="background:#D97706"></span>Published on partner blog + cross-posted on KPI channels</li>
         <li class="cad-item"><span class="cad-dot" style="background:#D97706"></span><strong>H1</strong> — Platform architecture, Unity Catalog patterns, CE on Lakehouse</li>
         <li class="cad-item"><span class="cad-dot" style="background:#D97706"></span><strong>H2</strong> — Vertical case studies, co-sell stories, benchmark findings</li>
@@ -755,7 +950,7 @@ body {
 
     <div class="wbr-card q2">
       <p class="wbr-mo q2">May · #5</p>
-      <p class="wbr-title">CE on Databricks and Snowflake: What the Platform Gives You</p>
+      <p class="wbr-title">CE on Databricks, Snowflake &amp; Fabric: What the Platform Gives You</p>
       <p class="wbr-aud">Data architects · senior engineers</p>
     </div>
 
@@ -845,8 +1040,8 @@ body {
         <p class="pipe-ttl">Partner Referral Engine</p>
       </div>
       <span class="pipe-when" style="background:#D1FAE5;color:#065F46">Starts Apr</span>
-      <p class="pipe-desc">Formal co-sell motion with Databricks and Snowflake field reps: named regional directors, shared pipeline view, monthly 30-min pipeline call. Registration does nothing alone — this turns it into a repeatable referral motion.</p>
-      <p class="pipe-action">→ Named Databricks RD relationship is Decision #3 on this page</p>
+      <p class="pipe-desc">Formal co-sell motion with Databricks, Snowflake, and Microsoft Fabric field reps: named regional directors, shared pipeline view, monthly 30-min pipeline call. Registration does nothing alone — this turns it into a repeatable referral motion.</p>
+      <p class="pipe-action">→ Named Databricks RD relationship is Decision #3 on this page · parallel Fabric AE relationship in Microsoft accounts</p>
     </div>
 
     <div class="pipe-card">
@@ -892,9 +1087,9 @@ body {
         <span class="pipe-num" style="background:#7C3AED">02</span>
         <p class="pipe-ttl">CDO Roundtable Dinner</p>
       </div>
-      <span class="pipe-when" style="background:#EDE9FE;color:#5B21B6">Community · Q1 &amp; Q3</span>
-      <p class="pipe-desc">Invite-only, 12–15 CDOs, no pitch, peer conversation about CE challenges. KPI hosts and facilitates. More pipeline value than any webinar — relationships built in a room convert differently. Fractal's pre-IPO playbook exactly. Run in <strong>New York</strong> (Q1 Mar) and <strong>London</strong> (Q3 Sep) to build presence in both primary markets simultaneously.</p>
-      <p class="pipe-action">→ New York Q1 Mar after Insurance accelerator ships · London Q3 Sep after Banking/Healthcare gate</p>
+      <span class="pipe-when" style="background:#EDE9FE;color:#5B21B6">Community · Q2 &amp; Q3</span>
+      <p class="pipe-desc">Invite-only, 12–15 CDOs, no pitch, peer conversation about CE challenges. KPI hosts and facilitates. More pipeline value than any webinar — relationships built in a room convert differently. Fractal's pre-IPO playbook exactly. Run in <strong>New York</strong> (Q2 Jun) and <strong>London</strong> (Q3 Sep) to build presence in both primary markets simultaneously.</p>
+      <p class="pipe-action">→ New York Q2 Jun once Insurance accelerator result is in hand · London Q3 Sep after Banking/Healthcare gate</p>
     </div>
 
     <div class="pipe-card">
@@ -943,7 +1138,7 @@ body {
         <p class="pipe-ttl">Partner Award Nominations</p>
       </div>
       <span class="pipe-when" style="background:#D1FAE5;color:#065F46">Social Proof · Q3–Q4</span>
-      <p class="pipe-desc"><strong>US:</strong> Databricks Partner of the Year (Best FS Solution), Snowflake Innovation Award, AWS Partner Award. <strong>UK/EU:</strong> Data IQ Award, Corinium CDO Innovation Award, Information Age Tech Excellence, Gartner EMEA Data &amp; Analytics Award. Being shortlisted = press release + proposal proof point + platform field-team credibility boost that directly accelerates co-sell on both sides of the Atlantic.</p>
+      <p class="pipe-desc"><strong>US:</strong> Databricks Partner of the Year (Best FS Solution), Snowflake Innovation Award, Microsoft Fabric Partner Excellence Award, AWS Partner Award. <strong>UK/EU:</strong> Data IQ Award, Corinium CDO Innovation Award, Information Age Tech Excellence, Gartner EMEA Data &amp; Analytics Award. Being shortlisted = press release + proposal proof point + platform field-team credibility boost that directly accelerates co-sell on both sides of the Atlantic.</p>
       <p class="pipe-action">→ Submit Q3 · announcements Q4 · feeds re:Invent (US) and FinTech Connect / Data+AI EU Summit (EU/UK) positioning</p>
     </div>
 
@@ -953,7 +1148,7 @@ body {
         <p class="pipe-ttl">AI Partner Ecosystem — Elevate &amp; Expand</p>
       </div>
       <span class="pipe-when" style="background:#FEE2E2;color:#991B1B">Partnerships · H1 priority</span>
-      <p class="pipe-desc"><strong>Elevate existing:</strong> move from registered to Select/Premier tier with Databricks and Snowflake — unlocks co-sell quotas, joint pipeline targets, and field alignment across US, UK, and EU regions. <strong>New AI-native partnerships:</strong> become a named Anthropic/Claude solutions partner, AWS Bedrock SI, and Azure AI Foundry partner. The key message is that CE is inherently multi-model and multi-platform. The AI partner ecosystem — Anthropic, AWS, Azure, not just the data platforms — is where enterprise deals will be shaped in 2027. <strong>EU angle:</strong> position KPI's CE practice as an EU AI Act compliance accelerator — the Anthropic + Azure AI Foundry stack maps directly to Article 13 transparency and Article 17 risk management obligations that European FS clients are under immediate pressure to address. Most SIs have not moved on this yet. First-mover advantage in this ecosystem closes by the end of the year.</p>
+      <p class="pipe-desc"><strong>Elevate existing:</strong> move from registered to Select/Premier tier with Databricks, Snowflake, and Microsoft Fabric — unlocks co-sell quotas, joint pipeline targets, and field alignment across US, UK, and EU regions. <strong>New AI-native partnerships:</strong> become a named Anthropic/Claude solutions partner, AWS Bedrock SI, and Azure AI Foundry partner. The key message is that CE is inherently multi-model and multi-platform. The AI partner ecosystem — Anthropic, AWS, Azure, not just the data platforms — is where enterprise deals will be shaped in 2027. <strong>EU angle:</strong> position KPI's CE practice as an EU AI Act compliance accelerator — the Anthropic + Azure AI Foundry stack maps directly to Article 13 transparency and Article 17 risk management obligations that European FS clients are under immediate pressure to address. Most SIs have not moved on this yet. First-mover advantage in this ecosystem closes by the end of the year.</p>
       <p class="pipe-action">→ Anthropic partner application Jan–Feb · AWS/Azure AI partnerships Q2 · EU AI Act positioning paper Q2 · tier upgrades tied to co-sell pipeline milestones · single highest-leverage partnership move available in both US and EU/UK markets</p>
     </div>
 
@@ -969,5 +1164,6 @@ body {
 
   </div>
 </section>
+
 
 </main>
