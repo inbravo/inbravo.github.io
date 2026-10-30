@@ -42,7 +42,7 @@ body {
 .hdr {
   background: #0B1826;
   color: white;
-  padding-block: 50px 44px;
+  padding-block: 32px 28px;
   padding-left:  max(36px, env(safe-area-inset-left,  0px));
   padding-right: max(36px, env(safe-area-inset-right, 0px));
 }
@@ -59,7 +59,7 @@ body {
 .hdr h1 em { font-style: normal; color: #5BA8F5; }
 .hdr-sub {
   font-size: 14px; color: rgba(255,255,255,0.46);
-  max-width: 560px; line-height: 1.7; margin-bottom: 26px;
+  max-width: 560px; line-height: 1.7; margin-bottom: 0;
 }
 .hdr-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .hdr-chip {
@@ -75,7 +75,7 @@ body {
   padding-left:  max(20px, env(safe-area-inset-left,  0px));
   padding-right: max(20px, env(safe-area-inset-right, 0px));
 }
-.sec { margin-top: 52px; }
+.sec { margin-top: 40px; }
 .sec:first-child { margin-top: 0; }
 .sec-lbl {
   font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
@@ -83,13 +83,13 @@ body {
 }
 
 /* ── TRACK CARDS ── */
-.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 700px) { .cards { grid-template-columns: 1fr; } }
 
 .card {
   background: var(--surf); border: 1px solid var(--bdr);
-  border-radius: 10px; padding: 20px 22px 22px;
-  position: relative; padding-left: 25px;
+  border-radius: 10px; padding: 16px 18px 18px;
+  position: relative; padding-left: 22px;
 }
 .card.full { grid-column: 1 / -1; }
 .card::before {
@@ -108,7 +108,7 @@ body {
 
 .card-top {
   display: flex; justify-content: space-between; align-items: flex-start;
-  gap: 8px; margin-bottom: 14px;
+  gap: 8px; margin-bottom: 10px;
 }
 .card-tn {
   font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em;
@@ -136,7 +136,7 @@ body {
 .track-group { margin-bottom: 6px; }
 .track-group + .track-group { margin-top: 22px; }
 .tg-lbl {
-  font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--tx3);
   padding: 5px 0 10px;
   border-bottom: 1px solid var(--bdr);
@@ -153,8 +153,8 @@ body {
 .tg-inward  .tg-lbl::before { background: #059669; }
 
 /* ── MILESTONE LIST ── */
-.ml { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-.ml.two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; }
+.ml { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.ml.two { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; }
 @media (max-width: 700px) { .ml.two { grid-template-columns: 1fr; } }
 
 .mi { display: flex; gap: 8px; align-items: baseline; min-width: 0; }
@@ -163,7 +163,7 @@ body {
   color: var(--tx3); flex-shrink: 0; min-width: 26px;
   font-variant-numeric: tabular-nums;
 }
-.mi-t { font-size: 12.5px; color: var(--tx2); line-height: 1.45; min-width: 0; }
+.mi-t { font-size: 12px; color: var(--tx2); line-height: 1.4; min-width: 0; }
 .tag {
   display: inline-block; font-size: 9px; font-weight: 700;
   padding: 1px 5px; border-radius: 3px; margin-left: 4px;
@@ -309,7 +309,7 @@ body {
   display: flex; flex-direction: column; gap: 14px;
 }
 .int-eyebrow {
-  font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--tx3); margin-bottom: 2px;
 }
 .int-title {
@@ -533,24 +533,75 @@ body {
 .kam-toggle > summary::-webkit-details-marker { display: none; }
 .kam-toggle > summary::after { content: "\25BE"; }
 .kam-toggle[open] > summary::after { content: "\25B4"; }
+
+/* ── Growth Engine inline section ── */
+.ge-section { padding: 32px 0 24px; }
+.ge-eye {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--tx2);
+  text-align: center; margin-bottom: 40px;
+}
+.ge-flow {
+  display: flex; align-items: flex-start;
+  justify-content: center; gap: 0;
+}
+.ge-step {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 12px; flex: 1; min-width: 0; padding: 0 8px;
+}
+.ge-step-num {
+  font-size: 11px; font-weight: 800;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--tx3);
+}
+.ge-step-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; }
+.ge-step-name {
+  font-size: clamp(13px, 1.5vw, 16px); font-weight: 800;
+  letter-spacing: -0.02em; line-height: 1.2;
+  text-align: center; color: var(--tx1);
+}
+.ge-step-tracks { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; margin-top: 4px; }
+.ge-trk {
+  font-size: 9.5px; font-weight: 700; color: var(--tx2);
+  background: var(--surf); border: 1.5px solid var(--bdr);
+  border-radius: 4px; padding: 2px 8px;
+}
+.ge-arrow { flex: 0 0 auto; display: flex; align-items: flex-start; padding-top: 28px; }
+.ge-arrow svg { width: 36px; height: 36px; }
+.ge-found-wrap {
+  margin-top: 28px; border-top: 1.5px dashed var(--bdr); padding-top: 20px;
+}
+.ge-found-label {
+  text-align: center; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--tx3); margin-bottom: 16px;
+}
+.ge-found-chips {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+@media (max-width: 700px) { .ge-found-chips { grid-template-columns: repeat(2, 1fr); } }
+.ge-fchip {
+  background: var(--surf); border: 1.5px solid var(--bdr);
+  border-radius: 8px; padding: 14px 18px;
+}
+.ge-fchip-name { font-size: 12.5px; font-weight: 700; color: var(--tx1); margin-bottom: 5px; }
+.ge-fchip-desc { font-size: 11.5px; font-weight: 400; color: var(--tx2); line-height: 1.5; }
+@media (max-width: 600px) {
+  .ge-flow { flex-direction: column; align-items: center; }
+  .ge-arrow { padding-top: 0; transform: rotate(90deg); }
+}
 </style>
 
 <header class="hdr">
   <p class="hdr-eye">Strategic Plan · KPI Partners · January – December 2027 · USA · UK · Europe</p>
   <h1>Becoming a <em>Context Engineering</em> company</h1>
   <p class="hdr-sub">Nine parallel tracks — three Outward (market-facing) and six Inward (capability-building) — to build the GTM motion, delivery capability, and market identity KPI needs to own the CE space before the window closes — across US, UK, and European markets.</p>
-  <div class="hdr-chips">
-    <span class="hdr-chip">Tracks 1–3 · your pillars</span>
-    <span class="hdr-chip">Tracks 4–7 · suggested additions</span>
-    <span class="hdr-chip">Track 8 · always-on mechanisms</span>
-    <span class="hdr-chip">Track 9 · presales excellence</span>
-    <span class="hdr-chip">One accelerator sprint per quarter</span>
-    <span class="hdr-chip">Kill if no pilot traction in a predefined timeline — take the lesson, build a better pilot</span>
-    <span class="hdr-chip" style="background:#DBEAFE;color:#1E40AF;border-color:#93C5FD;">Markets — USA · UK · Europe</span>
-  </div>
 </header>
 
 <nav class="page-nav">
+  <a href="#motion">Motion</a>
   <a href="#roadmap">Roadmap</a>
   <a href="#tracks">Tracks</a>
   <a href="#content">Content</a>
@@ -561,6 +612,86 @@ body {
 
 
 <main class="wrap">
+
+<!-- ══ GROWTH ENGINE ══ -->
+<section class="sec ge-section" id="motion">
+  <p class="sec-lbl">CE Growth Engine · how the motion works</p>
+
+  <div class="ge-flow">
+    <div class="ge-step">
+      <span class="ge-step-num">01</span>
+      <span class="ge-step-dot" style="background:var(--t6)"></span>
+      <p class="ge-step-name">Build<br>Credibility</p>
+      <div class="ge-step-tracks">
+        <span class="ge-trk" style="color:var(--t6)">T6 Thought Leadership</span>
+        <span class="ge-trk" style="color:var(--t4)">T4 Co-Sell</span>
+      </div>
+    </div>
+    <div class="ge-arrow">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 18h28M22 9l9 9-9 9" stroke="#8899AE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="ge-step">
+      <span class="ge-step-num">02</span>
+      <span class="ge-step-dot" style="background:var(--t5)"></span>
+      <p class="ge-step-name">Open<br>the Door</p>
+      <div class="ge-step-tracks">
+        <span class="ge-trk" style="color:var(--t5)">T5 CE Assessment</span>
+      </div>
+    </div>
+    <div class="ge-arrow">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 18h28M22 9l9 9-9 9" stroke="#8899AE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="ge-step">
+      <span class="ge-step-num">03</span>
+      <span class="ge-step-dot" style="background:var(--t2)"></span>
+      <p class="ge-step-name">Prove<br>the Model</p>
+      <div class="ge-step-tracks">
+        <span class="ge-trk" style="color:var(--t2)">T2 Accelerators</span>
+        <span class="ge-trk" style="color:var(--t3)">T3 CE CoE</span>
+      </div>
+    </div>
+    <div class="ge-arrow">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 18h28M22 9l9 9-9 9" stroke="#8899AE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="ge-step">
+      <span class="ge-step-num">04</span>
+      <span class="ge-step-dot" style="background:var(--t6)"></span>
+      <p class="ge-step-name">Publish<br>the Proof</p>
+      <div class="ge-step-tracks">
+        <span class="ge-trk" style="color:var(--t6)">T6 Thought Leadership</span>
+        <span class="ge-trk" style="color:var(--t4)">T4 Co-Sell</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ge-found-wrap">
+    <p class="ge-found-label">Foundation — always-on, all year</p>
+    <div class="ge-found-chips">
+      <div class="ge-fchip">
+        <div class="ge-fchip-name">T7 · Practice Discipline</div>
+        <div class="ge-fchip-desc">CE methodology, reusable IP, delivery playbooks</div>
+      </div>
+      <div class="ge-fchip">
+        <div class="ge-fchip-name">T8 · Always-on Mechanisms</div>
+        <div class="ge-fchip-desc">Pipeline engine, partner activation, digital presence, internal thought leadership building</div>
+      </div>
+      <div class="ge-fchip">
+        <div class="ge-fchip-name">T9 · Presales Excellence</div>
+        <div class="ge-fchip-desc">Rapid RFP response, qualified demos, proposal velocity, compelling orals &amp; presentations</div>
+      </div>
+      <div class="ge-fchip">
+        <div class="ge-fchip-name">T1 · Sales Acceleration</div>
+        <div class="ge-fchip-desc">Faster deal cycles, account expansion, AI-assisted pipeline velocity</div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ══ GANTT ══ -->
 <section class="sec" id="roadmap">
@@ -656,7 +787,7 @@ body {
       <div style="grid-column:1;grid-row:12"    class="g-lbl" data-t="h">Hires</div>
       <div style="grid-column:2/3;grid-row:12"  class="g-hire">CE Lead</div>
       <div style="grid-column:4/5;grid-row:12"  class="g-hire">CCO / GTM</div>
-      <div style="grid-column:6/8;grid-row:12"  class="g-hire">Domain Spec</div>
+      <div style="grid-column:6/8;grid-row:12"  class="g-hire">Domain Specialization</div>
 
       <!-- External Events (row 13) -->
       <div style="grid-column:1;grid-row:13"     class="g-lbl" data-t="e">Events · US</div>
@@ -713,7 +844,7 @@ body {
       <ul class="ml">
         <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Lock pricing model + SOW template (fixed-fee, ~$30–40K, 4 weeks) and define the CE Readiness Assessment deliverable — CE Maturity Score, one Quick Win, 90-day roadmap. Both must be ready before the first sales conversation, not after.</span></li>
         <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Deliver first assessment with a friendly or partner-referred customer. Build a template so junior consultants can run it independently.</span></li>
-        <li class="mi"><span class="mi-q">Q2–3</span><span class="mi-t">Target 4–6 assessments by end of Q3. Each one creates a qualified view into whether a vertical accelerator is warranted — the assessment is the due diligence, not just a sales step.</span></li>
+        <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Target 5–7 assessments by end of Q2. Each one creates a qualified view into whether a vertical accelerator is warranted — the assessment is the due diligence, not just a sales step.</span></li>
         <li class="mi"><span class="mi-q">Q4</span><span class="mi-t">Assessment runs without the CE lead's direct involvement. If that's not true by Q4, the SKU isn't productised enough yet.</span></li>
       </ul>
     </div>
@@ -723,15 +854,16 @@ body {
         <div><p class="card-tn">Track 6</p><p class="card-title">Thought Leadership &amp; Analyst Relations</p><p class="card-owner">Owner · CCO + CE Lead</p></div>
         <span class="badge b-out">Outward</span>
       </div>
-      <ul class="ml">
+      <ul class="ml two">
         <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Publish KPI's CE positioning paper — "Why CE is the new Data Strategy". One clear point of view that becomes the narrative behind all external content.</span></li>
         <li class="mi"><span class="mi-q">Q1–2</span><span class="mi-t">LinkedIn content engine: 2 posts/week on CE practice-building. Customers Google the name they heard at a conference — you need to show up. </span></li>
         <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Submit speaking proposals: Databricks Summit and Snowflake Summit (both June 2027) and Microsoft Fabric Community Conference (Mar 2027). These need 3–4 months lead time — submit in Q1.</span></li>
-        <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">First analyst briefing (Gartner or Forrester) with a live reference customer. Target inclusion in a 2028 Hype Cycle — one analyst mention outweighs 10 webinars. </span></li>
+        <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">First analyst briefing (Gartner, Forrester, or Everest Group) with a live reference customer. Target inclusion in a 2028 Hype Cycle — one analyst mention outweighs 10 webinars. </span></li>
       </ul>
     </div>
 
   </div></div><!-- /outward T4-T5-T6 -->
+
 
   <div class="track-group tg-inward">
     <p class="tg-lbl">Inward — capability building, practice discipline &amp; quality gate</p>
@@ -804,12 +936,12 @@ body {
       </ul>
     </div>
 
-    <div class="card" data-t="3">
+    <div class="card full" data-t="3">
       <div class="card-top">
         <div><p class="card-tn">Track 3</p><p class="card-title">CE Delivery Capability</p><p class="card-owner">Owner · CE Lead</p></div>
         <span class="badge b-in">Inward</span>
       </div>
-      <ul class="ml">
+      <ul class="ml two">
         <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Identify or hire CE Delivery Lead — experienced, passionate, comfortable with fail-fast culture. This hire defines the practice DNA. <span class="tag hire">Critical hire</span></span></li>
         <li class="mi"><span class="mi-q">Q1–2</span><span class="mi-t">Build CE delivery methodology: Discovery → Ontology Design → Semantic Layer Build → Agent Activation. Document before the first project.</span></li>
         <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">First CE engagement — real customer or funded internal pilot. Document what worked, what took 3× longer, what can be templated.</span></li>
@@ -938,7 +1070,7 @@ body {
         <li class="cad-item"><span class="cad-dot" style="background:#2563EB"></span><strong>Mar</strong> — CE Accelerator Model: How to Build Vertical AI in 90 Days</li>
         <li class="cad-item"><span class="cad-dot" style="background:#059669"></span><strong>May</strong> — CE on Databricks Unity Catalog: Architecture Patterns</li>
         <li class="cad-item"><span class="cad-dot" style="background:#059669"></span><strong>Jul</strong> — CE in Financial Services: Insurance, Banking and Beyond</li>
-        <li class="cad-item"><span class="cad-dot" style="background:#7C3AED"></span><strong>Sep</strong> — CE and the Analyst Radar: Gartner, Forrester and What's Coming</li>
+        <li class="cad-item"><span class="cad-dot" style="background:#7C3AED"></span><strong>Sep</strong> — CE and the Analyst Radar: Gartner, Forrester, Everest Group and What's Coming</li>
         <li class="cad-item"><span class="cad-dot" style="background:#D97706"></span><strong>Nov</strong> — State of Context Engineering 2027: What the Data Says</li>
       </ul>
     </div>
@@ -1053,7 +1185,7 @@ body {
 
     <div class="wbr-card q3">
       <p class="wbr-mo q3">September · #9</p>
-      <p class="wbr-title">What Analysts Are Saying About CE: Gartner &amp; Forrester Signals</p>
+      <p class="wbr-title">What Analysts Are Saying About CE: Gartner, Forrester &amp; Everest Group Signals</p>
       <p class="wbr-aud">CDOs · data strategy leads</p>
     </div>
 
