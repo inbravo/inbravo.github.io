@@ -597,10 +597,11 @@ body {
 }
 .ge-found-chips {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 12px;
 }
-@media (max-width: 700px) { .ge-found-chips { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 900px) { .ge-found-chips { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px) { .ge-found-chips { grid-template-columns: repeat(2, 1fr); } }
 .ge-fchip {
   background: var(--surf); border: 1.5px solid var(--bdr);
   border-radius: 8px; padding: 14px 18px;
@@ -696,7 +697,7 @@ body {
   </div>
 
   <div class="ge-found-wrap">
-    <p class="ge-found-label">Foundation — always-on, all year</p>
+    <p class="ge-found-label">Foundation &amp; always-on motions — running all year</p>
     <div class="ge-found-chips">
       <div class="ge-fchip">
         <div class="ge-fchip-name">T7 · Practice Discipline</div>
@@ -713,6 +714,10 @@ body {
       <div class="ge-fchip">
         <div class="ge-fchip-name">T1 · Sales Acceleration</div>
         <div class="ge-fchip-desc">Faster deal cycles, account expansion, AI-assisted pipeline velocity</div>
+      </div>
+      <div class="ge-fchip">
+        <div class="ge-fchip-name">T10 · Marketing Excellence</div>
+        <div class="ge-fchip-desc">ABM campaigns, demand gen, brand building, marketing-attributed pipeline</div>
       </div>
     </div>
   </div>
