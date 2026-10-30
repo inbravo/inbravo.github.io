@@ -15,14 +15,15 @@
   --tx1:  #0B1826;
   --tx2:  #3A4F66;
   --tx3:  #8899AE;
-  --t1: #2563EB;
-  --t2: #059669;
-  --t3: #7C3AED;
-  --t4: #0891B2;
-  --t5: #D97706;
-  --t6: #C42020;
-  --t7: #1E293B;
+  --t1: #059669;
+  --t2: #0D9488;
+  --t3: #0891B2;
+  --t4: #0284C7;
+  --t5: #4F46E5;
+  --t6: #7C3AED;
+  --t7: #166534;
   --t8: #0F766E;
+  --t9: #BE185D;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -102,6 +103,7 @@ body {
 .card[data-t="6"]::before { background: var(--t6); }
 .card[data-t="7"]::before { background: var(--t7); }
 .card[data-t="8"]::before { background: var(--t8); }
+.card[data-t="9"]::before { background: var(--t9); }
 
 .card-top {
   display: flex; justify-content: space-between; align-items: flex-start;
@@ -119,14 +121,15 @@ body {
 .card[data-t="6"] .card-tn { color: var(--t6); }
 .card[data-t="7"] .card-tn { color: var(--t7); }
 .card[data-t="8"] .card-tn { color: var(--t8); }
+.card[data-t="9"] .card-tn { color: var(--t9); }
 .card-title { font-size: 14px; font-weight: 600; line-height: 1.3; }
 
 .badge {
   font-size: 9.5px; font-weight: 600; padding: 3px 8px;
   border-radius: 4px; white-space: nowrap; flex-shrink: 0;
 }
-.b-yours { background: #EFF6FF; color: #1D4ED8; }
-.b-new   { background: #FFF7ED; color: #C2410C; }
+.b-in  { background: #DCFCE7; color: #14532D; }
+.b-out { background: #DBEAFE; color: #1E40AF; }
 
 /* ── TRACK GROUP LABELS ── */
 .track-group { margin-bottom: 6px; }
@@ -178,7 +181,7 @@ body {
 .gantt {
   display: grid;
   grid-template-columns: 150px repeat(12, 1fr);
-  grid-template-rows: 20px 24px 44px 88px 44px 44px 44px 44px 44px 44px 60px 60px 60px 60px;
+  grid-template-rows: 20px 24px 44px 88px 44px 44px 44px 44px 44px 44px 44px 60px 60px 60px 60px;
   min-width: 1000px;
 }
 .g-q {
@@ -212,6 +215,7 @@ body {
 .g-lbl[data-t="6"] { border-left-color: var(--t6); }
 .g-lbl[data-t="7"] { border-left-color: var(--t7); }
 .g-lbl[data-t="8"] { border-left-color: var(--t8); }
+.g-lbl[data-t="9"] { border-left-color: var(--t9); }
 .g-lbl[data-t="h"] { border-left-color: #7C3AED; }
 .g-lbl[data-t="e"] { border-left-color: #D97706; }
 .g-lbl[data-t="w"]  { border-left-color: #16A34A; }
@@ -413,26 +417,30 @@ body {
 }
 
 /* bar colour variants */
-.t1a { background: #DBEAFE; color: #1E40AF; }
-.t1b { background: #93C5FD; color: #1E3A8A; }
-.t1c { background: #2563EB; color: #fff; }
-.t2a { background: #A7F3D0; color: #065F46; }
-.t2b { background: #34D399; color: #064E3B; }
-.t2c { background: #059669; color: #fff; }
-.t3a { background: #EDE9FE; color: #5B21B6; }
-.t3b { background: #7C3AED; color: #fff; }
-.t3c { background: #6D28D9; color: #fff; }
-.t4a { background: #CFFAFE; color: #155E75; }
-.t4b { background: #0891B2; color: #fff; }
-.t5a { background: #FEF3C7; color: #92400E; }
-.t5b { background: #D97706; color: #fff; }
-.t6a { background: #FEE2E2; color: #991B1B; }
-.t6b { background: #B91C1C; color: #fff; }
-.t7a { background: #E2E8F0; color: #334155; }
-.t7b { background: #64748B; color: #fff; }
-.t7c { background: #1E293B; color: #fff; }
+/* Inward: emerald/teal/forest/rose */
+.t1a { background: #D1FAE5; color: #065F46; }
+.t1b { background: #6EE7B7; color: #064E3B; }
+.t1c { background: #059669; color: #fff; }
+.t2a { background: #CCFBF1; color: #134E4A; }
+.t2b { background: #2DD4BF; color: #134E4A; }
+.t2c { background: #0D9488; color: #fff; }
+.t7a { background: #DCFCE7; color: #14532D; }
+.t7b { background: #4ADE80; color: #14532D; }
+.t7c { background: #166534; color: #fff; }
 .t8a { background: #CCFBF1; color: #134E4A; }
 .t8b { background: #0F766E; color: #fff; }
+/* Inward: cyan for T3 delivery */
+.t3a { background: #E0F9FF; color: #164E63; }
+.t3b { background: #0891B2; color: #fff; }
+/* Outward: blue/indigo/violet */
+.t4a { background: #E0F2FE; color: #0369A1; }
+.t4b { background: #0284C7; color: #fff; }
+.t5a { background: #EEF2FF; color: #3730A3; }
+.t5b { background: #4F46E5; color: #fff; }
+.t6a { background: #EDE9FE; color: #5B21B6; }
+.t6b { background: #7C3AED; color: #fff; }
+.t9a { background: #FCE7F3; color: #9D174D; }
+.t9b { background: #BE185D; color: #fff; }
 
 /* ── KAM SCENARIOS ── */
 .kam-wrap {
@@ -450,7 +458,7 @@ body {
 @media (max-width: 860px) { .kam-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .kam-grid { grid-template-columns: 1fr; } }
 .ks {
-  background: #F0F7FF; border: 1px solid #BFDBFE;
+  background: #ECFDF5; border: 1px solid #A7F3D0;
   border-radius: 7px; padding: 11px 13px;
 }
 .ks-top { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; }
@@ -462,8 +470,8 @@ body {
 }
 .ks-title { font-size: 11.5px; font-weight: 600; color: var(--tx1); line-height: 1.3; }
 .ks-prompt {
-  font-size: 11px; color: #1D4ED8;
-  background: #EBF3FF; border-left: 2px solid #93C5FD;
+  font-size: 11px; color: #065F46;
+  background: #ECFDF5; border-left: 2px solid #6EE7B7;
   padding: 5px 8px; border-radius: 0 4px 4px 0;
   margin-bottom: 6px; font-style: italic; line-height: 1.5;
 }
@@ -487,41 +495,212 @@ body {
 <header class="hdr">
   <p class="hdr-eye">Strategic Plan · KPI Partners · January – December 2027 · USA · UK · Europe</p>
   <h1>Becoming a <em>Context Engineering</em> company</h1>
-  <p class="hdr-sub">Eight parallel tracks — four Outward (market-facing) and four Inward (capability-building) — to build the GTM motion, delivery capability, and market identity KPI needs to own the CE space before the window closes — across US, UK, and European markets.</p>
+  <p class="hdr-sub">Nine parallel tracks — three Outward (market-facing) and six Inward (capability-building) — to build the GTM motion, delivery capability, and market identity KPI needs to own the CE space before the window closes — across US, UK, and European markets.</p>
   <div class="hdr-chips">
     <span class="hdr-chip">Tracks 1–3 · your pillars</span>
     <span class="hdr-chip">Tracks 4–7 · suggested additions</span>
     <span class="hdr-chip">Track 8 · always-on mechanisms</span>
+    <span class="hdr-chip">Track 9 · presales excellence</span>
     <span class="hdr-chip">One accelerator sprint per quarter</span>
-    <span class="hdr-chip">Kill if no pilot traction in 6 weeks</span>
+    <span class="hdr-chip">Kill if no pilot traction in a predefined timeline — take the lesson, build a better pilot</span>
     <span class="hdr-chip" style="background:#DBEAFE;color:#1E40AF;border-color:#93C5FD;">Markets — USA · UK · Europe</span>
   </div>
 </header>
 
 <main class="wrap">
 
+<!-- ══ GANTT ══ -->
+<section class="sec">
+  <p class="sec-lbl">12-month roadmap · Jan → Dec 2027 · 9 tracks</p>
+  <div class="gantt-wrap">
+    <p class="gantt-note">◆ = sprint review (kill or continue) &nbsp;·&nbsp; lighter shade = build phase &nbsp;·&nbsp; full colour = live / active</p>
+    <div class="gantt">
+
+      <!-- Q-header row (row 1) -->
+      <div style="grid-column:1;grid-row:1" class="g-q"></div>
+      <div style="grid-column:2/5;grid-row:1" class="g-q">Q1</div>
+      <div style="grid-column:5/8;grid-row:1" class="g-q">Q2</div>
+      <div style="grid-column:8/11;grid-row:1" class="g-q">Q3</div>
+      <div style="grid-column:11/14;grid-row:1" class="g-q">Q4</div>
+
+      <!-- Month-header row (row 2) -->
+      <div style="grid-column:1;grid-row:2" class="g-hlbl">Track</div>
+      <div style="grid-column:2;grid-row:2"  class="g-m">Jan</div>
+      <div style="grid-column:3;grid-row:2"  class="g-m">Feb</div>
+      <div style="grid-column:4;grid-row:2"  class="g-m">Mar</div>
+      <div style="grid-column:5;grid-row:2"  class="g-m">Apr</div>
+      <div style="grid-column:6;grid-row:2"  class="g-m">May</div>
+      <div style="grid-column:7;grid-row:2"  class="g-m">Jun</div>
+      <div style="grid-column:8;grid-row:2"  class="g-m">Jul</div>
+      <div style="grid-column:9;grid-row:2"  class="g-m">Aug</div>
+      <div style="grid-column:10;grid-row:2" class="g-m">Sep</div>
+      <div style="grid-column:11;grid-row:2" class="g-m">Oct</div>
+      <div style="grid-column:12;grid-row:2" class="g-m">Nov</div>
+      <div style="grid-column:13;grid-row:2" class="g-m">Dec</div>
+
+      <!-- T1 KAM (row 3) -->
+      <div style="grid-column:1;grid-row:3"    class="g-lbl" data-t="1">T1 · KAM / Sales Velocity</div>
+      <div style="grid-column:2/4;grid-row:3"  class="g-bar t1a">SharePoint schema + MCP config</div>
+      <div style="grid-column:4/8;grid-row:3"  class="g-bar t1b">ICP library — 50 accounts + deck templates</div>
+      <div style="grid-column:8/14;grid-row:3" class="g-bar t1c">3 sellers live → expand to full team</div>
+
+      <!-- T2 Accelerators (row 4) — split lane: migration top / CE sprints bottom -->
+      <div style="grid-column:1;grid-row:4;white-space:normal;flex-direction:column;align-items:flex-start;gap:1px;" class="g-lbl" data-t="2">
+        <span style="font-size:11px;font-weight:700;color:var(--tx2);">T2 · Accelerators</span>
+        <span style="font-size:9.5px;color:#9A6B20;font-weight:600;">▴ Migration</span>
+        <span style="font-size:9.5px;color:var(--t2);font-weight:600;">▾ CE Sprints</span>
+      </div>
+      <!-- top lane: migration accelerators (existing, scaling) -->
+      <div style="grid-column:2/7;grid-row:4"  class="g-bar mg-a lane-top">EDW · ETL · BI migration — established &amp; active</div>
+      <div style="grid-column:7/14;grid-row:4" class="g-bar mg-b lane-top">Scaling to Databricks · Snowflake · Fabric — new platform plays</div>
+      <!-- bottom lane: new CE sprints -->
+      <div style="grid-column:2/4;grid-row:4"   class="g-bar t2a lane-bot">Insurance CE POC</div>
+      <div style="grid-column:4/5;grid-row:4"   class="lane-dot-bot">◆</div>
+      <div style="grid-column:5/7;grid-row:4"   class="g-bar t2a lane-bot">Banking AML CE POC</div>
+      <div style="grid-column:7/8;grid-row:4"   class="lane-dot-bot">◆</div>
+      <div style="grid-column:8/10;grid-row:4"  class="g-bar t2b lane-bot">Health Claims CE POC</div>
+      <div style="grid-column:10/11;grid-row:4" class="lane-dot-bot">◆</div>
+      <div style="grid-column:11/14;grid-row:4" class="g-bar t2c lane-bot">Scale 2 CE survivors</div>
+
+      <!-- T3 Delivery (row 5) -->
+      <div style="grid-column:1;grid-row:5"    class="g-lbl" data-t="3">T3 · Delivery</div>
+      <div style="grid-column:2/5;grid-row:5"  class="g-bar t3a">Hire CE Lead + 2 delivery architects</div>
+      <div style="grid-column:5/10;grid-row:5" class="g-bar t3b">Delivery — first 3 billable CE engagements</div>
+      <div style="grid-column:10/14;grid-row:5" class="g-bar t3c">COE cadence + quarterly retro</div>
+
+      <!-- T4 Partners (row 6) -->
+      <div style="grid-column:1;grid-row:6"    class="g-lbl" data-t="4">T4 · Partners</div>
+      <div style="grid-column:2/4;grid-row:6"  class="g-bar t4a">Register Databricks + Snowflake + Fabric</div>
+      <div style="grid-column:4/14;grid-row:6" class="g-bar t4b">Co-sell — 5+ opps in partner portal</div>
+
+      <!-- T5 CE SKU (row 7) -->
+      <div style="grid-column:1;grid-row:7"    class="g-lbl" data-t="5">T5 · CE SKU</div>
+      <div style="grid-column:3/5;grid-row:7"  class="g-bar t5a">Pricing model + SOW template</div>
+      <div style="grid-column:5/14;grid-row:7" class="g-bar t5b">3 CE SKU flavors in active pipeline</div>
+
+      <!-- T6 Thought Leadership (row 8) -->
+      <div style="grid-column:1;grid-row:8"    class="g-lbl" data-t="6">T6 · Thought Lead.</div>
+      <div style="grid-column:2/4;grid-row:8"  class="g-bar t6a">CE POV paper + blog cadence</div>
+      <div style="grid-column:4/14;grid-row:8" class="g-bar t6b">Summit talks · analyst briefings · LinkedIn</div>
+
+      <!-- T7 Practice Discipline (row 9) -->
+      <div style="grid-column:1;grid-row:9"    class="g-lbl" data-t="7">T7 · Discipline</div>
+      <div style="grid-column:2/5;grid-row:9"  class="g-bar t7a">ICP filter doc + kill criteria + owner named</div>
+      <div style="grid-column:5/11;grid-row:9" class="g-bar t7b">Quarterly pipeline kill/scale review</div>
+      <div style="grid-column:11/14;grid-row:9" class="g-bar t7c">2027 retro + CE 2.0 roadmap</div>
+
+      <!-- T8 Always-on Mechanisms (row 10) -->
+      <div style="grid-column:1;grid-row:10"    class="g-lbl" data-t="8">T8 · Always-on</div>
+      <div style="grid-column:2/6;grid-row:10"  class="g-bar t8a">Syntax→Semantics channel launched + Live Wire cadence set</div>
+      <div style="grid-column:6/14;grid-row:10" class="g-bar t8b">Bi-weekly Live Wire · ongoing · talent surfaced for client-facing roles</div>
+
+      <!-- T9 Presales Excellence (row 11) -->
+      <div style="grid-column:1;grid-row:11"    class="g-lbl" data-t="9">T9 · Presales</div>
+      <div style="grid-column:2/5;grid-row:11"  class="g-bar t9a">Quality gate + win theme framework — pipeline in writing</div>
+      <div style="grid-column:5/14;grid-row:11" class="g-bar t9b">Presales pipeline live — SLA tracked · speaker bench active · win rate by quality tier</div>
+
+      <!-- Hires (row 12) -->
+      <div style="grid-column:1;grid-row:12"    class="g-lbl" data-t="h">Hires</div>
+      <div style="grid-column:2/3;grid-row:12"  class="g-hire">CE Lead</div>
+      <div style="grid-column:4/5;grid-row:12"  class="g-hire">CCO / GTM</div>
+      <div style="grid-column:6/8;grid-row:12"  class="g-hire">Domain Spec</div>
+
+      <!-- External Events (row 13) -->
+      <div style="grid-column:1;grid-row:13"     class="g-lbl" data-t="e">Events · US</div>
+      <div style="grid-column:3/4;grid-row:13"   class="g-evt">DB Summit sub.</div>
+      <div style="grid-column:6/7;grid-row:13"   class="g-evt">Snflk Summit</div>
+      <div style="grid-column:7/8;grid-row:13"   class="g-evt">DAIS 2027</div>
+      <div style="grid-column:9/10;grid-row:13"  class="g-evt">re:Invent sub.</div>
+      <div style="grid-column:10/11;grid-row:13" class="g-evt">Analyst brief.</div>
+      <div style="grid-column:11/12;grid-row:13" class="g-evt">Gartner sub.</div>
+      <div style="grid-column:13/14;grid-row:13" class="g-evt">AWS re:Invent</div>
+
+      <!-- Webinars (row 14) -->
+      <div style="grid-column:1;grid-row:14"    class="g-lbl" data-t="w">Webinars</div>
+      <div style="grid-column:2/14;grid-row:14" class="g-bar" style="background:#DCFCE7;color:#14532D;font-weight:700;">Monthly CE webinar series — 12 webinars Jan → Dec 2027 · dual sessions US (ET) + UK/EU (GMT/CET)</div>
+
+      <!-- EU/UK Events (row 15) -->
+      <div style="grid-column:1;grid-row:15"     class="g-lbl" data-t="eu">Events · EU/UK</div>
+      <div style="grid-column:5/6;grid-row:15"   class="g-evt">AWS Summit London</div>
+      <div style="grid-column:6/7;grid-row:15"   class="g-evt">Gartner D&amp;A London</div>
+      <div style="grid-column:7/8;grid-row:15"   class="g-evt">Money20/20 EU</div>
+      <div style="grid-column:9/10;grid-row:15"  class="g-evt">Corinium CDO UK</div>
+      <div style="grid-column:12/13;grid-row:15" class="g-evt">Data+AI EU Summit</div>
+      <div style="grid-column:13/14;grid-row:15" class="g-evt">FinTech Connect</div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ══ TRACKS ══ -->
 <section class="sec">
-  <p class="sec-lbl">Eight parallel tracks — Outward &amp; Inward</p>
+  <p class="sec-lbl">Nine parallel tracks — Outward &amp; Inward</p>
+  <div class="track-group tg-outward">
+    <p class="tg-lbl">Outward — market-facing GTM &amp; delivery</p>
+  <div class="cards">
+
+    <div class="card" data-t="4">
+      <div class="card-top">
+        <div><p class="card-tn">Track 4</p><p class="card-title">Platform Co-Sell Engine</p></div>
+        <span class="badge b-out">Outward</span>
+      </div>
+      <ul class="ml">
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Register CE positioning in Databricks, Snowflake, Microsoft Fabric, and AWS co-sell programs — not as a generic SI, but as a Context Engineering specialist. Platform field reps need to know KPI by name when a CE deal comes up.</span></li>
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Joint solution brief with each platform: "KPI + Databricks for Insurance CE", "KPI + Snowflake for CE", "KPI + Microsoft Fabric for CE". These are the one-pagers platform AEs hand to customers asking about CE.</span></li>
+        <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">First co-sell pipeline: 3 warm leads from platform partners by end of Q2. Platform AEs are incentivised to close — use that.</span></li>
+        <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">Databricks Marketplace listing for the CE Assessment SKU. Formalise Anthropic partnership (CE builds on Claude — Anthropic has a certified partner program). <span class="tag go">Milestone</span></span></li>
+      </ul>
+    </div>
+
+    <div class="card" data-t="5">
+      <div class="card-top">
+        <div><p class="card-tn">Track 5</p><p class="card-title">CE Assessment SKU — The Wedge</p></div>
+        <span class="badge b-out">Outward</span>
+      </div>
+      <ul class="ml">
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Define the CE Readiness Assessment: 4 weeks, fixed-fee (~$30–40K). Deliverable: CE Maturity Score, one Quick Win, 90-day roadmap. Hunters sell this — no presales dependency.</span></li>
+        <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Deliver first assessment with a friendly or partner-referred customer. Build a template so junior consultants can run it independently.</span></li>
+        <li class="mi"><span class="mi-q">Q2–3</span><span class="mi-t">Target 4–6 assessments by end of Q3. Each one creates a qualified view into whether a vertical accelerator is warranted — the assessment is the due diligence, not just a sales step.</span></li>
+        <li class="mi"><span class="mi-q">Q4</span><span class="mi-t">Assessment runs without the CE lead's direct involvement. If that's not true by Q4, the SKU isn't productised enough yet.</span></li>
+      </ul>
+    </div>
+
+    <div class="card full" data-t="6">
+      <div class="card-top">
+        <div><p class="card-tn">Track 6</p><p class="card-title">Thought Leadership &amp; Analyst Relations</p></div>
+        <span class="badge b-out">Outward</span>
+      </div>
+      <ul class="ml">
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Publish KPI's CE positioning paper — "Why CE is the new Data Strategy". One clear point of view that becomes the narrative behind all external content.</span></li>
+        <li class="mi"><span class="mi-q">Q1–2</span><span class="mi-t">LinkedIn content engine: 2 posts/week on CE practice-building. Customers Google the name they heard at a conference — you need to show up. <span class="tag go">Brand</span></span></li>
+        <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Submit speaking proposals: Databricks Summit and Snowflake Summit (both June 2027) and Microsoft Fabric Community Conference (Mar 2027). These need 3–4 months lead time — submit in Q1.</span></li>
+        <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">First analyst briefing (Gartner or Forrester) with a live reference customer. Target inclusion in a 2028 Hype Cycle — one analyst mention outweighs 10 webinars. <span class="tag go">Milestone</span></span></li>
+      </ul>
+    </div>
+
+  </div></div><!-- /outward T4-T5-T6 -->
+
   <div class="track-group tg-inward">
-    <p class="tg-lbl">Inward — capability building &amp; practice discipline</p>
+    <p class="tg-lbl">Inward — capability building, practice discipline &amp; quality gate</p>
   <div class="cards">
 
     <div class="card" data-t="1">
       <div class="card-top">
-        <div><p class="card-tn">Track 1</p><p class="card-title">KAM — KPI Asset Manager</p></div>
-        <span class="badge b-yours">Your idea</span>
+        <div><p class="card-tn">Track 1</p><p class="card-title">KPI Asset Manager — SA-Grade Context for Every Seller</p></div>
+        <span class="badge b-in">Inward</span>
       </div>
+      <p style="font-size:11.5px;color:var(--tx2);line-height:1.6;margin-bottom:14px;padding:8px 10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--t1);">
+        KAM is the primary lever for <strong style="color:var(--tx1)">sales scale without big headcount scale in Presales or Delivery</strong>. Today, every competitive question, first SOW draft, or meeting prep pulls a presales SA or a delivery architect into the loop. KAM removes that dependency for routine motions — hunters self-serve in minutes, Presales &amp; Delivery focus on qualified deals.      </p>
       <ul class="ml">
-        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Establish SharePoint taxonomy <code>[year]-[vertical]-[customer]-[topic]</code>. Upload first 50 assets — existing proposals, estimation templates, capability decks.</span></li>
-        <li class="mi"><span class="mi-q">Q1–2</span><span class="mi-t">Connect Claude to KAM via MCP. Any hunter queries "give me our last three insurance proposals" and gets a draft in minutes — zero presales dependency.</span></li>
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Establish SharePoint taxonomy structured so an LLM can understand the purpose of each artifact and re-use it for context-building in similar future engagements — e.g. a proposal stored as <code>[year]-[vertical]-[customer]-[topic]</code> signals type, domain, and audience at a glance. Upload first 50 assets — existing proposals, estimation templates, capability decks.</span></li>
+        <li class="mi"><span class="mi-q">Q1–2</span><span class="mi-t">Connect Claude and Copilot to KAM via MCP. Any hunter queries "give me our last three insurance proposals" and gets a draft in minutes — minimal presales / engineering dependency.</span></li>
         <li class="mi"><span class="mi-q">Q2–3</span><span class="mi-t">CE capability decks onboarded: Databricks, Snowflake, Fabric, AWS. Each new outgoing proposal auto-archived and indexed as it ships.</span></li>
         <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">KAM live for all hunters and farmers. Establish Proposal Velocity KPI: time-to-first-draft before vs. after KAM. <span class="tag go">Milestone</span></span></li>
         <li class="mi"><span class="mi-q">Q4</span><span class="mi-t">KAM self-evolving: sales managers query win/loss patterns, hunters pull vertical playbooks without presales involvement.</span></li>
       </ul>
 
       <div class="kam-wrap">
-        <p class="kam-eyebrow">KAM in action — 5 seller scenarios</p>
+        <p class="kam-eyebrow">5 no-queue, no-SA-needed seller scenarios</p>
         <div class="kam-grid">
 
           <div class="ks">
@@ -561,27 +740,21 @@ body {
     <div class="card" data-t="2">
       <div class="card-top">
         <div><p class="card-tn">Track 2</p><p class="card-title">Industry Ontology Accelerators</p></div>
-        <span class="badge b-yours">Your idea</span>
+        <span class="badge b-in">Inward</span>
       </div>
       <ul class="ml">
         <li class="mi"><span class="mi-q">Now</span><span class="mi-t"><strong>Existing migration accelerators (EDW · ETL · BI):</strong> KPI already has proven migration accelerators in production. These are the commercial anchor for 2027 — they fund the CE sprint cycle and provide the customer relationships to test CE against. CE sprints are additive, not replacement.</span></li>
-        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Insurance CE sprint — 4-week build → pilot. P&amp;C claims ontology, MCP server on Databricks. Kill rule: 0 qualified pilot conversations in 6 weeks = retired, no exceptions. <span class="tag go">Sprint 1</span></span></li>
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Insurance CE sprint — 4-week build → pilot. P&amp;C claims ontology, MCP server on Databricks. Kill rule: 0 qualified pilot conversations within the predefined timeline = retired, no exceptions — take the lesson and build a better pilot. <span class="tag go">Sprint 1</span></span></li>
         <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Banking sprint — 4 weeks, independent of Insurance outcome. BCBS/RDARR angle aligns with Barclays/Danske relationships. Start with a customer conversation before writing a line of code. <span class="tag go">Sprint 2</span></span></li>
         <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">Healthcare or CPG sprint — whichever has an active KPI customer relationship to test against. The market picks the vertical, not the strategy deck. <span class="tag go">Sprint 3</span></span></li>
         <li class="mi"><span class="mi-q">Q4</span><span class="mi-t">Kill review: formally retire accelerators with no pipeline. Double investment on the 1–2 that got traction. Nothing carries into 2028 without a named pilot customer behind it. <span class="tag go">Kill / Scale</span></span></li>
       </ul>
     </div>
 
-  </div></div><!-- /inward T1-T2 -->
-
-  <div class="track-group tg-outward">
-    <p class="tg-lbl">Outward — market-facing GTM &amp; delivery</p>
-  <div class="cards">
-
     <div class="card" data-t="3">
       <div class="card-top">
         <div><p class="card-tn">Track 3</p><p class="card-title">CE Delivery Capability</p></div>
-        <span class="badge b-yours">Your idea</span>
+        <span class="badge b-in">Inward</span>
       </div>
       <ul class="ml">
         <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Identify or hire CE Delivery Lead — experienced, passionate, comfortable with fail-fast culture. This hire defines the practice DNA. <span class="tag hire">Critical hire</span></span></li>
@@ -592,59 +765,30 @@ body {
       </ul>
     </div>
 
-    <div class="card" data-t="4">
+    <div class="card full" data-t="9">
       <div class="card-top">
-        <div><p class="card-tn">Track 4 · Suggested</p><p class="card-title">Platform Co-Sell Engine</p></div>
-        <span class="badge b-new">Suggested</span>
+        <div><p class="card-tn">Track 9 · Presales</p><p class="card-title">Presales Excellence &amp; Artifact Quality</p></div>
+        <span class="badge b-in">Inward</span>
       </div>
-      <ul class="ml">
-        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Register CE positioning in Databricks, Snowflake, Microsoft Fabric, and AWS co-sell programs — not as a generic SI, but as a Context Engineering specialist. Platform field reps need to know KPI by name when a CE deal comes up.</span></li>
-        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Joint solution brief with each platform: "KPI + Databricks for Insurance CE", "KPI + Snowflake for CE", "KPI + Microsoft Fabric for CE". These are the one-pagers platform AEs hand to customers asking about CE.</span></li>
-        <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">First co-sell pipeline: 3 warm leads from platform partners by end of Q2. Platform AEs are incentivised to close — use that.</span></li>
-        <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">Databricks Marketplace listing for the CE Assessment SKU. Formalise Anthropic partnership (CE builds on Claude — Anthropic has a certified partner program). <span class="tag go">Milestone</span></span></li>
+      <p style="font-size:11.5px;color:var(--tx2);line-height:1.55;margin-bottom:14px;padding:8px 10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--t9);">
+        Presales is the <strong style="color:var(--tx1)">vertical thread</strong> at every stage — it owns the artifact, sets the winning theme, and pulls from TA + Delivery Head. Gate sequence: TA + Delivery Head → <strong style="color:var(--t9)">Presales (owns)</strong> → Sales &amp; Leadership (feedback + sign-off) → Partner → Customer.
+      </p>
+      <ul class="ml two">
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Define "A-grade proposal" standard — publish the gate flow in writing. Build TA and Delivery Head review checklists. Name owners at every stage. First pipeline run with real pursuits.</span></li>
+        <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">First mock pitch: SAs present to a simulated CDO/CTO panel; sellers play client. Subject Depth Library in KAM: 10 industry primers (BCBS 239, RDARR, IFRS 17, FHIR R4, IRB risk…). First external SA appearance. <span class="tag go">Milestone</span></span></li>
+        <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">Proposal quality KPI live: win rate tracked by pipeline compliance vs. skipped stages. 2–3 SAs presenting externally at partner events or Databricks/Snowflake field sessions.</span></li>
+        <li class="mi"><span class="mi-q">Q4</span><span class="mi-t">Win-rate retro: gated vs. skipped proposals — data informs 2028 standards. Speaker pipeline formalised: Live Wire → mock pitch → webinar panel → conference breakout. Subject Depth Library at 15 primers. <span class="tag go">Milestone</span></span></li>
       </ul>
     </div>
-
-    <div class="card" data-t="5">
-      <div class="card-top">
-        <div><p class="card-tn">Track 5 · Suggested</p><p class="card-title">CE Assessment SKU — The Wedge</p></div>
-        <span class="badge b-new">Suggested</span>
-      </div>
-      <ul class="ml">
-        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Define the CE Readiness Assessment: 4 weeks, fixed-fee (~$30–40K). Deliverable: CE Maturity Score, one Quick Win, 90-day roadmap. Hunters sell this — no presales dependency.</span></li>
-        <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Deliver first assessment with a friendly or partner-referred customer. Build a template so junior consultants can run it independently.</span></li>
-        <li class="mi"><span class="mi-q">Q2–3</span><span class="mi-t">Target 4–6 assessments by end of Q3. Each one creates a qualified view into whether a vertical accelerator is warranted — the assessment is the due diligence, not just a sales step.</span></li>
-        <li class="mi"><span class="mi-q">Q4</span><span class="mi-t">Assessment runs without the CE lead's direct involvement. If that's not true by Q4, the SKU isn't productised enough yet.</span></li>
-      </ul>
-    </div>
-
-    <div class="card" data-t="6">
-      <div class="card-top">
-        <div><p class="card-tn">Track 6 · Suggested</p><p class="card-title">Thought Leadership &amp; Analyst Relations</p></div>
-        <span class="badge b-new">Suggested</span>
-      </div>
-      <ul class="ml">
-        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Publish KPI's CE positioning paper — "Why CE is the new Data Strategy". One clear point of view that becomes the narrative behind all external content.</span></li>
-        <li class="mi"><span class="mi-q">Q1–2</span><span class="mi-t">LinkedIn content engine: 2 posts/week on CE practice-building. Customers Google the name they heard at a conference — you need to show up. <span class="tag go">Brand</span></span></li>
-        <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Submit speaking proposals: Databricks Summit and Snowflake Summit (both June 2027) and Microsoft Fabric Community Conference (Mar 2027). These need 3–4 months lead time — submit in Q1.</span></li>
-        <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">First analyst briefing (Gartner or Forrester) with a live reference customer. Target inclusion in a 2028 Hype Cycle — one analyst mention outweighs 10 webinars. <span class="tag go">Milestone</span></span></li>
-      </ul>
-    </div>
-
-  </div></div><!-- /outward T3-T6 -->
-
-  <div class="track-group tg-inward">
-    <p class="tg-lbl">Inward — practice discipline &amp; always-on mechanisms</p>
-  <div class="cards">
 
     <div class="card full" data-t="7">
       <div class="card-top">
-        <div><p class="card-tn">Track 7 · Suggested</p><p class="card-title">Practice Discipline — What We Build, What We Decline</p></div>
-        <span class="badge b-new">Suggested</span>
+        <div><p class="card-tn">Track 7</p><p class="card-title">Practice Discipline — What We Build, What We Decline</p></div>
+        <span class="badge b-in">Inward</span>
       </div>
       <ul class="ml two">
         <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Define ICP: the customer KPI is building CE for. Minimum criteria — large data estate on Databricks, Snowflake, or Microsoft Fabric, a CDO or analytics VP, operates in insurance, banking, or healthcare. Turn down work that doesn't fit.</span></li>
-        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Publish kill criteria for accelerators in writing: 0 qualified pilot conversations in 6 weeks = retired. No exceptions. This protects engineering bandwidth and forces honest signal from the market.</span></li>
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Publish kill criteria for accelerators in writing: 0 qualified pilot conversations within a tangible predefined timeline = retired. No exceptions — take the lesson and build a better pilot. This protects engineering bandwidth and forces honest signal from the market.</span></li>
         <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Quarterly accelerator review: active, paused, or killed. One slide per accelerator reviewed with the CE lead and a sponsor. Killing early is the discipline — not the failure. <span class="tag go">Cadence</span></span></li>
         <li class="mi"><span class="mi-q">Q2–3</span><span class="mi-t">Say no to staff augmentation requests in CE-adjacent areas. Tredence and LatentView both exited aug pricing deliberately — it crowds out IP build and signals commodity positioning.</span></li>
         <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">Document what KPI has declined: specific project types, deal structures, and verticals that don't fit. Used in sales to frame the practice as a specialist, not as a filter. <span class="tag go">Milestone</span></span></li>
@@ -655,7 +799,7 @@ body {
     <div class="card full" data-t="8">
       <div class="card-top">
         <div><p class="card-tn">Track 8</p><p class="card-title">Always-on Mechanisms — Internal Team</p></div>
-        <span class="badge b-yours">Your idea</span>
+        <span class="badge b-in">Inward</span>
       </div>
 
       <div style="background:var(--bg);border-radius:8px;padding:14px 16px;margin-bottom:18px;border-left:3px solid var(--t8);">
@@ -719,126 +863,8 @@ body {
       </div>
     </div>
 
-  </div></div><!-- /inward T7-T8 -->
+  </div></div><!-- /inward T1-T2-T3-T9-T7-T8 -->
 
-</section>
-
-<!-- ══ GANTT ══ -->
-<section class="sec">
-  <p class="sec-lbl">12-month roadmap · Jan → Dec 2027 · 8 tracks</p>
-  <div class="gantt-wrap">
-    <p class="gantt-note">◆ = sprint review (kill or continue) &nbsp;·&nbsp; lighter shade = build phase &nbsp;·&nbsp; full colour = live / active</p>
-    <div class="gantt">
-
-      <!-- Q-header row (row 1) -->
-      <div style="grid-column:1;grid-row:1" class="g-q"></div>
-      <div style="grid-column:2/5;grid-row:1" class="g-q">Q1</div>
-      <div style="grid-column:5/8;grid-row:1" class="g-q">Q2</div>
-      <div style="grid-column:8/11;grid-row:1" class="g-q">Q3</div>
-      <div style="grid-column:11/14;grid-row:1" class="g-q">Q4</div>
-
-      <!-- Month-header row (row 2) -->
-      <div style="grid-column:1;grid-row:2" class="g-hlbl">Track</div>
-      <div style="grid-column:2;grid-row:2"  class="g-m">Jan</div>
-      <div style="grid-column:3;grid-row:2"  class="g-m">Feb</div>
-      <div style="grid-column:4;grid-row:2"  class="g-m">Mar</div>
-      <div style="grid-column:5;grid-row:2"  class="g-m">Apr</div>
-      <div style="grid-column:6;grid-row:2"  class="g-m">May</div>
-      <div style="grid-column:7;grid-row:2"  class="g-m">Jun</div>
-      <div style="grid-column:8;grid-row:2"  class="g-m">Jul</div>
-      <div style="grid-column:9;grid-row:2"  class="g-m">Aug</div>
-      <div style="grid-column:10;grid-row:2" class="g-m">Sep</div>
-      <div style="grid-column:11;grid-row:2" class="g-m">Oct</div>
-      <div style="grid-column:12;grid-row:2" class="g-m">Nov</div>
-      <div style="grid-column:13;grid-row:2" class="g-m">Dec</div>
-
-      <!-- T1 KAM (row 3) -->
-      <div style="grid-column:1;grid-row:3"    class="g-lbl" data-t="1">T1 · KAM</div>
-      <div style="grid-column:2/4;grid-row:3"  class="g-bar t1a">SharePoint schema + MCP config</div>
-      <div style="grid-column:4/8;grid-row:3"  class="g-bar t1b">ICP library — 50 accounts + deck templates</div>
-      <div style="grid-column:8/14;grid-row:3" class="g-bar t1c">3 sellers live → expand to full team</div>
-
-      <!-- T2 Accelerators (row 4) — split lane: migration top / CE sprints bottom -->
-      <div style="grid-column:1;grid-row:4;white-space:normal;flex-direction:column;align-items:flex-start;gap:1px;" class="g-lbl" data-t="2">
-        <span style="font-size:11px;font-weight:700;color:var(--tx2);">T2 · Accelerators</span>
-        <span style="font-size:9.5px;color:#9A6B20;font-weight:600;">▴ Migration</span>
-        <span style="font-size:9.5px;color:var(--t2);font-weight:600;">▾ CE Sprints</span>
-      </div>
-      <!-- top lane: migration accelerators (existing, scaling) -->
-      <div style="grid-column:2/7;grid-row:4"  class="g-bar mg-a lane-top">EDW · ETL · BI migration — established &amp; active</div>
-      <div style="grid-column:7/14;grid-row:4" class="g-bar mg-b lane-top">Scaling to Databricks · Snowflake · Fabric — new platform plays</div>
-      <!-- bottom lane: new CE sprints -->
-      <div style="grid-column:2/4;grid-row:4"   class="g-bar t2a lane-bot">Insurance CE POC</div>
-      <div style="grid-column:4/5;grid-row:4"   class="lane-dot-bot">◆</div>
-      <div style="grid-column:5/7;grid-row:4"   class="g-bar t2a lane-bot">Banking AML CE POC</div>
-      <div style="grid-column:7/8;grid-row:4"   class="lane-dot-bot">◆</div>
-      <div style="grid-column:8/10;grid-row:4"  class="g-bar t2b lane-bot">Health Claims CE POC</div>
-      <div style="grid-column:10/11;grid-row:4" class="lane-dot-bot">◆</div>
-      <div style="grid-column:11/14;grid-row:4" class="g-bar t2c lane-bot">Scale 2 CE survivors</div>
-
-      <!-- T3 Delivery (row 5) -->
-      <div style="grid-column:1;grid-row:5"    class="g-lbl" data-t="3">T3 · Delivery</div>
-      <div style="grid-column:2/5;grid-row:5"  class="g-bar t3a">Hire CE Lead + 2 delivery architects</div>
-      <div style="grid-column:5/10;grid-row:5" class="g-bar t3b">Delivery — first 3 billable CE engagements</div>
-      <div style="grid-column:10/14;grid-row:5" class="g-bar t3c">COE cadence + quarterly retro</div>
-
-      <!-- T4 Partners (row 6) -->
-      <div style="grid-column:1;grid-row:6"    class="g-lbl" data-t="4">T4 · Partners</div>
-      <div style="grid-column:2/4;grid-row:6"  class="g-bar t4a">Register Databricks + Snowflake + Fabric</div>
-      <div style="grid-column:4/14;grid-row:6" class="g-bar t4b">Co-sell — 5+ opps in partner portal</div>
-
-      <!-- T5 CE SKU (row 7) -->
-      <div style="grid-column:1;grid-row:7"    class="g-lbl" data-t="5">T5 · CE SKU</div>
-      <div style="grid-column:3/5;grid-row:7"  class="g-bar t5a">Pricing model + SOW template</div>
-      <div style="grid-column:5/14;grid-row:7" class="g-bar t5b">3 CE SKU flavors in active pipeline</div>
-
-      <!-- T6 Thought Leadership (row 8) -->
-      <div style="grid-column:1;grid-row:8"    class="g-lbl" data-t="6">T6 · Thought Lead.</div>
-      <div style="grid-column:2/4;grid-row:8"  class="g-bar t6a">CE POV paper + blog cadence</div>
-      <div style="grid-column:4/14;grid-row:8" class="g-bar t6b">Summit talks · analyst briefings · LinkedIn</div>
-
-      <!-- T7 Practice Discipline (row 9) -->
-      <div style="grid-column:1;grid-row:9"    class="g-lbl" data-t="7">T7 · Discipline</div>
-      <div style="grid-column:2/5;grid-row:9"  class="g-bar t7a">ICP filter doc + kill criteria + owner named</div>
-      <div style="grid-column:5/11;grid-row:9" class="g-bar t7b">Quarterly pipeline kill/scale review</div>
-      <div style="grid-column:11/14;grid-row:9" class="g-bar t7c">2027 retro + CE 2.0 roadmap</div>
-
-      <!-- T8 Always-on Mechanisms (row 10) -->
-      <div style="grid-column:1;grid-row:10"    class="g-lbl" data-t="8">T8 · Always-on</div>
-      <div style="grid-column:2/6;grid-row:10"  class="g-bar t8a">Syntax→Semantics channel launched + Live Wire cadence set</div>
-      <div style="grid-column:6/14;grid-row:10" class="g-bar t8b">Bi-weekly Live Wire · ongoing · talent surfaced for client-facing roles</div>
-
-      <!-- Hires (row 11) -->
-      <div style="grid-column:1;grid-row:11"    class="g-lbl" data-t="h">Hires</div>
-      <div style="grid-column:2/3;grid-row:11"  class="g-hire">CE Lead</div>
-      <div style="grid-column:4/5;grid-row:11"  class="g-hire">CCO / GTM</div>
-      <div style="grid-column:6/8;grid-row:11"  class="g-hire">Domain Spec</div>
-
-      <!-- External Events (row 12) -->
-      <div style="grid-column:1;grid-row:12"     class="g-lbl" data-t="e">Events · US</div>
-      <div style="grid-column:3/4;grid-row:12"   class="g-evt">DB Summit sub.</div>
-      <div style="grid-column:6/7;grid-row:12"   class="g-evt">Snflk Summit</div>
-      <div style="grid-column:7/8;grid-row:12"   class="g-evt">DAIS 2027</div>
-      <div style="grid-column:9/10;grid-row:12"  class="g-evt">re:Invent sub.</div>
-      <div style="grid-column:10/11;grid-row:12" class="g-evt">Analyst brief.</div>
-      <div style="grid-column:11/12;grid-row:12" class="g-evt">Gartner sub.</div>
-      <div style="grid-column:13/14;grid-row:12" class="g-evt">AWS re:Invent</div>
-
-      <!-- Webinars (row 13) -->
-      <div style="grid-column:1;grid-row:13"    class="g-lbl" data-t="w">Webinars</div>
-      <div style="grid-column:2/14;grid-row:13" class="g-bar" style="background:#DCFCE7;color:#14532D;font-weight:700;">Monthly CE webinar series — 12 webinars Jan → Dec 2027 · dual sessions US (ET) + UK/EU (GMT/CET)</div>
-
-      <!-- EU/UK Events (row 14) -->
-      <div style="grid-column:1;grid-row:14"     class="g-lbl" data-t="eu">Events · EU/UK</div>
-      <div style="grid-column:5/6;grid-row:14"   class="g-evt">AWS Summit London</div>
-      <div style="grid-column:6/7;grid-row:14"   class="g-evt">Gartner D&amp;A London</div>
-      <div style="grid-column:7/8;grid-row:14"   class="g-evt">Money20/20 EU</div>
-      <div style="grid-column:9/10;grid-row:14"  class="g-evt">Corinium CDO UK</div>
-      <div style="grid-column:12/13;grid-row:14" class="g-evt">Data+AI EU Summit</div>
-      <div style="grid-column:13/14;grid-row:14" class="g-evt">FinTech Connect</div>
-
-    </div>
-  </div>
 </section>
 
 <!-- ══ CONTENT CADENCE ══ -->
