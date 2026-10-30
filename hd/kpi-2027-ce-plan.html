@@ -25,6 +25,7 @@
   --t7: #166534;
   --t8: #0F766E;
   --t9: #BE185D;
+  --t10: #D97706;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -114,6 +115,7 @@ body {
 .card[data-t="7"]::before { background: var(--t7); }
 .card[data-t="8"]::before { background: var(--t8); }
 .card[data-t="9"]::before { background: var(--t9); }
+.card[data-t="10"]::before { background: var(--t10); }
 
 .card-top {
   display: flex; justify-content: space-between; align-items: flex-start;
@@ -132,6 +134,7 @@ body {
 .card[data-t="7"] .card-tn { color: var(--t7); }
 .card[data-t="8"] .card-tn { color: var(--t8); }
 .card[data-t="9"] .card-tn { color: var(--t9); }
+.card[data-t="10"] .card-tn { color: var(--t10); }
 .card-title { font-size: 14px; font-weight: 600; line-height: 1.3; }
 
 .badge {
@@ -191,7 +194,7 @@ body {
 .gantt {
   display: grid;
   grid-template-columns: 150px repeat(12, 1fr);
-  grid-template-rows: 20px 24px 44px 44px 44px 44px 132px 44px 44px 44px 44px 60px 60px 60px 60px;
+  grid-template-rows: 20px 24px 44px 44px 44px 44px 132px 44px 44px 44px 44px 44px 60px 60px 60px 60px;
   min-width: 1000px;
 }
 .g-q {
@@ -226,6 +229,7 @@ body {
 .g-lbl[data-t="7"] { border-left-color: var(--t7); }
 .g-lbl[data-t="8"] { border-left-color: var(--t8); }
 .g-lbl[data-t="9"] { border-left-color: var(--t9); }
+.g-lbl[data-t="10"] { border-left-color: var(--t10); }
 .g-lbl[data-t="h"] { border-left-color: #7C3AED; }
 .g-lbl[data-t="e"] { border-left-color: #D97706; }
 .g-lbl[data-t="w"]  { border-left-color: #16A34A; }
@@ -454,6 +458,10 @@ body {
 .t6b { background: #7C3AED; color: #fff; }
 .t9a { background: #FCE7F3; color: #9D174D; }
 .t9b { background: #BE185D; color: #fff; }
+/* Outward: amber for T10 marketing */
+.t10a { background: #FEF3C7; color: #92400E; }
+.t10b { background: #FDE68A; color: #78350F; }
+.t10c { background: #D97706; color: #fff; }
 
 /* ── KAM SCENARIOS ── */
 .kam-wrap {
@@ -611,7 +619,7 @@ body {
       <p class="hdr-eye">Strategic Plan · KPI Partners · January – December 2027 · USA · UK · Europe</p>
       <h1>Becoming a <em>Context Engineering</em> company</h1>
     </div>
-    <p class="hdr-sub">Nine parallel tracks — three Outward (market-facing) and six Inward (capability-building) — to build the GTM motion, delivery capability, and market identity KPI needs to own the CE space before the window closes — across US, UK, and European markets.</p>
+    <p class="hdr-sub">Ten parallel tracks — four Outward (market-facing) and six Inward (capability-building) — to build the GTM motion, delivery capability, and market identity KPI needs to own the CE space before the window closes — across US, UK, and European markets.</p>
   </div>
 </header>
 
@@ -640,6 +648,7 @@ body {
       <div class="ge-step-tracks">
         <span class="ge-trk" style="color:var(--t6)">T6 Thought Leadership</span>
         <span class="ge-trk" style="color:var(--t4)">T4 Co-Sell</span>
+        <span class="ge-trk" style="color:var(--t10)">T10 Marketing</span>
       </div>
     </div>
     <div class="ge-arrow">
@@ -681,6 +690,7 @@ body {
       <div class="ge-step-tracks">
         <span class="ge-trk" style="color:var(--t6)">T6 Thought Leadership</span>
         <span class="ge-trk" style="color:var(--t4)">T4 Co-Sell</span>
+        <span class="ge-trk" style="color:var(--t10)">T10 Marketing</span>
       </div>
     </div>
   </div>
@@ -710,7 +720,7 @@ body {
 
 <!-- ══ GANTT ══ -->
 <section class="sec" id="roadmap">
-  <p class="sec-lbl">12-month roadmap · Jan → Dec 2027 · 9 tracks</p>
+  <p class="sec-lbl">12-month roadmap · Jan → Dec 2027 · 10 tracks</p>
   <div class="gantt-wrap">
     <p class="gantt-note">lighter shade = build phase &nbsp;·&nbsp; ◆ = sprint review &nbsp;·&nbsp; full colour = live / active &nbsp;·&nbsp; blue = Outward &nbsp;·&nbsp; green = Inward</p>
     <div class="gantt">
@@ -804,34 +814,39 @@ body {
       <div style="grid-column:2/5;grid-row:11"  class="g-bar t9a">Quality gate + win theme framework — pipeline in writing</div>
       <div style="grid-column:5/14;grid-row:11" class="g-bar t9b">Presales pipeline live — SLA tracked · speaker bench active · win rate by quality tier</div>
 
-      <!-- Hires (row 12) -->
-      <div style="grid-column:1;grid-row:12"    class="g-lbl" data-t="h">Hires</div>
-      <div style="grid-column:2/3;grid-row:12"  class="g-hire">CE Lead</div>
-      <div style="grid-column:4/5;grid-row:12"  class="g-hire">CCO / GTM</div>
-      <div style="grid-column:6/8;grid-row:12"  class="g-hire">Domain Specialization</div>
+      <!-- T10 Marketing Excellence (row 12) -->
+      <div style="grid-column:1;grid-row:12"    class="g-lbl" data-t="10">T10 · Marketing</div>
+      <div style="grid-column:2/8;grid-row:12"  class="g-bar t10b">ABM campaigns — ICP accounts + email + LinkedIn</div>
+      <div style="grid-column:8/14;grid-row:12" class="g-bar t10c">Integrated demand gen — marketing-attributed pipeline live</div>
 
-      <!-- External Events (row 13) -->
-      <div style="grid-column:1;grid-row:13"     class="g-lbl" data-t="e">Events · US</div>
-      <div style="grid-column:3/4;grid-row:13"   class="g-evt">DB Summit sub.</div>
-      <div style="grid-column:6/7;grid-row:13"   class="g-evt">Snflk Summit</div>
-      <div style="grid-column:7/8;grid-row:13"   class="g-evt">DAIS 2027</div>
-      <div style="grid-column:9/10;grid-row:13"  class="g-evt">re:Invent sub.</div>
-      <div style="grid-column:10/11;grid-row:13" class="g-evt">Analyst brief.</div>
-      <div style="grid-column:11/12;grid-row:13" class="g-evt">Gartner sub.</div>
-      <div style="grid-column:13/14;grid-row:13" class="g-evt">AWS re:Invent</div>
+      <!-- Hires (row 13) -->
+      <div style="grid-column:1;grid-row:13"    class="g-lbl" data-t="h">Hires</div>
+      <div style="grid-column:2/3;grid-row:13"  class="g-hire">CE Lead</div>
+      <div style="grid-column:4/5;grid-row:13"  class="g-hire">CCO / GTM</div>
+      <div style="grid-column:6/8;grid-row:13"  class="g-hire">Domain Specialization</div>
 
-      <!-- Webinars (row 14) -->
-      <div style="grid-column:1;grid-row:14"    class="g-lbl" data-t="w">Webinars</div>
-      <div style="grid-column:2/14;grid-row:14" class="g-bar" style="background:#DCFCE7;color:#14532D;font-weight:700;">Monthly CE webinar series — 12 webinars Jan → Dec 2027 · dual sessions US (ET) + UK/EU (GMT/CET)</div>
+      <!-- External Events (row 14) -->
+      <div style="grid-column:1;grid-row:14"     class="g-lbl" data-t="e">Events · US</div>
+      <div style="grid-column:3/4;grid-row:14"   class="g-evt">DB Summit sub.</div>
+      <div style="grid-column:6/7;grid-row:14"   class="g-evt">Snflk Summit</div>
+      <div style="grid-column:7/8;grid-row:14"   class="g-evt">DAIS 2027</div>
+      <div style="grid-column:9/10;grid-row:14"  class="g-evt">re:Invent sub.</div>
+      <div style="grid-column:10/11;grid-row:14" class="g-evt">Analyst brief.</div>
+      <div style="grid-column:11/12;grid-row:14" class="g-evt">Gartner sub.</div>
+      <div style="grid-column:13/14;grid-row:14" class="g-evt">AWS re:Invent</div>
 
-      <!-- EU/UK Events (row 15) -->
-      <div style="grid-column:1;grid-row:15"     class="g-lbl" data-t="eu">Events · EU/UK</div>
-      <div style="grid-column:5/6;grid-row:15"   class="g-evt">AWS Summit London</div>
-      <div style="grid-column:6/7;grid-row:15"   class="g-evt">Gartner D&amp;A London</div>
-      <div style="grid-column:7/8;grid-row:15"   class="g-evt">Money20/20 EU</div>
-      <div style="grid-column:9/10;grid-row:15"  class="g-evt">Corinium CDO UK</div>
-      <div style="grid-column:12/13;grid-row:15" class="g-evt">Data+AI EU Summit</div>
-      <div style="grid-column:13/14;grid-row:15" class="g-evt">FinTech Connect</div>
+      <!-- Webinars (row 15) -->
+      <div style="grid-column:1;grid-row:15"    class="g-lbl" data-t="w">Webinars</div>
+      <div style="grid-column:2/14;grid-row:15" class="g-bar" style="background:#DCFCE7;color:#14532D;font-weight:700;">Monthly CE webinar series — 12 webinars Jan → Dec 2027 · dual sessions US (ET) + UK/EU (GMT/CET)</div>
+
+      <!-- EU/UK Events (row 16) -->
+      <div style="grid-column:1;grid-row:16"     class="g-lbl" data-t="eu">Events · EU/UK</div>
+      <div style="grid-column:5/6;grid-row:16"   class="g-evt">AWS Summit London</div>
+      <div style="grid-column:6/7;grid-row:16"   class="g-evt">Gartner D&amp;A London</div>
+      <div style="grid-column:7/8;grid-row:16"   class="g-evt">Money20/20 EU</div>
+      <div style="grid-column:9/10;grid-row:16"  class="g-evt">Corinium CDO UK</div>
+      <div style="grid-column:12/13;grid-row:16" class="g-evt">Data+AI EU Summit</div>
+      <div style="grid-column:13/14;grid-row:16" class="g-evt">FinTech Connect</div>
 
     </div>
   </div>
@@ -839,7 +854,7 @@ body {
 
 <!-- ══ TRACKS ══ -->
 <section class="sec" id="tracks">
-  <p class="sec-lbl">Nine parallel tracks — Outward &amp; Inward</p>
+  <p class="sec-lbl">Ten parallel tracks — Outward &amp; Inward</p>
   <div class="track-group tg-outward">
     <p class="tg-lbl">Outward — market-facing GTM &amp; delivery</p>
   <div class="cards">
@@ -870,20 +885,33 @@ body {
       </ul>
     </div>
 
-    <div class="card full" data-t="6">
+    <div class="card" data-t="6">
       <div class="card-top">
         <div><p class="card-tn">Track 6</p><p class="card-title">Thought Leadership &amp; Analyst Relations</p><p class="card-owner">Owner · CCO + CE Lead</p></div>
         <span class="badge b-out">Outward</span>
       </div>
-      <ul class="ml two">
+      <ul class="ml">
         <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Publish KPI's CE positioning paper — "Why CE is the new Data Strategy". One clear point of view that becomes the narrative behind all external content.</span></li>
-        <li class="mi"><span class="mi-q">Q1–2</span><span class="mi-t">LinkedIn content engine: 2 posts/week on CE practice-building. Customers Google the name they heard at a conference — you need to show up. </span></li>
+        <li class="mi"><span class="mi-q">Q1–2</span><span class="mi-t">LinkedIn content engine: 2 posts/week on CE practice-building. Customers Google the name they heard at a conference — you need to show up.</span></li>
         <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Submit speaking proposals: Databricks Summit and Snowflake Summit (both June 2027) and Microsoft Fabric Community Conference (Mar 2027). These need 3–4 months lead time — submit in Q1.</span></li>
-        <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">First analyst briefing (Gartner, Forrester, or Everest Group) with a live reference customer. Target inclusion in a 2028 Hype Cycle — one analyst mention outweighs 10 webinars. </span></li>
+        <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">First analyst briefing (Gartner, Forrester, or Everest Group) with a live reference customer. Target inclusion in a 2028 Hype Cycle — one analyst mention outweighs 10 webinars.</span></li>
       </ul>
     </div>
 
-  </div></div><!-- /outward T4-T5-T6 -->
+    <div class="card" data-t="10">
+      <div class="card-top">
+        <div><p class="card-tn">Track 10</p><p class="card-title">Marketing Excellence — Demand &amp; Brand</p><p class="card-owner">Owner · Marketing Lead / CCO</p></div>
+        <span class="badge b-out">Outward</span>
+      </div>
+      <ul class="ml">
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Build brand foundations — CE-focused website section, social presence, email list, and brand voice guidelines that position KPI as a CE-native firm, not a generic SI.</span></li>
+        <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Launch ABM campaigns targeting ICP accounts — named-account LinkedIn outreach, content sequences, and email nurture tracks aligned to CE pain points by vertical.</span></li>
+        <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">Integrated demand engine live — content calendar, webinar amplification, partner co-marketing, and MQL-to-SQL handoff process with Sales.</span></li>
+        <li class="mi"><span class="mi-q">Q4</span><span class="mi-t">First marketing-attributed pipeline report. The shift from "KPI does marketing" to "Marketing drives pipeline" — MQL→SQL conversion tracked by channel.</span></li>
+      </ul>
+    </div>
+
+  </div></div><!-- /outward T4-T5-T6-T10 -->
 
 
   <div class="track-group tg-inward">
