@@ -555,6 +555,10 @@ body {
 
 /* ── Growth Engine inline section ── */
 .ge-section { padding: 32px 0 24px; }
+.ge-wrap {
+  background: var(--surf); border: 1px solid var(--bdr);
+  border-radius: 10px; padding: 28px 28px 24px;
+}
 .ge-eye {
   font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
   text-transform: uppercase; color: var(--tx2);
@@ -585,6 +589,11 @@ body {
   background: var(--surf); border: 1.5px solid var(--bdr);
   border-radius: 4px; padding: 2px 8px;
 }
+a.ge-trk { text-decoration: none; transition: border-color 0.12s; }
+a.ge-trk:hover { border-color: var(--bdr2); }
+a.ge-fchip { text-decoration: none; color: inherit; display: block; transition: border-color 0.12s; }
+a.ge-fchip:hover { border-color: var(--bdr2); }
+.card { scroll-margin-top: 52px; }
 .ge-arrow { flex: 0 0 auto; display: flex; align-items: flex-start; padding-top: 28px; }
 .ge-arrow svg { width: 36px; height: 36px; }
 .ge-found-wrap {
@@ -640,6 +649,7 @@ body {
 <!-- ══ GROWTH ENGINE ══ -->
 <section class="sec ge-section" id="motion">
   <p class="sec-lbl">CE Growth Engine · how the motion works</p>
+  <div class="ge-wrap">
 
   <div class="ge-flow">
     <div class="ge-step">
@@ -647,9 +657,9 @@ body {
       <span class="ge-step-dot" style="background:var(--t6)"></span>
       <p class="ge-step-name">Build<br>Credibility</p>
       <div class="ge-step-tracks">
-        <span class="ge-trk" style="color:var(--t6)">T6 Thought Leadership</span>
-        <span class="ge-trk" style="color:var(--t4)">T4 Co-Sell</span>
-        <span class="ge-trk" style="color:var(--t10)">T10 Marketing</span>
+        <a class="ge-trk" href="#track-6" style="color:var(--t6)">T6 Thought Leadership</a>
+        <a class="ge-trk" href="#track-4" style="color:var(--t4)">T4 Co-Sell</a>
+        <a class="ge-trk" href="#track-10" style="color:var(--t10)">T10 Marketing</a>
       </div>
     </div>
     <div class="ge-arrow">
@@ -662,7 +672,7 @@ body {
       <span class="ge-step-dot" style="background:var(--t5)"></span>
       <p class="ge-step-name">Open<br>the Door</p>
       <div class="ge-step-tracks">
-        <span class="ge-trk" style="color:var(--t5)">T5 CE Assessment</span>
+        <a class="ge-trk" href="#track-5" style="color:var(--t5)">T5 CE Assessment</a>
       </div>
     </div>
     <div class="ge-arrow">
@@ -675,8 +685,8 @@ body {
       <span class="ge-step-dot" style="background:var(--t2)"></span>
       <p class="ge-step-name">Prove<br>the Model</p>
       <div class="ge-step-tracks">
-        <span class="ge-trk" style="color:var(--t2)">T2 Accelerators</span>
-        <span class="ge-trk" style="color:var(--t3)">T3 CE CoE</span>
+        <a class="ge-trk" href="#track-2" style="color:var(--t2)">T2 Accelerators</a>
+        <a class="ge-trk" href="#track-3" style="color:var(--t3)">T3 CE CoE</a>
       </div>
     </div>
     <div class="ge-arrow">
@@ -689,9 +699,9 @@ body {
       <span class="ge-step-dot" style="background:var(--t6)"></span>
       <p class="ge-step-name">Publish<br>the Proof</p>
       <div class="ge-step-tracks">
-        <span class="ge-trk" style="color:var(--t6)">T6 Thought Leadership</span>
-        <span class="ge-trk" style="color:var(--t4)">T4 Co-Sell</span>
-        <span class="ge-trk" style="color:var(--t10)">T10 Marketing</span>
+        <a class="ge-trk" href="#track-6" style="color:var(--t6)">T6 Thought Leadership</a>
+        <a class="ge-trk" href="#track-4" style="color:var(--t4)">T4 Co-Sell</a>
+        <a class="ge-trk" href="#track-10" style="color:var(--t10)">T10 Marketing</a>
       </div>
     </div>
   </div>
@@ -699,27 +709,28 @@ body {
   <div class="ge-found-wrap">
     <p class="ge-found-label">Foundation &amp; always-on motions — running all year</p>
     <div class="ge-found-chips">
-      <div class="ge-fchip">
+      <a class="ge-fchip" href="#track-7">
         <div class="ge-fchip-name">T7 · Practice Discipline</div>
         <div class="ge-fchip-desc">CE methodology, reusable IP, delivery playbooks</div>
-      </div>
-      <div class="ge-fchip">
+      </a>
+      <a class="ge-fchip" href="#track-8">
         <div class="ge-fchip-name">T8 · Always-on Mechanisms</div>
         <div class="ge-fchip-desc">Pipeline engine, partner activation, digital presence, internal thought leadership building</div>
-      </div>
-      <div class="ge-fchip">
+      </a>
+      <a class="ge-fchip" href="#track-9">
         <div class="ge-fchip-name">T9 · Presales Excellence</div>
         <div class="ge-fchip-desc">Rapid RFP response, qualified demos, proposal velocity, compelling orals &amp; presentations</div>
-      </div>
-      <div class="ge-fchip">
+      </a>
+      <a class="ge-fchip" href="#track-1">
         <div class="ge-fchip-name">T1 · Sales Acceleration</div>
         <div class="ge-fchip-desc">Faster deal cycles, account expansion, AI-assisted pipeline velocity</div>
-      </div>
-      <div class="ge-fchip">
+      </a>
+      <a class="ge-fchip" href="#track-10">
         <div class="ge-fchip-name">T10 · Marketing Excellence</div>
         <div class="ge-fchip-desc">ABM campaigns, demand gen, brand building, marketing-attributed pipeline</div>
-      </div>
+      </a>
     </div>
+  </div>
   </div>
 </section>
 
@@ -864,7 +875,7 @@ body {
     <p class="tg-lbl">Outward — market-facing GTM &amp; delivery</p>
   <div class="cards">
 
-    <div class="card" data-t="4">
+    <div class="card" data-t="4" id="track-4">
       <div class="card-top">
         <div><p class="card-tn">Track 4</p><p class="card-title">Platform Co-Sell Engine</p><p class="card-owner">Owner · CCO / Partnerships</p></div>
         <span class="badge b-out">Outward</span>
@@ -877,7 +888,7 @@ body {
       </ul>
     </div>
 
-    <div class="card" data-t="5">
+    <div class="card" data-t="5" id="track-5">
       <div class="card-top">
         <div><p class="card-tn">Track 5</p><p class="card-title">CE Assessment — The Wedge</p><p class="card-owner">Owner · CE Lead + CCO</p></div>
         <span class="badge b-out">Outward</span>
@@ -890,7 +901,7 @@ body {
       </ul>
     </div>
 
-    <div class="card" data-t="6">
+    <div class="card" data-t="6" id="track-6">
       <div class="card-top">
         <div><p class="card-tn">Track 6</p><p class="card-title">Thought Leadership &amp; Analyst Relations</p><p class="card-owner">Owner · CCO + CE Lead</p></div>
         <span class="badge b-out">Outward</span>
@@ -903,7 +914,7 @@ body {
       </ul>
     </div>
 
-    <div class="card" data-t="10">
+    <div class="card" data-t="10" id="track-10">
       <div class="card-top">
         <div><p class="card-tn">Track 10</p><p class="card-title">Marketing Excellence — Demand &amp; Brand</p><p class="card-owner">Owner · Marketing Lead / CCO</p></div>
         <span class="badge b-out">Outward</span>
@@ -923,7 +934,7 @@ body {
     <p class="tg-lbl">Inward — capability building, practice discipline &amp; quality gate</p>
   <div class="cards">
 
-    <div class="card" data-t="1">
+    <div class="card" data-t="1" id="track-1">
       <div class="card-top">
         <div><p class="card-tn">Track 1</p><p class="card-title">KPI Asset Manager — SA-Grade Context for Every Seller</p><p class="card-owner">Owner · CCO / Sales Ops</p></div>
         <span class="badge b-in">Inward</span>
@@ -976,7 +987,7 @@ body {
       </details>
     </div>
 
-    <div class="card" data-t="2">
+    <div class="card" data-t="2" id="track-2">
       <div class="card-top">
         <div><p class="card-tn">Track 2</p><p class="card-title">Industry Ontology Accelerators</p><p class="card-owner">Owner · CE Lead</p></div>
         <span class="badge b-in">Inward</span>
@@ -990,7 +1001,7 @@ body {
       </ul>
     </div>
 
-    <div class="card full" data-t="3">
+    <div class="card full" data-t="3" id="track-3">
       <div class="card-top">
         <div><p class="card-tn">Track 3</p><p class="card-title">CE Delivery Capability</p><p class="card-owner">Owner · CE Lead</p></div>
         <span class="badge b-in">Inward</span>
@@ -1004,7 +1015,7 @@ body {
       </ul>
     </div>
 
-    <div class="card full" data-t="9">
+    <div class="card full" data-t="9" id="track-9">
       <div class="card-top">
         <div><p class="card-tn">Track 9 · Presales</p><p class="card-title">Presales Excellence &amp; Artifact Quality</p><p class="card-owner">Owner · Presales Lead</p></div>
         <span class="badge b-in">Inward</span>
@@ -1020,7 +1031,7 @@ body {
       </ul>
     </div>
 
-    <div class="card full" data-t="7">
+    <div class="card full" data-t="7" id="track-7">
       <div class="card-top">
         <div><p class="card-tn">Track 7</p><p class="card-title">Practice Discipline — What We Build, What We Decline</p><p class="card-owner">Owner · CE Lead</p></div>
         <span class="badge b-in">Inward</span>
@@ -1035,7 +1046,7 @@ body {
       </ul>
     </div>
 
-    <div class="card full" data-t="8">
+    <div class="card full" data-t="8" id="track-8">
       <div class="card-top">
         <div><p class="card-tn">Track 8</p><p class="card-title">Always-on Mechanisms — Internal Team</p><p class="card-owner">Owner · Practice Lead</p></div>
         <span class="badge b-in">Inward</span>
