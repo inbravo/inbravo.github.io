@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ontology — Technology, Insurance, and Agentic Accelerator">
+  <meta name="author" content="Amit Dixit">
+  <link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+  <script src="../js/jquery-1.11.3.min.js"></script>
+  <script src="../js/csi.min.js"></script>
+  <script src="../js/inbravo.js"></script>
+  <title>Ontology · InBravo</title>
+  <style>
+    /* ── Tab chrome ──────────────────────────────────────────── */
+    .ont-tabs {
+      display: flex;
+      gap: 4px;
+      margin: 18px auto 0;
+      max-width: 960px;
+      padding: 0 8px;
+    }
+    .ont-tab {
+      padding: 7px 20px;
+      border: 1px solid var(--border, #444);
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary, #999);
+      background: var(--bg-secondary, #1e1e1e);
+      transition: color 0.15s, background 0.15s;
+      letter-spacing: 0.03em;
+    }
+    .ont-tab:hover { color: var(--text-primary, #e0e0e0); }
+    .ont-tab.active {
+      color: var(--accent-cyan, #00d4ff);
+      background: var(--bg-primary, #121212);
+      border-color: var(--accent-cyan, #00d4ff);
+    }
+    .ont-panel {
+      display: none;
+      max-width: 960px;
+      margin: 0 auto 40px;
+      padding: 22px 16px;
+      border: 1px solid var(--border, #444);
+      border-radius: 0 6px 6px 6px;
+    }
+    .ont-panel.active { display: block; }
+
+    /* ── Shared content helpers ──────────────────────────────── */
+    .ont-h2 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-cyan, #00d4ff);
+      margin: 24px 0 10px;
+      border-bottom: 1px solid var(--border, #333);
+      padding-bottom: 4px;
+    }
+    .ont-h2:first-child { margin-top: 0; }
+    .ont-p {
+      font-size: 0.78rem;
+      color: var(--text-secondary, #aaa);
+      line-height: 1.65;
+      margin: 0 0 10px;
+    }
+    .ont-tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      padding: 2px 7px;
+      border-radius: 3px;
+      margin: 2px 3px 2px 0;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .tag-cyan  { background: rgba(0,212,255,.12); color: #00d4ff; border: 1px solid rgba(0,212,255,.25); }
+    .tag-green { background: rgba(80,250,123,.10); color: #50fa7b; border: 1px solid rgba(80,250,123,.22); }
+    .tag-amber { background: rgba(255,184,0,.10);  color: #ffc53d; border: 1px solid rgba(255,184,0,.22); }
+    .tag-red   { background: rgba(255,85,85,.10);  color: #ff7070; border: 1px solid rgba(255,85,85,.22); }
+    .tag-grey  { background: rgba(170,170,170,.10);color: #aaa;    border: 1px solid rgba(170,170,170,.2); }
+
+    /* ── Five-layer stack (Technology tab) ───────────────────── */
+    .stack-row {
+      display: grid;
+      grid-template-columns: 130px 1fr 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--border, #333);
+      padding: 8px 0;
+      font-size: 0.76rem;
+      align-items: start;
+    }
+    .stack-row:last-child { border-bottom: none; }
+    .stack-label {
+      font-weight: 700;
+      color: var(--text-primary, #e0e0e0);
+      padding-right: 12px;
+    }
+    .stack-std { color: var(--text-secondary, #aaa); }
+    .stack-note { color: var(--text-secondary, #888); font-size: 0.72rem; }
+
+    /* ── Platform card grid ───────────────────────────────────── */
+    .plat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .plat-card {
+      border: 1px solid var(--border, #333);
+      border-radius: 8px;
+      padding: 14px 16px;
+      background: var(--bg-secondary, #1a1a1a);
+    }
+    .plat-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-primary, #e0e0e0);
+      margin-bottom: 5px;
+    }
+    .plat-status {
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    .status-ga   { background: rgba(80,250,123,.15); color: #50fa7b; }
+    .status-prev { background: rgba(255,184,0,.12);  color: #ffc53d; }
+    .plat-line {
+      font-size: 0.72rem;
+      color: var(--text-secondary, #aaa);
+      margin: 3px 0;
+      line-height: 1.5;
+    }
+    .plat-highlight {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent-cyan, #00d4ff);
+    }
+
+    /* ── Insurance ontology entities table ───────────────────── */
+    .ent-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.74rem;
+      margin-top: 10px;
+    }
+    .ent-table th {
+      text-align: left;
+      padding: 6px 10px;
+      background: var(--bg-secondary, #1e1e1e);
+      color: var(--text-secondary, #aaa);
+      font-weight: 600;
+      border: 1px solid var(--border, #333);
+      font-size: 0.70rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .ent-table td {
+      padding: 6px 10px;
+      border: 1px solid var(--border, #333);
+      color: var(--text-primary, #ddd);
+      vertical-align: top;
+    }
+    .ent-table tr:nth-child(even) td {
+      background: var(--bg-secondary, #161616);
+    }
+    .mono {
+      font-family: 'Courier New', monospace;
+      font-size: 0.70rem;
+      color: var(--accent-cyan, #00d4ff);
+    }
+
+    /* ── Accelerator agent cards ─────────────────────────────── */
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+    @media (max-width: 500px) {
+      .agent-grid { grid-template-columns: 1fr; }
+      .plat-grid  { grid-template-columns: 1fr; }
+    }
+    .agent-card {
+      border: 1px solid var(--border, #333);
+      border-radius: 8px;
+      padding: 16px;
+      background: var(--bg-secondary, #1a1a1a);
+      position: relative;
+    }
+    .agent-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .agent-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-primary, #e0e0e0);
+    }
+    .agent-q {
+      font-size: 0.72rem;
+      color: var(--text-secondary, #aaa);
+      font-style: italic;
+      margin: 0 0 10px;
+      line-height: 1.5;
+    }
+    .agent-section-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary, #777);
+      margin: 10px 0 4px;
+    }
+    .entity-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+    .entity-pill {
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: rgba(0,212,255,.10);
+      color: #00d4ff;
+      border: 1px solid rgba(0,212,255,.2);
+    }
+    .rule-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      font-size: 0.72rem;
+      color: var(--text-secondary, #bbb);
+      margin: 3px 0;
+      line-height: 1.5;
+    }
+    .rule-row::before {
+      content: '→';
+      color: var(--accent-cyan, #00d4ff);
+      flex-shrink: 0;
+      margin-top: 0;
+    }
+    .agent-why {
+      font-size: 0.70rem;
+      color: #50fa7b;
+      background: rgba(80,250,123,.07);
+      border-left: 2px solid #50fa7b;
+      padding: 5px 8px;
+      margin-top: 8px;
+      border-radius: 0 4px 4px 0;
+      line-height: 1.5;
+    }
+    .agent-approach {
+      font-size: 0.70rem;
+      background: rgba(255,154,108,.07);
+      border-left: 2px solid #ff9a6c;
+      padding: 5px 8px;
+      margin-top: 8px;
+      border-radius: 0 4px 4px 0;
+      line-height: 1.65;
+      color: var(--text-secondary, #bbb);
+    }
+    .agent-approach strong { color: #ff9a6c; font-weight: 700; }
+    .mvo-badge {
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: rgba(255,184,0,.12);
+      color: #ffc53d;
+      border: 1px solid rgba(255,184,0,.25);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── Standard rows ───────────────────────────────────────── */
+    .w3c-grid {
+      display: grid;
+      grid-template-columns: 80px 1fr 1fr;
+      gap: 0;
+      font-size: 0.74rem;
+    }
+    .w3c-row {
+      display: contents;
+    }
+    .w3c-row > * {
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--border, #333);
+      vertical-align: top;
+    }
+    .w3c-std { font-weight: 700; color: var(--accent-cyan, #00d4ff); font-family: monospace; }
+    .w3c-role { color: var(--text-primary, #ddd); }
+    .w3c-note { color: var(--text-secondary, #999); font-size: 0.70rem; }
+
+    /* ── Compact link list ───────────────────────────────────── */
+    .ref-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .ref-link {
+      font-size: 0.72rem;
+      color: var(--accent-cyan, #00d4ff);
+      border: 1px solid rgba(0,212,255,.2);
+      padding: 2px 9px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+    .ref-link:hover { background: rgba(0,212,255,.1); }
+
+    /* ── Contested metric table ───────────────────────────────── */
+    .metric-banner {
+      font-size: 0.68rem;
+      background: rgba(255,184,0,.08);
+      border: 1px solid rgba(255,184,0,.2);
+      border-radius: 4px;
+      padding: 7px 12px;
+      color: #ffc53d;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div align="center">
+    <div data-include="header.html"></div>
+  </div>
+
+  <div align="center">
+    <p style="font-size:0.75rem;color:#888;margin:18px 0 0;">Ontology — knowledge structure for AI agents · Insurance focus · Oct 2026</p>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="ont-tabs">
+    <div class="ont-tab active" onclick="showTab('tech')">Technology</div>
+    <div class="ont-tab" onclick="showTab('ins')">Insurance</div>
+    <div class="ont-tab" onclick="showTab('acc')">Accelerator</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TAB 1 — TECHNOLOGY
+  ══════════════════════════════════════════════════════════ -->
+  <div class="ont-panel active" id="tab-tech">
+
+    <div class="ont-h2">What is an Ontology?</div>
+    <p class="ont-p">An ontology is an <em>explicit specification of a conceptualisation</em> — named classes, relationships, and constraints that let machines reason about a domain rather than just retrieve text. For AI agents, it is the difference between an LLM that guesses and one that applies verified domain rules.</p>
+
+    <div class="ont-h2">The Five-Layer Stack</div>
+    <div class="stack-row" style="font-size:0.68rem;color:var(--text-secondary,#777);border-bottom:1px solid var(--border,#333);padding-bottom:6px;">
+      <div>Layer</div><div>Standard / Format</div><div>Purpose</div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-label">5 · Context Graph</div>
+      <div class="stack-std">Live RDF · Event streams</div>
+      <div class="stack-note">Runtime state — what is happening <em>now</em> (claim filed today, price updated, agent action taken)</div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-label">4 · Knowledge Graph</div>
+      <div class="stack-std">RDF triples · Property Graph</div>
+      <div class="stack-note">Persisted facts and relationships — who owns what policy, which party filed which claim</div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-label">3 · Ontology</div>
+      <div class="stack-std">OWL 2 · SHACL</div>
+      <div class="stack-note">Formal schema — class hierarchy, cardinality, inference rules, constraint validation</div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-label">2 · Semantic Layer</div>
+      <div class="stack-std">SPARQL · OWL reasoner</div>
+      <div class="stack-note">Mapping business questions to graph queries; computed metrics; lineage</div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-label">1 · Taxonomy</div>
+      <div class="stack-std">SKOS · Thesaurus</div>
+      <div class="stack-note">Vocabulary — preferred labels, synonyms, broader/narrower terms; no logic, just language alignment</div>
+    </div>
+
+    <div class="ont-h2">W3C Standards in Practice</div>
+    <div class="w3c-grid">
+      <div class="w3c-row">
+        <div class="w3c-std">RDF</div>
+        <div class="w3c-role">Resource Description Framework — the base triple model <span class="mono">subject → predicate → object</span></div>
+        <div class="w3c-note">Everything else sits on top of RDF. Serialised as Turtle (.ttl), JSON-LD, or N-Triples.</div>
+      </div>
+      <div class="w3c-row">
+        <div class="w3c-std">OWL 2</div>
+        <div class="w3c-role">Web Ontology Language — class definitions, subclass hierarchies, property restrictions, inference</div>
+        <div class="w3c-note">Enables a reasoner to infer <em>Policy subClassOf Contract</em> automatically; supports open-world semantics.</div>
+      </div>
+      <div class="w3c-row">
+        <div class="w3c-std">SKOS</div>
+        <div class="w3c-role">Simple Knowledge Organization System — controlled vocabularies and thesauri</div>
+        <div class="w3c-note"><span class="mono">skos:prefLabel</span>, <span class="mono">skos:altLabel</span>, <span class="mono">skos:broader/narrower</span> — maps synonyms LLMs will encounter.</div>
+      </div>
+      <div class="w3c-row">
+        <div class="w3c-std">SHACL</div>
+        <div class="w3c-role">Shapes Constraint Language — data validation against a schema at query time</div>
+        <div class="w3c-note">Closed-world validation: rejects a Policy with no InceptionDate; used for data quality gates and agent guardrails.</div>
+      </div>
+    </div>
+
+    <div class="ont-h2">Platform Implementations · Oct 2026</div>
+    <div class="plat-grid">
+      <div class="plat-card">
+        <div class="plat-name">Databricks Genie Ontology</div>
+        <div class="plat-status status-prev">Public Preview · Sep 2026</div>
+        <div class="plat-line">Metadata layer inside <strong>Unity Catalog</strong> — define tables as domain entities, map metric definitions, set join paths</div>
+        <div class="plat-line">Genie uses the ontology to turn NL questions into verified SQL; no hallucinated joins</div>
+        <div class="plat-line">Configured in Unity Catalog YAML; no separate OWL tooling required</div>
+        <div class="plat-line" style="margin-top:6px;"><span class="plat-highlight">Strength:</span> Iceberg-native, works across Delta + external tables</div>
+      </div>
+      <div class="plat-card">
+        <div class="plat-name">Snowflake Cortex Analyst · Semantic Model</div>
+        <div class="plat-status status-ga">GA · Jul 2026</div>
+        <div class="plat-line">YAML semantic model declaring tables, dimensions, measures, and verified SQL snippets</div>
+        <div class="plat-line">Cortex Sense adds ontology grounding: baseline accuracy <strong>24.1% → 86.3%</strong> with ontology-constrained reasoning</div>
+        <div class="plat-line">Semantic model lives in a Snowflake Stage, versioned like code</div>
+        <div class="plat-line" style="margin-top:6px;"><span class="plat-highlight">Strength:</span> Mature NL-to-SQL; integrates with Streamlit for self-service</div>
+      </div>
+      <div class="plat-card">
+        <div class="plat-name">Microsoft Fabric IQ Ontology</div>
+        <div class="plat-status status-prev">Preview · GA pending</div>
+        <div class="plat-line">Ontology item in Fabric workspace — define entities on top of OneLake Medallion tables</div>
+        <div class="plat-line">Known blocker: <strong>Decimal column type bug</strong> (rounds financial figures) blocks insurance/finance data — track MS feedback item</div>
+        <div class="plat-line">CDM (Common Data Model) alignment built in; Power BI measures inherit ontology</div>
+        <div class="plat-line" style="margin-top:6px;"><span class="plat-highlight">Strength:</span> M365 / Copilot integration; single workspace governance</div>
+      </div>
+      <div class="plat-card">
+        <div class="plat-name">Timbr.io (Cross-platform)</div>
+        <div class="plat-status status-ga">GA</div>
+        <div class="plat-line">Only commercial tool spanning Databricks <em>and</em> Snowflake <em>and</em> Fabric with a <strong>single shared ontology</strong></div>
+        <div class="plat-line">OWL + SPARQL on top of existing data warehouse — no ETL, no data copy</div>
+        <div class="plat-line">Outputs SPARQL or SQL depending on target engine</div>
+        <div class="plat-line" style="margin-top:6px;"><span class="plat-highlight">Use case:</span> Multi-cloud insurer with data split across platforms</div>
+      </div>
+    </div>
+
+    <div class="ont-h2">Apache Iceberg as the Bridge</div>
+    <p class="ont-p">Iceberg is the open table format that makes ontology-grounded agents possible across platforms. A claim fact written as an Iceberg table on S3 can be queried from Databricks, Snowflake (via Iceberg REST Catalog), and Fabric (via OneLake shortcuts) — the same physical data, different ontology adapters. This is the foundation for a <em>write-once, reason-anywhere</em> architecture.</p>
+
+    <div class="ont-h2">Open-Source Ontologies (GitHub)</div>
+    <div class="ref-list">
+      <a class="ref-link" href="https://github.com/fabio-rovai/insurance-register-ontology" target="_blank">fabio-rovai/insurance-register-ontology · OWL/SKOS/SHACL · 276K triples · Aug 2026</a>
+      <a class="ref-link" href="https://github.com/riskine/ontology" target="_blank">riskine/ontology · JSON Schema · stale 2021</a>
+      <a class="ref-link" href="https://data.world/nrippner/acme-insurance" target="_blank">ACME insurance.ttl · Turtle/OWL · data.world</a>
+      <a class="ref-link" href="https://arxiv.org/abs/2606.04037" target="_blank">arXiv 2606.04037 · Pre-Deployment Assurance for Agents via Ontology</a>
+    </div>
+
+  </div><!-- /tab-tech -->
+
+  <!-- ══════════════════════════════════════════════════════════
+       TAB 2 — INSURANCE
+  ══════════════════════════════════════════════════════════ -->
+  <div class="ont-panel" id="tab-ins">
+
+    <div class="ont-h2">Core Entity Hierarchy (ACORD-aligned)</div>
+    <table class="ent-table">
+      <thead>
+        <tr>
+          <th>Entity</th>
+          <th>Key Attributes</th>
+          <th>Relationships</th>
+          <th>Standard</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Party</strong></td>
+          <td>PartyID, Role, TaxID, VirtualParty flag (AI/IoT)</td>
+          <td>Insured, Claimant, Broker, Reinsurer</td>
+          <td><span class="ont-tag tag-cyan">ACORD v2.9</span></td>
+        </tr>
+        <tr>
+          <td><strong>Policy</strong></td>
+          <td>PolicyNumber, InceptionDate, ExpiryDate, WrittenPremium</td>
+          <td>→ Party (Insured) · → Coverage · → RiskObject</td>
+          <td><span class="ont-tag tag-cyan">ACORD</span></td>
+        </tr>
+        <tr>
+          <td><strong>Coverage</strong></td>
+          <td>CoverageType, Limit, Deductible, Peril, Exclusions</td>
+          <td>→ Policy · → Claim</td>
+          <td><span class="ont-tag tag-cyan">ACORD</span></td>
+        </tr>
+        <tr>
+          <td><strong>Claim</strong></td>
+          <td>ClaimID, DateOfLoss, ReportedDate, LossAmount, Status</td>
+          <td>→ Policy · → Coverage · → Party (Claimant) · → Reserve</td>
+          <td><span class="ont-tag tag-cyan">ACORD</span></td>
+        </tr>
+        <tr>
+          <td><strong>Reserve</strong></td>
+          <td>ReserveType (Case/IBNR/LAE), Amount, ValuationDate</td>
+          <td>→ Claim · → AccidentYear</td>
+          <td><span class="ont-tag tag-grey">Internal</span></td>
+        </tr>
+        <tr>
+          <td><strong>Contract Group</strong></td>
+          <td>GroupID, OnboardingYear, MeasurementModel (BBA/PAA/VFA)</td>
+          <td>→ Policy · → CSM · → CoverageUnit</td>
+          <td><span class="ont-tag tag-amber">IFRS 17</span></td>
+        </tr>
+        <tr>
+          <td><strong>Treaty</strong></td>
+          <td>TreatyType (QS/XL/Fac), CessionPct, Retention, Limit</td>
+          <td>→ Reinsurer (Party) · → Cession · → Recovery</td>
+          <td><span class="ont-tag tag-cyan">ACORD RI</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="ont-h2">Contested Metrics — the Disambiguation Problem</div>
+    <div class="metric-banner">
+      ⚠ &nbsp;An AI agent answering "What is our loss ratio?" can return 6 different numbers — all arithmetically correct, all semantically different. The ontology must encode <strong>which variant applies when</strong>, or the answer is always wrong.
+    </div>
+    <table class="ent-table">
+      <thead>
+        <tr><th>Metric</th><th>Formula</th><th>When to Use</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Reported LR</strong></td>
+          <td><span class="mono">Reported Losses / Earned Premium</span></td>
+          <td>Short-tail lines (Motor, Property)</td>
+        </tr>
+        <tr>
+          <td><strong>Ultimate LR</strong></td>
+          <td><span class="mono">(Paid + IBNR + IBNER) / Earned Premium</span></td>
+          <td>Long-tail lines (Liability, Workers' Comp)</td>
+        </tr>
+        <tr>
+          <td><strong>Attritional LR</strong></td>
+          <td><span class="mono">Losses excl. Cat &amp; Large / Earned Premium</span></td>
+          <td>Underlying performance ex-volatile events</td>
+        </tr>
+        <tr>
+          <td><strong>Cat LR</strong></td>
+          <td><span class="mono">Cat Losses (net RI) / Earned Premium</span></td>
+          <td>Natural catastrophe monitoring</td>
+        </tr>
+        <tr>
+          <td><strong>Net LR</strong></td>
+          <td><span class="mono">Net Losses (after RI recovery) / Net Earned Premium</span></td>
+          <td>Reinsurance performance; Solvency II SCR</td>
+        </tr>
+        <tr>
+          <td><strong>IFRS 17 LR</strong></td>
+          <td><span class="mono">Insurance Service Expense / Insurance Revenue</span></td>
+          <td>IFRS 17 P&amp;L reporting only — not comparable to GAAP LR</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="ont-h2">Regulatory Forcing Functions</div>
+    <div class="plat-grid">
+      <div class="plat-card">
+        <div class="plat-name">IFRS 17 · Contractual Service Margin</div>
+        <div class="plat-status status-ga">Live Jan 2023 · Global (excl. US)</div>
+        <div class="plat-line">Three measurement models: <strong>BBA/GMM</strong> (default) · <strong>PAA</strong> (short-duration) · <strong>VFA</strong> (participating)</div>
+        <div class="plat-line">CSM is the unearned profit liability — released into revenue as Coverage Units are served</div>
+        <div class="plat-line">Requires assumption versioning: each reporting period the model must record <em>current</em> vs <em>locked-in</em> assumptions</div>
+        <div class="plat-line" style="margin-top:6px;"><span class="plat-highlight">Ontology need:</span> ContractGroup, CSM, CoverageUnit, MeasurementModel entity</div>
+      </div>
+      <div class="plat-card">
+        <div class="plat-name">Lloyd's CDR · Core Data Record</div>
+        <div class="plat-status status-ga">Mandatory · Full risk lifecycle end-2026</div>
+        <div class="plat-line">Blueprint Two digital data standard for the London market; ACORD-aligned</div>
+        <div class="plat-line">Covers bind → endorsement → premium → claims → settlement in a single CDR</div>
+        <div class="plat-line">MRC (Market Reform Contract) data fields map 1-to-1 to ACORD entities</div>
+        <div class="plat-line" style="margin-top:6px;"><span class="plat-highlight">Ontology need:</span> CDR as subclass of Policy, with UMR (Unique Market Reference) as identifier</div>
+      </div>
+      <div class="plat-card">
+        <div class="plat-name">Solvency II · XBRL Taxonomy</div>
+        <div class="plat-status status-prev">EIOPA 2.10.0 · Q1 2027</div>
+        <div class="plat-line">QRT (Quantitative Reporting Templates) map to OWL classes; each data point is a XBRL fact</div>
+        <div class="plat-line">UK diverged post-Brexit: Bank of England Insurance Taxonomy (BEIT) is the UK standard</div>
+        <div class="plat-line">SCR (Solvency Capital Requirement) entity relates to Net LR, Technical Provisions, Own Funds</div>
+        <div class="plat-line" style="margin-top:6px;"><span class="plat-highlight">Ontology need:</span> SCR, MCR, TechnicalProvisions, OwnFunds entities with XBRL data point labels</div>
+      </div>
+      <div class="plat-card">
+        <div class="plat-name">ACORD · Information Model v2.9</div>
+        <div class="plat-status status-ga">Sep 2026 · Jul 2026 Virtual Party update</div>
+        <div class="plat-line">De facto insurance data standard — covers P&amp;C, Life, Reinsurance, Surety</div>
+        <div class="plat-line">Jul 2026: <strong>Virtual Party</strong> entity added for AI agents and IoT devices as first-class parties</div>
+        <div class="plat-line">Member-gated access; Lloyd's CDR, Solvency II, and most insurtech APIs align to ACORD</div>
+        <div class="plat-line" style="margin-top:6px;"><span class="plat-highlight">Reference:</span> <a class="ref-link" href="https://www.acord.org" target="_blank" style="font-size:0.70rem;">acord.org</a></div>
+      </div>
+    </div>
+
+    <div class="ont-h2">Actuarial Reserve Structures</div>
+    <table class="ent-table">
+      <thead>
+        <tr><th>Structure</th><th>Method</th><th>Entities Required</th><th>Use When</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Loss Development Triangle</strong></td>
+          <td>Historical paid/reported by AY × development age</td>
+          <td>AccidentYear, DevelopmentAge, CumulativePaid</td>
+          <td>Foundation for all reserve methods</td>
+        </tr>
+        <tr>
+          <td><strong>Chain Ladder</strong></td>
+          <td>Link ratios × latest diagonal</td>
+          <td>Triangle + LinkRatio</td>
+          <td>Mature accident years with credible history</td>
+        </tr>
+        <tr>
+          <td><strong>Bornhuetter-Ferguson (BF)</strong></td>
+          <td>A priori expected × (1 − % reported) + reported losses</td>
+          <td>Triangle + ExpectedLossRatio</td>
+          <td>Immature AYs or sparse data</td>
+        </tr>
+        <tr>
+          <td><strong>Tail Factor</strong></td>
+          <td>Link ratio beyond last observed development age</td>
+          <td>TailFactor (external benchmark or curve-fit)</td>
+          <td>Long-tail lines (WC, GL, Med Mal)</td>
+        </tr>
+        <tr>
+          <td><strong>IBNR</strong></td>
+          <td>Ultimate − Reported (CL or BF)</td>
+          <td>Reserve (type=IBNR)</td>
+          <td>All lines; regulatory and IFRS 17 balance sheet</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div><!-- /tab-ins -->
+
+  <!-- ══════════════════════════════════════════════════════════
+       TAB 3 — ACCELERATOR
+  ══════════════════════════════════════════════════════════ -->
+  <div class="ont-panel" id="tab-acc">
+
+    <div style="background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);border-radius:6px;padding:14px 16px;margin-bottom:20px;">
+      <div style="font-size:0.8rem;font-weight:700;color:var(--accent-cyan,#00d4ff);margin-bottom:6px;">Minimum Viable Ontology (MVO) · The Principle</div>
+      <p class="ont-p" style="margin:0;line-height:1.7;">
+        An agent needs exactly the ontology to answer <em>one specific question correctly</em> — no more. Adding unused entities creates maintenance cost and ambiguity. Each card below is a <strong>self-contained micro-ontology</strong>: the agent name, its benchmark question, the minimum entity set, the decision rules, and the reason this set is sufficient.
+      </p>
+    </div>
+
+    <div class="agent-grid">
+
+      <!-- 1. Loss Ratio Agent -->
+      <div class="agent-card">
+        <div class="agent-card-top">
+          <div class="agent-title">Loss Ratio Agent</div>
+          <div class="mvo-badge">3 entities · 1 rule</div>
+        </div>
+        <div class="agent-q">"What was our attritional loss ratio for Property Q3 2026?"</div>
+        <div class="agent-section-label">Minimum Entities</div>
+        <div class="entity-pill-row">
+          <span class="entity-pill">Policy</span>
+          <span class="entity-pill">Claim</span>
+          <span class="entity-pill">EarnedPremium</span>
+          <span class="entity-pill">LossRatioVariant</span>
+        </div>
+        <div class="agent-section-label">Decision Rules</div>
+        <div class="rule-row">Long-tail line detected → use <strong>Ultimate LR</strong> (include IBNR)</div>
+        <div class="rule-row">Cat flag on Claim → exclude from Attritional LR</div>
+        <div class="rule-row">EarnedPremium is prorated WrittenPremium; never use GWP directly</div>
+        <div class="agent-approach">
+          <strong>Pattern:</strong> Semantic layer SQL aggregation — no graph, no ML, pure metric arithmetic<br>
+          <strong>Stack:</strong> Snowflake Cortex Analyst YAML or Databricks Genie Ontology; variant rule as a CASE expression in the semantic model<br>
+          <strong>Hard part:</strong> EarnedPremium proration logic (WrittenPremium × days-in-force ÷ policy-term) — wrong here means every LR is wrong for every agent downstream
+        </div>
+        <div class="agent-why">✓ Sufficient because: no coverage structure or party data needed — just premium aggregation and claim classification. Three entities, one disambiguation rule.</div>
+      </div>
+
+      <!-- 2. FNOL Triage Agent -->
+      <div class="agent-card">
+        <div class="agent-card-top">
+          <div class="agent-title">FNOL Triage Agent</div>
+          <div class="mvo-badge">5 entities · 2 rules</div>
+        </div>
+        <div class="agent-q">"Is this claim covered under policy P-7821 and who handles it?"</div>
+        <div class="agent-section-label">Minimum Entities</div>
+        <div class="entity-pill-row">
+          <span class="entity-pill">Policy</span>
+          <span class="entity-pill">Coverage</span>
+          <span class="entity-pill">Peril</span>
+          <span class="entity-pill">OccurrenceDate</span>
+          <span class="entity-pill">Insured (Party)</span>
+        </div>
+        <div class="agent-section-label">Decision Rules</div>
+        <div class="rule-row">OccurrenceDate must fall within [InceptionDate, ExpiryDate] of Policy</div>
+        <div class="rule-row">Peril must exist in Coverage.IncludedPerils and NOT in Coverage.Exclusions</div>
+        <div class="rule-row">Route: if covered → assign adjuster; if borderline → SIU flag; if not covered → denial letter</div>
+        <div class="agent-approach">
+          <strong>Pattern:</strong> Structured policy lookup + rule matching; RAG over coverage wording PDF for exclusion detection<br>
+          <strong>Stack:</strong> MCP tool wrapping Guidewire PolicyCenter or Duck Creek; vector store for coverage language (exclusions live in unstructured wording)<br>
+          <strong>Hard part:</strong> Exclusions are in natural language in the policy wording — "flood damage caused by storm surge" may or may not be covered depending on exact wording; the agent must RAG the document, not just query the structured coverage table
+        </div>
+        <div class="agent-why">✓ Sufficient because: no payment calculation is needed for triage — only policy/coverage matching and routing logic. No financial entities required.</div>
+      </div>
+
+      <!-- 3. Fraud Ring Agent -->
+      <div class="agent-card">
+        <div class="agent-card-top">
+          <div class="agent-title">Fraud Ring Detection Agent</div>
+          <div class="mvo-badge">4 entities · 1 rule</div>
+        </div>
+        <div class="agent-q">"Are claims C-1041, C-1098, C-1112 part of a coordinated pattern?"</div>
+        <div class="agent-section-label">Minimum Entities</div>
+        <div class="entity-pill-row">
+          <span class="entity-pill">Claimant (Party)</span>
+          <span class="entity-pill">Claim</span>
+          <span class="entity-pill">RepairShop / Provider</span>
+          <span class="entity-pill">SharedIdentifier</span>
+        </div>
+        <div class="agent-section-label">Decision Rules</div>
+        <div class="rule-row">Shared Party (same TaxID, phone, or address) across ≥3 Claims in ≤90 days → fraud ring flag</div>
+        <div class="rule-row">Same RepairShop on ≥5 Claims in 30 days → provider fraud flag</div>
+        <div class="rule-row">ACORD Virtual Party (Jul 2026): AI agent itself is a Party — audit trail required</div>
+        <div class="agent-approach">
+          <strong>Pattern:</strong> Multi-hop graph traversal — the ONLY agent in this library that genuinely requires a graph database; SQL cannot efficiently traverse 3+ hops<br>
+          <strong>Stack:</strong> GraphDB (SPARQL) or Neo4j (Cypher) for ring detection; GraphRAG over adjuster notes to surface soft signals (same narrative across claims)<br>
+          <strong>Hard part:</strong> Entity resolution — the same claimant with two phone numbers appears as two nodes; an unresolved graph produces false negatives and the ring is invisible; resolve identities before inserting any node
+        </div>
+        <div class="agent-why">✓ Sufficient because: ring detection is purely a graph connectivity problem. No premium, no coverage, no actuarial data needed — just shared identifiers and claim frequency.</div>
+      </div>
+
+      <!-- 4. Underwriting Gap Agent -->
+      <div class="agent-card">
+        <div class="agent-card-top">
+          <div class="agent-title">Underwriting Triage Agent</div>
+          <div class="mvo-badge">4 entities · 1 checklist</div>
+        </div>
+        <div class="agent-q">"Does this submission have all the data to quote?"</div>
+        <div class="agent-section-label">Minimum Entities</div>
+        <div class="entity-pill-row">
+          <span class="entity-pill">RiskObject</span>
+          <span class="entity-pill">CoverageRequested</span>
+          <span class="entity-pill">LossHistory (5yr)</span>
+          <span class="entity-pill">Broker</span>
+        </div>
+        <div class="agent-section-label">Decision Rules</div>
+        <div class="rule-row">Compare submission against Minimum Required Data (MRD) checklist for line of business</div>
+        <div class="rule-row">Missing loss runs → auto-request from Broker before routing to underwriter</div>
+        <div class="rule-row">Appetite check: if RiskObject.Class in DeclinedClasses → decline immediately</div>
+        <div class="agent-approach">
+          <strong>Pattern:</strong> LLM extraction from broker submission PDFs → structured checklist validation via SHACL MRD (Minimum Required Data) shape<br>
+          <strong>Stack:</strong> Azure Document Intelligence or Databricks document parsing; SHACL shape as the MRD definition; broker portal API or email-to-structured pipeline<br>
+          <strong>Hard part:</strong> Vocabulary variance — "Named Insured", "Policyholder", "Assured", "Cedant" all mean the same thing across different broker submission templates; the ontology synonym map (SKOS altLabels) must cover all of them or the gap check misfires
+        </div>
+        <div class="agent-why">✓ Sufficient because: this is gap detection, not rating. The agent does not need to compute a premium — only verify data completeness and appetite. Four entities cover it.</div>
+      </div>
+
+      <!-- 5. IFRS 17 CSM Agent -->
+      <div class="agent-card">
+        <div class="agent-card-top">
+          <div class="agent-title">IFRS 17 CSM Release Agent</div>
+          <div class="mvo-badge">4 entities · 2 rules</div>
+        </div>
+        <div class="agent-q">"What is the CSM release for Contract Group G-12 in Q3 2026?"</div>
+        <div class="agent-section-label">Minimum Entities</div>
+        <div class="entity-pill-row">
+          <span class="entity-pill">ContractGroup</span>
+          <span class="entity-pill">CSM (opening balance)</span>
+          <span class="entity-pill">CoverageUnit</span>
+          <span class="entity-pill">ReportingPeriod</span>
+        </div>
+        <div class="agent-section-label">Decision Rules</div>
+        <div class="rule-row">Select MeasurementModel: PAA if contract duration ≤1yr OR claims occur evenly; else BBA</div>
+        <div class="rule-row">CSM release = (CoverageUnits in period / Total CoverageUnits remaining) × Opening CSM</div>
+        <div class="rule-row">Assumption change in period → split CSM movement into experience vs assumption variance</div>
+        <div class="agent-approach">
+          <strong>Pattern:</strong> Versioned actuarial calculation — the ontology must carry both locked-in (inception) and current (reporting date) assumptions as separate triples; IFRS 17 requires the split<br>
+          <strong>Stack:</strong> Prophet/AXIS actuarial engine → results written as ontology KPIs; GitOps versioning of assumption sets so each reporting period's CSM can be audited and restated<br>
+          <strong>Hard part:</strong> Assumption change attribution — when interest rates move, the CSM movement must split into "experience variance" vs "assumption change"; if the ontology conflates the two, the P&amp;L note is wrong and the audit fails
+        </div>
+        <div class="agent-why">✓ Sufficient because: CSM release is a pure accounting calculation. No claims data or pricing needed — only the group's balance, coverage unit allocation, and measurement model choice.</div>
+      </div>
+
+      <!-- 6. Renewal Churn Agent -->
+      <div class="agent-card">
+        <div class="agent-card-top">
+          <div class="agent-title">Renewal Churn Agent</div>
+          <div class="mvo-badge">4 entities · 3 signals</div>
+        </div>
+        <div class="agent-q">"Which motor policies renewing in Nov 2026 are flight risks?"</div>
+        <div class="agent-section-label">Minimum Entities</div>
+        <div class="entity-pill-row">
+          <span class="entity-pill">Policy</span>
+          <span class="entity-pill">PremiumChange%</span>
+          <span class="entity-pill">ClaimCount (3yr)</span>
+          <span class="entity-pill">RenewalDate</span>
+        </div>
+        <div class="agent-section-label">Decision Rules</div>
+        <div class="rule-row">Premium increase &gt;15% YoY → HIGH churn risk (price shock)</div>
+        <div class="rule-row">ClaimCount ≥2 in 3 years AND prior-year premium increase → MEDIUM risk (adverse risk perception)</div>
+        <div class="rule-row">Score = weighted sum; output: RETAIN (offer discount), MONITOR, or LET LAPSE</div>
+        <div class="agent-approach">
+          <strong>Pattern:</strong> ML gradient-boosting score surfaced as an ontology KPI (Tredence Step 5 pattern) — the model runs offline; the agent reads the score, not the model<br>
+          <strong>Stack:</strong> Databricks MLflow (model training) + Feature Store (premium change, claim count features) → churn score written to ontology as PremiumRetentionScore; LangGraph for action routing<br>
+          <strong>Hard part:</strong> PremiumChange% must compare against market rate, not just prior year — a 10% increase is fine if competitors raised 15%; without an external rate feed the signal fires false positives on every hard market renewal
+        </div>
+        <div class="agent-why">✓ Sufficient because: churn prediction at renewal needs price sensitivity and claim history — not full claim details. A 4-entity model outperforms complex models on explainability and speed for this use case.</div>
+      </div>
+
+      <!-- 7. Reserve Adequacy Agent -->
+      <div class="agent-card">
+        <div class="agent-card-top">
+          <div class="agent-title">Reserve Adequacy Agent</div>
+          <div class="mvo-badge">5 entities · 2 methods</div>
+        </div>
+        <div class="agent-q">"Is the reserve for Accident Year 2023 Motor sufficient at Q3 2026?"</div>
+        <div class="agent-section-label">Minimum Entities</div>
+        <div class="entity-pill-row">
+          <span class="entity-pill">AccidentYear</span>
+          <span class="entity-pill">PaidLoss</span>
+          <span class="entity-pill">ReportedLoss</span>
+          <span class="entity-pill">DevelopmentFactor</span>
+          <span class="entity-pill">ExpectedLossRatio</span>
+        </div>
+        <div class="agent-section-label">Decision Rules</div>
+        <div class="rule-row">AY reported ≥60% developed → Chain Ladder (credible history dominates)</div>
+        <div class="rule-row">AY reported &lt;60% developed → Bornhuetter-Ferguson (a priori ELR blended in)</div>
+        <div class="rule-row">IBNR = Ultimate (selected method) − Reported; compare to booked reserve</div>
+        <div class="agent-approach">
+          <strong>Pattern:</strong> Actuarial triangle time-series computation — development periods are a first-class dimension in the ontology, not just a column; each cell is a triple (AccidentYear, DevelopmentAge, CumulativePaid)<br>
+          <strong>Stack:</strong> Python <span class="mono">chainladder</span> library or R <span class="mono">ChainLadder</span> package → results bound as ontology KPIs (UltimateEstimate, IBNR); actuarial sign-off gate before agent surfaces the number<br>
+          <strong>Hard part:</strong> Tail factor selection for long-tail lines (WC, GL, Med Mal) — no deterministic answer exists; agent must flag "tail factor applied = 1.15 from industry benchmark" for actuary review, never decide autonomously; wrong tail = material reserve inadequacy
+        </div>
+        <div class="agent-why">✓ Sufficient because: reserve triangulation only needs paid/reported losses by development period and an ELR for immature years. No policy, party, or coverage entity is required for the calculation.</div>
+      </div>
+
+      <!-- 8. Reinsurance Cession Agent -->
+      <div class="agent-card">
+        <div class="agent-card-top">
+          <div class="agent-title">Reinsurance Cession Agent</div>
+          <div class="mvo-badge">4 entities · 2 rules</div>
+        </div>
+        <div class="agent-q">"What ceded written premium should I report to Treaty T-42 for July 2026?"</div>
+        <div class="agent-section-label">Minimum Entities</div>
+        <div class="entity-pill-row">
+          <span class="entity-pill">Treaty (type, CessionPct, Retention, Limit)</span>
+          <span class="entity-pill">PolicyCession</span>
+          <span class="entity-pill">WrittenPremium</span>
+          <span class="entity-pill">InceptionDate</span>
+        </div>
+        <div class="agent-section-label">Decision Rules</div>
+        <div class="rule-row">Quota Share: CededPremium = CessionPct × GrossPremium for all policies in treaty scope</div>
+        <div class="rule-row">Excess of Loss: CededPremium = RateOnLine × (Limit − Retention); no per-risk cession on premium</div>
+        <div class="rule-row">Validate: sum of ceded policies matches cession statement from reinsurer within ±0.1%</div>
+        <div class="agent-approach">
+          <strong>Pattern:</strong> LLM treaty term extraction + arithmetic validation; treaty wordings are unstructured PDFs; carve-backs and corridor definitions buried in 40-page documents<br>
+          <strong>Stack:</strong> Nomad Data / V7 Go for treaty extraction → treaty terms as SHACL constraints on cession arithmetic; TCS BaNCS or SAP FS-RI as premium transaction source via R2RML<br>
+          <strong>Hard part:</strong> Carve-backs — "losses arising from a single occurrence exceeding $50M" reduces the cession; one missed carve-back creates material leakage that only surfaces at settlement; every exclusion must be a named ontology rule, not just the headline cession rate
+        </div>
+        <div class="agent-why">✓ Sufficient because: cession calculation on a quota share is purely arithmetic — treaty terms applied to premium. No claim, coverage, or actuarial data required at the cession statement stage.</div>
+      </div>
+
+      <!-- 9. Solvency II SCR Mapping Agent -->
+      <div class="agent-card">
+        <div class="agent-card-top">
+          <div class="agent-title">Solvency II QRT Mapping Agent</div>
+          <div class="mvo-badge">5 entities · 1 mapping</div>
+        </div>
+        <div class="agent-q">"Map our internal model output to QRT S.05.01 for Q3 2026 reporting."</div>
+        <div class="agent-section-label">Minimum Entities</div>
+        <div class="entity-pill-row">
+          <span class="entity-pill">SCR (by module)</span>
+          <span class="entity-pill">TechnicalProvisions</span>
+          <span class="entity-pill">OwnFunds</span>
+          <span class="entity-pill">XBRLDataPoint</span>
+          <span class="entity-pill">ReportingTemplate</span>
+        </div>
+        <div class="agent-section-label">Decision Rules</div>
+        <div class="rule-row">Map each internal model output field → EIOPA XBRL taxonomy data point label (e.g., S.05.01.01.01)</div>
+        <div class="rule-row">UK firms: use Bank of England Insurance Taxonomy (BEIT), not EIOPA taxonomy</div>
+        <div class="rule-row">Validation: TechnicalProvisions (best estimate + RM) + OwnFunds ≥ SCR + MCR</div>
+        <div class="agent-approach">
+          <strong>Pattern:</strong> Ontology-to-XBRL crosswalk — EIOPA publishes the target ontology as an XBRL taxonomy; the agent maps internal model fields to taxonomy data point labels via R2RML<br>
+          <strong>Stack:</strong> EIOPA XBRL taxonomy (or BEIT for UK) as the target ontology; Altova MapForce or custom R2RML for field mapping; GitOps to track taxonomy version changes (EIOPA releases annually)<br>
+          <strong>Hard part:</strong> UK vs EU taxonomy divergence — same internal SCR field maps to different XBRL labels depending on whether the legal entity is FCA-regulated (BEIT) or EIOPA-regulated; a single-taxonomy agent used for a dual-jurisdiction group produces incorrect filings in one jurisdiction
+        </div>
+        <div class="agent-why">✓ Sufficient because: QRT mapping is a translation task. The agent needs the internal value, its XBRL label, and the template cell. No pricing, claims, or actuarial model logic required.</div>
+      </div>
+
+      <!-- 10. Catastrophe Exposure Agent -->
+      <div class="agent-card">
+        <div class="agent-card-top">
+          <div class="agent-title">Catastrophe Exposure Agent</div>
+          <div class="mvo-badge">5 entities · 1 model</div>
+        </div>
+        <div class="agent-q">"What is our total net insured value for hurricane peril in Florida for Q4 2026, and what is the 1-in-250-year PML?"</div>
+        <div class="agent-section-label">Minimum Entities</div>
+        <div class="entity-pill-row">
+          <span class="entity-pill">RiskObject (lat/lon, occupancy, construction)</span>
+          <span class="entity-pill">Policy</span>
+          <span class="entity-pill">Coverage (Peril)</span>
+          <span class="entity-pill">TIV (Total Insured Value)</span>
+          <span class="entity-pill">CatTreatyLoss (net XL)</span>
+        </div>
+        <div class="agent-section-label">Decision Rules</div>
+        <div class="rule-row">Gross TIV = sum of RiskObject.ReplacementValue for all risks where peril zone intersects hurricane zone and policy is in-force</div>
+        <div class="rule-row">Net TIV = Gross TIV × (1 − cat XL cession rate for layer containing this peril-zone aggregate)</div>
+        <div class="rule-row">PML at 1-in-250yr = external cat model output (RMS Miu / AIR Touchstone) bound as ontology KPI — not computed in the ontology</div>
+        <div class="rule-row">ACORD Virtual Party rule: if cat model is an AI agent, log it as a VirtualParty with a timestamped audit trail</div>
+        <div class="agent-approach">
+          <strong>Pattern:</strong> Geospatial aggregation + external catastrophe model API integration; the ontology anchors the exposure; the cat model is called externally and its output is written back as a KPI triple<br>
+          <strong>Stack:</strong> Databricks with H3/Apache Sedona for geospatial polygon intersection; RMS Miu or AIR Touchstone API for PML; Iceberg as the exposure data lake shared across all cat model runs<br>
+          <strong>Hard part:</strong> RiskObject geocoding — "123 High Street, Canary Wharf, London" must resolve to lat/lon before any peril zone lookup runs; bad geocode = wrong flood zone = wrong TIV = wrong PML; geocoding accuracy is the single largest driver of cat model error and must be validated as a SHACL constraint before the agent runs
+        </div>
+        <div class="agent-why">✓ Sufficient because: cat exposure aggregation is purely a geospatial join on risk objects — no claims, no premium proration, no actuarial methods needed. The PML is consumed from the external model as a read-only KPI, not recomputed inside the ontology.</div>
+      </div>
+
+    </div><!-- /agent-grid -->
+
+    <div style="margin-top:24px;border-top:1px solid var(--border,#333);padding-top:14px;">
+      <div class="ont-h2" style="margin-top:0;">MVO Design Rules</div>
+      <div class="rule-row">Start with the benchmark question, not the domain. The question defines the minimum entity set.</div>
+      <div class="rule-row">If removing an entity does not break the benchmark question, remove it.</div>
+      <div class="rule-row">Rules &gt; entities: 1 well-scoped rule prevents more hallucination than 5 extra entities.</div>
+      <div class="rule-row">Each MVO is a separate ontology file — not a module of a big one. Compose at runtime if needed.</div>
+      <div class="rule-row">Platform adapter (Databricks YAML / Snowflake YAML / Fabric) is a <em>projection</em> of the MVO, not a new ontology.</div>
+    </div>
+
+    <div class="ont-h2">References &amp; Further Reading</div>
+    <div class="ref-list">
+      <a class="ref-link" href="https://pub.towardsai.net/the-minimum-viable-ontology-building-an-operating-layer-knowledge-graph-you-can-actually-trust-379cc51a5eec" target="_blank">Towards AI · Minimum Viable Ontology</a>
+      <a class="ref-link" href="https://shepbryan.com/minimum-viable-ontology-mvo" target="_blank">Bryan Shep · MVO Framework</a>
+      <a class="ref-link" href="https://pnbr.io/blog/why-ai-agents-need-ontology" target="_blank">Why AI Agents Need Ontology</a>
+      <a class="ref-link" href="https://github.com/narayan1483/ClaimGraph-AI" target="_blank">ClaimGraph-AI · Neo4j / LangGraph fraud agent</a>
+      <a class="ref-link" href="https://dev.to/vaibhav7387/knowledge-graphs-beyond-fraud-the-substrate-insurance-ai-actually-needs-4c43" target="_blank">Knowledge Graphs Beyond Fraud</a>
+      <a class="ref-link" href="https://arxiv.org/abs/2606.04037" target="_blank">arXiv · Pre-Deployment Assurance via Ontology</a>
+    </div>
+
+  </div><!-- /tab-acc -->
+
+  <div data-include="footer.html"></div>
+
+  <script>
+    function showTab(id) {
+      document.querySelectorAll('.ont-tab').forEach(function(t, i) {
+        var ids = ['tech','ins','acc'];
+        t.classList.toggle('active', ids[i] === id);
+      });
+      document.querySelectorAll('.ont-panel').forEach(function(p) {
+        p.classList.toggle('active', p.id === 'tab-' + id);
+      });
+    }
+  </script>
+
+</body>
+</html>
