@@ -55,15 +55,15 @@
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--accent-cyan, #00d4ff);
+      color: var(--accent-cyan, #0891b2);
       margin: 24px 0 10px;
-      border-bottom: 1px solid var(--border, #333);
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
       padding-bottom: 4px;
     }
     .ont-h2:first-child { margin-top: 0; }
     .ont-p {
       font-size: 0.78rem;
-      color: var(--text-secondary, #aaa);
+      color: var(--text-primary, #334155);
       line-height: 1.65;
       margin: 0 0 10px;
     }
@@ -76,18 +76,18 @@
       font-weight: 600;
       letter-spacing: 0.04em;
     }
-    .tag-cyan  { background: rgba(0,212,255,.12); color: #00d4ff; border: 1px solid rgba(0,212,255,.25); }
-    .tag-green { background: rgba(80,250,123,.10); color: #50fa7b; border: 1px solid rgba(80,250,123,.22); }
-    .tag-amber { background: rgba(255,184,0,.10);  color: #ffc53d; border: 1px solid rgba(255,184,0,.22); }
-    .tag-red   { background: rgba(255,85,85,.10);  color: #ff7070; border: 1px solid rgba(255,85,85,.22); }
-    .tag-grey  { background: rgba(170,170,170,.10);color: #aaa;    border: 1px solid rgba(170,170,170,.2); }
+    .tag-cyan  { background: rgba(8,145,178,.10);  color: var(--accent-cyan,#0891b2);  border: 1px solid rgba(8,145,178,.3); }
+    .tag-green { background: rgba(5,150,105,.10);  color: var(--accent-green,#059669); border: 1px solid rgba(5,150,105,.3); }
+    .tag-amber { background: rgba(180,130,0,.10);  color: #92650a;                     border: 1px solid rgba(180,130,0,.3); }
+    .tag-red   { background: rgba(200,50,50,.10);  color: #b91c1c;                     border: 1px solid rgba(200,50,50,.3); }
+    .tag-grey  { background: rgba(100,116,139,.10);color: var(--text-secondary,#64748b);border: 1px solid rgba(100,116,139,.25); }
 
     /* ── Five-layer stack (Technology tab) ───────────────────── */
     .stack-row {
       display: grid;
       grid-template-columns: 130px 1fr 1fr;
       gap: 0;
-      border-bottom: 1px solid var(--border, #333);
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
       padding: 8px 0;
       font-size: 0.76rem;
       align-items: start;
@@ -95,11 +95,11 @@
     .stack-row:last-child { border-bottom: none; }
     .stack-label {
       font-weight: 700;
-      color: var(--text-primary, #e0e0e0);
+      color: var(--text-primary, #1e293b);
       padding-right: 12px;
     }
-    .stack-std { color: var(--text-secondary, #aaa); }
-    .stack-note { color: var(--text-secondary, #888); font-size: 0.72rem; }
+    .stack-std { color: var(--text-primary, #334155); }
+    .stack-note { color: var(--text-secondary, #475569); font-size: 0.72rem; }
 
     /* ── Platform card grid ───────────────────────────────────── */
     .plat-grid {
@@ -109,15 +109,15 @@
       margin-top: 10px;
     }
     .plat-card {
-      border: 1px solid var(--border, #333);
+      border: 1px solid var(--border-color, #e2e8f0);
       border-radius: 8px;
       padding: 14px 16px;
-      background: var(--bg-secondary, #1a1a1a);
+      background: var(--bg-secondary, #f8fafc);
     }
     .plat-name {
       font-size: 0.8rem;
       font-weight: 700;
-      color: var(--text-primary, #e0e0e0);
+      color: var(--text-primary, #1e293b);
       margin-bottom: 5px;
     }
     .plat-status {
@@ -128,18 +128,18 @@
       display: inline-block;
       margin-bottom: 8px;
     }
-    .status-ga   { background: rgba(80,250,123,.15); color: #50fa7b; }
-    .status-prev { background: rgba(255,184,0,.12);  color: #ffc53d; }
+    .status-ga   { background: rgba(5,150,105,.12); color: var(--accent-green,#059669); border: 1px solid rgba(5,150,105,.25); }
+    .status-prev { background: rgba(180,130,0,.10); color: #92650a;                    border: 1px solid rgba(180,130,0,.25); }
     .plat-line {
       font-size: 0.72rem;
-      color: var(--text-secondary, #aaa);
+      color: var(--text-primary, #334155);
       margin: 3px 0;
       line-height: 1.5;
     }
     .plat-highlight {
       font-size: 0.72rem;
       font-weight: 700;
-      color: var(--accent-cyan, #00d4ff);
+      color: var(--accent-cyan, #0891b2);
     }
 
     /* ── Insurance ontology entities table ───────────────────── */
@@ -152,27 +152,27 @@
     .ent-table th {
       text-align: left;
       padding: 6px 10px;
-      background: var(--bg-secondary, #1e1e1e);
-      color: var(--text-secondary, #aaa);
+      background: var(--bg-secondary, #f1f5f9);
+      color: var(--text-secondary, #475569);
       font-weight: 600;
-      border: 1px solid var(--border, #333);
+      border: 1px solid var(--border-color, #e2e8f0);
       font-size: 0.70rem;
       letter-spacing: 0.05em;
       text-transform: uppercase;
     }
     .ent-table td {
       padding: 6px 10px;
-      border: 1px solid var(--border, #333);
-      color: var(--text-primary, #ddd);
+      border: 1px solid var(--border-color, #e2e8f0);
+      color: var(--text-primary, #1e293b);
       vertical-align: top;
     }
     .ent-table tr:nth-child(even) td {
-      background: var(--bg-secondary, #161616);
+      background: var(--bg-secondary, #f8fafc);
     }
     .mono {
       font-family: 'Courier New', monospace;
       font-size: 0.70rem;
-      color: var(--accent-cyan, #00d4ff);
+      color: var(--accent-cyan, #0891b2);
     }
 
     /* ── Accelerator agent cards ─────────────────────────────── */
@@ -187,10 +187,10 @@
       .plat-grid  { grid-template-columns: 1fr; }
     }
     .agent-card {
-      border: 1px solid var(--border, #333);
+      border: 1px solid var(--border-color, #e2e8f0);
       border-radius: 8px;
       padding: 16px;
-      background: var(--bg-secondary, #1a1a1a);
+      background: var(--bg-secondary, #f8fafc);
       position: relative;
     }
     .agent-card-top {
@@ -203,7 +203,7 @@
     .agent-title {
       font-size: 0.82rem;
       font-weight: 700;
-      color: var(--text-primary, #e0e0e0);
+      color: var(--text-primary, #1e293b);
     }
     .agent-q {
       font-size: 0.72rem;
@@ -278,9 +278,9 @@
       font-weight: 700;
       padding: 2px 7px;
       border-radius: 3px;
-      background: rgba(255,184,0,.12);
-      color: #ffc53d;
-      border: 1px solid rgba(255,184,0,.25);
+      background: rgba(180,130,0,.10);
+      color: #92650a;
+      border: 1px solid rgba(180,130,0,.28);
       white-space: nowrap;
       flex-shrink: 0;
     }
@@ -297,12 +297,12 @@
     }
     .w3c-row > * {
       padding: 7px 10px;
-      border-bottom: 1px solid var(--border, #333);
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
       vertical-align: top;
     }
-    .w3c-std { font-weight: 700; color: var(--accent-cyan, #00d4ff); font-family: monospace; }
-    .w3c-role { color: var(--text-primary, #ddd); }
-    .w3c-note { color: var(--text-secondary, #999); font-size: 0.70rem; }
+    .w3c-std { font-weight: 700; color: var(--accent-cyan, #0891b2); font-family: monospace; }
+    .w3c-role { color: var(--text-primary, #1e293b); }
+    .w3c-note { color: var(--text-secondary, #475569); font-size: 0.70rem; }
 
     /* ── Compact link list ───────────────────────────────────── */
     .ref-list {
@@ -313,23 +313,23 @@
     }
     .ref-link {
       font-size: 0.72rem;
-      color: var(--accent-cyan, #00d4ff);
-      border: 1px solid rgba(0,212,255,.2);
+      color: var(--accent-cyan, #0891b2);
+      border: 1px solid rgba(8,145,178,.25);
       padding: 2px 9px;
       border-radius: 4px;
       text-decoration: none;
       transition: background 0.12s;
     }
-    .ref-link:hover { background: rgba(0,212,255,.1); }
+    .ref-link:hover { background: rgba(8,145,178,.10); }
 
     /* ── Contested metric table ───────────────────────────────── */
     .metric-banner {
       font-size: 0.68rem;
-      background: rgba(255,184,0,.08);
-      border: 1px solid rgba(255,184,0,.2);
+      background: rgba(180,130,0,.07);
+      border: 1px solid rgba(180,130,0,.25);
       border-radius: 4px;
       padding: 7px 12px;
-      color: #ffc53d;
+      color: #92650a;
       margin-bottom: 12px;
       line-height: 1.6;
     }
@@ -341,7 +341,7 @@
   </div>
 
   <div align="center">
-    <p style="font-size:0.75rem;color:#888;margin:18px 0 0;">Ontology — knowledge structure for AI agents · Insurance focus · Oct 2026</p>
+    <p style="font-size:0.75rem;color:var(--text-secondary,#475569);margin:18px 0 0;">Ontology — knowledge structure for AI agents · Insurance focus · Oct 2026</p>
   </div>
 
   <!-- Tab bar -->
