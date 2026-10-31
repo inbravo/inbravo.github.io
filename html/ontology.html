@@ -207,7 +207,7 @@
     }
     .agent-q {
       font-size: 0.72rem;
-      color: var(--text-secondary, #aaa);
+      color: var(--text-secondary, #475569);
       font-style: italic;
       margin: 0 0 10px;
       line-height: 1.5;
@@ -217,7 +217,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: var(--text-secondary, #777);
+      color: var(--text-muted, #64748b);
       margin: 10px 0 4px;
     }
     .entity-pill-row {
@@ -231,30 +231,30 @@
       font-weight: 600;
       padding: 2px 8px;
       border-radius: 12px;
-      background: rgba(0,212,255,.10);
-      color: #00d4ff;
-      border: 1px solid rgba(0,212,255,.2);
+      background: rgba(34,211,238,.10);
+      color: var(--accent-cyan, #0891b2);
+      border: 1px solid rgba(34,211,238,.25);
     }
     .rule-row {
       display: flex;
       align-items: flex-start;
       gap: 6px;
       font-size: 0.72rem;
-      color: var(--text-secondary, #bbb);
+      color: var(--text-primary, #1e293b);
       margin: 3px 0;
       line-height: 1.5;
     }
     .rule-row::before {
       content: '→';
-      color: var(--accent-cyan, #00d4ff);
+      color: var(--accent-cyan, #0891b2);
       flex-shrink: 0;
       margin-top: 0;
     }
     .agent-why {
       font-size: 0.70rem;
-      color: #50fa7b;
-      background: rgba(80,250,123,.07);
-      border-left: 2px solid #50fa7b;
+      color: var(--accent-green, #059669);
+      background: rgba(16,185,129,.08);
+      border-left: 2px solid var(--accent-green, #059669);
       padding: 5px 8px;
       margin-top: 8px;
       border-radius: 0 4px 4px 0;
@@ -262,15 +262,17 @@
     }
     .agent-approach {
       font-size: 0.70rem;
-      background: rgba(255,154,108,.07);
-      border-left: 2px solid #ff9a6c;
+      background: rgba(234,88,12,.07);
+      border-left: 2px solid #d96a20;
       padding: 5px 8px;
       margin-top: 8px;
       border-radius: 0 4px 4px 0;
       line-height: 1.65;
-      color: var(--text-secondary, #bbb);
+      color: var(--text-primary, #1e293b);
     }
-    .agent-approach strong { color: #ff9a6c; font-weight: 700; }
+    .agent-approach strong { color: #c55500; font-weight: 700; }
+    /* In dark mode, strong labels can be brighter */
+    :root:not([data-theme="light"]) .agent-approach strong { color: #ff9a6c; }
     .mvo-badge {
       font-size: 0.62rem;
       font-weight: 700;
@@ -346,7 +348,6 @@
   <div class="ont-tabs">
     <div class="ont-tab active" onclick="showTab('tech')">Technology</div>
     <div class="ont-tab" onclick="showTab('ins')">Insurance</div>
-    <div class="ont-tab" onclick="showTab('acc')">Accelerator</div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -416,10 +417,22 @@
       <div class="plat-card">
         <div class="plat-name">Databricks Genie Ontology</div>
         <div class="plat-status status-prev">Public Preview · Sep 2026</div>
-        <div class="plat-line">Metadata layer inside <strong>Unity Catalog</strong> — define tables as domain entities, map metric definitions, set join paths</div>
-        <div class="plat-line">Genie uses the ontology to turn NL questions into verified SQL; no hallucinated joins</div>
-        <div class="plat-line">Configured in Unity Catalog YAML; no separate OWL tooling required</div>
-        <div class="plat-line" style="margin-top:6px;"><span class="plat-highlight">Strength:</span> Iceberg-native, works across Delta + external tables</div>
+        <div class="plat-line">Metadata layer inside <strong>Unity Catalog</strong> — metric views, domains, Pages, certification tags, agent instructions, and benchmark suites</div>
+        <div class="plat-line">Genie uses the ontology to turn NL questions into verified SQL; modeled context takes precedence over inferred context</div>
+        <div class="plat-line" style="margin-top:6px;"><span class="plat-highlight">The 9-Rung Ladder</span> (Viral M Desai · Insurance Implementation)</div>
+        <div class="plat-line" style="font-size:0.70rem;line-height:1.8;color:var(--text-secondary,#aaa);">
+          Rung 0 · Raw table, wrong metric → <strong style="color:#f66;">10.6%</strong><br>
+          Rung 1 · Column comments + PK/FK joins → 10.8%<br>
+          Rung 2 · Metric views (paid / incurred / ultimate) → 28.5%<br>
+          Rung 3 · Synonyms &amp; display names → 28.5%<br>
+          Rung 4 · Domains &amp; subdomains → 28.5%<br>
+          Rung 5 · <strong>Pages</strong> (governed default: long-tail → ultimate) → <strong style="color:#50fa7b;">52.1%</strong><br>
+          Rung 6 · Certification + deprecate legacy table → 52.1% repeatable<br>
+          Rung 7 · Agent instructions (NEVER use paid_lr for profitability) → follow-ups correct<br>
+          Rung 8 · Benchmark suite (30 trap questions) → 52.1% provable
+        </div>
+        <div class="plat-line" style="margin-top:6px;color:#ffc53d;font-size:0.70rem;">⚑ Same model · same data · answer moves 10.6% → 52.1% from context alone</div>
+        <div class="plat-line" style="margin-top:6px;"><span class="plat-highlight">Strength:</span> Iceberg-native · no OWL tooling · <a class="ref-link" href="https://viralmdesai.github.io/genie-ontology-insurance/" target="_blank" style="font-size:0.70rem;">live insurance walkthrough ↗</a></div>
       </div>
       <div class="plat-card">
         <div class="plat-name">Snowflake Cortex Analyst · Semantic Model</div>
@@ -450,8 +463,26 @@
     <div class="ont-h2">Apache Iceberg as the Bridge</div>
     <p class="ont-p">Iceberg is the open table format that makes ontology-grounded agents possible across platforms. A claim fact written as an Iceberg table on S3 can be queried from Databricks, Snowflake (via Iceberg REST Catalog), and Fabric (via OneLake shortcuts) — the same physical data, different ontology adapters. This is the foundation for a <em>write-once, reason-anywhere</em> architecture.</p>
 
+    <div class="ont-h2">Databricks Genie · Insurance Metric View Pattern</div>
+    <p class="ont-p" style="margin-bottom:6px;">From <a href="https://viralmdesai.github.io/genie-ontology-insurance/" target="_blank" style="color:var(--accent-cyan,#00d4ff);">Viral M Desai's live insurance walkthrough</a> — the minimal YAML that forces Genie to ask which variant before answering "What is our loss ratio?"</p>
+    <pre style="font-size:0.68rem;background:var(--bg-secondary,#1a1a1a);border:1px solid var(--border,#333);border-radius:5px;padding:12px 14px;overflow-x:auto;color:#c9d1d9;line-height:1.6;"><code><span style="color:#79c0ff;">version:</span> <span style="color:#a5d6ff;">1.1</span>
+<span style="color:#79c0ff;">source:</span> <span style="color:#a5d6ff;">catalog.schema.gld_fact_underwriting_result_monthly</span>
+<span style="color:#79c0ff;">measures:</span>
+  - <span style="color:#79c0ff;">name:</span> <span style="color:#a5d6ff;">paid_lr</span>
+    <span style="color:#79c0ff;">expr:</span> <span style="color:#a5d6ff;">SUM(source.ay_paid_loss) / NULLIF(SUM(source.earned_premium), 0)</span>
+    <span style="color:#79c0ff;">display_name:</span> <span style="color:#a5d6ff;">'Paid Loss Ratio'</span>
+  - <span style="color:#79c0ff;">name:</span> <span style="color:#a5d6ff;">incurred_lr</span>
+    <span style="color:#79c0ff;">expr:</span> <span style="color:#a5d6ff;">SUM(source.ay_case_incurred) / NULLIF(SUM(source.earned_premium), 0)</span>
+    <span style="color:#79c0ff;">display_name:</span> <span style="color:#a5d6ff;">'Case-Incurred Loss Ratio'</span>
+  - <span style="color:#79c0ff;">name:</span> <span style="color:#a5d6ff;">ultimate_lr</span>
+    <span style="color:#79c0ff;">expr:</span> <span style="color:#a5d6ff;">SUM(source.ay_ultimate_loss) / NULLIF(SUM(source.earned_premium), 0)</span>
+    <span style="color:#79c0ff;">display_name:</span> <span style="color:#a5d6ff;">'Ultimate Loss Ratio'</span>
+<span style="color:#6e7681;"># ↑ Deliberately NO bare 'loss_ratio' measure — forces variant selection</span>
+<span style="color:#6e7681;"># Genie Page (Rung 5) sets rule: long-tail lines → MEASURE(ultimate_lr)</span></code></pre>
+
     <div class="ont-h2">Open-Source Ontologies (GitHub)</div>
     <div class="ref-list">
+      <a class="ref-link" href="https://viralmdesai.github.io/genie-ontology-insurance/" target="_blank">Viral M Desai · Genie Ontology for Insurers · Databricks insurance walkthrough</a>
       <a class="ref-link" href="https://github.com/fabio-rovai/insurance-register-ontology" target="_blank">fabio-rovai/insurance-register-ontology · OWL/SKOS/SHACL · 276K triples · Aug 2026</a>
       <a class="ref-link" href="https://github.com/riskine/ontology" target="_blank">riskine/ontology · JSON Schema · stale 2021</a>
       <a class="ref-link" href="https://data.world/nrippner/acme-insurance" target="_blank">ACME insurance.ttl · Turtle/OWL · data.world</a>
@@ -638,12 +669,7 @@
       </tbody>
     </table>
 
-  </div><!-- /tab-ins -->
-
-  <!-- ══════════════════════════════════════════════════════════
-       TAB 3 — ACCELERATOR
-  ══════════════════════════════════════════════════════════ -->
-  <div class="ont-panel" id="tab-acc">
+    <div class="ont-h2">Agentic Accelerator · Minimum Viable Ontology per Use Case</div>
 
     <div style="background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);border-radius:6px;padding:14px 16px;margin-bottom:20px;">
       <div style="font-size:0.8rem;font-weight:700;color:var(--accent-cyan,#00d4ff);margin-bottom:6px;">Minimum Viable Ontology (MVO) · The Principle</div>
@@ -673,9 +699,10 @@
         <div class="rule-row">Cat flag on Claim → exclude from Attritional LR</div>
         <div class="rule-row">EarnedPremium is prorated WrittenPremium; never use GWP directly</div>
         <div class="agent-approach">
-          <strong>Pattern:</strong> Semantic layer SQL aggregation — no graph, no ML, pure metric arithmetic<br>
-          <strong>Stack:</strong> Snowflake Cortex Analyst YAML or Databricks Genie Ontology; variant rule as a CASE expression in the semantic model<br>
-          <strong>Hard part:</strong> EarnedPremium proration logic (WrittenPremium × days-in-force ÷ policy-term) — wrong here means every LR is wrong for every agent downstream
+          <strong>Pattern:</strong> Semantic layer SQL aggregation — no graph, no ML; variant selection as a Genie Page rule or Cortex YAML condition<br>
+          <strong>Stack:</strong> Databricks: metric view with three named measures (<span class="mono">paid_lr</span>, <span class="mono">incurred_lr</span>, <span class="mono">ultimate_lr</span>) + Genie Page sets governed default (long-tail → ultimate); Snowflake: Cortex Analyst YAML semantic model with equivalent measures<br>
+          <strong>Hard part:</strong> EarnedPremium proration (WrittenPremium × days-in-force ÷ policy-term) — wrong here breaks every LR agent downstream; also never define a bare <span class="mono">loss_ratio</span> measure — force the agent to choose a named variant<br>
+          <strong>Reference:</strong> <a class="ref-link" href="https://viralmdesai.github.io/genie-ontology-insurance/" target="_blank" style="font-size:0.70rem;">Viral M Desai · Live Databricks Genie insurance walkthrough (AY 2025 GL: 10.6% → 52.1%) ↗</a>
         </div>
         <div class="agent-why">✓ Sufficient because: no coverage structure or party data needed — just premium aggregation and claim classification. Three entities, one disambiguation rule.</div>
       </div>
@@ -940,14 +967,14 @@
       <a class="ref-link" href="https://arxiv.org/abs/2606.04037" target="_blank">arXiv · Pre-Deployment Assurance via Ontology</a>
     </div>
 
-  </div><!-- /tab-acc -->
+  </div><!-- /tab-ins -->
 
   <div data-include="footer.html"></div>
 
   <script>
     function showTab(id) {
       document.querySelectorAll('.ont-tab').forEach(function(t, i) {
-        var ids = ['tech','ins','acc'];
+        var ids = ['tech','ins'];
         t.classList.toggle('active', ids[i] === id);
       });
       document.querySelectorAll('.ont-panel').forEach(function(p) {
