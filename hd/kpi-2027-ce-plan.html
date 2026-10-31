@@ -194,7 +194,7 @@ body {
 .gantt {
   display: grid;
   grid-template-columns: 150px repeat(12, 1fr);
-  grid-template-rows: 20px 24px 44px 44px 44px 44px 132px 44px 44px 44px 44px 44px 60px 60px 60px 60px;
+  grid-template-rows: 20px 24px 44px 44px 44px 44px 220px 44px 44px 44px 44px 44px 60px 60px 60px 60px;
   min-width: 1000px;
 }
 .g-q {
@@ -248,6 +248,8 @@ body {
   height: 36px; min-height: unset;
   font-style: italic;
 }
+.lane-top-b { align-self: start; margin-top: 47px; height: 36px; min-height: unset; font-style: italic; }
+.lane-top-c { align-self: start; margin-top: 89px; height: 36px; min-height: unset; font-style: italic; }
 .lane-bot {
   align-self: end; margin-bottom: 5px;
   height: 36px; min-height: unset;
@@ -259,6 +261,7 @@ body {
 /* migration bar colours */
 .mg-a { background: #F5EDDA; color: #7A5C2E; }
 .mg-b { background: #C9A55A; color: #fff; }
+.mg-c { background: #0D9488; color: #fff; }
 .g-dot {
   display: flex; align-items: center; justify-content: center;
   align-self: center; color: #F59E0B; font-size: 13px; font-weight: 900;
@@ -440,6 +443,7 @@ body {
 .t2a { background: #CCFBF1; color: #134E4A; }
 .t2b { background: #2DD4BF; color: #134E4A; }
 .t2c { background: #0D9488; color: #fff; }
+.t2-accel { font-size: 9px; padding: 3px 4px; line-height: 1.2; height: 36px; min-height: unset; overflow: hidden; }
 .t7a { background: #DCFCE7; color: #14532D; }
 .t7b { background: #4ADE80; color: #14532D; }
 .t7c { background: #166534; color: #fff; }
@@ -591,6 +595,8 @@ body {
 }
 a.ge-trk { text-decoration: none; transition: border-color 0.12s; }
 a.ge-trk:hover { border-color: var(--bdr2); }
+a.g-lbl { text-decoration: none; transition: color 0.12s; }
+a.g-lbl:hover { color: var(--tx1); }
 a.ge-fchip { text-decoration: none; color: inherit; display: block; transition: border-color 0.12s; }
 a.ge-fchip:hover { border-color: var(--bdr2); }
 .card { scroll-margin-top: 52px; }
@@ -764,73 +770,84 @@ a.ge-fchip:hover { border-color: var(--bdr2); }
       <div style="grid-column:13;grid-row:2" class="g-m">Dec</div>
 
       <!-- T4 Partners (row 3) -->
-      <div style="grid-column:1;grid-row:6"    class="g-lbl" data-t="1">T1 · KAM / Sales Velocity</div>
+      <a href="#track-1" style="grid-column:1;grid-row:6"    class="g-lbl" data-t="1">T1 · KAM / Sales Velocity</a>
       <div style="grid-column:2/4;grid-row:6"  class="g-bar t1a">SharePoint schema + MCP config</div>
       <div style="grid-column:4/8;grid-row:6"  class="g-bar t1b">ICP library — 50 accounts + deck templates</div>
       <div style="grid-column:8/14;grid-row:6" class="g-bar t1c">3 sellers live → expand to full team</div>
 
       <!-- T5 CE Assess. (row 4) -->
-      <div style="grid-column:1;grid-row:7;white-space:normal;flex-direction:column;align-items:flex-start;gap:1px;" class="g-lbl" data-t="2">
+      <a href="#track-2" style="grid-column:1;grid-row:7;white-space:normal;flex-direction:column;align-items:flex-start;gap:1px;" class="g-lbl" data-t="2">
         <span style="font-size:11px;font-weight:700;color:var(--tx2);">T2 · Accelerators</span>
         <span style="font-size:9.5px;color:#9A6B20;font-weight:600;">▴ Migration</span>
-        <span style="font-size:9.5px;color:var(--t2);font-weight:600;">▸ Domain Focus</span>
+        <span style="font-size:9.5px;color:var(--t2);font-weight:600;">▸ Ontology · 12 sprints</span>
+        <span style="display:flex;gap:2px;flex-wrap:wrap;margin-top:2px;">
+          <span style="font-size:7px;background:#CCFBF1;color:#134E4A;padding:1px 4px;border-radius:2px;font-weight:700;white-space:nowrap;">① cust</span>
+          <span style="font-size:7px;background:#2DD4BF;color:#134E4A;padding:1px 4px;border-radius:2px;font-weight:700;white-space:nowrap;">② co-sell</span>
+          <span style="font-size:7px;background:#0D9488;color:#fff;padding:1px 4px;border-radius:2px;font-weight:700;white-space:nowrap;">③ market</span>
+        </span>
         <span style="font-size:9.5px;color:var(--t5);font-weight:600;">▾ Accountable AI</span>
-      </div>
+      </a>
       <!-- top lane: migration accelerators (existing, scaling) -->
-      <div style="grid-column:2/7;grid-row:7"  class="g-bar mg-a lane-top">EDW · ETL · BI migration — established &amp; active</div>
-      <div style="grid-column:7/14;grid-row:7" class="g-bar mg-b lane-top">Scaling to Databricks · Snowflake · Fabric — new platform plays</div>
+      <div style="grid-column:2/14;grid-row:7" class="g-bar mg-a lane-top">EDW · ETL · BI migration — evergreen: source &amp; target stacks continuously added</div>
+      <div style="grid-column:2/14;grid-row:7" class="g-bar mg-b lane-top-b">Semantic layer builds — Databricks · Snowflake · Fabric</div>
+      <div style="grid-column:2/14;grid-row:7" class="g-bar mg-c lane-top-c">Conversational BI/AI — Vibe analytics</div>
       <!-- middle lane: domain focus ontology accelerators -->
-      <div style="grid-column:2/4;grid-row:7"   class="g-bar t2a lane-mid">Insurance Ontology Accelerator</div>
-      <div style="grid-column:4/5;grid-row:7"   class="lane-dot-mid">◆</div>
-      <div style="grid-column:5/7;grid-row:7"   class="g-bar t2a lane-mid">Banking Ontology Accelerator</div>
-      <div style="grid-column:7/8;grid-row:7"   class="lane-dot-mid">◆</div>
-      <div style="grid-column:8/10;grid-row:7"  class="g-bar t2b lane-mid">Healthcare Ontology Accelerator</div>
-      <div style="grid-column:10/11;grid-row:7" class="lane-dot-mid">◆</div>
-      <div style="grid-column:11/14;grid-row:7" class="g-bar t2c lane-mid">Scale 2 winning accelerators</div>
+      <div style="grid-column:2/3;grid-row:7;align-self:start;margin-top:135px"   class="g-bar t2a t2-accel" title="Insurance — P&amp;C Claims &amp; Ontology (Databricks) · Customer-mapped: Aegon">Insurance P&amp;C</div>
+      <div style="grid-column:3/4;grid-row:7;align-self:start;margin-top:135px"   class="g-bar t2a t2-accel" title="Banking — Regulatory Reporting BCBS 239/RDARR (Databricks) · Customer-mapped: Barclays + Danske">Banking Reg</div>
+      <div style="grid-column:4/5;grid-row:7;align-self:start;margin-top:135px"   class="g-bar t2a t2-accel" title="Capital Markets — eFX &amp; Trade Context (Databricks) · Customer-mapped: BNP Paribas">Capital Mkts</div>
+      <div style="grid-column:5/6;grid-row:7;align-self:start;margin-top:135px"   class="g-bar t2b t2-accel" title="Healthcare — Clinical Decision Support (Snowflake Cortex AI) · Partner-suggested: Snowflake">Healthcare</div>
+      <div style="grid-column:6/7;grid-row:7;align-self:start;margin-top:135px"   class="g-bar t2b t2-accel" title="Wealth Management — Client Portfolio Intelligence (Databricks/Snowflake) · Partner-suggested">Wealth Mgmt</div>
+      <div style="grid-column:7/8;grid-row:7;align-self:start;margin-top:135px"   class="g-bar t2b t2-accel" title="Insurance — Underwriting Automation (Microsoft Fabric) · Partner-suggested: Fabric">Insurance UW</div>
+      <div style="grid-column:8/9;grid-row:7;align-self:start;margin-top:135px"   class="g-bar t2b t2-accel" title="Retail Banking — KYC / AML Compliance (Databricks) · Partner-suggested: EU AI Act tailwind">KYC / AML</div>
+      <div style="grid-column:9/10;grid-row:7;align-self:start;margin-top:135px"  class="g-bar t2c t2-accel" title="Life Sciences — Clinical Trial Intelligence (Databricks) · Market play">Life Sci.</div>
+      <div style="grid-column:10/11;grid-row:7;align-self:start;margin-top:135px" class="g-bar t2c t2-accel" title="Retail &amp; CPG — Customer 360 &amp; Category Intelligence (Snowflake) · Market play">Retail CPG</div>
+      <div style="grid-column:11/12;grid-row:7;align-self:start;margin-top:135px" class="g-bar t2c t2-accel" title="Manufacturing — Supply Chain Intelligence (Snowflake) · Market play">Mfg.</div>
+      <div style="grid-column:12/13;grid-row:7;align-self:start;margin-top:135px" class="g-bar t2c t2-accel" title="Telecom — Network &amp; Churn Intelligence (Snowflake) · Market play">Telecom</div>
+      <div style="grid-column:13/14;grid-row:7;align-self:start;margin-top:135px" class="g-bar t2c t2-accel" title="Cross-vertical — AI Governance &amp; Responsible Context (Fabric/Databricks) · Market play">AI Gov.</div>
       <!-- bottom lane: Accountable AI, by Design -->
       <div style="grid-column:2/5;grid-row:7"   class="g-bar t5a lane-bot">Accountable AI Foundation — product design &amp; IP build</div>
       <div style="grid-column:5/11;grid-row:7"  class="g-bar t5a lane-bot">Accountable AI Foundation — pilot &amp; project delivery</div>
       <div style="grid-column:11/14;grid-row:7" class="g-bar t5b lane-bot">Accountable AI Standing Service — pilot and project retainer</div>
 
       <!-- T6 Thought Leadership (row 5) -->
-      <div style="grid-column:1;grid-row:8"    class="g-lbl" data-t="3">T3 · Delivery</div>
+      <a href="#track-3" style="grid-column:1;grid-row:8"    class="g-lbl" data-t="3">T3 · Delivery</a>
       <div style="grid-column:2/5;grid-row:8"  class="g-bar t3a">Hire CE/AI Practice Lead + delivery architects</div>
       <div style="grid-column:5/10;grid-row:8" class="g-bar t3b">Delivery — billable CE engagements</div>
       <div style="grid-column:10/14;grid-row:8" class="g-bar t3c">COE cadence + quarterly retro</div>
 
       <!-- T1 KAM (row 6) -->
-      <div style="grid-column:1;grid-row:3"    class="g-lbl" data-t="4">T4 · Partners</div>
+      <a href="#track-4" style="grid-column:1;grid-row:3"    class="g-lbl" data-t="4">T4 · Partners</a>
       <div style="grid-column:2/4;grid-row:3"  class="g-bar t4a">Register Databricks + Snowflake + Fabric</div>
       <div style="grid-column:4/14;grid-row:3" class="g-bar t4b">Co-sell — inflow of opps start in partner portal</div>
 
       <!-- T2 Accelerators (row 7) — split lane -->
-      <div style="grid-column:1;grid-row:4"    class="g-lbl" data-t="5">T5 · CE Assess.</div>
+      <a href="#track-5" style="grid-column:1;grid-row:4"    class="g-lbl" data-t="5">T5 · CE Assess.</a>
       <div style="grid-column:2/5;grid-row:4"  class="g-bar t5a">CE Assessment SKU — go-to-market launch</div>
       <div style="grid-column:5/14;grid-row:4" class="g-bar t5b">3 CE SKU flavors in active pipeline <span style="opacity:0.6;font-size:9px;font-weight:800;letter-spacing:0.04em;">→ T2</span></div>
 
       <!-- T3 Delivery (row 8) -->
-      <div style="grid-column:1;grid-row:5"    class="g-lbl" data-t="6">T6 · Thought Lead.</div>
+      <a href="#track-6" style="grid-column:1;grid-row:5"    class="g-lbl" data-t="6">T6 · Thought Lead.</a>
       <div style="grid-column:2/4;grid-row:5"  class="g-bar t6a">CE POV paper + blog cadence</div>
       <div style="grid-column:4/14;grid-row:5" class="g-bar t6b">Summit talks · analyst briefings · LinkedIn</div>
 
       <!-- T7 Practice Discipline (row 9) -->
-      <div style="grid-column:1;grid-row:9"    class="g-lbl" data-t="7">T7 · Discipline</div>
+      <a href="#track-7" style="grid-column:1;grid-row:9"    class="g-lbl" data-t="7">T7 · Discipline</a>
       <div style="grid-column:2/5;grid-row:9"  class="g-bar t7a">ICP filter doc + kill criteria + owner named</div>
       <div style="grid-column:5/11;grid-row:9" class="g-bar t7b">Quarterly pipeline kill/scale review</div>
       <div style="grid-column:11/14;grid-row:9" class="g-bar t7c">2027 retro + CE 2.0 roadmap</div>
 
       <!-- T8 Always-on Mechanisms (row 10) -->
-      <div style="grid-column:1;grid-row:10"    class="g-lbl" data-t="8">T8 · Always-on</div>
+      <a href="#track-8" style="grid-column:1;grid-row:10"    class="g-lbl" data-t="8">T8 · Always-on</a>
       <div style="grid-column:2/6;grid-row:10"  class="g-bar t8a">Syntax→Semantics channel launched + Live Wire cadence set</div>
       <div style="grid-column:6/14;grid-row:10" class="g-bar t8b">Bi-weekly Live Wire · ongoing · talent surfaced for client-facing roles</div>
 
       <!-- T9 Presales Excellence (row 11) -->
-      <div style="grid-column:1;grid-row:11"    class="g-lbl" data-t="9">T9 · Presales</div>
+      <a href="#track-9" style="grid-column:1;grid-row:11"    class="g-lbl" data-t="9">T9 · Presales</a>
       <div style="grid-column:2/5;grid-row:11"  class="g-bar t9a">Quality gate + win theme framework — pipeline in writing</div>
       <div style="grid-column:5/14;grid-row:11" class="g-bar t9b">Presales pipeline live — SLA tracked · speaker bench active · win rate by quality tier</div>
 
       <!-- T10 Marketing Excellence (row 12) -->
-      <div style="grid-column:1;grid-row:12"    class="g-lbl" data-t="10">T10 · Marketing</div>
+      <a href="#track-10" style="grid-column:1;grid-row:12"    class="g-lbl" data-t="10">T10 · Marketing</a>
       <div style="grid-column:2/8;grid-row:12"  class="g-bar t10b">ABM campaigns — ICP accounts + email + LinkedIn</div>
       <div style="grid-column:8/14;grid-row:12" class="g-bar t10c">Integrated demand gen — marketing-attributed pipeline live</div>
 
@@ -989,15 +1006,16 @@ a.ge-fchip:hover { border-color: var(--bdr2); }
 
     <div class="card" data-t="2" id="track-2">
       <div class="card-top">
-        <div><p class="card-tn">Track 2</p><p class="card-title">Industry Ontology Accelerators</p><p class="card-owner">Owner · CE Lead</p></div>
+        <div><p class="card-tn">Track 2</p><p class="card-title">CE Accelerators — Ontology &amp; Conversational BI/AI</p><p class="card-owner">Owner · CE Lead</p></div>
         <span class="badge b-in">Inward</span>
       </div>
       <ul class="ml">
-        <li class="mi"><span class="mi-q">Now</span><span class="mi-t"><strong>Existing migration accelerators (EDW · ETL · BI):</strong> KPI already has proven migration accelerators in production. These are the commercial anchor for 2027 — they fund the CE sprint cycle and provide the customer relationships to test CE against. CE sprints are additive, not replacement.</span></li>
-        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t">Insurance CE sprint — 4-week build → pilot. P&amp;C claims ontology, MCP server on Databricks. Kill rule: 0 qualified pilot conversations within the predefined timeline = retired, no exceptions — take the lesson and build a better pilot. <span class="tag go">Sprint 1</span></span></li>
-        <li class="mi"><span class="mi-q">Q2</span><span class="mi-t">Banking sprint — 4 weeks, independent of Insurance outcome. BCBS/RDARR angle aligns with Barclays/Danske relationships. Start with a customer conversation before writing a line of code. <span class="tag go">Sprint 2</span></span></li>
-        <li class="mi"><span class="mi-q">Q3</span><span class="mi-t">Healthcare or CPG sprint — whichever has an active KPI customer relationship to test against. The market picks the vertical, not the strategy deck. <span class="tag go">Sprint 3</span></span></li>
-        <li class="mi"><span class="mi-q">Q4</span><span class="mi-t">Kill review: formally retire accelerators with no pipeline. Double investment on the 1–2 that got traction. Nothing carries into 2028 without a named pilot customer behind it. <span class="tag go">Kill / Scale</span></span></li>
+        <li class="mi"><span class="mi-q">Now</span><span class="mi-t"><strong>Existing migration accelerators (EDW · ETL · BI):</strong> KPI already has proven migration accelerators in production. These are the commercial anchor for 2027 — they fund the CE build cycle and provide the customer relationships to test CE against. New accelerator work is additive, not replacement.<br><br><strong>New: BI → Conversational BI/AI accelerators (Vibe analytics):</strong> KPI is building a new class of accelerators that transition customers from traditional BI dashboards to Copilot/Claude-grade conversational experiences — the experience layer moves to AI-native interfaces while the analytics logic moves to semantic layers on Databricks, Snowflake, and Fabric. This positions KPI at the intersection of platform migration and AI experience delivery: the exact transition every BI-heavy enterprise will be forced to make.</span></li>
+        <li class="mi"><span class="mi-q">Priority</span><span class="mi-t">One Ontology Accelerator shipped every month — 12 in 2027. Sequencing priority is fixed and non-negotiable: <strong style="color:#134E4A;background:#CCFBF1;padding:1px 6px;border-radius:3px;">① Customer-mapped</strong> (Jan–Mar) — verticals where KPI has a named existing relationship and a willing pilot conversation; build these first, they de-risk the whole programme. Then <strong style="color:#134E4A;background:#2DD4BF;padding:1px 6px;border-radius:3px;">② Partner-suggested</strong> (Apr–Jul) — co-sell plays briefed to Databricks, Snowflake, and Fabric field teams; partner alignment converts faster than cold outbound. Finally <strong style="color:#fff;background:#0D9488;padding:1px 6px;border-radius:3px;">③ Market play</strong> (Aug–Dec) — sizable TAM, no KPI customer validation yet; treat these as R&amp;D builds until a pilot customer surfaces.</span></li>
+        <li class="mi"><span class="mi-q">Q1</span><span class="mi-t"><strong>Jan:</strong> Insurance P&amp;C Claims Ontology (Databricks, MCP server) — Aegon relationship is the pilot anchor. <strong>Feb:</strong> Banking Regulatory Reporting (BCBS 239/RDARR, Databricks) — Barclays + Danske validated demand. <strong>Mar:</strong> Capital Markets eFX &amp; Trade Context (Databricks) — BNP Paribas eFX engagement as pilot. Kill rule for each: 0 qualified pilot conversations within the sprint window = retired, no exceptions. <span class="tag go">Sprints 1–3</span></span></li>
+        <li class="mi"><span class="mi-q">Q2</span><span class="mi-t"><strong>Apr:</strong> Healthcare Clinical Decision Support (Snowflake Cortex AI) — Snowflake co-sell motion. <strong>May:</strong> Wealth Management Client Portfolio Intelligence (Databricks/Snowflake). <strong>Jun:</strong> Insurance Underwriting Automation (Microsoft Fabric) — extends the Jan accelerator, Fabric partner play. <strong>Jul:</strong> Retail Banking KYC/AML Compliance (Databricks) — EU AI Act regulatory tailwind. Partner field briefings active from April. <span class="tag go">Sprints 4–7</span></span></li>
+        <li class="mi"><span class="mi-q">Q3</span><span class="mi-t"><strong>Aug:</strong> Life Sciences Clinical Trial Intelligence (Databricks). <strong>Sep:</strong> Retail &amp; CPG Customer 360 &amp; Category Intelligence (Snowflake) — Tredence owns this space; KPI differentiates on CE-native depth and 4-week build speed. Mid-Q3 review: audit which of the 9 shipped accelerators have active pilot customers. Double investment on those; freeze pipeline spend on the rest. <span class="tag go">Sprints 8–9</span></span></li>
+        <li class="mi"><span class="mi-q">Q4</span><span class="mi-t"><strong>Oct:</strong> Manufacturing Supply Chain Intelligence (Snowflake). <strong>Nov:</strong> Telecom Network &amp; Churn Intelligence (Snowflake). <strong>Dec:</strong> AI Governance &amp; Responsible Context (Fabric/Databricks) — EU AI Act compliance, year-end regulatory push. Kill review: formally retire accelerators with no pipeline. Scale the 1–2 with traction. Nothing carries into 2028 without a named pilot customer behind it. <span class="tag go">Sprints 10–12 · Kill/Scale</span></span></li>
       </ul>
     </div>
 
