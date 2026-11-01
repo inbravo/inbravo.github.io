@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="/images/inbravo.png">
+  <link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+  <script src="../js/jquery-1.11.3.min.js"></script>
+  <script src="../js/csi.min.js"></script>
+  <script src="../js/inbravo.js"></script>
+  <title>Agent Testing</title>
+  <style>
+    /* ── Layout ───────────────────────────────────────────────── */
+    .at-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    /* ── Tabs ─────────────────────────────────────────────────── */
+    .at-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 18px 20px 0;
+      max-width: 960px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+    .at-tab {
+      padding: 8px 18px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 6px 6px 0 0;
+      color: var(--text-secondary, #475569);
+      border: 1px solid transparent;
+      border-bottom: none;
+      transition: color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .at-tab:hover { color: var(--accent-cyan, #0891b2); }
+    .at-tab.active {
+      color: var(--accent-cyan, #0891b2);
+      background: var(--bg-secondary, #f8fafc);
+      border-color: var(--border-color, #e2e8f0);
+      border-bottom-color: var(--bg-secondary, #f8fafc);
+      margin-bottom: -1px;
+    }
+    .at-panel { display: none; padding-top: 28px; }
+    .at-panel.active { display: block; }
+
+    /* ── Typography ───────────────────────────────────────────── */
+    .at-h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent-cyan, #0891b2);
+      margin: 28px 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+      letter-spacing: 0.02em;
+    }
+    .at-h3 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-primary, #1e293b);
+      margin: 20px 0 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .at-p {
+      font-size: 0.82rem;
+      color: var(--text-primary, #334155);
+      line-height: 1.7;
+      margin: 0 0 12px;
+    }
+
+    /* ── Alert / breaking ─────────────────────────────────────── */
+    .at-alert {
+      background: rgba(185,28,28,.07);
+      border: 1px solid rgba(185,28,28,.25);
+      border-left: 3px solid #b91c1c;
+      border-radius: 5px;
+      padding: 10px 14px;
+      margin: 0 0 18px;
+      font-size: 0.78rem;
+      color: var(--text-primary, #1e293b);
+      line-height: 1.6;
+    }
+    .at-alert strong { color: #b91c1c; }
+
+    /* ── Info banner ──────────────────────────────────────────── */
+    .at-info {
+      background: rgba(8,145,178,.07);
+      border: 1px solid rgba(8,145,178,.25);
+      border-radius: 5px;
+      padding: 10px 14px;
+      margin: 0 0 18px;
+      font-size: 0.78rem;
+      color: var(--text-primary, #1e293b);
+      line-height: 1.6;
+    }
+    .at-info strong { color: var(--accent-cyan, #0891b2); }
+
+    /* ── Concept cards grid ───────────────────────────────────── */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin: 0 0 24px;
+    }
+    .concept-card {
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 8px;
+      background: var(--bg-secondary, #f8fafc);
+      padding: 14px 16px;
+    }
+    .concept-name {
+      font-size: 0.80rem;
+      font-weight: 700;
+      color: var(--text-primary, #1e293b);
+      margin: 0 0 6px;
+    }
+    .concept-desc {
+      font-size: 0.75rem;
+      color: var(--text-primary, #334155);
+      line-height: 1.65;
+      margin: 0;
+    }
+    .concept-tag {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 3px;
+      margin: 0 0 7px;
+    }
+    .tag-gen1 { background: rgba(8,145,178,.10); color: var(--accent-cyan, #0891b2); border: 1px solid rgba(8,145,178,.25); }
+    .tag-gen2 { background: rgba(5,150,105,.10); color: var(--accent-green, #059669); border: 1px solid rgba(5,150,105,.25); }
+    .tag-open  { background: rgba(180,130,0,.10); color: #92650a; border: 1px solid rgba(180,130,0,.28); }
+    .tag-risk  { background: rgba(185,28,28,.08); color: #b91c1c; border: 1px solid rgba(185,28,28,.22); }
+
+    /* ── Maturity model ───────────────────────────────────────── */
+    .maturity-row {
+      display: grid;
+      grid-template-columns: 90px 1fr 1fr;
+      gap: 0;
+      font-size: 0.75rem;
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 7px;
+      overflow: hidden;
+      margin: 0 0 20px;
+    }
+    .maturity-row > * {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+      color: var(--text-primary, #1e293b);
+    }
+    .maturity-row > *:last-of-type,
+    .maturity-row > *:nth-last-of-type(2),
+    .maturity-row > *:nth-last-of-type(3) { border-bottom: none; }
+    .m-level {
+      font-weight: 700;
+      color: var(--accent-cyan, #0891b2);
+      background: var(--bg-secondary, #f1f5f9);
+      border-right: 1px solid var(--border-color, #e2e8f0);
+    }
+    .m-label { font-weight: 600; }
+    .m-note  { color: var(--text-secondary, #475569); }
+
+    /* ── Framework table ──────────────────────────────────────── */
+    .fw-table-wrap { overflow-x: auto; margin: 0 0 24px; }
+    .fw-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.74rem;
+      min-width: 600px;
+    }
+    .fw-table th {
+      background: var(--bg-secondary, #f1f5f9);
+      color: var(--text-secondary, #475569);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.68rem;
+      padding: 8px 12px;
+      text-align: left;
+      border: 1px solid var(--border-color, #e2e8f0);
+    }
+    .fw-table td {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color, #e2e8f0);
+      color: var(--text-primary, #1e293b);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    .fw-table tr:nth-child(even) td { background: rgba(0,0,0,.015); }
+    .fw-name { font-weight: 700; color: var(--accent-cyan, #0891b2); }
+    .fw-dead { opacity: 0.55; text-decoration: line-through; }
+
+    /* ── Lab cards ────────────────────────────────────────────── */
+    .lab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 0 0 24px;
+    }
+    .lab-card {
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 8px;
+      background: var(--bg-secondary, #f8fafc);
+      padding: 16px;
+    }
+    .lab-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-primary, #1e293b);
+      margin: 0 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lab-stat {
+      font-size: 0.72rem;
+      color: var(--text-primary, #334155);
+      margin: 5px 0;
+      padding-left: 10px;
+      border-left: 2px solid var(--accent-cyan, #0891b2);
+      line-height: 1.55;
+    }
+    .lab-stat strong { color: var(--accent-green, #059669); }
+    .lab-note {
+      font-size: 0.72rem;
+      color: var(--text-secondary, #475569);
+      margin: 8px 0 0;
+      line-height: 1.6;
+    }
+
+    /* ── Standards table ──────────────────────────────────────── */
+    .std-table-wrap { overflow-x: auto; margin: 0 0 24px; }
+    .std-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.74rem;
+      min-width: 520px;
+    }
+    .std-table th {
+      background: var(--bg-secondary, #f1f5f9);
+      color: var(--text-secondary, #475569);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.68rem;
+      padding: 8px 12px;
+      text-align: left;
+      border: 1px solid var(--border-color, #e2e8f0);
+    }
+    .std-table td {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color, #e2e8f0);
+      color: var(--text-primary, #1e293b);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    .std-name { font-weight: 700; color: var(--accent-cyan, #0891b2); font-family: monospace; font-size: 0.78rem; }
+    .std-live { color: var(--accent-green, #059669); font-weight: 700; font-size: 0.68rem; text-transform: uppercase; }
+    .std-active { color: #92650a; font-weight: 700; font-size: 0.68rem; text-transform: uppercase; }
+
+    /* ── Insurance callout ────────────────────────────────────── */
+    .ins-card {
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 8px;
+      background: var(--bg-secondary, #f8fafc);
+      padding: 14px 16px;
+      margin: 0 0 12px;
+    }
+    .ins-title {
+      font-size: 0.80rem;
+      font-weight: 700;
+      color: var(--text-primary, #1e293b);
+      margin: 0 0 6px;
+    }
+    .ins-body {
+      font-size: 0.75rem;
+      color: var(--text-primary, #334155);
+      line-height: 1.65;
+      margin: 0;
+    }
+    .ins-body strong { color: var(--accent-cyan, #0891b2); }
+
+    /* ── Verdict box ──────────────────────────────────────────── */
+    .verdict {
+      background: rgba(5,150,105,.07);
+      border: 1px solid rgba(5,150,105,.25);
+      border-left: 3px solid var(--accent-green, #059669);
+      border-radius: 5px;
+      padding: 10px 14px;
+      margin: 18px 0;
+      font-size: 0.78rem;
+      color: var(--text-primary, #1e293b);
+      line-height: 1.65;
+    }
+    .verdict strong { color: var(--accent-green, #059669); }
+
+    /* ── Score pill ───────────────────────────────────────────── */
+    .score-pill {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+    .score-hi { background: rgba(5,150,105,.12); color: var(--accent-green, #059669); border: 1px solid rgba(5,150,105,.25); }
+    .score-lo { background: rgba(185,28,28,.08); color: #b91c1c; border: 1px solid rgba(185,28,28,.22); }
+    .score-md { background: rgba(180,130,0,.10); color: #92650a; border: 1px solid rgba(180,130,0,.28); }
+
+    /* ── Divider ──────────────────────────────────────────────── */
+    .at-divider {
+      border: none;
+      border-top: 1px solid var(--border-color, #e2e8f0);
+      margin: 28px 0;
+    }
+
+    /* ── Ref links ────────────────────────────────────────────── */
+    .ref-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .ref-link {
+      font-size: 0.72rem;
+      color: var(--accent-cyan, #0891b2);
+      border: 1px solid rgba(8,145,178,.25);
+      padding: 2px 9px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+    .ref-link:hover { background: rgba(8,145,178,.10); }
+
+    /* ── Decision guide ───────────────────────────────────────── */
+    .guide-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 0 0 8px;
+      font-size: 0.75rem;
+    }
+    .guide-q {
+      color: var(--text-secondary, #475569);
+      font-style: italic;
+      padding: 7px 10px;
+      background: var(--bg-secondary, #f8fafc);
+      border-radius: 4px;
+      border: 1px solid var(--border-color, #e2e8f0);
+    }
+    .guide-a {
+      color: var(--text-primary, #1e293b);
+      font-weight: 600;
+      padding: 7px 10px;
+      border-left: 2px solid var(--accent-cyan, #0891b2);
+    }
+
+    @media (max-width: 560px) {
+      .guide-row { grid-template-columns: 1fr; }
+      .maturity-row { grid-template-columns: 70px 1fr; }
+      .maturity-row .m-note { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div align="center">
+    <div data-include="header.html"></div>
+  </div>
+
+  <div align="center">
+    <p style="font-size:0.75rem;color:var(--text-secondary,#475569);margin:18px 0 0;">Agent Testing &amp; Evaluation — frameworks, AI lab approaches, standards · Nov 2026</p>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="at-tabs">
+    <div class="at-tab active" onclick="showTab('concepts')">Concepts</div>
+    <div class="at-tab" onclick="showTab('tooling')">Tooling</div>
+    <div class="at-tab" onclick="showTab('industry')">Labs &amp; Standards</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TAB 1 — CONCEPTS
+  ══════════════════════════════════════════════════════════ -->
+  <div class="at-panel active at-wrap" id="tab-concepts">
+
+    <div class="at-h2">Why Agent Testing Is Different</div>
+    <p class="at-p">Classical software testing assumes deterministic output — same input, same result. AI agents are stochastic, multi-step, and tool-using. A unit test that asserts <code>assertEqual(result, expected)</code> cannot evaluate whether the agent took the right reasoning path, used the right tool in the right order, or made a decision that will hold at scale. Three dimensions must be tested independently: <strong>output quality</strong>, <strong>reasoning trajectory</strong>, and <strong>operational safety</strong>.</p>
+
+    <div class="at-info"><strong>The 10.6% → 52.1% lesson:</strong> an agent can return a plausible-looking answer that is semantically wrong. Output scoring alone misses this. The Databricks Genie 9-Rung Ladder shows that 42% of accuracy gains came not from a better model, but from adding governed context. Testing must verify the context is being used correctly, not just that a number appeared.</div>
+
+    <div class="at-h2">Scoring Dimensions</div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-tag tag-gen1">Generation 1</div>
+        <div class="concept-name">Output Scoring</div>
+        <div class="concept-desc">Did the agent return the right answer? Compares final response to a reference. Fast and cheap. Misses correct answers via wrong paths and wrong answers via lucky data alignment. The Rung 8 benchmark suite operates here.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-tag tag-gen2">Generation 2</div>
+        <div class="concept-name">Trajectory Scoring</div>
+        <div class="concept-desc">Did it use the right tools in the right order with the right arguments? A correct answer via a wrong path (e.g. paid_lr matching ultimate_lr by coincidence) is flagged as a brittle pass. LangSmith, W&amp;B Weave, TruLens, and Vertex AI all treat this as first-class.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-tag tag-gen2">Generation 2</div>
+        <div class="concept-name">Ontology-Derived Evals</div>
+        <div class="concept-desc">SHACL constraint → auto-generated test case. If a constraint says <code>earnedPremium &gt; 0</code>, a trap question is generated automatically: "what if earned premium is zero?" The ontology IS the test spec. Tredence's agentic repair loop uses this pattern.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-tag tag-open">Emerging</div>
+        <div class="concept-name">Multi-Agent Eval</div>
+        <div class="concept-desc">No deployed standard yet. Compositional failure: each sub-agent passes individually; the orchestration fails. arXiv 2609.18820 ("Compositional Policy Violations") shows step-level compliance can pass while workflow-level compliance fails.</div>
+      </div>
+    </div>
+
+    <div class="at-h2">LLM-as-Judge vs Agent-as-Judge</div>
+    <p class="at-p">Using a language model to score another language model's output is Generation 2's key method — but its reliability is contested.</p>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-tag tag-risk">Reliability risk</div>
+        <div class="concept-name">LLM-as-Judge</div>
+        <div class="concept-desc">AgentRewardBench (COLM 2025): 1,300+ expert-annotated web-agent trajectories. Finding: <strong>no single LLM judge reliably scores across tasks.</strong> Preference leakage (Li et al. 2025) contaminates scoring when the judge's own training overlaps with benchmark data. ~70% agreement with human experts.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-tag tag-gen2">Better</div>
+        <div class="concept-name">Agent-as-Judge</div>
+        <div class="concept-desc">Zhuge et al. (2025): a separate agent evaluates the primary agent's reasoning steps, not just its final answer. Achieves ~90% agreement with human experts vs. ~70% for simple LLM-as-judge. The evaluator agent itself can be tested and versioned separately from the agent under test.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-tag tag-open">New (2026)</div>
+        <div class="concept-name">TRAIL Framework</div>
+        <div class="concept-desc">Trace Reasoning and Agentic Issue Localization (arXiv 2505.08638). Goes beyond pass/fail: diagnoses exactly where in a trace the agent deviated. "The agent had the right tool but called it with the wrong policy date" — issue localized to step 3 of 7.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-tag tag-risk">Known gap</div>
+        <div class="concept-name">Benchmark Contamination</div>
+        <div class="concept-desc">Search-time contamination: web-enabled agents retrieve benchmark answers during execution. SWE-bench saturation: OpenAI (Feb 2026) argues the benchmark no longer measures frontier coding capability. Preference leakage from overlapping judge training data. Static benchmarks have a shelf life.</div>
+      </div>
+    </div>
+
+    <div class="at-h2">Eval-Driven Development (EDD)</div>
+    <p class="at-p">The agent testing equivalent of Test-Driven Development. Write the eval before writing the fix. Because agents are non-deterministic, assertions need statistical thresholds, not binary pass/fail.</p>
+
+    <div class="maturity-row" style="grid-template-columns:90px 1fr 1fr;">
+      <div class="m-level" style="background:var(--bg-secondary,#f1f5f9);border-right:1px solid var(--border-color,#e2e8f0);">Rule</div>
+      <div class="m-label">What it means</div>
+      <div class="m-note">Why it matters</div>
+
+      <div class="m-level">Write eval first</div>
+      <div>Define the benchmark question and success threshold before changing the agent or ontology</div>
+      <div class="m-note">Forces you to state what "correct" means before being influenced by the output</div>
+
+      <div class="m-level">Statistical gates</div>
+      <div>Pass if score ≥ X% over N runs, not assertEqual on a single run</div>
+      <div class="m-note">Stochastic agents have variance; a single run result is not a proof</div>
+
+      <div class="m-level">Token budget</div>
+      <div>Token usage must stay within 5% of baseline (FutureAGI guidance)</div>
+      <div class="m-note">A fix that doubles token cost is not a free fix — latency and cost regress</div>
+
+      <div class="m-level">Monitor in prod</div>
+      <div>Run evals in CI and in production monitoring — not only pre-merge</div>
+      <div class="m-note">Pass rate drifts when nothing in your repo changed (provider silently updates model)</div>
+
+      <div class="m-level">GitOps</div>
+      <div>Ontology PR triggers full eval suite before merge</div>
+      <div class="m-note">A YAML metric change that breaks a downstream agent is caught before it ships</div>
+    </div>
+
+    <div class="at-h2">Testing Maturity Model</div>
+    <div class="maturity-row">
+      <div class="m-level">Level 1</div>
+      <div class="m-label">Output check</div>
+      <div class="m-note">"Did the agent return 52.1%?" — Rung 8 benchmark suite</div>
+
+      <div class="m-level">Level 2</div>
+      <div class="m-label">Trace check</div>
+      <div class="m-note">"Did it use ultimate_lr, not paid_lr?" — MLflow Traces, LangSmith, W&amp;B Weave</div>
+
+      <div class="m-level">Level 3</div>
+      <div class="m-label">Ontology-derived</div>
+      <div class="m-note">SHACL rule → auto-generate test case — Tredence agentic repair loop</div>
+
+      <div class="m-level">Level 4</div>
+      <div class="m-label">Adversarial eval</div>
+      <div class="m-note">LLM/agent generates trap questions from the schema — Braintrust, RAGAS, custom harnesses</div>
+
+      <div class="m-level">Level 5</div>
+      <div class="m-label">Continuous regression</div>
+      <div class="m-note">Ontology PR → eval suite in CI/CD — GitOps for ontology (emerging 2026–27)</div>
+    </div>
+
+    <div class="verdict"><strong>Core principle:</strong> The benchmark suite is not a certificate of quality — it is a regression harness. Its job is not to prove the agent is good; it is to catch when the agent gets worse after the next change to the ontology, the model, or the data.</div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TAB 2 — TOOLING
+  ══════════════════════════════════════════════════════════ -->
+  <div class="at-panel at-wrap" id="tab-tooling">
+
+    <div class="at-alert">
+      <strong>Breaking — OpenAI hosted Evals shutting down:</strong> OpenAI's Agent Builder and hosted Evals platform goes read-only 31 Oct 2026 and is removed 30 Nov 2026. Official migration recommendation: <strong>Promptfoo</strong> (OpenAI cookbook, Jun 2026). The open-source <code>openai/evals</code> repo continues as a community benchmark registry but is not a trajectory evaluator and ships no CI/CD runner.
+    </div>
+
+    <div class="at-h2">Framework Comparison</div>
+    <div class="fw-table-wrap">
+      <table class="fw-table">
+        <thead>
+          <tr>
+            <th>Framework</th>
+            <th>Tests</th>
+            <th>How it works</th>
+            <th>Licence / cost</th>
+            <th>Best for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="fw-name">DeepEval</span></td>
+            <td>Output, RAG, agent task, span-level</td>
+            <td>pytest-style runner, 50+ metrics (G-Eval, faithfulness, task completion). CI-friendly. Confident AI is the hosted wrapper.</td>
+            <td>Apache 2.0 (open source)</td>
+            <td>Most popular OSS option; teams wanting CI/CD integration out of the box</td>
+          </tr>
+          <tr>
+            <td><span class="fw-name">LangSmith</span></td>
+            <td>Output, trace, trajectory, tool calls, multi-turn</td>
+            <td>Hosted; integrates with LangGraph for span-level and full-trace scoring; trajectory evals are first-class</td>
+            <td>Proprietary ~$39/seat/month</td>
+            <td>LangChain / LangGraph shops; teams that need trajectory scoring today</td>
+          </tr>
+          <tr>
+            <td><span class="fw-name">Braintrust</span></td>
+            <td>Output, span, full trace, A/B prompt</td>
+            <td>Hosted; eval + observability in one; MIT-licensed proxy; scorers run per span or completed trace; versioned prompt/eval management</td>
+            <td>MIT proxy / hosted pricing</td>
+            <td>Teams wanting versioned eval management and A/B prompt testing</td>
+          </tr>
+          <tr>
+            <td><span class="fw-name">W&amp;B Weave</span></td>
+            <td>Agent traces, conversations, LLM calls, tool calls</td>
+            <td>Apache 2.0 toolkit; ingests OpenTelemetry spans; multi-modal trace support</td>
+            <td>Apache 2.0 (open source)</td>
+            <td>Teams already using Weights &amp; Biases for ML experiment tracking</td>
+          </tr>
+          <tr>
+            <td><span class="fw-name">TruLens</span></td>
+            <td>Agent traces, logical consistency, tool calling, goal-plan-action alignment</td>
+            <td>Open source; reference-free goal-plan-action alignment metrics; CI/CD gates for Azure Pipelines, CircleCI, GitHub Actions. MLflow integrates TruLens scorers natively (2026).</td>
+            <td>Apache 2.0</td>
+            <td>Azure / MLflow shops; multi-step reasoning validation</td>
+          </tr>
+          <tr>
+            <td><span class="fw-name">RAGAS</span></td>
+            <td>RAG pipeline only (retrieval, faithfulness, relevancy)</td>
+            <td>Open source; specialized — not built for general agent or multi-turn eval</td>
+            <td>Apache 2.0</td>
+            <td>RAG pipeline quality only; combine with DeepEval for agent evals</td>
+          </tr>
+          <tr>
+            <td><span class="fw-name">Promptfoo</span></td>
+            <td>Security, prompt injection, red-teaming, vulnerability scanning</td>
+            <td>Open source CLI + CI integration; adversarial probing; now OpenAI's recommended migration target</td>
+            <td>MIT (open source)</td>
+            <td>Security testing, red-teaming, prompt injection harness</td>
+          </tr>
+          <tr>
+            <td><span class="fw-name">Inspect (UK AISI)</span></td>
+            <td>Safety, autonomy, cyberattack capability, tool use, multi-turn</td>
+            <td>MIT-licensed Python harness; METR, Apollo Research, and government testing bodies run on it. Inspect Hawk = METR's AWS infrastructure layer.</td>
+            <td>MIT (open source)</td>
+            <td>Safety evals, government / regulated-sector compliance, frontier risk assessment</td>
+          </tr>
+          <tr>
+            <td><span class="fw-name">Langfuse</span></td>
+            <td>Traces, spans, dataset evals</td>
+            <td>Open source + self-hosted option; privacy-first; no data leaves infrastructure</td>
+            <td>MIT (open source)</td>
+            <td>Privacy-sensitive deployments where traces cannot leave your infrastructure</td>
+          </tr>
+          <tr>
+            <td><span class="fw-name">Phoenix (Arize)</span></td>
+            <td>Traces, spans, production monitoring</td>
+            <td>Open source; OpenTelemetry-native; strong observability + eval pairing</td>
+            <td>Apache 2.0</td>
+            <td>Production monitoring + eval in one view</td>
+          </tr>
+          <tr>
+            <td><span class="fw-name fw-dead">OpenAI Evals (hosted)</span></td>
+            <td>—</td>
+            <td>Shutting down. Read-only 31 Oct 2026; removed 30 Nov 2026.</td>
+            <td>—</td>
+            <td>Migrate to Promptfoo</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="at-h2">Decision Guide</div>
+    <p class="at-p" style="margin-bottom:14px;">Match the tool to the question you're trying to answer:</p>
+
+    <div class="guide-row"><div class="guide-q">"Is my RAG retrieval quality good?"</div><div class="guide-a">RAGAS → DeepEval</div></div>
+    <div class="guide-row"><div class="guide-q">"Did my agent follow the right tool sequence?"</div><div class="guide-a">LangSmith (trajectory) · Braintrust · W&amp;B Weave</div></div>
+    <div class="guide-row"><div class="guide-q">"Can my agent be prompt-injected?"</div><div class="guide-a">Promptfoo (red-team mode)</div></div>
+    <div class="guide-row"><div class="guide-q">"I need traces to stay on-prem"</div><div class="guide-a">Langfuse (self-hosted)</div></div>
+    <div class="guide-row"><div class="guide-q">"I'm regulated — need audit-ready safety evidence"</div><div class="guide-a">Inspect (UK AISI) + NIST AI RMF documentation</div></div>
+    <div class="guide-row"><div class="guide-q">"My ontology changes monthly — I need a regression harness"</div><div class="guide-a">DeepEval in CI/CD + ontology-derived test cases (SHACL → pytest)</div></div>
+    <div class="guide-row"><div class="guide-q">"I'm on Azure / MLflow already"</div><div class="guide-a">TruLens (MLflow-native scorers)</div></div>
+    <div class="guide-row"><div class="guide-q">"I want versioned A/B of prompt changes"</div><div class="guide-a">Braintrust</div></div>
+
+    <hr class="at-divider">
+
+    <div class="at-h2">OpenTelemetry as the Common Layer</div>
+    <p class="at-p">All Generation 2 tools — LangSmith, W&amp;B Weave, TruLens, Langfuse, Phoenix — ingest OpenTelemetry (OTel) spans. This means you can swap the eval frontend without re-instrumenting your agent. The emerging pattern is: instrument once with OTel → fan out to multiple eval backends. The <code>agentevals</code> package (LangChain, not OpenAI) implements trajectory matching evaluators on top of OTel spans and works with any OpenTelemetry-instrumented framework using OpenAI models (e.g. o3-mini) as judges.</p>
+
+    <div class="at-h2">References</div>
+    <div class="ref-list">
+      <a class="ref-link" href="https://github.com/langchain-ai/agentevals" target="_blank">agentevals (LangChain) ↗</a>
+      <a class="ref-link" href="https://www.deepeval.com" target="_blank">DeepEval ↗</a>
+      <a class="ref-link" href="https://www.braintrust.dev" target="_blank">Braintrust ↗</a>
+      <a class="ref-link" href="https://www.trulens.org" target="_blank">TruLens ↗</a>
+      <a class="ref-link" href="https://inspect.ai-safety-institute.org.uk" target="_blank">Inspect (UK AISI) ↗</a>
+      <a class="ref-link" href="https://langfuse.com" target="_blank">Langfuse ↗</a>
+      <a class="ref-link" href="https://github.com/promptfoo/promptfoo" target="_blank">Promptfoo ↗</a>
+      <a class="ref-link" href="https://openai.com/index/introducing-agentkit/" target="_blank">OpenAI AgentKit announcement ↗</a>
+      <a class="ref-link" href="https://futureagi.com/blog/ci-cd-for-ai-agents-best-practices-2026/" target="_blank">CI/CD for AI agents 2026 ↗</a>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TAB 3 — INDUSTRY
+  ══════════════════════════════════════════════════════════ -->
+  <div class="at-panel at-wrap" id="tab-industry">
+
+    <div class="at-h2">AI Labs — Evaluation Approaches</div>
+    <div class="lab-grid">
+
+      <div class="lab-card">
+        <div class="lab-name">Anthropic</div>
+        <div class="lab-stat"><strong>SWE-bench Verified:</strong> Claude Opus 4.6 = 80.84% (Feb 2026, avg over 25 trials). Claude Opus 5 = 97.00% (Sep 2026, Vals.ai leaderboard).</div>
+        <div class="lab-stat"><strong>τ-bench (tau-bench):</strong> agentic task completion — agent interacts with simulated users and APIs in customer-service scenarios. Extended as τ²-bench (dual-control, 2025).</div>
+        <div class="lab-stat"><strong>System cards:</strong> Detailed methodology notes (e.g. averaging over 25 trials, multimodal, multilingual evals). Constitutional AI underpins internal safety eval structure.</div>
+        <div class="lab-note">Benchmark saturation debate: OpenAI argued Feb 2026 that SWE-bench Verified no longer measures frontier coding capability due to contamination. Anthropic methodology notes acknowledge this by averaging over many trials.</div>
+      </div>
+
+      <div class="lab-card">
+        <div class="lab-name">Google / DeepMind</div>
+        <div class="lab-stat"><strong>GAIA:</strong> 466 human-annotated tasks mixing text with attached files. Accuracy: 74.5% (2026 AI Index). Extended as Gaia2 — agents run against dynamic environment events that change world state during the task.</div>
+        <div class="lab-stat"><strong>AgentBench:</strong> evaluates agents across 8 environments — OS, Database, Knowledge Graph, Digital Card Game, Lateral Thinking, House-Holding, Web Shopping, Web Browsing.</div>
+        <div class="lab-stat"><strong>Vertex AI Agent Engine:</strong> trajectory evaluation is first-class. Final response eval + tool-call sequence eval both native. 2026 vendor comparison: Gemini 2.5 Pro reached 100% pass rate on a task suite at lower cost than Claude Managed Agents (slowest wall time).</div>
+        <div class="lab-note">Less publicly documented than Anthropic's system cards. Primary references are BigBench (older) and internal red-teaming.</div>
+      </div>
+
+      <div class="lab-card">
+        <div class="lab-name">OpenAI</div>
+        <div class="lab-stat"><strong>Hosted Evals — shutting down.</strong> Read-only 31 Oct 2026, removed 30 Nov 2026. Official migration: Promptfoo.</div>
+        <div class="lab-stat"><strong>openai/evals repo:</strong> continues as community benchmark registry and LLM eval framework. Not a trajectory evaluator; no CI/CD runner shipped.</div>
+        <div class="lab-stat"><strong>agentevals (LangChain):</strong> trajectory matching evaluators using OpenAI models (o3-mini) as judges. <code>create_trajectory_match_evaluator</code> — most-used pattern for OpenAI Agents SDK testing.</div>
+        <div class="lab-stat"><strong>AgentKit + RFT (2025):</strong> Reinforcement Fine-Tuning for agents. Limited public detail on built-in testing tooling beyond what is in the API.</div>
+        <div class="lab-note">OpenAI's own platform eval tooling is being deprecated. The OpenAI-native testing path is: OTel traces → agentevals → Promptfoo for security.</div>
+      </div>
+
+    </div>
+
+    <hr class="at-divider">
+
+    <div class="at-h2">Standards &amp; Governance</div>
+    <div class="std-table-wrap">
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>Standard / Body</th>
+            <th>Scope</th>
+            <th>Relevance to agent testing</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="std-name">NIST AI RMF 1.0</span><br>+ AI 600-1 (Gen AI Profile)</td>
+            <td>US — AI risk management</td>
+            <td>MEASURE function covers testing methodology. AI 600-1 is the agents-specific companion. Most common governance framework cited in financial services.</td>
+            <td><span class="std-live">Live</span></td>
+          </tr>
+          <tr>
+            <td><span class="std-name">NIST Agent Standards Initiative</span></td>
+            <td>US — agent security, identity, interoperability</td>
+            <td>Directly targets AI agents. Focuses on agent identity, trust, and interoperability — where eval evidence must land.</td>
+            <td><span class="std-active">Active (Feb 2026)</span></td>
+          </tr>
+          <tr>
+            <td><span class="std-name">ISO/IEC 42001</span></td>
+            <td>International — certifiable AI management</td>
+            <td>38 Annex A controls; audit-ready. Continuous testing evidence (eval runs, CI logs) feeds directly into the MEASURE and MANAGE controls. Used as the audit wrapper over NIST RMF.</td>
+            <td><span class="std-live">Live</span></td>
+          </tr>
+          <tr>
+            <td><span class="std-name">Inspect (UK AISI)</span></td>
+            <td>UK government — safety eval harness</td>
+            <td>MIT-licensed Python framework. METR, Apollo Research, and government bodies run on it. METR migrated from Vivaria onto Inspect (Jun 2026). Inspect Hawk = AWS infrastructure layer.</td>
+            <td><span class="std-live">Live · Government standard</span></td>
+          </tr>
+          <tr>
+            <td><span class="std-name">METR Time Horizon 1.1</span></td>
+            <td>Model capability assessment</td>
+            <td>Post-2023 capability doubling time = 130.8 days (Jan 2026 report). Frontier risk reports with agent capability assessments. Sets the context for what "safe" means over time.</td>
+            <td><span class="std-active">Active</span></td>
+          </tr>
+          <tr>
+            <td><span class="std-name">CSA Agentic Governance v1</span></td>
+            <td>Cloud Security Alliance</td>
+            <td>Maps NIST AI Agent Standards to agentic governance controls. Published Mar 2026.</td>
+            <td><span class="std-live">Published</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="at-divider">
+
+    <div class="at-h2">Regulatory &amp; Enterprise Context</div>
+
+    <div class="ins-card">
+      <div class="ins-title">EU AI Act — High-Risk Classification</div>
+      <div class="ins-body">Agents used in recruitment, credit, education, law enforcement, critical infrastructure, and healthcare are classified high-risk. <strong>Conformity assessment required</strong> before deployment — ISO 42001 is the most common certification path. Continuous monitoring evidence (eval run logs, CI pass rates) is a conformity artefact, not optional documentation.</div>
+    </div>
+
+    <div class="ins-card">
+      <div class="ins-title">SR 11-7 Extension to AI Agents (US Financial Services)</div>
+      <div class="ins-body">The Federal Reserve's SR 11-7 (Model Risk Management, 2011) is being extended to AI agents. An agent that makes a credit, pricing, or reserving decision must have documented validation evidence equivalent to a model validation — including out-of-sample testing and ongoing monitoring. <strong>Trajectory scoring provides this evidence; output scoring alone does not.</strong></div>
+    </div>
+
+    <div class="ins-card">
+      <div class="ins-title">Academic Work — Ontology-Grounded Testing (arXiv 2606.04037)</div>
+      <div class="ins-body">Proposes <strong>ontology-grounded simulation and trust certification</strong> as the pre-deployment verification method for enterprise AI agents. Key argument: no conformity-assessment standard yet exists for enterprise agents. The closest analogue is pharmaceutical clinical trial structure — phased, evidence-graded, independent review. Each MVO-based agent needs a formal trust certificate before it can make production decisions.</div>
+    </div>
+
+    <div class="ins-card">
+      <div class="ins-title">Compositional Policy Violations (arXiv 2609.18820)</div>
+      <div class="ins-body">Step-level compliance can pass while workflow-level compliance fails. An agent whose every tool call passes validation can still violate a business rule at the workflow level. Testing each agent in isolation is necessary but not sufficient — the workflow composition must also be tested. Critical for any multi-step, multi-agent orchestration.</div>
+    </div>
+
+    <div class="verdict">
+      <strong>The practical stack for an enterprise AI agent in 2026:</strong> Instrument with OpenTelemetry → DeepEval for output + task completion scoring in CI → LangSmith or W&amp;B Weave for trajectory review → ontology constraints auto-generate trap questions → Langfuse (self-hosted) where data cannot leave the tenant → ISO 42001 audit trail from CI logs → NIST AI RMF MEASURE function for the governance layer.
+    </div>
+
+    <div class="at-h2">References</div>
+    <div class="ref-list">
+      <a class="ref-link" href="https://arxiv.org/pdf/2606.04037" target="_blank">arXiv 2606.04037 — Ontology-grounded trust ↗</a>
+      <a class="ref-link" href="https://arxiv.org/pdf/2609.18820" target="_blank">arXiv 2609.18820 — Compositional policy violations ↗</a>
+      <a class="ref-link" href="https://arxiv.org/pdf/2505.08638" target="_blank">TRAIL — Trace Reasoning ↗</a>
+      <a class="ref-link" href="https://metr.org/blog/2026-05-19-frontier-risk-report/" target="_blank">METR Frontier Risk Report May 2026 ↗</a>
+      <a class="ref-link" href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/evaluation-agents" target="_blank">Vertex AI Agent Evaluation ↗</a>
+      <a class="ref-link" href="https://www-cdn.anthropic.com/c5fbac3f0b1280a933ebd26d3cb8bb9f5bdeaf48/Claude%20Opus%205%20System%20Card.pdf" target="_blank">Claude Opus 5 System Card ↗</a>
+      <a class="ref-link" href="https://www.vals.ai/benchmarks/swebench" target="_blank">SWE-bench Leaderboard ↗</a>
+      <a class="ref-link" href="https://labs.cloudsecurityalliance.org/wp-content/uploads/2026/03/governance-nist-ai-agent-standards-agentic-governance-v1-csa-styled.pdf" target="_blank">CSA Agentic Governance v1 ↗</a>
+    </div>
+
+  </div>
+
+  <script>
+    const ids = ['concepts','tooling','industry'];
+    function showTab(id) {
+      ids.forEach(t => {
+        document.getElementById('tab-' + t).classList.toggle('active', t === id);
+        document.querySelectorAll('.at-tab').forEach((el, i) => {
+          el.classList.toggle('active', ids[i] === id);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
