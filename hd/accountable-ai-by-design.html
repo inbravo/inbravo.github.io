@@ -1,0 +1,731 @@
+<script>(function(){var s;try{s=localStorage.getItem('kpi-aai-theme')}catch(e){}document.documentElement.setAttribute('data-theme',s&&s!=='system'?s:'light')})()</script>
+<title>Accountable AI by Design</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+  --bg:#FFFFFF;--bg-alt:#F5F8FC;--bg-navy:#0B1628;--bg-navy2:#112240;
+  --fg:#0D1B2A;--fg2:#4A5568;--fg3:#718096;
+  --fg-inv:rgba(255,255,255,.93);--fg-inv2:rgba(255,255,255,.62);
+  --acc:#0EA58A;--acc-lt:#E4F5F2;--acc-md:#0A8A73;--acc-dk:#076B5A;
+  --bdr:#E2E8F0;--bdr2:#CBD5E0;
+  --green:#27AE60;--green-bg:#EBF8F0;
+  --amber:#C57B14;--amber-bg:#FEF3DC;
+  --red:#C53030;--red-bg:#FFF5F5;
+  --blue:#2B6CB0;--blue-bg:#EBF4FF;
+  --r:8px;--r2:12px;
+  --sh:0 1px 4px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.06);
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D1117;--bg-alt:#161B22;--bg-navy:#030810;--bg-navy2:#0A1628;
+  --fg:#E6EDF3;--fg2:#8B949E;--fg3:#6E7681;
+  --bdr:#30363D;--bdr2:#484F58;
+  --acc-lt:#0C2B24;--green-bg:#0D2E1A;--amber-bg:#2A1E08;
+  --red-bg:#2E0A0A;--blue-bg:#0A1628;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0D1117;--bg-alt:#161B22;--bg-navy:#030810;--bg-navy2:#0A1628;
+  --fg:#E6EDF3;--fg2:#8B949E;--fg3:#6E7681;
+  --bdr:#30363D;--bdr2:#484F58;
+  --acc-lt:#0C2B24;--green-bg:#0D2E1A;--amber-bg:#2A1E08;
+  --red-bg:#2E0A0A;--blue-bg:#0A1628;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--fg);line-height:1.65}
+a{color:var(--acc-md);text-decoration:none}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:90;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--bdr)}
+:root[data-theme="dark"] .nav{background:rgba(13,17,23,.96)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:2px;
+  overflow-x:auto;scrollbar-width:none;padding-block:7px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px))}
+.nav-inner::-webkit-scrollbar{display:none}
+.nl{font-size:11px;font-weight:500;padding:3px 9px;border-radius:5px;color:var(--fg2);white-space:nowrap;transition:.15s}
+.nl:hover{background:var(--acc-lt);color:var(--acc-md)}
+.nav-end{margin-left:auto;display:flex;gap:6px;flex-shrink:0;padding-left:8px}
+.tbtn{font-size:11px;padding:3px 10px;border:1px solid var(--bdr);border-radius:5px;
+  background:none;color:var(--fg3);cursor:pointer;font-family:inherit;transition:.15s}
+.tbtn:hover{border-color:var(--acc);color:var(--acc)}
+
+/* section shells */
+.sec{padding-block:60px 64px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sec--alt{background:var(--bg-alt)}
+.sec--dark{background:var(--bg-navy);color:var(--fg-inv)}
+.wrap{max-width:1160px;margin:0 auto}
+.eyebrow{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin-bottom:8px}
+.sec-title{font-size:clamp(20px,2.6vw,30px);font-weight:700;margin-bottom:8px;text-wrap:balance}
+.sec-sub{font-size:15px;color:var(--fg2);max-width:660px;margin-bottom:32px;line-height:1.7}
+.sec--dark .sec-title{color:var(--fg-inv)}
+.sec--dark .sec-sub{color:var(--fg-inv2)}
+
+/* hero */
+.hero{background:var(--bg-navy);padding-block:72px 76px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px))}
+.hero-kicker{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:14px}
+.hero-title{font-size:clamp(28px,4vw,52px);font-weight:800;color:#fff;line-height:1.12;text-wrap:balance;margin-bottom:14px}
+.hero-title span{color:var(--acc)}
+.hero-sub{font-size:16px;color:rgba(255,255,255,.7);max-width:560px;line-height:1.7;margin-bottom:36px}
+.stat-strip{display:flex;flex-wrap:wrap;gap:10px}
+.stat-pill{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:12px 18px;min-width:180px}
+.stat-num{font-size:26px;font-weight:800;color:var(--acc);line-height:1;margin-bottom:4px;font-variant-numeric:tabular-nums}
+.stat-lbl{font-size:11px;color:rgba(255,255,255,.6);line-height:1.4}
+
+/* taxonomy */
+.tax{display:flex;flex-direction:column;gap:6px;margin-bottom:28px}
+.tax-zone{border:1.5px dashed rgba(14,165,138,.4);border-radius:14px;padding:10px;
+  display:flex;flex-direction:column;gap:6px;position:relative}
+.tax-zlbl{position:absolute;top:-10px;right:14px;background:var(--bg);
+  padding:2px 10px;font-size:10px;font-weight:700;color:var(--acc-md);
+  border-radius:20px;border:1px solid rgba(14,165,138,.3);white-space:nowrap;
+  letter-spacing:.06em;text-transform:uppercase}
+.tax-lay{border-radius:10px;padding:11px 14px;border:.5px solid var(--bdr)}
+.tax-top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.tax-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.tax-name{font-size:13px;font-weight:600;color:var(--fg);flex:1}
+.tax-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;
+  background:var(--acc-lt);color:var(--acc-md);border:1px solid rgba(14,165,138,.3);
+  white-space:nowrap;flex-shrink:0}
+.tax-role{font-size:10px;font-weight:500;color:var(--fg3);flex-shrink:0;
+  text-transform:uppercase;letter-spacing:.06em}
+.tax-desc{font-size:12px;color:var(--fg2);margin-bottom:6px;line-height:1.5}
+.tax-chips{display:flex;flex-wrap:wrap;gap:4px}
+.tx-chip{font-size:10px;padding:2px 7px;border-radius:4px;border:.5px solid var(--bdr2);
+  color:var(--fg2);background:var(--bg);white-space:nowrap}
+.tx-chip-k{border-color:rgba(14,165,138,.3);color:var(--acc-md);background:var(--acc-lt)}
+.tl4{background:var(--acc-lt)}.tl4 .tax-num{background:var(--acc-dk);color:#fff}
+.tl3{background:var(--blue-bg);border-color:rgba(43,108,176,.25)!important}
+.tl3 .tax-num{background:var(--blue);color:#fff}
+.tl3 .tax-desc{color:var(--blue)}
+.tl2{background:var(--amber-bg)}.tl2 .tax-num{background:var(--amber);color:#fff}
+.tl1{background:var(--bg-alt)}.tl1 .tax-num{background:var(--fg3);color:#fff}
+.tax-play{border:1px solid rgba(14,165,138,.25);border-radius:10px;padding:12px 16px;
+  background:var(--acc-lt)}
+.tax-play-lbl{font-size:12px;font-weight:700;color:var(--acc-dk);margin-bottom:3px}
+.tax-play-txt{font-size:12px;color:var(--acc-md);line-height:1.55}
+
+/* vocab */
+.vocab-box{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.vocab-card{border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px;flex:1;min-width:200px}
+.vocab-org{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--fg3);margin-bottom:4px}
+.vocab-term{font-size:13px;font-weight:700;color:var(--fg);margin-bottom:2px}
+.vocab-scope{font-size:12px;color:var(--fg2)}
+
+/* utility cards */
+.util-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:24px}
+.util-card{border:1px solid var(--bdr);border-radius:var(--r2);padding:14px 16px;
+  background:var(--bg);display:flex;flex-direction:column;gap:7px;transition:box-shadow .15s}
+.util-card:hover{box-shadow:var(--sh)}
+.util-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.util-name{font-size:13px;font-weight:700;color:var(--fg);line-height:1.3}
+.util-tag{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.ut-build{background:var(--acc-lt);color:var(--acc-md)}
+.ut-champ{background:var(--green-bg);color:var(--green)}
+.util-desc{font-size:12px;color:var(--fg2);line-height:1.5}
+.util-anchor{font-size:11px;color:var(--fg3);font-style:italic}
+.ev-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.ev-pill{font-size:11px;font-weight:500;padding:4px 11px;border-radius:5px;
+  background:var(--acc-lt);color:var(--acc-md);border:1px solid rgba(14,165,138,.2)}
+
+/* phase rail */
+.phase-rail{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-bottom:20px;padding-bottom:4px}
+.phase-rail::-webkit-scrollbar{display:none}
+.ph-btn{font-size:12px;font-weight:500;padding:7px 14px;border-radius:6px;
+  border:1.5px solid var(--bdr);background:var(--bg);color:var(--fg2);
+  cursor:pointer;white-space:nowrap;font-family:inherit;transition:.15s;flex-shrink:0}
+.ph-btn.active{background:var(--acc);border-color:var(--acc);color:#fff}
+.ph-btn:not(.active):hover{border-color:var(--acc);color:var(--acc-md)}
+.phase-panel{border:1.5px solid var(--bdr);border-radius:var(--r2);padding:20px 22px;background:var(--bg)}
+.ph-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.ph-title{font-size:16px;font-weight:700}
+.ph-goal{font-size:13px;color:var(--fg2);margin-top:2px;line-height:1.5}
+.ph-tool{font-size:11px;font-weight:500;padding:3px 10px;border-radius:5px;
+  background:var(--acc-lt);color:var(--acc-md);flex-shrink:0}
+.pattern-list{display:flex;flex-wrap:wrap;gap:6px}
+.pat{font-size:11px;font-weight:500;padding:4px 10px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--bdr);color:var(--fg)}
+.pat.spotlight{background:var(--acc-lt);border-color:rgba(14,165,138,.3);color:var(--acc-dk)}
+
+/* platform table */
+.pt-wrap{overflow-x:auto;border:1px solid var(--bdr);border-radius:var(--r2)}
+.pt{width:100%;border-collapse:collapse;font-size:12px;min-width:800px}
+.pt thead th{position:sticky;top:0;z-index:2;background:var(--bg-navy);
+  color:rgba(255,255,255,.9);padding:11px 13px;text-align:left;font-weight:600;
+  white-space:nowrap;border-right:1px solid rgba(255,255,255,.1)}
+.pt thead th:first-child{min-width:160px;position:sticky;left:0;z-index:3}
+.pt tbody td{padding:9px 13px;border-top:1px solid var(--bdr);vertical-align:top;line-height:1.4;color:var(--fg)}
+.pt tbody td:first-child{font-weight:600;font-size:11px;white-space:nowrap;
+  position:sticky;left:0;background:var(--bg);z-index:1;border-right:1px solid var(--bdr2)}
+.sec--alt .pt tbody td:first-child{background:var(--bg-alt)}
+.pt tbody tr:hover td{background:var(--acc-lt)}
+.pt tbody tr:hover td:first-child{background:var(--acc-lt)}
+
+/* gap */
+.gap-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;
+  border:1px solid var(--bdr);border-radius:var(--r2);overflow:hidden;margin-bottom:24px}
+@media(max-width:600px){.gap-wrap{grid-template-columns:1fr}}
+.gap-col{padding:20px}
+.gap-col:first-child{border-right:1px solid var(--bdr)}
+.gap-col-title{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--fg3);margin-bottom:8px}
+.gap-col-head{font-size:15px;font-weight:700;margin-bottom:4px;color:var(--fg)}
+.gap-col-sub{font-size:12px;color:var(--fg2);line-height:1.5;margin-bottom:12px}
+.gap-items{display:flex;flex-direction:column;gap:4px}
+.gap-item{font-size:12px;padding:5px 9px;border-radius:5px}
+.gap-item.has{background:var(--green-bg);color:var(--green)}
+.gap-item.no{background:var(--red-bg);color:var(--red)}
+.must-build-table{width:100%;border-collapse:collapse;font-size:12px}
+.must-build-table th{font-size:11px;font-weight:600;text-align:left;padding:8px 12px;
+  background:var(--bg-alt);color:var(--fg2);border:1px solid var(--bdr)}
+.must-build-table td{padding:9px 12px;border:1px solid var(--bdr);vertical-align:top}
+.must-build-table td:first-child{font-weight:500;white-space:nowrap}
+.must-build-table td:nth-child(2),.must-build-table td:nth-child(3){text-align:center;font-size:15px}
+.must-build-table td:last-child{font-size:11px;color:var(--fg2)}
+
+/* regulatory */
+.reg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:16px}
+.reg-card{border:1px solid var(--bdr);border-radius:var(--r);padding:16px 18px;background:var(--bg)}
+.reg-org{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);margin-bottom:5px}
+.reg-name{font-size:14px;font-weight:700;margin-bottom:5px;line-height:1.3}
+.reg-desc{font-size:12px;color:var(--fg2);line-height:1.5;margin-bottom:8px}
+.reg-date{font-size:11px;font-weight:500;color:var(--fg3);padding:2px 7px;
+  border:1px solid var(--bdr);border-radius:4px;display:inline-block}
+.sec-regs{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.sec-reg{font-size:11px;padding:4px 11px;border-radius:5px;border:1px solid var(--bdr);background:var(--bg);color:var(--fg2)}
+
+/* market signals */
+.ms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.ms-card{border:1px solid var(--bdr);border-radius:var(--r);padding:18px 20px;background:var(--bg)}
+.ms-num{font-size:28px;font-weight:800;color:var(--acc);line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums}
+.ms-lbl{font-size:13px;font-weight:600;margin-bottom:3px}
+.ms-src{font-size:11px;color:var(--fg3)}
+
+/* kpi positioning */
+.comp-table{width:100%;border-collapse:collapse;font-size:12px;min-width:520px}
+.comp-table th{background:var(--bg-navy);color:rgba(255,255,255,.8);padding:9px 12px;
+  text-align:left;font-size:11px;font-weight:600;border-right:1px solid rgba(255,255,255,.08)}
+.comp-table td{padding:9px 12px;border-bottom:1px solid var(--bdr);border-right:1px solid var(--bdr);font-size:12px;line-height:1.4}
+.comp-table tr:last-child td{border-bottom:none}
+.kpi-row td{background:var(--acc-lt);font-weight:600;color:var(--acc-dk)}
+.diff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:24px}
+.diff-card{border:1px solid var(--bdr);border-radius:var(--r2);padding:16px 18px;background:var(--bg)}
+.diff-num{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-bottom:10px}
+.diff-name{font-size:14px;font-weight:700;margin-bottom:6px}
+.diff-desc{font-size:12px;color:var(--fg2);line-height:1.55}
+
+/* cta + footer */
+.cta-title{font-size:clamp(22px,3vw,34px);font-weight:800;color:#fff;text-wrap:balance;margin-bottom:12px}
+.cta-sub{font-size:15px;color:rgba(255,255,255,.65);max-width:560px;line-height:1.7}
+.footer{background:var(--bg-navy);padding-block:20px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px))}
+.footer-inner{max-width:1160px;margin:0 auto;display:flex;flex-wrap:wrap;gap:6px;justify-content:space-between}
+.footer-txt{font-size:10px;color:rgba(255,255,255,.3)}
+</style>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nl" href="#top">Overview</a>
+    <a class="nl" href="#concept">Taxonomy</a>
+    <a class="nl" href="#kpi-play">KPI Play</a>
+    <a class="nl" href="#gap">Gov. Gap</a>
+    <a class="nl" href="#platform">Platform</a>
+    <a class="nl" href="#lifecycle">Patterns</a>
+    <a class="nl" href="#regulatory">Regulatory</a>
+    <a class="nl" href="#positioning">KPI</a>
+    <div class="nav-end">
+      <button class="tbtn" onclick="toggleTheme()">Theme</button>
+    </div>
+  </div>
+</nav>
+
+<!-- S1 HERO -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-kicker">KPI Partners · Customer Engagement Practice · Nov 2026</div>
+    <h1 class="hero-title">Accountable AI<br><span>by Design</span></h1>
+    <p class="hero-sub">The practitioner's guide to agent governance — what the industry calls "guardrails", what it actually requires, and where KPI's differentiated play sits.</p>
+    <div class="stat-strip">
+      <div class="stat-pill">
+        <div class="stat-num">81%</div>
+        <div class="stat-lbl">of BFSI firms run AI agents — yet only 14% have security approval. The fastest-adopting sector is the most under-governed. (AWS GEAR, 2026)</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-num">21%</div>
+        <div class="stat-lbl">of enterprises have mature governance for deployed agents (AWS GEAR, 2026)</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-num">$15.8B</div>
+        <div class="stat-lbl">AI governance software market by 2030 · 30% CAGR (Forrester)</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-num">Aug 26</div>
+        <div class="stat-lbl">EU AI Act Art. 9+17 enforcement — version-controlled test metrics legally required</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S2 TAXONOMY -->
+<section class="sec" id="concept">
+  <div class="wrap">
+    <div class="eyebrow">Taxonomy</div>
+    <h2 class="sec-title">AgentOS, Harness, Framework — what's what</h2>
+    <p class="sec-sub">The industry uses these terms interchangeably. They are not the same thing. Your governance investment lands in the wrong layer if you confuse them.</p>
+    <div class="tax">
+      <div class="tax-zone">
+        <span class="tax-zlbl">AgentOS scope — L3 + L4</span>
+        <div class="tax-lay tl4">
+          <div class="tax-top">
+            <div class="tax-num">L4</div>
+            <div class="tax-name">Agent Management Platform</div>
+            <span class="tax-role">Operate</span>
+          </div>
+          <div class="tax-desc">Fleet visibility, cost attribution, and governance across agents built on any framework. Gartner published its inaugural MQ for this category Nov 2026 — three Leaders named. By 2029, Gartner expects 60% of enterprise agents managed through an agent management platform.</div>
+          <div class="tax-chips">
+            <span class="tx-chip tx-chip-k">Microsoft Agent 365</span>
+            <span class="tx-chip tx-chip-k">IBM watsonx Orchestrate</span>
+            <span class="tx-chip tx-chip-k">ServiceNow AI Control Tower</span>
+            <span class="tx-chip">AWS (Challenger)</span>
+          </div>
+        </div>
+        <div class="tax-lay tl3">
+          <div class="tax-top">
+            <div class="tax-num">L3</div>
+            <div class="tax-name">Agent Harness / Runtime Governance</div>
+            <span class="tax-badge">← KPI configures &amp; extends</span>
+          </div>
+          <div class="tax-desc">Runtime enforcement — RBAC, circuit breakers, audit trails, PII redaction, cost gates, HITL. This is what "we need guardrails" actually means in an architecture review. Built into cloud platforms; KPI configures these, not replaces them.</div>
+          <div class="tax-chips">
+            <span class="tx-chip tx-chip-k">AWS AgentCore</span>
+            <span class="tx-chip tx-chip-k">Azure AGT</span>
+            <span class="tx-chip tx-chip-k">Databricks MLflow 3.0</span>
+            <span class="tx-chip tx-chip-k">Snowflake Cortex Gateway</span>
+            <span class="tx-chip tx-chip-k">Google Vertex AI Agent Builder</span>
+          </div>
+        </div>
+      </div>
+      <div class="tax-lay tl2">
+        <div class="tax-top">
+          <div class="tax-num">L2</div>
+          <div class="tax-name">Agent Orchestration</div>
+          <span class="tax-role">Coordinate</span>
+        </div>
+        <div class="tax-desc">Supervisor patterns, handoffs, routing between agents. Coordinates — does not govern.</div>
+        <div class="tax-chips">
+          <span class="tx-chip">LangGraph</span>
+          <span class="tx-chip">AG2 / AutoGen</span>
+          <span class="tx-chip">Google ADK</span>
+        </div>
+      </div>
+      <div class="tax-lay tl1">
+        <div class="tax-top">
+          <div class="tax-num">L1</div>
+          <div class="tax-name">Agent Framework / Runtime</div>
+          <span class="tax-role">Build</span>
+        </div>
+        <div class="tax-desc">The perceive → reason → act → observe loop. Builds individual agents — does not govern them.</div>
+        <div class="tax-chips">
+          <span class="tx-chip">Pydantic AI</span>
+          <span class="tx-chip">smolagents</span>
+          <span class="tx-chip">Google ADK</span>
+        </div>
+      </div>
+      <div class="tax-play">
+        <div class="tax-play-lbl">KPI's play — above L3, not inside it</div>
+        <div class="tax-play-txt">KPI configures and extends your existing cloud harness. The differentiated value is domain utilities and opinionated configurations — each with a measurable before/after output. Details in the next section.</div>
+      </div>
+    </div>
+    <div class="vocab-box">
+      <div class="vocab-card">
+        <div class="vocab-org">Gartner · MQ 2026</div>
+        <div class="vocab-term">AI Agent Management Platforms</div>
+        <div class="vocab-scope">Leaders: Microsoft, IBM, ServiceNow (Gartner MQ Nov 2026)</div>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-org">Forrester · Q3 2026</div>
+        <div class="vocab-term">Agentic Development Platforms</div>
+        <div class="vocab-scope">25 vendors; Wave report Q4 2026</div>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-org">Forrester · Blog 2026</div>
+        <div class="vocab-term">Agent Control Plane</div>
+        <div class="vocab-scope">"Still lacks a robust standards stack"</div>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-org">Gartner · Market Guide Feb 2026</div>
+        <div class="vocab-term">Guardian Agents</div>
+        <div class="vocab-scope">Reviewer · Monitor · Protector &gt;$3B by 2030</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S3 KPI DIFFERENTIATED PLAY -->
+<section class="sec sec--alt" id="kpi-play">
+  <div class="wrap">
+    <div class="eyebrow">KPI Differentiated Play</div>
+    <h2 class="sec-title">Not the harness — what makes the harness useful</h2>
+    <p class="sec-sub">Platform companies build L3 infrastructure. KPI builds the opinionated utilities and configurations that sit on top — specific to enterprise domains, measurable before/after. The same model Tredence used for semantic-layer token efficiency: don't build the database, build the utility that tests the database's quality for AI use.</p>
+    <div class="util-grid">
+      <div class="util-card">
+        <div class="util-top">
+          <div class="util-name">Semantic Layer AI Readiness Score</div>
+          <span class="util-tag ut-build">Build</span>
+        </div>
+        <div class="util-desc">Audits LookML, dbt metrics, or Tableau extensions for AI-readiness. Runs test agent queries before and after, measures token reduction % and answer accuracy delta. Produces a ranked fix list.</div>
+        <div class="util-anchor">Anchors in BI practice — KPI already implements semantic layers for clients.</div>
+      </div>
+      <div class="util-card">
+        <div class="util-top">
+          <div class="util-name">Golden Dataset Factory</div>
+          <span class="util-tag ut-build">Build</span>
+        </div>
+        <div class="util-desc">Generates domain eval suites from existing BI reports. Extracts known Q&amp;A pairs → structures as RAGAS-compatible eval cases → wires to CI. Compresses 6-week eval construction to days.</div>
+        <div class="util-anchor">High reuse across verticals — every client has BI reports; almost none have structured eval suites.</div>
+      </div>
+      <div class="util-card">
+        <div class="util-top">
+          <div class="util-name">Context Compression Benchmarker</div>
+          <span class="util-tag ut-build">Build</span>
+        </div>
+        <div class="util-desc">Tests chunking strategies, embedding models, and retrieval parameters against a client's document corpus. Measures token efficiency vs. answer faithfulness. Outputs an optimal "context recipe."</div>
+        <div class="util-anchor">40–70% token reduction routinely available. Most clients never measure it.</div>
+      </div>
+      <div class="util-card">
+        <div class="util-top">
+          <div class="util-name">Agent Output Consistency Checker</div>
+          <span class="util-tag ut-build">Build</span>
+        </div>
+        <div class="util-desc">Tests whether an agent returns semantically equivalent answers to rephrased questions. Flags divergence beyond a threshold. Produces a "consistency score" — a key audit metric for financial agents under EU AI Act Art. 9.</div>
+        <div class="util-anchor">BFSI regulators require version-controlled test metrics. This is the simplest metric that maps to that requirement.</div>
+      </div>
+      <div class="util-card">
+        <div class="util-top">
+          <div class="util-name">Data-to-Agent Contract Validator</div>
+          <span class="util-tag ut-build">Build</span>
+        </div>
+        <div class="util-desc">YAML metadata spec overlaid on Unity Catalog or Snowflake Horizon — annotates data assets with AI-consumption rules: PII sensitivity, allowed agents, business rules. Validates agent data access before promotion.</div>
+        <div class="util-anchor">Extends existing data platform engagement into AI governance with no custom harness required.</div>
+      </div>
+      <div class="util-card">
+        <div class="util-top">
+          <div class="util-name">OWASP AIT10 Reference Test Kit</div>
+          <span class="util-tag ut-champ">Champion</span>
+        </div>
+        <div class="util-desc">PromptFoo test suite covering all 10 Agentic AI failure modes (ASI01–ASI10): prompt injection, tool poisoning, excessive agency, and more. Sector variants for BFSI and CX. Standard pre-go-live gate.</div>
+        <div class="util-anchor">Referenced in BFSI RFPs by name since Dec 2025.</div>
+      </div>
+    </div>
+    <div class="ev-row">
+      <span class="ev-pill">JPMorgan Chase FSB submission — gateway pattern reference architecture</span>
+      <span class="ev-pill">Barclays BCBS 239 Wave 2 — LeapLogic + LLM lineage harness</span>
+      <span class="ev-pill">NSA advisory — MCP has no protocol-level enforcement; gateway required</span>
+    </div>
+  </div>
+</section>
+
+<!-- S4 MODEL PROVIDER GAP -->
+<section class="sec" id="gap">
+  <div class="wrap">
+    <div class="eyebrow">Structural Gap</div>
+    <h2 class="sec-title">Training-time safety ≠ runtime governance</h2>
+    <p class="sec-sub">Constitutional AI and Model Spec are behavioral priors baked into model weights. They reduce the probability of harmful outputs. They provide no RBAC, no audit trail, no circuit breakers. This is a structural gap — not a product lag.</p>
+    <div class="gap-wrap">
+      <div class="gap-col">
+        <div class="gap-col-title">Training-time safety</div>
+        <div class="gap-col-head">Constitutional AI · Model Spec · RLHF</div>
+        <div class="gap-col-sub">Governs model behavior at inference. The model "tries" to refuse harmful requests. Can be overridden by a sufficiently adversarial system prompt.</div>
+        <div class="gap-items">
+          <div class="gap-item has">✓ Reduces probability of harmful outputs</div>
+          <div class="gap-item has">✓ Refusal classifiers in model weights</div>
+          <div class="gap-item no">✗ No RBAC — anyone with an API key gets the same model</div>
+          <div class="gap-item no">✗ No audit trail — model doesn't log tool calls</div>
+          <div class="gap-item no">✗ No circuit breakers — model doesn't halt after N iterations</div>
+          <div class="gap-item no">✗ No delegation-chain enforcement</div>
+        </div>
+      </div>
+      <div class="gap-col">
+        <div class="gap-col-title">Runtime governance</div>
+        <div class="gap-col-head">What enterprises must build or configure</div>
+        <div class="gap-col-sub">Enforcement happens outside model weights — at the gateway, in the harness, in the orchestration layer. This is what regulated enterprises require.</div>
+        <div class="gap-items">
+          <div class="gap-item no">✗ RBAC (who can call what agent / tool)</div>
+          <div class="gap-item no">✗ Audit trail of every tool call and hop</div>
+          <div class="gap-item no">✗ Rate / cost circuit breakers per agent</div>
+          <div class="gap-item no">✗ PII redaction layer (GDPR, HIPAA)</div>
+          <div class="gap-item no">✗ Prompt injection defense (OWASP ASI01)</div>
+          <div class="gap-item no">✗ Human approval gates (EU AI Act Art. 14)</div>
+        </div>
+      </div>
+    </div>
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:14px">What you must configure on model providers</h3>
+    <div style="overflow-x:auto">
+    <table class="must-build-table">
+      <thead><tr>
+        <th style="min-width:180px">Control required</th>
+        <th>Anthropic API</th><th>OpenAI API</th><th>Required by</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Per-agent identity</td><td>❌</td><td>❌</td><td>OWASP ASI01 · EU AI Act Art. 9</td></tr>
+        <tr><td>Audit trail of tool calls</td><td>❌</td><td>⚡ 30-day limit</td><td>NIST AI RMF · ISO 42001 Cl. 8</td></tr>
+        <tr><td>RBAC per agent / tool</td><td>⚡ MCP auth (partial)</td><td>❌</td><td>AIUC-1 · internal compliance</td></tr>
+        <tr><td>Rate / cost circuit breakers</td><td>❌</td><td>❌</td><td>FinOps · risk management</td></tr>
+        <tr><td>PII redaction</td><td>❌</td><td>❌</td><td>GDPR · CCPA · HIPAA</td></tr>
+        <tr><td>Prompt injection defense</td><td>⚠ Protocol warning only</td><td>❌</td><td>OWASP ASI01</td></tr>
+        <tr><td>Human approval gates</td><td>⚡ SDK interrupt only</td><td>⚡ SDK interrupt only</td><td>EU AI Act Art. 14 · HITL</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:12px;color:var(--fg3);margin-top:10px">Business model tension: model providers monetize on token consumption; governance controls that limit consumption are economically adverse. Infrastructure providers (AWS, Azure, Databricks) monetize on platform lock-in — governance drives stickiness. That's why the enforcement layer belongs to infrastructure, not model providers.</p>
+  </div>
+</section>
+
+<!-- S5 PLATFORM COMPARISON -->
+<section class="sec sec--alt" id="platform">
+  <div class="wrap">
+    <div class="eyebrow">Platform Comparison · 7 platforms · 10 governance dimensions</div>
+    <h2 class="sec-title">Who is building the Agentic Control Plane — and how fast</h2>
+    <p class="sec-sub">Assessed across governance specification depth, enforcement completeness, identity, observability, and strategic direction. Sources: Gartner MQ 2026, Forrester Q3 2026, platform documentation, Nov 2026.</p>
+    <div class="pt-wrap">
+    <table class="pt">
+      <thead><tr>
+        <th>Dimension</th>
+        <th>Microsoft<br><small style="font-weight:400;opacity:.7">AGT + Fabric + Agent 365</small></th>
+        <th>AWS<br><small style="font-weight:400;opacity:.7">Bedrock + AgentCore</small></th>
+        <th>Databricks<br><small style="font-weight:400;opacity:.7">Mosaic AI + Agent Bricks</small></th>
+        <th>Snowflake<br><small style="font-weight:400;opacity:.7">Cortex AI + Horizon</small></th>
+        <th>Google<br><small style="font-weight:400;opacity:.7">GEAP + A2A</small></th>
+        <th>Anthropic<br><small style="font-weight:400;opacity:.7">Claude + MCP</small></th>
+        <th>OpenAI<br><small style="font-weight:400;opacity:.7">Agents SDK</small></th>
+      </tr></thead>
+      <tbody id="ptBody"></tbody>
+    </table>
+    </div>
+    <p style="font-size:11px;color:var(--fg3);margin-top:10px">✅ Full / native &nbsp;⚡ Partial / emerging &nbsp;❌ None / must build &nbsp;🔥 Best-in-class · Scroll horizontally on narrow screens.</p>
+  </div>
+</section>
+
+<!-- S6 DESIGN PATTERNS -->
+<section class="sec" id="lifecycle">
+  <div class="wrap">
+    <div class="eyebrow">Design Patterns · 18 spotlight patterns across 6 phases</div>
+    <h2 class="sec-title">Governance applied per lifecycle phase — not bolted on at the end</h2>
+    <p class="sec-sub">Each phase has distinct governance obligations. Spotlight patterns are the ones that matter most in enterprise architecture reviews and regulatory audits.</p>
+    <div class="phase-rail" id="phaseRail"></div>
+    <div class="phase-panel" id="phasePanel"></div>
+  </div>
+</section>
+
+<!-- S7 REGULATORY COMPASS -->
+<section class="sec sec--alt" id="regulatory">
+  <div class="wrap">
+    <div class="eyebrow">Regulatory Compass</div>
+    <h2 class="sec-title">Four frameworks shaping enterprise agent governance</h2>
+    <p class="sec-sub">These are the frameworks cited in procurement RFPs and architecture reviews. Know the obligations before the auditor does.</p>
+    <div class="reg-grid">
+      <div class="reg-card">
+        <div class="reg-org">European Union</div>
+        <div class="reg-name">EU AI Act Art. 9 + 17</div>
+        <div class="reg-desc">Risk management system + quality management. Version-controlled test metrics legally required for high-risk AI. Credit scoring, insurance risk pricing = Annex III.</div>
+        <div class="reg-date">Enforcement Aug 2026</div>
+      </div>
+      <div class="reg-card">
+        <div class="reg-org">NIST</div>
+        <div class="reg-name">AI Risk Management Framework 1.0</div>
+        <div class="reg-desc">Govern / Map / Measure / Manage functions. The US enterprise governance baseline. Maps directly to harness component requirements.</div>
+        <div class="reg-date">GA 2023 · Agentic update 2025</div>
+      </div>
+      <div class="reg-card">
+        <div class="reg-org">ISO / IEC</div>
+        <div class="reg-name">ISO 42001:2023</div>
+        <div class="reg-desc">AI management system standard. Clause 8 requires documented AI system lifecycle processes including testing and monitoring. Audit-ready evidence trail.</div>
+        <div class="reg-date">Published Dec 2023</div>
+      </div>
+      <div class="reg-card">
+        <div class="reg-org">OWASP</div>
+        <div class="reg-name">Agentic AI Top 10</div>
+        <div class="reg-desc">ASI01–ASI10. Published Dec 2025. Fastest-adopted failure-mode taxonomy in the industry. CDOs reference it by name in BFSI RFPs. The red-team test matrix.</div>
+        <div class="reg-date">Published Dec 2025</div>
+      </div>
+    </div>
+    <div class="sec-regs">
+      <span class="sec-reg">AIUC-1 Certification (UiPath first certified)</span>
+      <span class="sec-reg">Singapore MAIGF v1.5 · May 2026</span>
+      <span class="sec-reg">ABS GenAI Guardrails Handbook</span>
+      <span class="sec-reg">NIST AI 600-1 (GenAI supplement)</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- S9 KPI POSITIONING -->
+<section class="sec sec--alt" id="positioning">
+  <div class="wrap">
+    <div class="eyebrow">KPI Positioning</div>
+    <h2 class="sec-title">"Accountable AI by Design" — an unclaimed position</h2>
+    <p class="sec-sub">Every major consultancy has staked a governance phrase. None own the utility-first, platform-native, eval-driven framing that enterprise architects actually need.</p>
+    <div style="overflow-x:auto;margin-bottom:24px">
+    <table class="comp-table">
+      <thead><tr><th>Firm</th><th>Governance Phrase</th><th>Primary Lens</th><th>What's Missing</th></tr></thead>
+      <tbody>
+        <tr><td>IBM</td><td>Trustworthy AI</td><td>Ethics + model bias</td><td>Runtime enforcement depth</td></tr>
+        <tr><td>Accenture</td><td>Responsible AI</td><td>Principles + policy</td><td>Platform-native delivery</td></tr>
+        <tr><td>Deloitte</td><td>AI Assurance</td><td>Audit + compliance</td><td>Agentic-specific patterns</td></tr>
+        <tr><td>KPMG</td><td>AI Trust (May 2025)</td><td>Risk management</td><td>Measurable utility output</td></tr>
+        <tr class="kpi-row"><td>KPI Partners</td><td>Accountable AI by Design</td><td>Utility-first · Platform-native · Eval-driven</td><td>—</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="diff-grid">
+      <div class="diff-card">
+        <div class="diff-num">①</div>
+        <div class="diff-name">Utility-first, not infrastructure-first</div>
+        <div class="diff-desc">KPI builds measurable accelerators on top of your existing harness — not a competing harness. Semantic Layer AI Readiness Score, Golden Dataset Factory, Context Compression Benchmarker. Each has a specific before/after output, like the Tredence semantic-layer token utility model.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">②</div>
+        <div class="diff-name">Platform-native configuration</div>
+        <div class="diff-desc">KPI configures AWS AgentCore, Azure AGT, Databricks MLflow, and Snowflake Cortex — not a proprietary harness. One less vendor to trust, one less thing to certify. Clients already paying for these platforms get governance from their own stack.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">③</div>
+        <div class="diff-name">Eval-driven from day one</div>
+        <div class="diff-desc">Write evals before prompts. Golden datasets built from the client's own BI reports. The 89%/52% observability-vs-eval gap is the direct entry point: most clients have monitoring, almost none have structured evals wired to CI.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S10 CTA -->
+<section class="sec sec--dark" id="assessment">
+  <div class="wrap" style="max-width:680px">
+    <div class="eyebrow" style="color:var(--acc)">Next Step</div>
+    <h2 class="cta-title">Ready to govern your agents before the incident?</h2>
+    <p class="cta-sub">KPI Partners helps enterprise teams close the governance gap — from platform configuration and harness selection to eval pipelines and regulatory readiness. Platform-native, utility-first.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="footer-txt">KPI Partners · Accountable AI by Design · Internal · Not for distribution · Nov 2026</span>
+    <span class="footer-txt">Research: Gartner MQ 2026 · Forrester Q3 2026 · OWASP Dec 2025 · Platform documentation</span>
+  </div>
+</footer>
+
+<script>
+function toggleTheme(){
+  var t=document.documentElement.getAttribute('data-theme');
+  var n=t==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',n);
+  try{localStorage.setItem('kpi-aai-theme',n)}catch(e){}
+}
+
+const PHASES=[
+  {id:'design',label:'Design',color:'#0EA58A',
+   goal:'Define agent scope, identity, memory architecture, and escalation triggers before any code is written.',
+   tool:'Identity modelling · X.509 / agentic_ctx JWT',
+   patterns:[
+    {name:'Least-privilege tool access',s:false},
+    {name:'Agent Identity Model (X.509)',s:false},
+    {name:'HITL Escalation — 4 trigger types',s:true},
+  ]},
+  {id:'build',label:'Build',color:'#2B6CB0',
+   goal:'Write production-quality agent code with type-safe schemas, guardian insertion, and sandboxed tool execution.',
+   tool:'Pydantic AI · LangGraph · E2B sandbox',
+   patterns:[
+    {name:'Evals-as-code / trace-first development',s:true},
+    {name:'Type-safe tool schemas (Pydantic AI)',s:true},
+    {name:'Guardian agent insertion',s:true},
+    {name:'Sandboxed code execution (E2B)',s:false},
+  ]},
+  {id:'test',label:'Test',color:'#553C9A',
+   goal:'Systematic quality validation before any production promotion — offline evals, adversarial tests, trajectory checks.',
+   tool:'RAGAS · DeepEval · PromptFoo · Braintrust',
+   patterns:[
+    {name:'Trajectory evaluation (tool-call correctness)',s:true},
+    {name:'OWASP AIT10 red-team suite (ASI01–ASI10)',s:true},
+    {name:'Offline eval suite wired to CI',s:true},
+    {name:'Context faithfulness scoring',s:false},
+  ]},
+  {id:'deploy',label:'Deploy',color:'#C57B14',
+   goal:'Promote agents with policy gates, version control, and kill switches wired before go-live.',
+   tool:'Policy-as-code (Cedar / AGT YAML) · OTel',
+   patterns:[
+    {name:'3-level kill switch (soft / hard / emergency)',s:true},
+    {name:'Policy-as-code deployment gate',s:true},
+    {name:'MCP governance patterns',s:false},
+  ]},
+  {id:'runtime',label:'Runtime',color:'#C53030',
+   goal:'Continuous enforcement during live agent operation — circuit breakers, PII guards, anomaly response.',
+   tool:'AWS AgentCore · Azure Content Safety · MLflow',
+   patterns:[
+    {name:'Circuit breaker — cost + iteration limits',s:true},
+    {name:'PII sentinel (regex + ML entity detection)',s:false},
+    {name:'Prompt injection defense (OWASP ASI01)',s:true},
+    {name:'Human approval gate escalation',s:false},
+  ]},
+  {id:'incident',label:'Incident',color:'#2B6CB0',
+   goal:'Structured response when an agent fails — root cause attribution, chain reconstruction, remediation.',
+   tool:'LangSmith traces · OTel spans · audit trail',
+   patterns:[
+    {name:'Responsibility laundering detection',s:true},
+    {name:'Tool-call chain reconstruction',s:false},
+    {name:'Kill switch activation protocol',s:true},
+  ]},
+];
+
+function renderPhase(idx){
+  const p=PHASES[idx];
+  document.querySelectorAll('.ph-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  document.getElementById('phasePanel').innerHTML=`
+    <div class="ph-header">
+      <div>
+        <div class="ph-title" style="color:${p.color}">${p.label}</div>
+        <div class="ph-goal">${p.goal}</div>
+      </div>
+      <span class="ph-tool">${p.tool}</span>
+    </div>
+    <div class="pattern-list">
+      ${p.patterns.map(pt=>`<span class="pat${pt.s?' spotlight':''}">${pt.name}</span>`).join('')}
+    </div>`;
+}
+const rail=document.getElementById('phaseRail');
+PHASES.forEach((p,i)=>{
+  const b=document.createElement('button');
+  b.className='ph-btn'+(i===0?' active':'');
+  b.textContent=p.label;
+  b.onclick=()=>renderPhase(i);
+  rail.appendChild(b);
+});
+renderPhase(0);
+
+const PT_ROWS=[
+  {d:'Policy-as-code spec',ms:'✅ YAML · MIT · 5-checkpoint',aws:'✅ Cedar',db:'⚡ Partial',sn:'⚡ Partial',goog:'❌',anth:'❌',oai:'❌'},
+  {d:'Runtime guardrails',ms:'✅ ACS — topic, PII, grounding',aws:'🔥 6 native types',db:'⚡ AI Gateway beta',sn:'✅ Cortex Gateway GA',goog:'⚡ Vertex AI',anth:'❌ Training-time only',oai:'❌'},
+  {d:'Agent identity / RBAC',ms:'🔥 Entra Agent ID GA',aws:'⚡ IAM roles',db:'✅ Unity Catalog',sn:'✅ Agent Identity GA',goog:'⚡ Service accounts',anth:'❌',oai:'❌'},
+  {d:'Audit / OTel tracing',ms:'✅ Azure Monitor',aws:'✅ CloudWatch',db:'🔥 MLflow 3.0 OTel',sn:'✅ Cortex tracing',goog:'✅ Cloud Trace',anth:'❌',oai:'❌'},
+  {d:'Cost / token controls',ms:'✅ Prompt budgets',aws:'✅ Spend limits',db:'✅ Budget policies',sn:'✅ Cortex controls',goog:'⚡ Quota API',anth:'❌',oai:'❌'},
+  {d:'Native eval / testing',ms:'⚡ Azure AI Foundry',aws:'⚡ Bedrock evals',db:'🔥 Human Review App',sn:'⚡ Cortex Analyst',goog:'✅ Vertex AI eval',anth:'⚡ API evals only',oai:'❌ Evals retiring Nov 26'},
+  {d:'HITL gates',ms:'✅ Approval flows',aws:'✅ AgentCore HITL',db:'✅ Human Review App',sn:'⚡ Partial',goog:'⚡ Partial',anth:'⚡ SDK interrupt',oai:'⚡ SDK interrupt'},
+  {d:'Unique security feature',ms:'🔥 Entra Agent ID',aws:'🔥 Automated Reasoning',db:'Unity Catalog lineage',sn:'Natoma acq. (data contracts)',goog:'A2A inter-agent trust',anth:'MCP (Linux Fdn)',oai:'—'},
+  {d:'Inter-agent protocol',ms:'⚡ AGT routing',aws:'⚡ AgentCore mesh',db:'⚡ LangGraph native',sn:'⚡ Cortex mesh',goog:'🔥 A2A v1.0 (Linux Fdn)',anth:'✅ MCP (Linux Fdn)',oai:'❌'},
+  {d:'Analyst position',ms:'🔥 Gartner MQ Leader',aws:'MQ Strong Performer',db:'Not in MQ 2026',sn:'Not in MQ 2026',goog:'MQ Visionary',anth:'Not in MQ',oai:'Not in MQ'},
+];
+const tbody=document.getElementById('ptBody');
+PT_ROWS.forEach(r=>{
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td>${r.d}</td><td>${r.ms}</td><td>${r.aws}</td><td>${r.db}</td><td>${r.sn}</td><td>${r.goog}</td><td>${r.anth}</td><td>${r.oai}</td>`;
+  tbody.appendChild(tr);
+});
+</script>
