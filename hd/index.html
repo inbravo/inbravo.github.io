@@ -1,0 +1,414 @@
+<title>KPI CE Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;--dim:#94A3B8;
+  --accent:#0EA58A;--accent-dim:#ECFDF9;
+  --teal:#0284C7;--teal-dim:#E0F2FE;
+  --hdr:#0B1628;--hdr-text:#F1F5F9;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.1),0 12px 32px rgba(0,0,0,.08);
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0B1628;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;
+  --accent-dim:#064E3B;--teal-dim:#0C4A6E;
+  --hdr:#060E1A;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
+}}
+:root[data-theme="dark"]{
+  --bg:#0B1628;--surface:#1E293B;--surface2:#0F172A;--border:#334155;
+  --text:#F1F5F9;--muted:#94A3B8;--dim:#64748B;
+  --accent-dim:#064E3B;--teal-dim:#0C4A6E;
+  --hdr:#060E1A;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  --shadow-hover:0 4px 12px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:13px;scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;min-height:100vh}
+h1,h2,h3{font-family:'Plus Jakarta Sans',system-ui,sans-serif;line-height:1.2}
+
+/* ── HEADER ── */
+.hdr{background:var(--hdr);color:var(--hdr-text);padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:100}
+.hdr-brand{display:flex;align-items:center;gap:.75rem}
+.hdr-badge{background:#0EA58A;color:#fff;font-size:.65rem;font-weight:700;padding:.15rem .45rem;border-radius:.25rem;letter-spacing:.05em;font-family:'Plus Jakarta Sans',sans-serif}
+.hdr-title{font-size:.95rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hdr-text)}
+.hdr-meta{display:flex;align-items:center;gap:.75rem;font-size:.72rem;color:#94A3B8}
+.theme-btn{background:none;border:1px solid #334155;color:#94A3B8;border-radius:.375rem;padding:.25rem .6rem;cursor:pointer;font-size:.8rem;transition:border-color .15s,color .15s;font-family:inherit}
+.theme-btn:hover{border-color:#0EA58A;color:var(--hdr-text)}
+
+/* ── HERO ── */
+.hero{padding:2.5rem 1.5rem 1.5rem;text-align:center;max-width:560px;margin:0 auto}
+.hero-eyebrow{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:.6rem}
+.hero-title{font-size:1.75rem;font-weight:800;color:var(--text);margin-bottom:.6rem}
+.hero-sub{font-size:.82rem;color:var(--muted);line-height:1.6;max-width:420px;margin:0 auto}
+
+/* ── SECTION LABEL ── */
+.section-label{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-family:'Plus Jakarta Sans',sans-serif;padding:.5rem 1.5rem 0;max-width:960px;margin:0 auto}
+
+/* ── CARD GRID ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;padding:1rem 1.5rem 1.5rem;max-width:960px;margin:0 auto}
+
+/* ── CARD ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:.625rem;overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .2s,transform .2s;display:flex;flex-direction:column}
+.card:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px)}
+.card-strip{height:4px}
+.card-body{padding:1.25rem;flex:1;display:flex;flex-direction:column;gap:.75rem}
+.card-icon{font-size:1.75rem;line-height:1}
+.card-title{font-size:1rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text)}
+.card-desc{font-size:.75rem;color:var(--muted);line-height:1.6;flex:1}
+.card-tags{display:flex;flex-wrap:wrap;gap:.35rem}
+.tag{font-size:.6rem;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.04em;padding:.2rem .5rem;border-radius:.25rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border)}
+.card-footer{padding:.875rem 1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-updated{font-size:.65rem;color:var(--dim)}
+.btn-open{display:inline-flex;align-items:center;gap:.35rem;padding:.375rem .875rem;border-radius:.375rem;font-size:.72rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;text-decoration:none;transition:opacity .15s,transform .1s;cursor:pointer}
+.btn-open:hover{opacity:.88;transform:translateX(2px)}
+.btn-open svg{width:12px;height:12px;flex-shrink:0}
+
+/* ── FOOTER ── */
+.page-footer{text-align:center;padding:2rem 1rem;font-size:.65rem;color:var(--dim);border-top:1px solid var(--border);margin-top:1rem}
+</style>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-brand">
+    <span class="hdr-badge">KPI</span>
+    <span class="hdr-title">Customer Engagement Hub</span>
+  </div>
+  <div class="hdr-meta">
+    <span>CE Practice · 2026</span>
+    <button class="theme-btn" id="themeBtn">🌙</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Internal Delivery Assets</div>
+  <h1 class="hero-title">CE Intelligence &amp; Playbooks</h1>
+  <p class="hero-sub">All Customer Engagement assets — assessment playbooks, strategy briefs, market intelligence, demos, and delivery frameworks for the KPI CE practice.</p>
+</section>
+
+<!-- SECTION: ASSESSMENT & DELIVERY -->
+<div class="section-label">Assessment &amp; Delivery</div>
+<main class="grid">
+
+  <!-- Card: CE Agent Readiness Playbook -->
+  <article class="card">
+    <div class="card-strip" style="background:linear-gradient(90deg,#0EA58A,#0284C7)"></div>
+    <div class="card-body">
+      <div class="card-icon">📋</div>
+      <div class="card-title">CE Agent Readiness Playbook</div>
+      <p class="card-desc">12-section internal delivery playbook for the 4-week CE Assessment — 6 agent classes, 8-pillar scoring, floor matrix calculator, OSI quick win spec, kill rules, competitive reference, and security &amp; compliance standards.</p>
+      <div class="card-tags">
+        <span class="tag">Playbook · v1.0</span>
+        <span class="tag">8 Pillars</span>
+        <span class="tag">6 Agent Classes</span>
+        <span class="tag">$30–40K</span>
+        <span class="tag">Internal</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Nov 2026</span>
+      <a href="kpi-ce-assessment-playbook.html" class="btn-open" style="background:linear-gradient(90deg,#0EA58A,#0284C7);color:#fff">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+  <!-- Card: KPI 2027 CE Growth Plan -->
+  <article class="card">
+    <div class="card-strip" style="background:linear-gradient(90deg,#6366F1,#0EA58A)"></div>
+    <div class="card-body">
+      <div class="card-icon">🗺️</div>
+      <div class="card-title">KPI 2027 CE Growth Plan</div>
+      <p class="card-desc">7-track roadmap for scaling the CE practice — accelerators, KAM tooling, partnerships, talent, and content. Includes a Gantt view with Hires and Events rows, quarterly fail-fast sprints, and a CE Growth Engine section.</p>
+      <div class="card-tags">
+        <span class="tag">Strategy</span>
+        <span class="tag">7 Tracks</span>
+        <span class="tag">2027 Roadmap</span>
+        <span class="tag">Gantt</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Oct 2026</span>
+      <a href="kpi-2027-ce-plan.html" class="btn-open" style="background:linear-gradient(90deg,#6366F1,#0EA58A);color:#fff">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+  <!-- Card: KAM Asset Manager -->
+  <article class="card">
+    <div class="card-strip" style="background:linear-gradient(90deg,#7C3AED,#6366F1)"></div>
+    <div class="card-body">
+      <div class="card-icon">🗂️</div>
+      <div class="card-title">KAM Asset Manager</div>
+      <p class="card-desc">KPI Asset Manager concept brief — SharePoint + Claude MCP for KAM teams. How KAMs find, version, and deliver CE assets without tribal knowledge. Includes architecture sketch and deployment model.</p>
+      <div class="card-tags">
+        <span class="tag">KAM Tooling</span>
+        <span class="tag">SharePoint</span>
+        <span class="tag">Claude MCP</span>
+        <span class="tag">Internal</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Aug 2026</span>
+      <a href="kam-description.html" class="btn-open" style="background:linear-gradient(90deg,#7C3AED,#6366F1);color:#fff">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+</main>
+
+<!-- SECTION: MARKET INTELLIGENCE -->
+<div class="section-label">Market Intelligence</div>
+<div class="grid">
+
+  <!-- Card: CE Accelerator Market -->
+  <article class="card">
+    <div class="card-strip" style="background:linear-gradient(90deg,#0284C7,#0EA5E9)"></div>
+    <div class="card-body">
+      <div class="card-icon">📊</div>
+      <div class="card-title">CE Accelerator Market</div>
+      <p class="card-desc">Market sizing, competitive landscape, and positioning intelligence for CE accelerator offers. Covers platform vendor moves, SI positioning, and where KPI's assessment-first motion creates differentiated entry points.</p>
+      <div class="card-tags">
+        <span class="tag">Market Intel</span>
+        <span class="tag">Competitive</span>
+        <span class="tag">Accelerators</span>
+        <span class="tag">BFSI · Insurance</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Aug 2026</span>
+      <a href="ce-accelerator-market.html" class="btn-open" style="background:linear-gradient(90deg,#0284C7,#0EA5E9);color:#fff">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+  <!-- Card: BI Disruption Brief -->
+  <article class="card">
+    <div class="card-strip" style="background:linear-gradient(90deg,#D97706,#F59E0B)"></div>
+    <div class="card-body">
+      <div class="card-icon">⚡</div>
+      <div class="card-title">BI Disruption Brief</div>
+      <p class="card-desc">Semantic layer disruption thesis for enterprise BI teams — the shift from dashboards to agent-served insights. Covers Vibe Analytics vs Dialog with Data framing, the SI play across three layers, and the governed semantic foundation.</p>
+      <div class="card-tags">
+        <span class="tag">Research</span>
+        <span class="tag">Dialog with Data</span>
+        <span class="tag">Semantic Layer</span>
+        <span class="tag">SI Play</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Oct 2026</span>
+      <a href="bi-disruption.html" class="btn-open" style="background:linear-gradient(90deg,#D97706,#F59E0B);color:#fff">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+  <!-- Card: AI Stack Reference -->
+  <article class="card">
+    <div class="card-strip" style="background:linear-gradient(90deg,#059669,#0D9488)"></div>
+    <div class="card-body">
+      <div class="card-icon">🔧</div>
+      <div class="card-title">AI Stack Reference</div>
+      <p class="card-desc">Technology stack reference for KPI's Customer Engagement platform — data layer, semantic layer, agent harness, and orchestration. Maps platform choices (Databricks / Snowflake / Fabric) against CE deployment patterns.</p>
+      <div class="card-tags">
+        <span class="tag">Reference</span>
+        <span class="tag">Databricks</span>
+        <span class="tag">Snowflake</span>
+        <span class="tag">Fabric</span>
+        <span class="tag">Architecture</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Aug 2026</span>
+      <a href="ai-stack.html" class="btn-open" style="background:linear-gradient(90deg,#059669,#0D9488);color:#fff">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+  <!-- Card: Fabric 2027 Outlook -->
+  <article class="card">
+    <div class="card-strip" style="background:linear-gradient(90deg,#0EA5E9,#6366F1)"></div>
+    <div class="card-body">
+      <div class="card-icon">☁️</div>
+      <div class="card-title">Fabric 2027 Outlook</div>
+      <p class="card-desc">Microsoft Fabric roadmap and CE opportunity brief through 2027 — Copilot Studio integration, Real-Time Intelligence, Eventhouse, and how the Fabric semantic model enables Dialog with Data in insurance and BFSI.</p>
+      <div class="card-tags">
+        <span class="tag">Research</span>
+        <span class="tag">Microsoft Fabric</span>
+        <span class="tag">Copilot Studio</span>
+        <span class="tag">2027 Roadmap</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Aug 2026</span>
+      <a href="fabric-2027.html" class="btn-open" style="background:linear-gradient(90deg,#0EA5E9,#6366F1);color:#fff">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+</div>
+
+<!-- SECTION: STRATEGY BRIEFS -->
+<div class="section-label">Strategy Briefs</div>
+<div class="grid">
+
+  <!-- Card: CE/IE Strategy Brief -->
+  <article class="card">
+    <div class="card-strip" style="background:linear-gradient(90deg,#0EA58A,#059669)"></div>
+    <div class="card-body">
+      <div class="card-icon">📝</div>
+      <div class="card-title">CE / IE Strategy Brief</div>
+      <p class="card-desc">Customer Engagement and Insurance Engagement strategy brief — the KPI thesis for serving insurance carriers with agentic CE, the pilot motion, and how IE-specific use cases anchor the broader CE platform play.</p>
+      <div class="card-tags">
+        <span class="tag">Strategy</span>
+        <span class="tag">Insurance</span>
+        <span class="tag">CE · IE</span>
+        <span class="tag">Brief</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Aug 2026</span>
+      <a href="ce-ie-strategy-brief.html" class="btn-open" style="background:linear-gradient(90deg,#0EA58A,#059669);color:#fff">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+  <!-- Card: Reactive to Proactive CE -->
+  <article class="card">
+    <div class="card-strip" style="background:linear-gradient(90deg,#DC2626,#F97316)"></div>
+    <div class="card-body">
+      <div class="card-icon">🔄</div>
+      <div class="card-title">Reactive to Proactive CE</div>
+      <p class="card-desc">The shift from reactive service models to proactive, insight-driven customer engagement — triggers, patterns, and the agent architecture that enables early intervention, next-best-action, and autonomous escalation.</p>
+      <div class="card-tags">
+        <span class="tag">Strategy</span>
+        <span class="tag">Proactive CE</span>
+        <span class="tag">Agentic</span>
+        <span class="tag">Insurance</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Aug 2026</span>
+      <a href="reactive-to-proactive.html" class="btn-open" style="background:linear-gradient(90deg,#DC2626,#F97316);color:#fff">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+  <!-- Card: Data-to-AI Transformation Patterns -->
+  <article class="card">
+    <div class="card-strip" style="background:linear-gradient(90deg,#6366F1,#DC2626)"></div>
+    <div class="card-body">
+      <div class="card-icon">📈</div>
+      <div class="card-title">Data-to-AI Transformation Patterns</div>
+      <p class="card-desc">Transformation patterns from data maturity to AI agent deployment — how enterprise data estates evolve stage by stage, which data foundations gate which agent classes, and the common blockers at each transition.</p>
+      <div class="card-tags">
+        <span class="tag">Framework</span>
+        <span class="tag">Data Maturity</span>
+        <span class="tag">AI Agents</span>
+        <span class="tag">Patterns</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Aug 2026</span>
+      <a href="data-to-ai-transformation-patterns.html" class="btn-open" style="background:linear-gradient(90deg,#6366F1,#DC2626);color:#fff">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+</div>
+
+<!-- SECTION: DEMOS & STORIES -->
+<div class="section-label">Demos &amp; Customer Stories</div>
+<div class="grid">
+
+  <!-- Card: AON CE Story -->
+  <article class="card">
+    <div class="card-strip" style="background:linear-gradient(90deg,#0B1628,#0EA58A)"></div>
+    <div class="card-body">
+      <div class="card-icon">🏢</div>
+      <div class="card-title">AON CE Engagement Story</div>
+      <p class="card-desc">Discovery narrative and value thesis for the AON insurance CE opportunity — business context, data estate gaps, target agent classes, proposed assessment scope, and the expected maturity score range for this client profile.</p>
+      <div class="card-tags">
+        <span class="tag">Customer Story</span>
+        <span class="tag">AON</span>
+        <span class="tag">Insurance</span>
+        <span class="tag">Discovery</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Aug 2026</span>
+      <a href="aon-ce-story.html" class="btn-open" style="background:linear-gradient(90deg,#0B1628,#0EA58A);color:#fff">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+  <!-- Card: AON Dialogue Demo -->
+  <article class="card">
+    <div class="card-strip" style="background:linear-gradient(90deg,#0EA5E9,#0EA58A)"></div>
+    <div class="card-body">
+      <div class="card-icon">💬</div>
+      <div class="card-title">Dialogue with Data Demo</div>
+      <p class="card-desc">Interactive demo built around the AON MDL schema — live agent interaction pattern with a governed semantic layer. Shows query, synthesis, and monitoring agent classes across the real MDL schema (lead_comverted_date, mv_marketing_pipeline).</p>
+      <div class="card-tags">
+        <span class="tag">Demo · Interactive</span>
+        <span class="tag">AON</span>
+        <span class="tag">MDL Schema</span>
+        <span class="tag">Dialog with Data</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-updated">Aug 2026</span>
+      <a href="aon-dialogue-demo.html" class="btn-open" style="background:linear-gradient(90deg,#0EA5E9,#0EA58A);color:#fff">
+        Open
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </article>
+
+</div>
+
+<footer class="page-footer">KPI Partners · Customer Engagement Hub · Internal · Not for distribution · Nov 2026</footer>
+
+<script>
+const btn = document.getElementById('themeBtn');
+const root = document.documentElement;
+function applyTheme(t) {
+  root.dataset.theme = t;
+  btn.textContent = t === 'dark' ? '☀️' : '🌙';
+  try { localStorage.setItem('kpi-ce-theme', t); } catch(e){}
+}
+btn.addEventListener('click', () => {
+  applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
+});
+try {
+  const _saved = localStorage.getItem('kpi-ce-theme');
+  applyTheme(_saved || 'light');
+} catch(e) { applyTheme('light'); }
+</script>

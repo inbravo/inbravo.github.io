@@ -1,0 +1,1530 @@
+<title>CE Assessment Playbook</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* Layout: sticky 240px sidebar + scrolling main */
+:root {
+  --bg: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --bg-sidebar: #0B1628;
+  --fg: #1A2333;
+  --fg-muted: #4A5A6E;
+  --accent: #0EA58A;
+  --accent-dim: #DCFDF7;
+  --amber: #B45309;
+  --amber-dim: #FEF3C7;
+  --red: #C2162A;
+  --red-dim: #FEE2E2;
+  --green: #047857;
+  --green-dim: #D1FAE5;
+  --blue: #1D4ED8;
+  --blue-dim: #DBEAFE;
+  --border: #E2E8F0;
+  --border-strong: #CBD5E1;
+  --sidebar-fg: #CBD5E1;
+  --sidebar-muted: #64748B;
+  --lv2-bg: #FFF7ED; --lv2-fg: #C2410C;
+  --lv3-bg: #FFFBEB; --lv3-fg: #92400E;
+  --lv5-bg: #EFF6FF; --lv5-fg: #1D4ED8;
+  --tier2-bg: #FFFBEB; --tier2-border: #B45309;
+  --warn-bg: #FFFBEB; --warn-fg: #92400E;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 14px; line-height: 1.6; margin: 0; }
+
+.layout { display: flex; min-height: 100vh; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 240px; min-width: 240px; background: var(--bg-sidebar);
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  flex-shrink: 0; padding: 20px 0; display: flex; flex-direction: column;
+}
+.sb-brand { padding: 0 18px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px; }
+.sb-kpi { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+.sb-title { font-size: 13px; font-weight: 600; color: var(--sidebar-fg); margin-top: 2px; line-height: 1.3; }
+.sb-lbl { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--sidebar-muted); padding: 10px 18px 4px; }
+.sb-nav a {
+  display: flex; align-items: center; gap: 8px; padding: 6px 18px;
+  font-size: 12px; color: var(--sidebar-fg); text-decoration: none;
+  border-left: 2px solid transparent; transition: color .12s, background .12s;
+}
+.sb-nav a:hover { color: #fff; background: rgba(255,255,255,0.05); }
+.sb-nav a.active { color: var(--accent); border-left-color: var(--accent); background: rgba(45,212,191,0.08); }
+.sb-nav .nn { font-family: var(--font-mono); font-size: 10px; color: var(--sidebar-muted); min-width: 18px; }
+.sb-meta { margin-top: auto; padding: 14px 18px 0; border-top: 1px solid rgba(255,255,255,0.08); }
+.sb-meta .mi { font-size: 11px; color: var(--sidebar-muted); line-height: 2; }
+.sb-meta .mv { color: var(--sidebar-fg); font-weight: 600; }
+
+/* ── MAIN ── */
+.main { flex: 1; min-width: 0; }
+.section {
+  padding: 36px max(24px, env(safe-area-inset-right, 0px)) 36px max(24px, env(safe-area-inset-left, 0px));
+  border-bottom: 1px solid var(--border); max-width: 920px;
+}
+.sh { display: flex; align-items: baseline; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.snum { font-size: 10px; font-weight: 700; font-family: var(--font-mono); color: var(--accent); letter-spacing: .05em; }
+.stitle { font-size: 20px; font-weight: 700; text-wrap: balance; margin: 0; }
+.ssub { font-size: 13px; color: var(--fg-muted); margin-top: 4px; }
+
+/* Cards */
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+
+/* Badges */
+.badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; }
+.ba { background: var(--accent-dim); color: var(--accent); }
+.bm { background: var(--amber-dim); color: var(--amber); }
+.br { background: var(--red-dim); color: var(--red); }
+.bg { background: var(--green-dim); color: var(--green); }
+.bb { background: var(--blue-dim); color: var(--blue); }
+
+/* Insurance example callout */
+.ins {
+  background: var(--amber-dim); border-left: 3px solid var(--amber);
+  border-radius: 0 6px 6px 0; padding: 9px 12px; margin: 10px 0; font-size: 13px;
+}
+.ins-lbl { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--amber); margin-bottom: 3px; }
+
+/* Agent class cards */
+.class-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 12px; margin-top: 16px; }
+.cc { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+.cc .cn { font-size: 10px; font-weight: 700; font-family: var(--font-mono); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 3px; }
+.cc .cname { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.cc .cdesc { font-size: 12px; color: var(--fg-muted); margin-bottom: 8px; }
+.cc .cfloor { font-size: 11px; color: var(--fg-muted); margin-top: 8px; }
+.c1 { border-top: 3px solid #6366F1; } .c1 .cn { color: #6366F1; }
+.c2 { border-top: 3px solid #0EA5E9; } .c2 .cn { color: #0EA5E9; }
+.c3 { border-top: 3px solid #10B981; } .c3 .cn { color: #10B981; }
+.c4 { border-top: 3px solid var(--amber); } .c4 .cn { color: var(--amber); }
+.c5 { border-top: 3px solid #F97316; } .c5 .cn { color: #F97316; }
+.c6 { border-top: 3px solid var(--red); } .c6 .cn { color: var(--red); }
+
+/* Elicitation questions */
+.eq { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px 12px 42px; margin-bottom: 8px; position: relative; }
+.eq-n { position: absolute; left: 14px; top: 13px; font-size: 12px; font-weight: 800; font-family: var(--font-mono); color: var(--accent); }
+.eq-q { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.eq-r { font-size: 12px; color: var(--fg-muted); }
+
+/* Pillar accordion */
+.pillar-list { display: flex; flex-direction: column; gap: 8px; }
+.pi { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.ph {
+  display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+  cursor: pointer; user-select: none; transition: background .12s;
+}
+.ph:hover { background: #F1F5F9; }
+.pw { font-size: 11px; font-weight: 700; font-family: var(--font-mono); background: var(--accent-dim); color: var(--accent); padding: 2px 7px; border-radius: 4px; min-width: 38px; text-align: center; }
+.pname { font-size: 13.5px; font-weight: 600; flex: 1; }
+.pnum { font-size: 10px; font-weight: 700; font-family: var(--font-mono); color: var(--fg-muted); }
+.pchev { font-size: 11px; color: var(--fg-muted); transition: transform .2s; }
+.pi.open .pchev { transform: rotate(90deg); }
+.pb { display: none; padding: 0 14px 14px; border-top: 1px solid var(--border); }
+.pi.open .pb { display: block; }
+.plbl { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin: 12px 0 6px; }
+.pdesc { font-size: 13px; color: var(--fg-muted); padding-top: 10px; margin-bottom: 0; }
+.iq { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 5px; }
+.iq li { font-size: 12.5px; padding: 7px 10px 7px 28px; background: var(--bg); border-radius: 6px; position: relative; }
+.iq li::before { content: "Q"; position: absolute; left: 9px; top: 8px; font-size: 9px; font-weight: 700; font-family: var(--font-mono); color: var(--accent); }
+.tg { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+.tc { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; font-size: 12px; }
+.tcp { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+.tc.db .tcp { color: #E87200; }
+.tc.sf .tcp { color: #29B5E8; }
+.tc.fab .tcp { color: #0078D4; }
+.rtab { width: 100%; border-collapse: collapse; font-size: 12px; }
+.rtab th { text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--fg-muted); padding: 5px 8px; border-bottom: 1px solid var(--border); }
+.rtab td { padding: 7px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.rtab tr:last-child td { border-bottom: none; }
+.lv1 { background: var(--red-dim); color: var(--red); font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 4px; display: inline-block; white-space: nowrap; }
+.lv2 { background: var(--lv2-bg); color: var(--lv2-fg); font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 4px; display: inline-block; white-space: nowrap; }
+.lv3 { background: var(--lv3-bg); color: var(--lv3-fg); font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 4px; display: inline-block; white-space: nowrap; }
+.lv4 { background: var(--green-dim); color: var(--green); font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 4px; display: inline-block; white-space: nowrap; }
+.lv5 { background: var(--lv5-bg); color: var(--lv5-fg); font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 4px; display: inline-block; white-space: nowrap; }
+
+/* Matrix */
+.score-row { display: flex; gap: 6px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 14px; padding: 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; }
+.score-row label { font-size: 11px; font-weight: 600; color: var(--fg-muted); align-self: center; margin-right: 4px; }
+.si-wrap { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.si-wrap span { font-size: 9px; font-weight: 700; text-align: center; color: var(--fg-muted); max-width: 52px; line-height: 1.2; }
+.si-wrap input[type=number] { width: 44px; text-align: center; font-family: var(--font-mono); font-size: 15px; font-weight: 700; border: 2px solid var(--border-strong); border-radius: 6px; background: var(--bg-card); color: var(--fg); padding: 4px 0; }
+.si-wrap input:focus { outline: none; border-color: var(--accent); }
+.score-result { margin-left: auto; text-align: right; }
+.sr-score { font-size: 28px; font-weight: 800; font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--accent); }
+.sr-tier { font-size: 11px; font-weight: 600; color: var(--fg-muted); }
+
+.matrix-wrap { overflow-x: auto; margin-top: 6px; }
+.mt { width: 100%; border-collapse: collapse; min-width: 600px; font-size: 12px; }
+.mt th { padding: 7px 10px; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--border-strong); white-space: nowrap; }
+.mt th:first-child { text-align: left; min-width: 175px; }
+.mt th:not(:first-child) { text-align: center; }
+.mt td { padding: 6px 10px; border: 1px solid var(--border); text-align: center; font-family: var(--font-mono); font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; }
+.mt td:first-child { text-align: left; font-family: var(--font-body); font-size: 12px; font-weight: 500; padding-left: 12px; }
+.mt tbody tr:hover td { background: rgba(45,212,191,0.04); }
+.cell-ok { background: var(--green-dim) !important; color: var(--green); }
+.cell-gap { background: var(--red-dim) !important; color: var(--red); }
+.cell-warn { background: var(--warn-bg) !important; color: var(--warn-fg); }
+.cell-n { background: var(--bg-card); color: var(--fg-muted); }
+.thc1 { color: #6366F1; } .thc2 { color: #0EA5E9; } .thc3 { color: #10B981; }
+.thc4 { color: var(--amber); } .thc5 { color: #F97316; } .thc6 { color: var(--red); }
+
+.gap-bar { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.gc { display: flex; align-items: center; gap: 6px; font-size: 12px; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); }
+.gcn { font-size: 18px; font-weight: 800; font-family: var(--font-mono); }
+.gcl { font-size: 10px; color: var(--fg-muted); }
+.gating-warn { background: var(--red-dim); border: 1px solid var(--red); border-radius: 6px; padding: 8px 12px; font-size: 12.5px; color: var(--red); font-weight: 600; margin-top: 10px; }
+
+/* Tiers */
+.tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 10px; margin-top: 14px; }
+.tcard { border-radius: 8px; padding: 14px 16px; border: 1px solid var(--border); }
+.tcard .ts { font-size: 10px; font-weight: 700; font-family: var(--font-mono); opacity: .7; margin-bottom: 4px; }
+.tcard .tn { font-size: 26px; font-weight: 800; line-height: 1; margin-bottom: 3px; }
+.tcard .tl { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.tcard .tx { font-size: 11.5px; color: var(--fg-muted); line-height: 1.5; }
+.t0 { background: var(--red-dim); border-color: var(--red); }
+.t1 { background: var(--amber-dim); border-color: var(--amber); }
+.t2 { background: var(--tier2-bg); border-color: var(--tier2-border); }
+.t3 { background: var(--green-dim); border-color: var(--green); }
+.t4 { background: var(--blue-dim); border-color: var(--blue); }
+
+/* Deliverables */
+.dg { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 12px; margin-top: 14px; }
+.dc { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+.dc .dt { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.dc .dp { font-size: 11px; color: var(--fg-muted); margin-bottom: 10px; }
+.dc ul { list-style: none; padding: 0; margin: 0; font-size: 12px; display: flex; flex-direction: column; gap: 4px; color: var(--fg-muted); }
+.dc ul li { padding-left: 12px; position: relative; }
+.dc ul li::before { content: "·"; position: absolute; left: 3px; color: var(--accent); }
+
+/* OSI */
+.osi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px,1fr)); gap: 10px; margin: 12px 0; }
+.opd { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+.opd .opn { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+.opd .ops { font-size: 12px; }
+.code-block { background: #0F1D2E; color: #E2E8F0; border-radius: 8px; padding: 14px 16px; font-family: var(--font-mono); font-size: 11.5px; line-height: 1.6; overflow-x: auto; margin: 10px 0; }
+.code-block .ck { color: #7DD3FC; } .code-block .cv { color: #86EFAC; } .code-block .cc { color: #94A3B8; }
+
+/* Competitive table */
+.ct-wrap { overflow-x: auto; margin-top: 14px; }
+.ct { width: 100%; border-collapse: collapse; min-width: 700px; font-size: 12px; }
+.ct th { padding: 7px 10px; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--border-strong); white-space: nowrap; }
+.ct th:first-child { text-align: left; min-width: 220px; }
+.ct th:not(:first-child) { text-align: center; }
+.ct td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: center; }
+.ct td:first-child { text-align: left; font-weight: 500; }
+.ct tr:last-child td { border-bottom: none; }
+.ck { color: var(--green); font-weight: 700; font-size: 14px; }
+.cx { color: var(--border-strong); font-size: 13px; }
+.cpa { color: var(--amber); font-weight: 700; font-size: 12px; }
+.ct-kpi th:nth-child(2) { color: var(--accent); font-size: 11px !important; }
+
+/* Kill rules */
+.kr { background: var(--red-dim); border: 1px solid var(--red); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
+.kr .kt { font-size: 13px; font-weight: 700; color: var(--red); margin-bottom: 3px; }
+.kr .ka { font-size: 12.5px; color: var(--fg); }
+
+/* Week steps */
+.wg { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px,1fr)); gap: 10px; margin-top: 14px; }
+.wc { background: var(--bg-card); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 8px; padding: 14px; }
+.wc .wl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); margin-bottom: 3px; }
+.wc .wt { font-size: 13px; font-weight: 700; margin-bottom: 7px; }
+.wc ul { list-style: none; padding: 0; margin: 0; font-size: 12px; color: var(--fg-muted); display: flex; flex-direction: column; gap: 3px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; min-width: unset; height: auto; position: relative; padding: 12px 0 6px; }
+  .sb-nav { display: flex; flex-direction: row; overflow-x: auto; padding: 0 12px; gap: 2px; }
+  .sb-nav a { white-space: nowrap; border-left: none; border-bottom: 2px solid transparent; padding: 5px 8px; font-size: 11px; }
+  .sb-nav a.active { border-left: none; border-bottom-color: var(--accent); background: transparent; }
+  .nn { display: none; }
+  .sb-brand { padding: 0 12px 10px; }
+  .sb-lbl, .sb-meta { display: none; }
+  .class-grid { grid-template-columns: 1fr; }
+  .tg { grid-template-columns: 1fr; }
+  .score-row { flex-direction: column; align-items: flex-start; }
+  .score-result { margin-left: 0; text-align: left; }
+}
+</style>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-kpi">KPI Partners · Internal</div>
+    <div class="sb-title">CE Assessment<br>Delivery Playbook</div>
+  </div>
+  <div class="sb-lbl">Engagement</div>
+  <div class="sb-nav">
+    <a href="#s1"><span class="nn">01</span> Overview</a>
+    <a href="#s2"><span class="nn">02</span> Agent Classes</a>
+    <a href="#s3"><span class="nn">03</span> Week 1 · Elicitation</a>
+    <a href="#s4"><span class="nn">04</span> Week 2 · 8 Pillars</a>
+    <a href="#s5"><span class="nn">05</span> Week 3 · Matrix</a>
+    <a href="#s6"><span class="nn">06</span> Readiness Tiers</a>
+    <a href="#s7"><span class="nn">07</span> Week 4 · Deliverables</a>
+    <a href="#s8"><span class="nn">08</span> OSI Export Spec</a>
+    <a href="#s9"><span class="nn">09</span> Competitive Position</a>
+    <a href="#s10"><span class="nn">10</span> Kill Rules</a>
+    <a href="#s11"><span class="nn">11</span> Market Reference</a>
+    <a href="#s12"><span class="nn">12</span> Security Standards</a>
+  </div>
+  <div class="sb-meta">
+    <div class="mi">Duration <span class="mv">4 weeks</span></div>
+    <div class="mi">Price <span class="mv">$30–40K fixed</span></div>
+    <div class="mi">Framework <span class="mv">v1.0 · Nov 2026</span></div>
+    <div class="mi" style="font-size:10px;color:var(--accent);margin-top:4px;line-height:1.5;">Monthly version rollouts<br>planned from Dec 2026</div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- S1 · OVERVIEW -->
+<section class="section" id="s1">
+  <div class="sh"><span class="snum">01</span><h2 class="stitle">Engagement Overview</h2></div>
+  <p class="ssub">Agent Readiness Assessment — a 4-week fixed-price diagnostic that tells a CDO exactly which AI agents they can deploy, and what is blocking the rest.</p>
+
+  <div class="wg">
+    <div class="wc">
+      <div class="wl">Week 1</div>
+      <div class="wt">Discovery</div>
+      <ul>
+        <li>Target Class Elicitation (30 min)</li>
+        <li>Business intent alignment</li>
+        <li>Top-20 priority questions</li>
+        <li>Platform inventory</li>
+        <li>Artifact: Target Class Profile</li>
+      </ul>
+    </div>
+    <div class="wc">
+      <div class="wl">Week 2</div>
+      <div class="wt">8-Pillar Scoring</div>
+      <ul>
+        <li>Data interviews (3–4 sessions)</li>
+        <li>Platform scan per pillar</li>
+        <li>Evidence collection</li>
+        <li>P8 governance deep-dive</li>
+        <li>Artifact: Draft pillar scores</li>
+      </ul>
+    </div>
+    <div class="wc">
+      <div class="wl">Week 3</div>
+      <div class="wt">Floor Plan Analysis</div>
+      <ul>
+        <li>Score all 8 pillars</li>
+        <li>Run Target Class Matrix</li>
+        <li>Identify Class-Gating Gaps</li>
+        <li>Draft Quick Win Spec</li>
+        <li>Artifact: Gap register</li>
+      </ul>
+    </div>
+    <div class="wc">
+      <div class="wl">Week 4</div>
+      <div class="wt">Findings Delivery</div>
+      <ul>
+        <li>Findings presentation (CDO + sponsors)</li>
+        <li>CE Maturity Score Report</li>
+        <li>Floor Plan one-pager</li>
+        <li>OSI Quick Win Spec</li>
+        <li>90-day CE Roadmap</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;" class="card-grid">
+    <div class="card">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);margin-bottom:6px;">Team</div>
+      <div style="font-size:13px;line-height:1.8;">
+        <strong>CE Architect</strong> — owns engagement, runs elicitation, scores all pillars<br>
+        <strong>Data Platform Analyst</strong> — platform scan (Databricks / Snowflake / Fabric)<br>
+        <strong>Delivery Lead</strong> — Week 4 CDO presentation, contract close
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);margin-bottom:6px;">When to pitch</div>
+      <div style="font-size:13px;line-height:1.8;">
+        CDO/CAO has expressed interest in agentic AI but no active deployment<br>
+        Customer has deployed BI agents and hit unexpected blockers<br>
+        Platform partner (Databricks/Snowflake) is recommending a readiness review<br>
+        Post-pilot failure — CDO needs to understand why
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S2 · AGENT CLASSES -->
+<section class="section" id="s2">
+  <div class="sh"><span class="snum">02</span><h2 class="stitle">The 6 Agent Classes</h2></div>
+  <p class="ssub">KPI proprietary taxonomy. Elicited in Week 1 before scoring begins. Target class sets the minimum pillar floors for the entire engagement.</p>
+
+  <div class="class-grid">
+    <div class="cc c1">
+      <div class="cn">Class 1</div>
+      <div class="cname">Query Agent</div>
+      <div class="cdesc">Answers structured questions about metrics and KPIs in natural language. Stateless or lightly stateful. One question → one answer.</div>
+      <div class="ins"><div class="ins-lbl">Insurance example</div>"What was gross written premium for P&amp;C Home in Q3 by distribution channel?"<br>"Which underwriters exceeded binding authority limits last quarter?"</div>
+      <div class="cfloor">Min harness: RBAC · audit log · basic output validation</div>
+      <div style="margin-top:6px;font-size:11px;color:var(--fg-muted);">Floors: P1=3, P2=2, P3=2, P4=<strong>3</strong>, P5=2, P6=2, P7=2, P8=2</div>
+    </div>
+    <div class="cc c2">
+      <div class="cn">Class 2</div>
+      <div class="cname">Research &amp; Synthesis</div>
+      <div class="cdesc">Aggregates across multiple domains, combines structured data and documents, produces summaries or recommendations.</div>
+      <div class="ins"><div class="ins-lbl">Insurance example</div>"Generate a renewal pack for account #AC-7821 including 5-year loss history, exposure summary, market conditions, and rate recommendation."</div>
+      <div class="cfloor">Min harness: Hallucination detection · source attribution · output validation</div>
+      <div style="margin-top:6px;font-size:11px;color:var(--fg-muted);">Floors: P1=4, P2=3, P3=3, P4=<strong>4</strong>, P5=3, P6=3, P7=2, P8=3</div>
+    </div>
+    <div class="cc c3">
+      <div class="cn">Class 3</div>
+      <div class="cname">Monitoring &amp; Alert</div>
+      <div class="cdesc">Runs continuously or on schedule, watches data signals against business thresholds, triggers alerts or downstream actions.</div>
+      <div class="ins"><div class="ins-lbl">Insurance example</div>"Alert claims ops when P&amp;C Motor combined ratio exceeds 97% for any regional portfolio for 3 consecutive weeks."<br>"Notify the chief actuary when IFRS 17 CSM movement deviates &gt;5% from forecast."</div>
+      <div class="cfloor">Min harness: Circuit breakers · iteration cap · escalation logic</div>
+      <div style="margin-top:6px;font-size:11px;color:var(--fg-muted);">Floors: P1=3, P2=<strong>4</strong>, P3=2, P4=3, P5=2, P6=2, P7=<strong>4</strong>, P8=3</div>
+    </div>
+    <div class="cc c4">
+      <div class="cn">Class 4</div>
+      <div class="cname">Workflow Orchestration</div>
+      <div class="cdesc">Drives multi-step business processes end-to-end, coordinates human review gates and system actions, maintains process state.</div>
+      <div class="ins"><div class="ins-lbl">Insurance example</div>"Process a new commercial property application: risk assessment → appetite check → underwriting recommendation → referral if above threshold → bind confirmation."<br>"Run month-end IFRS 17 close end-to-end with actuary sign-off gate."</div>
+      <div class="cfloor">Min harness: Full harness · human-in-the-loop gates · step-level audit trail · rollback</div>
+      <div style="margin-top:6px;font-size:11px;color:var(--fg-muted);">Floors: P1=4, P2=4, P3=<strong>4</strong>, P4=4, P5=4, P6=3, P7=3, P8=<strong>4</strong></div>
+    </div>
+    <div class="cc c5">
+      <div class="cn">Class 5</div>
+      <div class="cname">Autonomous Decision</div>
+      <div class="cdesc">Makes decisions with limited or no human oversight in a pre-approved decision domain. Output triggers direct system action.</div>
+      <div class="ins"><div class="ins-lbl">Insurance example</div>"Auto-approve motor claims under £3,000 meeting all standard adjudication criteria — no fraud indicators, PH not on watchlist, damage consistent with reported incident."<br>"Automatically bind personal lines home renewals within pre-agreed rate change corridor."</div>
+      <div class="cfloor">Min harness: Full harness · AIUC-1/EU AI Act Art. 9 · explainability · hard-stop controls</div>
+      <div style="margin-top:6px;font-size:11px;color:var(--fg-muted);">Floors: P1=<strong>5</strong>, P2=<strong>5</strong>, P3=4, P4=<strong>5</strong>, P5=<strong>5</strong>, P6=4, P7=4, P8=<strong>5</strong></div>
+    </div>
+    <div class="cc c6">
+      <div class="cn">Class 6</div>
+      <div class="cname">Multi-Agent Orchestrator</div>
+      <div class="cdesc">Coordinates and delegates to multiple specialist agents (which may be Class 1–5), manages delegation chains, resolves conflicts.</div>
+      <div class="ins"><div class="ins-lbl">Insurance example</div>"Solvency II QRT submission orchestrator: delegates to domain agents (P&amp;C, Life, Health), data quality agent, actuarial agent, filing agent — coordinates end-to-end."<br>"Customer 360 orchestrator across CRM, claims history, risk scoring, and next-best-action agents."</div>
+      <div class="cfloor">Min harness: Delegation chain accountability · cost envelope at orchestrator level · CSA Agentic Profile</div>
+      <div style="margin-top:6px;font-size:11px;color:var(--fg-muted);">Floors: P1=5, P2=4, P3=<strong>5</strong>, P4=5, P5=4, P6=4, P7=4, P8=4</div>
+    </div>
+  </div>
+</section>
+
+<!-- S3 · WEEK 1: ELICITATION -->
+<section class="section" id="s3">
+  <div class="sh"><span class="snum">03</span><h2 class="stitle">Week 1 · Target Class Elicitation</h2></div>
+  <p class="ssub">Run these 5 questions in the first 30 minutes of the Week 1 Discovery Workshop with the CDO and Business Champion. Document the Target Class Profile before moving to priority question elicitation.</p>
+
+  <div class="eq"><span class="eq-n">Q1</span><div class="eq-q">What tasks or decisions do you want AI agents to handle?</div><div class="eq-r">Open-ended. Note what <em>actions</em> the agent takes, not just what <em>insights</em> it produces. "Tell me X" → lean Class 1/2. "Do X automatically" → lean Class 3/4/5. Record verbatim.</div></div>
+  <div class="eq"><span class="eq-n">Q2</span><div class="eq-q">Will the agent's output be consumed by a human making a decision — or will it trigger a downstream system action directly?</div><div class="eq-r">Human reads and acts → Class 1/2 candidates. Triggers automated system action → Class 3/4/5 territory.</div></div>
+  <div class="eq"><span class="eq-n">Q3</span><div class="eq-q">Does the agent need to run continuously or on a schedule, without a human initiating each run?</div><div class="eq-r">Yes → Class 3 minimum (monitoring) or Class 4/5 (if acting). No → Class 1/2. An underwriting recommendation on demand is Class 2; one that runs nightly against the book is Class 3.</div></div>
+  <div class="eq"><span class="eq-n">Q4</span><div class="eq-q">Does the agent's output domain involve regulated decisions — claims adjudication, underwriting bind decisions, credit scoring, trading, clinical care?</div><div class="eq-r">Yes → floor the class at Class 4 minimum. If the agent makes the decision autonomously → Class 5 treatment required. This is the question that changes the readiness bar most dramatically.</div></div>
+  <div class="eq"><span class="eq-n">Q5</span><div class="eq-q">Do you intend to have multiple specialised AI agents coordinated by a higher-level orchestrator?</div><div class="eq-r">Yes → include Class 6 in target profile alongside the specialist classes. No → target class is the highest class identified from Q1–Q4.</div></div>
+
+  <div style="margin-top:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:16px;">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);margin-bottom:10px;">Insurance worked example · Aegon-type Life &amp; P&amp;C carrier</div>
+    <div style="font-size:13px;line-height:1.9;">
+      <strong>Q1:</strong> "We want agents that monitor our combined ratio in real-time and alert us to deteriorating portfolios, and also agents that can auto-approve low-value motor claims."<br>
+      <strong>Q2:</strong> Monitoring → alert to human (Class 3). Claims approval → system action, no human (Class 5).<br>
+      <strong>Q3:</strong> Monitoring runs continuously. Claims agent runs on submission event.<br>
+      <strong>Q4:</strong> Claims adjudication is a regulated decision → Class 5 treatment confirmed.<br>
+      <strong>Q5:</strong> Not in Year 1.<br>
+    </div>
+    <div style="margin-top:8px;padding:8px 12px;background:var(--accent-dim);border-radius:6px;font-size:13px;font-weight:600;color:var(--accent);">
+      Target Class Profile: Class 3 (Monitoring) + Class 5 (Autonomous Decision). Year 2 may add Class 4 for IFRS 17 close workflow.
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:var(--fg-muted);">Delivery note: This profile immediately sets the readiness bar high. P1=5, P2=5, P4=5, P8=5 are all required for Class 5. Check these pillars first in Week 2 — early signal on whether a Foundation Sprint is needed.</div>
+  </div>
+</section>
+
+<!-- S4 · 8 PILLARS -->
+<section class="section" id="s4">
+  <div class="sh"><span class="snum">04</span><h2 class="stitle">Week 2 · 8-Pillar Scoring Guide</h2></div>
+  <p class="ssub">Each pillar: what it measures, insurance-specific interview questions, platform tooling to check, and the 5-level scoring rubric. Score each pillar 1–5 based on evidence gathered. Never self-report — verify claims against platform artefacts.</p>
+
+  <div class="pillar-list" id="pillar-list">
+
+    <!-- P1 -->
+    <div class="pi" id="pi1">
+      <div class="ph" onclick="togglePillar('pi1')">
+        <span class="pnum">P1</span>
+        <span class="pw">20%</span>
+        <span class="pname">Semantic Asset Coverage</span>
+        <span class="pchev">▶</span>
+      </div>
+      <div class="pb">
+        <p class="pdesc">Breadth and quality of formal metric, entity, and KPI definitions in the platform's semantic layer. An agent can only answer questions that are formally defined — undefined terms force improvised SQL with no business-logic guarantee. <em>Insurance focus: combined ratio, loss ratio, GWP, NWP, earned premium, claims frequency/severity, reserve adequacy, binding authority utilisation, IFRS 17 CSM/RA.</em></p>
+        <div class="plbl">Interview Questions</div>
+        <ul class="iq">
+          <li>Where do your metric definitions live today — BI tool measures, dbt models, or a platform-native semantic layer (Databricks Metric Views / Snowflake Semantic Views)?</li>
+          <li>If an AI agent asked "What is our P&amp;C Motor combined ratio?" — could it get the answer without a human writing SQL for it?</li>
+          <li>How many of your top-20 business questions have a verified, agreed metric definition that any function in the company would accept as authoritative?</li>
+          <li>Are your metric descriptions written for LLMs (natural language, business context) or for data analysts (technical, with SQL references)?</li>
+        </ul>
+        <div class="plbl">Platform Tooling to Check</div>
+        <div class="tg">
+          <div class="tc db"><div class="tcp">Databricks</div>Unity Catalog Metric Views, dbt Semantic Layer (MetricFlow), AI/BI Genie semantic configuration</div>
+          <div class="tc sf"><div class="tcp">Snowflake</div>Semantic Views (preview), Cortex Analyst YAML semantic file, dbt on Snowflake</div>
+          <div class="tc fab"><div class="tcp">Fabric</div>Power BI semantic models, Direct Lake semantic layer, dbt-fabric adapter</div>
+        </div>
+        <div class="plbl">Scoring Rubric</div>
+        <div style="overflow-x:auto;"><table class="rtab">
+          <tr><th>Level</th><th>Label</th><th>Evidence</th></tr>
+          <tr><td><span class="lv1">L1 · Absent</span></td><td>No semantic layer</td><td>Metrics exist only in BI calculated fields or ad-hoc SQL scripts. No machine-readable definitions. Agent would need to improvise SQL.</td></tr>
+          <tr><td><span class="lv2">L2 · Initial</span></td><td>CEO dashboard set only</td><td>&lt;20% of priority questions covered. Definitions in a single tool (e.g. Power BI measures only). No cross-platform consistency.</td></tr>
+          <tr><td><span class="lv3">L3 · Developing</span></td><td>20–50% coverage</td><td>Formal definitions in one platform's native layer (dbt metrics, Databricks Metric Views). Column-level descriptions exist but inconsistent. LLM context absent.</td></tr>
+          <tr><td><span class="lv4">L4 · Established</span></td><td>50–80% coverage</td><td>Definitions include business logic, not just column aliases. LLM-facing descriptions present on priority assets. Multi-domain coverage beginning.</td></tr>
+          <tr><td><span class="lv5">L5 · Optimised</span></td><td>80%+ coverage</td><td>Semantic layer is the system of record for metrics. Version-controlled. Domain coverage spans all AI-target domains. LLM consumption descriptions tested.</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- P2 -->
+    <div class="pi" id="pi2">
+      <div class="ph" onclick="togglePillar('pi2')">
+        <span class="pnum">P2</span>
+        <span class="pw">17%</span>
+        <span class="pname">Data Asset Governance &amp; Trust</span>
+        <span class="pchev">▶</span>
+      </div>
+      <div class="pb">
+        <p class="pdesc">Whether gold-layer data assets are documented, owned, quality-certified, and have freshness SLAs — so agents can trust what they consume. An agent acting on stale or uncertified data produces authoritative-sounding wrong answers. <em>Insurance focus: policy data gold tier, claims transactions, premium ledger, reinsurance bordereau, actuarial run-off triangles, IFRS 17 measurement data.</em></p>
+        <div class="plbl">Interview Questions</div>
+        <ul class="iq">
+          <li>Who is the named data owner for your claims, policy, and premium datasets? Can you name them today without looking it up?</li>
+          <li>Do you have quality monitoring on gold-layer data assets? What happens — who is alerted — when quality drops below threshold?</li>
+          <li>How do you know whether the data an agent would query was loaded this morning or three days ago? Is freshness SLA enforced?</li>
+          <li>Do you have data contracts between producing and consuming teams — or does everyone query source systems directly?</li>
+        </ul>
+        <div class="plbl">Platform Tooling to Check</div>
+        <div class="tg">
+          <div class="tc db"><div class="tcp">Databricks</div>Unity Catalog data lineage, Delta Live Table expectations, Databricks data quality monitoring (system.data_quality)</div>
+          <div class="tc sf"><div class="tcp">Snowflake</div>Data Quality Monitoring (GA 2026), governance tags, masking policies, lineage in Snowsight</div>
+          <div class="tc fab"><div class="tcp">Fabric</div>Microsoft Purview data catalog, Fabric Data Factory pipeline monitoring, OneLake data quality</div>
+        </div>
+        <div class="plbl">Scoring Rubric</div>
+        <div style="overflow-x:auto;"><table class="rtab">
+          <tr><th>Level</th><th>Label</th><th>Evidence</th></tr>
+          <tr><td><span class="lv1">L1 · Absent</span></td><td>No governance layer</td><td>No data catalog. No data owners assigned. Data quality unknown. Agent would consume raw data with no quality guarantee.</td></tr>
+          <tr><td><span class="lv2">L2 · Initial</span></td><td>Basic catalog only</td><td>Column names and table descriptions catalogued. Some owners identified. No quality monitoring. Freshness unknown.</td></tr>
+          <tr><td><span class="lv3">L3 · Developing</span></td><td>Priority assets governed</td><td>Gold-layer assets catalogued with business context. Data owners identified. Quality checks exist but not alerting-enabled. Freshness SLAs documented for some assets.</td></tr>
+          <tr><td><span class="lv4">L4 · Established</span></td><td>Quality monitoring active</td><td>Gold/silver/bronze tier documented. Quality monitoring active on AI-target assets (DLT expectations or equivalent). Freshness SLAs enforced with alerting. Data stewardship process active.</td></tr>
+          <tr><td><span class="lv5">L5 · Optimised</span></td><td>Data contracts in force</td><td>Automated quality gates on all AI-target assets. Data contracts governing producer/consumer relationships. Freshness SLAs tied to agent execution schedules. Quality score tracked as a KPI.</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- P3 -->
+    <div class="pi" id="pi3">
+      <div class="ph" onclick="togglePillar('pi3')">
+        <span class="pnum">P3</span>
+        <span class="pw">13%</span>
+        <span class="pname">Domain &amp; Organisational Alignment</span>
+        <span class="pchev">▶</span>
+      </div>
+      <div class="pb">
+        <p class="pdesc">Whether the organisation's domain model is agreed, entities are resolved across domains, and a business champion owns the semantic layer programme. Without this, every function builds its own definitions and the agent gets contradictory answers for the same question. <em>Insurance focus: Customer/policyholder entity resolution (same customer in CRM, policy admin, claims), Counterparty ID for reinsurance, product hierarchy agreed across Finance/Underwriting/Reserving.</em></p>
+        <div class="plbl">Interview Questions</div>
+        <ul class="iq">
+          <li>Is there a single agreed Customer ID (or Policy ID, Counterparty ID) that every system uses — or do different systems use different identifiers for the same entity?</li>
+          <li>Who is your CDO or business champion for the semantic layer programme? What decisions can they make unilaterally?</li>
+          <li>If the Claims team and Finance disagree on the definition of "paid loss" — who resolves it and how? How long does that take?</li>
+          <li>Do you have a process for publishing new semantic definitions, or does each team build its own in isolation?</li>
+        </ul>
+        <div class="plbl">Platform Tooling to Check</div>
+        <div class="tg">
+          <div class="tc db"><div class="tcp">Databricks</div>Unity Catalog business glossary, entity resolution via Delta tables, domain workspace structure</div>
+          <div class="tc sf"><div class="tcp">Snowflake</div>Cortex Glossary, Snowflake governance schema, cross-database entity joins</div>
+          <div class="tc fab"><div class="tcp">Fabric</div>Purview data glossary, OneLake domain partitions, Power BI shared semantic models</div>
+        </div>
+        <div class="plbl">Scoring Rubric</div>
+        <div style="overflow-x:auto;"><table class="rtab">
+          <tr><th>Level</th><th>Label</th><th>Evidence</th></tr>
+          <tr><td><span class="lv1">L1 · Absent</span></td><td>No domain model</td><td>Data ownership disputes common. No business champion. Each team builds its own definitions. Same entity has different IDs across systems.</td></tr>
+          <tr><td><span class="lv2">L2 · Initial</span></td><td>Informal ownership</td><td>One team has started semantic layer work. No cross-functional engagement. Entity resolution not attempted.</td></tr>
+          <tr><td><span class="lv3">L3 · Developing</span></td><td>Domain model drafted</td><td>Domain model documented (even informally). Business champion identified. Cross-domain entity definitions begun (e.g. Customer ID agreed between Policy Admin and CRM).</td></tr>
+          <tr><td><span class="lv4">L4 · Established</span></td><td>Cross-domain resolution</td><td>Formal domain ownership with data stewards per domain. Cross-domain entity resolution in place. Business sponsor actively engaged. Conflict resolution process documented.</td></tr>
+          <tr><td><span class="lv5">L5 · Optimised</span></td><td>Governance committee active</td><td>Semantic layer governance committee meets regularly. Domain boundaries enforced via platform access controls. Entity resolution automated. Organisation-wide publishing process.</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- P4 -->
+    <div class="pi" id="pi4">
+      <div class="ph" onclick="togglePillar('pi4')">
+        <span class="pnum">P4</span>
+        <span class="pw">18%</span>
+        <span class="pname">Agent &amp; AI Consumption Readiness</span>
+        <span class="pchev">▶</span>
+      </div>
+      <div class="pb">
+        <p class="pdesc">Whether the semantic layer is configured for machine consumption — API access, LLM-facing descriptions, verified example queries, agent-scoped RBAC. A semantic layer built for human BI users is fundamentally different from one ready for agent consumption. <strong>Hard gating rule: P4 = Level 1 caps the overall tier at Foundation regardless of composite score.</strong></p>
+        <div class="ins"><div class="ins-lbl">Insurance note</div>Check whether Cortex Analyst YAML semantic file exists for Snowflake; Genie-ready Unity Catalog configuration for Databricks; verified NL→SQL for top-20 insurance questions (combined ratio, loss ratio, GWP, reserve adequacy).</div>
+        <div class="plbl">Interview Questions</div>
+        <ul class="iq">
+          <li>Has your semantic layer ever been queried by a machine — a bot, an API, or an AI tool — rather than a human BI user?</li>
+          <li>Do your metric definitions include LLM-facing descriptions written in natural language, explaining business context — not just column aliases?</li>
+          <li>Have you tested a natural language to SQL tool against your semantic layer? What percentage of your top-20 questions did it answer correctly?</li>
+          <li>Do AI agent service accounts have separate RBAC from human user accounts — or does the agent use a shared human login?</li>
+        </ul>
+        <div class="plbl">Platform Tooling to Check</div>
+        <div class="tg">
+          <div class="tc db"><div class="tcp">Databricks</div>Genie (AI/BI conversational analytics), Unity Catalog function calling, Mosaic AI Agent Framework, Genie-ready metadata configuration</div>
+          <div class="tc sf"><div class="tcp">Snowflake</div>Cortex Analyst semantic YAML file, Cortex Search, Snowflake Cortex LLM functions, Arctic Embed</div>
+          <div class="tc fab"><div class="tcp">Fabric</div>Microsoft Copilot for Power BI, Azure OpenAI on Fabric data, natural language query in Power BI</div>
+        </div>
+        <div class="plbl">Scoring Rubric</div>
+        <div style="overflow-x:auto;"><table class="rtab">
+          <tr><th>Level</th><th>Label</th><th>Evidence</th></tr>
+          <tr><td><span class="lv1">L1 · Absent</span></td><td>Human BI only</td><td>Semantic layer is a human BI tool. No API access. No LLM-facing descriptions. No verified NL→SQL. Agent cannot consume without writing raw SQL. <span class="br" style="font-size:10px;padding:1px 5px;">Hard gate — Foundation Sprint required</span></td></tr>
+          <tr><td><span class="lv2">L2 · Initial</span></td><td>API accessible</td><td>Assets accessible via SQL API. Descriptions written for analysts, not LLMs. No verified example queries. Agent service account exists but has broad permissions.</td></tr>
+          <tr><td><span class="lv3">L3 · Developing</span></td><td>LLM descriptions present</td><td>Some LLM-facing descriptions (ai_context, column-level NL descriptions). Priority assets accessible via agent accounts with scoped permissions. Some example queries verified.</td></tr>
+          <tr><td><span class="lv4">L4 · Established</span></td><td>Agent-ready configuration</td><td>All priority assets have LLM consumption descriptions. Agent service accounts configured with scoped RBAC. Top-20 priority questions have verified SQL. Genie/Cortex Analyst/Copilot configured.</td></tr>
+          <tr><td><span class="lv5">L5 · Optimised</span></td><td>NL→SQL tested in production</td><td>Semantic layer tested against LLM consumption (NL→SQL eval on priority questions). Agent access patterns monitored. Prompt templates maintained for complex queries. AI features in active production use.</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- P5 -->
+    <div class="pi" id="pi5">
+      <div class="ph" onclick="togglePillar('pi5')">
+        <span class="pnum">P5</span>
+        <span class="pw">13%</span>
+        <span class="pname">Business Context &amp; Knowledge Capture</span>
+        <span class="pchev">▶</span>
+      </div>
+      <div class="pb">
+        <p class="pdesc">Whether tacit business knowledge — regulatory thresholds, exception rules, domain-specific context — is captured in machine-readable form in the semantic layer. <em>Insurance focus: loss ratio thresholds by portfolio segment, underwriting authority limits, IFRS 17 CSM calculation rules, Solvency II pillar thresholds, fraud indicators, claims adjudication criteria, risk appetite parameters.</em></p>
+        <div class="plbl">Interview Questions</div>
+        <ul class="iq">
+          <li>Where does your combined ratio threshold live — in someone's head, in a spreadsheet, or in the data platform as a versioned definition?</li>
+          <li>If an agent needed to know "what constitutes a large claim in P&amp;C Motor" — where would it find that definition?</li>
+          <li>For IFRS 17 or Solvency II reporting — are the regulatory definitions of your key metrics machine-readable, or only in the regulation text?</li>
+          <li>When a business rule changes (e.g. the threshold for automatic binding approval is updated) — how is that change communicated to the teams building data products?</li>
+        </ul>
+        <div class="plbl">Platform Tooling to Check</div>
+        <div class="tg">
+          <div class="tc db"><div class="tcp">Databricks</div>Unity Catalog business glossary, dbt metric descriptions with business context, documentation site</div>
+          <div class="tc sf"><div class="tcp">Snowflake</div>Cortex Glossary with business context fields, Semantic Views description fields, Snowflake docs</div>
+          <div class="tc fab"><div class="tcp">Fabric</div>Purview glossary terms with definition and context, Power BI measure descriptions, DAX documentation</div>
+        </div>
+        <div class="plbl">Scoring Rubric</div>
+        <div style="overflow-x:auto;"><table class="rtab">
+          <tr><th>Level</th><th>Label</th><th>Evidence</th></tr>
+          <tr><td><span class="lv1">L1 · Absent</span></td><td>Knowledge in people's heads</td><td>Business rules exist only in documents or tribal knowledge. No thresholds in the data platform. Agent would have to hallucinate business context.</td></tr>
+          <tr><td><span class="lv2">L2 · Initial</span></td><td>Informal capture</td><td>Some rules captured in column descriptions. No structured glossary. Exception handling undocumented. Thresholds not versioned.</td></tr>
+          <tr><td><span class="lv3">L3 · Developing</span></td><td>Glossary with 50+ terms</td><td>Business glossary covering key insurance terms. Key thresholds documented in the semantic layer (e.g. loss ratio threshold = 65%). Common exception rules captured.</td></tr>
+          <tr><td><span class="lv4">L4 · Established</span></td><td>All AI-target domains covered</td><td>Glossary covers all AI-target domains. Thresholds version-controlled and linked to semantic definitions. Regulatory context documented for regulated metrics. Exception ontology in progress.</td></tr>
+          <tr><td><span class="lv5">L5 · Optimised</span></td><td>Rules expressed as code</td><td>Business rules expressed as dbt tests, DLT expectations, or Snowflake data quality constraints. Regulatory rule changes tracked as semantic layer updates. Knowledge base integrated with agent consumption layer.</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- P6 -->
+    <div class="pi" id="pi6">
+      <div class="ph" onclick="togglePillar('pi6')">
+        <span class="pnum">P6</span>
+        <span class="pw">5%</span>
+        <span class="pname">Semantic Coverage vs Business Demand</span>
+        <span class="pchev">▶</span>
+      </div>
+      <div class="pb">
+        <p class="pdesc">Whether the current semantic coverage actually covers the questions the target agent needs to answer. High P1 scores with low P6 mean quality definitions exist but don't address the priority use cases.</p>
+        <div class="plbl">Interview Questions</div>
+        <ul class="iq">
+          <li>Can you give me your top 20 business questions — the ones your CDO, underwriting director, or head of claims would ask every week?</li>
+          <li>For each of those, can we map it: does a formal metric definition exist in the semantic layer today?</li>
+          <li>Which 3–5 questions are most important for your target agent? Are those specifically covered?</li>
+        </ul>
+        <div class="plbl">Scoring Rubric</div>
+        <div style="overflow-x:auto;"><table class="rtab">
+          <tr><th>Level</th><th>Label</th><th>Coverage of top-20 priority questions</th></tr>
+          <tr><td><span class="lv1">L1 · Absent</span></td><td>No mapping done</td><td>No priority question catalog. Coverage unknown.</td></tr>
+          <tr><td><span class="lv2">L2 · Initial</span></td><td>&lt;30% answerable</td><td>Questions catalogued informally. Coverage assessed: fewer than 6 of top 20 answerable from semantic layer.</td></tr>
+          <tr><td><span class="lv3">L3 · Developing</span></td><td>30–50% answerable</td><td>Top-20 questions catalogued. Coverage mapped: 6–10 answerable from current semantic assets.</td></tr>
+          <tr><td><span class="lv4">L4 · Established</span></td><td>50–75% answerable</td><td>Coverage mapped for all priority questions: 10–15 answerable. Gaps identified and backlogged. Coverage tracked quarter-on-quarter.</td></tr>
+          <tr><td><span class="lv5">L5 · Optimised</span></td><td>75%+ answerable</td><td>15+ of top-20 answerable. Coverage tracking automated. New business questions triaged against semantic layer before BI tool build.</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- P7 -->
+    <div class="pi" id="pi7">
+      <div class="ph" onclick="togglePillar('pi7')">
+        <span class="pnum">P7</span>
+        <span class="pw">4%</span>
+        <span class="pname">Operational Readiness</span>
+        <span class="pchev">▶</span>
+      </div>
+      <div class="pb">
+        <p class="pdesc">Whether the team, tooling, and processes exist to maintain and evolve the semantic layer over time. A semantic layer without operational discipline decays — metrics drift, definitions become stale, coverage shrinks. Especially important for Class 3 (monitoring) agents which depend on freshness SLAs.</p>
+        <div class="plbl">Interview Questions</div>
+        <ul class="iq">
+          <li>Who maintains your semantic layer today? Is it one person or a team? What happens when they leave?</li>
+          <li>Is your semantic layer in version control with a review/approval process for changing a metric definition?</li>
+          <li>How long does it take to add a new metric definition from business request to production availability?</li>
+          <li>Do you have automated tests that run when a semantic layer change is deployed?</li>
+        </ul>
+        <div class="plbl">Scoring Rubric</div>
+        <div style="overflow-x:auto;"><table class="rtab">
+          <tr><th>Level</th><th>Label</th><th>Evidence</th></tr>
+          <tr><td><span class="lv1">L1 · Absent</span></td><td>Ad-hoc, single owner</td><td>One person owns the semantic layer with no documentation. Changes undocumented and untested. No version control.</td></tr>
+          <tr><td><span class="lv2">L2 · Initial</span></td><td>Some version control</td><td>Files in git. One informal owner. No deployment pipeline. Change process undocumented.</td></tr>
+          <tr><td><span class="lv3">L3 · Developing</span></td><td>Basic CI/CD</td><td>Named team (even if small). Semantic layer in version control. Basic CI/CD for dbt or equivalent. Change management process informal but present.</td></tr>
+          <tr><td><span class="lv4">L4 · Established</span></td><td>Process-governed changes</td><td>Dedicated team or clear ownership matrix. CI/CD pipeline with automated tests. Change request process for semantic definition changes. Documentation standards enforced.</td></tr>
+          <tr><td><span class="lv5">L5 · Optimised</span></td><td>Platform-agnostic management</td><td>Automated semantic drift detection. Semantic layer SLA (availability, freshness, quality) tracked. Roadmap for coverage expansion maintained and reviewed quarterly.</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- P8 -->
+    <div class="pi" id="pi8">
+      <div class="ph" onclick="togglePillar('pi8')">
+        <span class="pnum">P8</span>
+        <span class="pw">10%</span>
+        <span class="pname">Agentic Harness Readiness</span>
+        <span class="pchev">▶</span>
+      </div>
+      <div class="pb">
+        <p class="pdesc">Whether the platform and team are ready to govern, cost-control, evaluate, and certify agents safely. For Class 4–6 agents, a gap here is as blocking as a gap in P1. <strong>Hard gating rule: P8 &lt; Level 3 with a Class 4, 5, or 6 target caps the overall tier at Foundation regardless of composite score.</strong></p>
+        <div class="ins"><div class="ins-lbl">Insurance note</div>Class 5 agents (auto-approve claims) require documentation ready for FCA or PRA inspection: AIUC-1 conformance path, EU AI Act Article 9 risk management system, explainability output per claim decision, hard-stop inputs that always require human review (e.g. suspected fraud flags, claims above £X regardless of criteria).</div>
+        <div class="plbl">Interview Questions</div>
+        <ul class="iq">
+          <li>If an agent ran 10,000 queries overnight due to a loop bug — would anything stop it? What is your cost-per-task circuit breaker?</li>
+          <li>Before deploying an agent to production — what is your testing process? Do you have a test suite with deliberate edge cases and seeded defects?</li>
+          <li>When the agent produces a wrong answer — how do you know? What hallucination detection approach do you use for agent outputs?</li>
+          <li>Does the agent use a dedicated service account with scoped permissions — or a shared admin credential?</li>
+          <li>For regulated use cases: do you have documentation ready for a regulator asking "how does this agent make decisions?"</li>
+        </ul>
+        <div class="plbl">Platform Tooling to Check</div>
+        <div class="tg">
+          <div class="tc db"><div class="tcp">Databricks</div>Mosaic AI Agent Evaluation, Unity Catalog agent RBAC, system.access.audit for agent query logs, Model Serving guardrails, Databricks cost management per cluster/job</div>
+          <div class="tc sf"><div class="tcp">Snowflake</div>Cortex Guard (hallucination detection), Snowflake Trust Center, model monitoring, Cortex Fine-Tuning eval harness, resource monitors for cost control</div>
+          <div class="tc fab"><div class="tcp">Fabric</div>Azure AI Content Safety, Azure AI Foundry evaluation framework, Responsible AI dashboard, Azure Monitor for cost tracking</div>
+        </div>
+        <div style="margin-top:10px;padding:8px 12px;background:var(--accent-dim);border-radius:6px;font-size:12px;color:var(--accent);font-weight:600;">Cross-platform governance: AIUC-1 certification (BSI audit path), OWASP Top 10 for Agentic Applications 2026, Cloud Security Alliance Agentic AI security controls, LangSmith / Arize Phoenix for eval harness tooling.</div>
+        <div class="plbl">Scoring Rubric</div>
+        <div style="overflow-x:auto;"><table class="rtab">
+          <tr><th>Level</th><th>Label</th><th>Evidence</th></tr>
+          <tr><td><span class="lv1">L1 · Absent</span></td><td>No governance layer</td><td>No cost controls. No eval harness. Agents deployed directly with no validation layer. No agent-specific RBAC or audit log. <span class="br" style="font-size:10px;padding:1px 5px;">Hard gate for Class 4/5/6</span></td></tr>
+          <tr><td><span class="lv2">L2 · Initial</span></td><td>Token caps only</td><td>Token limits set at LLM API level. Manual testing only. Agent credentials shared with human users. No structured eval suite. Basic output format checking.</td></tr>
+          <tr><td><span class="lv3">L3 · Developing</span></td><td>Cost + basic eval</td><td>Cost tracking per agent run. Basic eval suite covering happy-path cases. Agent service accounts with scoped permissions. Query audit log active. Basic hallucination detection (schema validation, answer grounding check). <span class="ba">Minimum for Class 4/5/6</span></td></tr>
+          <tr><td><span class="lv4">L4 · Established</span></td><td>Circuit breakers + edge cases</td><td>Circuit breakers on cost and iteration count. Eval harness with edge-case coverage and defect seeding. Hallucination detection for all priority outputs. Dedicated agent audit trail reviewed. Escalation/hard-stop rules documented. Cost-per-task tracked as a KPI.</td></tr>
+          <tr><td><span class="lv5">L5 · Optimised</span></td><td>CI/CD gated + compliant</td><td>No agent promotes without passing eval CI/CD gate. CHARM-type cascading hallucination detection. AIUC-1 or EU AI Act Article 9 controls documented. Governance board reviews agent permissions and eval scores quarterly. All Class 4+ agents have human-in-the-loop gates documented and tested.</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+  </div><!-- end pillar-list -->
+</section>
+
+<!-- S5 · MATRIX -->
+<section class="section" id="s5">
+  <div class="sh"><span class="snum">05</span><h2 class="stitle">Week 3 · Target Class × Pillar Floor Matrix</h2></div>
+  <p class="ssub">Enter the customer's pillar scores (1–5) to identify Class-Gating Gaps. Any score below the floor for the target class is a blocker — not a recommendation. These go into Phase 1 of the 90-day roadmap.</p>
+
+  <div class="score-row">
+    <label>Customer scores →</label>
+    <div class="si-wrap"><span>P1 Semantic</span><input type="number" min="1" max="5" value="3" id="sc1" oninput="updateMatrix()"></div>
+    <div class="si-wrap"><span>P2 Governance</span><input type="number" min="1" max="5" value="2" id="sc2" oninput="updateMatrix()"></div>
+    <div class="si-wrap"><span>P3 Domain</span><input type="number" min="1" max="5" value="2" id="sc3" oninput="updateMatrix()"></div>
+    <div class="si-wrap"><span>P4 Agent Ready</span><input type="number" min="1" max="5" value="3" id="sc4" oninput="updateMatrix()"></div>
+    <div class="si-wrap"><span>P5 Biz Context</span><input type="number" min="1" max="5" value="2" id="sc5" oninput="updateMatrix()"></div>
+    <div class="si-wrap"><span>P6 Demand</span><input type="number" min="1" max="5" value="2" id="sc6" oninput="updateMatrix()"></div>
+    <div class="si-wrap"><span>P7 Operations</span><input type="number" min="1" max="5" value="2" id="sc7" oninput="updateMatrix()"></div>
+    <div class="si-wrap"><span>P8 Harness</span><input type="number" min="1" max="5" value="2" id="sc8" oninput="updateMatrix()"></div>
+    <div class="score-result">
+      <div class="sr-score" id="composite-score">43</div>
+      <div class="sr-tier" id="current-tier">Tier 1 · Foundation</div>
+    </div>
+  </div>
+
+  <div id="gating-alert" class="gating-alert" hidden></div>
+
+  <div class="matrix-wrap">
+    <table class="mt" id="matrix-table">
+      <thead>
+        <tr>
+          <th>Pillar</th>
+          <th class="thc1">Class 1<br>Query</th>
+          <th class="thc2">Class 2<br>Research</th>
+          <th class="thc3">Class 3<br>Monitor</th>
+          <th class="thc4">Class 4<br>Workflow</th>
+          <th class="thc5">Class 5<br>Autonomous</th>
+          <th class="thc6">Class 6<br>Orchestrator</th>
+        </tr>
+      </thead>
+      <tbody id="matrix-body">
+        <!-- Populated by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="gap-bar" id="gap-bar">
+    <div class="gc"><span class="gcn thc1" id="gap-c1">0</span><span class="gcl">Class 1<br>gaps</span></div>
+    <div class="gc"><span class="gcn thc2" id="gap-c2">0</span><span class="gcl">Class 2<br>gaps</span></div>
+    <div class="gc"><span class="gcn thc3" id="gap-c3">0</span><span class="gcl">Class 3<br>gaps</span></div>
+    <div class="gc"><span class="gcn thc4" id="gap-c4">0</span><span class="gcl">Class 4<br>gaps</span></div>
+    <div class="gc"><span class="gcn thc5" id="gap-c5">0</span><span class="gcl">Class 5<br>gaps</span></div>
+    <div class="gc"><span class="gcn thc6" id="gap-c6">0</span><span class="gcl">Class 6<br>gaps</span></div>
+    <div style="margin-left:auto;font-size:11px;color:var(--fg-muted);align-self:center;"><span class="cell-ok" style="display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:3px;"></span>Above floor &nbsp; <span class="cell-warn" style="display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:3px;"></span>At floor &nbsp; <span class="cell-gap" style="display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:3px;"></span>Gap</div>
+  </div>
+</section>
+
+<!-- S6 · TIERS -->
+<section class="section" id="s6">
+  <div class="sh"><span class="snum">06</span><h2 class="stitle">Readiness Tiers</h2></div>
+  <p class="ssub">Composite score = P1×20% + P2×17% + P3×13% + P4×18% + P5×13% + P6×5% + P7×4% + P8×10%. Level-to-score mapping: L1=15, L2=35, L3=55, L4=75, L5=95.</p>
+
+  <div class="tier-grid">
+    <div class="tcard t0">
+      <div class="ts">Score 0–29</div>
+      <div class="tn">0</div>
+      <div class="tl">Not CE-Ready</div>
+      <div class="tx">Mandatory Foundation Sprint (6–8 weeks) before any T2 Accelerator. Do not proceed to Sprint 1.</div>
+    </div>
+    <div class="tcard t1">
+      <div class="ts">Score 30–49</div>
+      <div class="tn">1</div>
+      <div class="tl">Foundation</div>
+      <div class="tx">T2 Accelerator Sprint 1 — focus on P1/P4 quick wins. Pilot a Class 1 query agent with limited scope.</div>
+    </div>
+    <div class="tcard t2">
+      <div class="ts">Score 50–69</div>
+      <div class="tn">2</div>
+      <div class="tl">Emerging</div>
+      <div class="tx">T2 Sprint 1 + Conversational BI pilot. Class 1–2 agents viable. Address Class-Gating Gaps before Class 3+.</div>
+    </div>
+    <div class="tcard t3">
+      <div class="ts">Score 70–84</div>
+      <div class="tn">3</div>
+      <div class="tl">CE-Ready</div>
+      <div class="tx">Genie / Cortex Analyst pilot immediately. T2 Sprint 2. Class 3 agents viable. Class 4 requires gap remediation.</div>
+    </div>
+    <div class="tcard t4">
+      <div class="ts">Score 85–100</div>
+      <div class="tn">4</div>
+      <div class="tl">Advanced</div>
+      <div class="tx">Multi-agent deployment viable. Skip starter sprint. Class 5/6 pending P8 score confirmation and compliance path.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:14px;background:var(--red-dim);border:1px solid var(--red);border-radius:8px;padding:12px 16px;font-size:12.5px;">
+    <strong style="color:var(--red);">Hard gating rules override the composite score:</strong> (1) P4 = Level 1 → capped at Foundation regardless. (2) P8 &lt; Level 3 with Class 4/5/6 target → capped at Foundation for that class. (3) Any Class-Gating Gap → those gaps are Phase 1 roadmap items before that class can deploy.
+  </div>
+</section>
+
+<!-- S7 · DELIVERABLES -->
+<section class="section" id="s7">
+  <div class="sh"><span class="snum">07</span><h2 class="stitle">Week 4 · Deliverables Guide</h2></div>
+  <p class="ssub">Four deliverables handed to the customer at the Week 4 findings presentation. The CE Architect owns the report and roadmap; the Data Platform Analyst produces the OSI export.</p>
+
+  <div class="dg">
+    <div class="dc" style="border-top:3px solid var(--accent);">
+      <div class="dt">CE Maturity Score Report</div>
+      <div class="dp">18–24 pages · CDO and sponsors</div>
+      <ul>
+        <li>Target Class Profile (0.5 page): confirmed class(es), minimum score floors this implies</li>
+        <li>Executive summary: composite score, tier, 3 Class-Gating Gaps</li>
+        <li>8-pillar scored assessment with evidence per pillar</li>
+        <li>Class-Gating Gaps section (1 page): each gap with evidence and specific remediation</li>
+        <li>P8 Harness Readiness deep-dive: score, gap, recommended tooling</li>
+        <li>Competitive benchmark vs industry (insurance/BFSI peers)</li>
+        <li>Quick Win recommendation with rationale</li>
+      </ul>
+    </div>
+    <div class="dc" style="border-top:3px solid #6366F1;">
+      <div class="dt">Floor Plan One-Pager</div>
+      <div class="dp">1 page · CDO boardroom visual</div>
+      <ul>
+        <li>Radar chart: 8 pillar scores as the outer polygon</li>
+        <li>Target class floor plotted as inner overlay ring</li>
+        <li>Class-Gating Gaps highlighted in red where score is below the floor</li>
+        <li>Title: "[Customer] · Class [X] Readiness Profile"</li>
+        <li>Single artefact that makes the CDO conversation immediate — they see exactly which gaps block their target deployment</li>
+      </ul>
+    </div>
+    <div class="dc" style="border-top:3px solid var(--amber);">
+      <div class="dt">OSI-Compatible Quick Win Spec</div>
+      <div class="dp">Technical · Data Platform Analyst delivers</div>
+      <ul>
+        <li>3–5 metric/entity definitions in OSI-format JSON/YAML (Apache Ossie spec v0.1.1)</li>
+        <li>Industry ontology seed: relevant FIBO/ACORD terms for the customer's vertical, pre-formatted for their primary platform</li>
+        <li>Deployable on Snowflake on day 1 of Sprint 1 (SYSTEM$CREATE_SEMANTIC_VIEW_FROM_OSSIE_YAML)</li>
+        <li>Structured for portability to Databricks/Fabric once native support ships</li>
+        <li>Note in delivery agreement: definitions may require spec version update when OSI moves to stable release</li>
+      </ul>
+    </div>
+    <div class="dc" style="border-top:3px solid var(--green);">
+      <div class="dt">90-Day CE Roadmap</div>
+      <div class="dp">3-phase · CDO and delivery team</div>
+      <ul>
+        <li><strong>Phase 1 (0–30 days):</strong> All Class-Gating Gaps + Quick Win implementation</li>
+        <li><strong>Phase 2 (30–60 days):</strong> Remaining pillar improvements to reach next tier</li>
+        <li><strong>Phase 3 (60–90 days):</strong> First agent deployment with eval harness in place</li>
+        <li>Tier 0 customers: Foundation Sprint replaces Phase 1; re-score at end</li>
+        <li>Each phase item maps to: pillar → current score → target score → specific platform action</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- S8 · OSI SPEC -->
+<section class="section" id="s8">
+  <div class="sh"><span class="snum">08</span><h2 class="stitle">OSI Export Specification <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;background:#FEF3C7;color:#92400E;border:1px solid #D97706;padding:2px 9px;border-radius:4px;margin-left:6px;vertical-align:middle;">Horizon · 12–18 months</span></h2></div>
+  <div style="background:#FFFBEB;border-left:3px solid #D97706;border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#78350F;line-height:1.6;">
+    <strong>Delivery guidance:</strong> Include the OSI Quick Win Spec on Snowflake engagements today (native preview support available). Flag as a 12–18 month roadmap item on Databricks and Fabric engagements — native import is not yet shipped on either platform. This section is a forward reference; keep it in the 90-day roadmap as a Phase 3 item rather than a Week 4 hard deliverable on non-Snowflake customers.
+  </div>
+  <p class="ssub">Apache Ossie spec v0.1.1 (Apache Software Foundation incubating project, January 2026). Do not use 0.2.0.dev0 — breaking changes, not backward compatible.</p>
+
+  <div class="osi-grid">
+    <div class="opd" style="border-top:3px solid #29B5E8;">
+      <div class="opn">Snowflake</div>
+      <div class="ops"><span class="bg" style="font-size:10px;">In Preview</span> Two SQL procedures available. Use <code style="font-family:var(--font-mono);font-size:11px;">SYSTEM$CREATE_SEMANTIC_VIEW_FROM_OSSIE_YAML</code>. Known limitation: datatypes not exported; composite primary keys fail cross-tool. Spec locked to v0.1.1.</div>
+    </div>
+    <div class="opd" style="border-top:3px solid #E87200;">
+      <div class="opn">Databricks</div>
+      <div class="ops"><span class="bm" style="font-size:10px;">Working group member</span> No native export shipped. Deliver structured JSON following OSI schema conventions. Note in the deliverable: "OSI-structured — natively importable once Databricks ships support (projected H1 2027)."</div>
+    </div>
+    <div class="opd" style="border-top:3px solid #0078D4;">
+      <div class="opn">Microsoft Fabric</div>
+      <div class="ops"><span class="bm" style="font-size:10px;">Community converter</span> Power BI ↔ Ossie community converter available (not native Fabric). Use the converter for Power BI semantic models. Flag as community tooling, not production Fabric feature.</div>
+    </div>
+  </div>
+
+  <div class="plbl" style="margin-top:16px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);">OSI YAML Structure (v0.1.1)</div>
+  <div class="code-block"><span class="cc"># Apache Ossie v0.1.1 — Quick Win Spec template (insurance example)</span>
+<span class="ck">semantic_model</span>:
+  <span class="ck">name</span>: <span class="cv">"insurance_core_metrics"</span>
+  <span class="ck">description</span>: <span class="cv">"Core P&amp;C insurance metrics for AI agent consumption. KPI Partners CE Assessment Quick Win."</span>
+  <span class="ck">datasets</span>:
+    - <span class="ck">name</span>: <span class="cv">"policy_fact"</span>
+      <span class="ck">source</span>: <span class="cv">"gold.policy_fact"</span>
+      <span class="ck">description</span>: <span class="cv">"One row per in-force policy. Refreshed nightly by 06:00 UTC."</span>
+      <span class="ck">primary_key</span>: <span class="cv">"policy_id"</span>
+  <span class="ck">metrics</span>:
+    - <span class="ck">name</span>: <span class="cv">"combined_ratio"</span>
+      <span class="ck">description</span>: <span class="cv">"(Incurred losses + LAE + underwriting expenses) / earned premium. Target: below 97% for P&amp;C Motor portfolio."</span>
+      <span class="ck">ai_context</span>: <span class="cv">"Use this metric to assess underwriting profitability. Values above 100% indicate an unprofitable portfolio. Threshold 97% triggers management review."</span>
+      <span class="ck">expression</span>: <span class="cv">"(SUM(incurred_loss) + SUM(lae) + SUM(expense)) / NULLIF(SUM(earned_premium), 0)"</span>
+      <span class="ck">format</span>: <span class="cv">"percentage"</span></div>
+
+  <div style="font-size:12px;color:var(--fg-muted);margin-top:8px;">
+    <strong>Delivery checklist:</strong> (1) Confirm the customer's primary platform — use native Snowflake procedure if on Snowflake, OSI-structured JSON for Databricks/Fabric. (2) Include industry ontology seed: ACORD terms for insurance, FIBO for BFSI. (3) Version the file as <code style="font-family:var(--font-mono);font-size:11px;">ossie-quickwin-v1.yaml</code> and include in delivery agreement. (4) Note spec version in the file header. (5) Add a statement that definitions will be updated if spec version changes before Sprint 1 starts.
+  </div>
+</section>
+
+<!-- S9 · COMPETITIVE -->
+<section class="section" id="s9">
+  <div class="sh"><span class="snum">09</span><h2 class="stitle">Competitive Positioning</h2></div>
+  <p class="ssub">Use this table in the CDO findings presentation (slide 2 or 3). Do not lead with it — lead with the Floor Plan One-Pager. The table lands hardest after the CDO has seen their own gap profile.</p>
+
+  <div class="ct-wrap">
+    <table class="ct ct-kpi">
+      <thead>
+        <tr>
+          <th>Differentiator</th>
+          <th>KPI v1.0</th>
+          <th>Databricks tool</th>
+          <th>Snowflake score</th>
+          <th>TCS SRI</th>
+          <th>Persistent</th>
+          <th>Other SI</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Multi-platform (DB + SF + Fabric) composite score</td><td><span class="ck">✓</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>Target Agent Class elicitation before scoring</td><td><span class="ck">✓</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>Class-specific minimum score floors (8×6 matrix)</td><td><span class="ck">✓</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>Agentic Harness Readiness as scored pillar (P8)</td><td><span class="ck">✓</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>OSI-compatible Quick Win deliverable</td><td><span class="ck">✓</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>Industry-vertical calibration (Insurance + BFSI)</td><td><span class="ck">✓</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cpa">Life Sci only</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>Question-first intake (top-20 elicitation)</td><td><span class="ck">✓</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>Fixed-price with Quick Win spec ($30–40K, 4 weeks)</td><td><span class="ck">✓</span></td><td>No delivery</td><td>No delivery</td><td>No delivery</td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>Kill rules / dead-end protocol</td><td><span class="ck">✓</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>T2 Accelerator Sprint intake included</td><td><span class="ck">✓</span></td><td>No delivery</td><td>No delivery</td><td>No delivery</td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:14px;font-size:12.5px;color:var(--fg-muted);line-height:1.8;">
+    <strong style="color:var(--fg);">Handling objections:</strong><br>
+    <strong>"Snowflake already has a readiness score"</strong> → "It has a single undifferentiated agents workload bucket. It doesn't ask what class of agent you're building, and it can't see your Databricks environment."<br>
+    <strong>"TCS/Accenture can do this"</strong> → "Ask them for their fixed-price with a platform-portable Quick Win spec and a kill rule. They'll say they need to scope it first. We hand you the deliverable in 4 weeks."<br>
+    <strong>"OSI isn't mature yet"</strong> → "Snowflake has native preview support today. Databricks is in the working group — native import is 12 months away. We give you a durable artefact that deploys on your primary platform now and is ready for Databricks when they ship."
+  </div>
+</section>
+
+<!-- S10 · KILL RULES -->
+<section class="section" id="s10">
+  <div class="sh"><span class="snum">10</span><h2 class="stitle">Kill Rules &amp; Foundation Sprint Protocol</h2></div>
+  <p class="ssub">These are the conditions under which we explicitly recommend the customer does NOT proceed to T2 Sprint 1 yet. Honest gating at this stage is what builds CDO trust and protects the delivery relationship.</p>
+
+  <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);margin-bottom:10px;">Automatic Foundation Sprint triggers — apply before presenting findings</div>
+
+  <div class="kr">
+    <div class="kt">Kill Rule 1 · Composite score ≤ 29 (Tier 0)</div>
+    <div class="ka">Mandatory Foundation Sprint. Present it positively: "You're in the right place — the gap is specific and addressable. We'd rather give you 6 weeks to fix it than have a sprint fail in month 2." Never proceed to Sprint 1 with a Tier 0 customer.</div>
+  </div>
+  <div class="kr">
+    <div class="kt">Kill Rule 2 · P4 (Agent Consumption Readiness) = Level 1</div>
+    <div class="ka">The semantic layer is not machine-accessible at all. Overall tier is hard-capped at Foundation regardless of composite score. Sprint 1 cannot succeed without basic API access and LLM-facing descriptions. Foundation Sprint focus: P4 to Level 2 minimum.</div>
+  </div>
+  <div class="kr">
+    <div class="kt">Kill Rule 3 · P8 (Harness Readiness) &lt; Level 3 with Class 4, 5, or 6 target</div>
+    <div class="ka">Tier capped at Foundation for the target class. Proceed to Sprint 1 only for Class 1–3 agents. Explicitly document: "Your target class (Class [X]) cannot be deployed safely until P8 reaches Level 3. This is a prerequisite, not a recommendation." Include a P8 track in the 90-day roadmap.</div>
+  </div>
+  <div class="kr">
+    <div class="kt">Kill Rule 4 · 3 or more Class-Gating Gaps for the target class</div>
+    <div class="ka">When three or more pillars are below the target class floor, Sprint 1 is high-risk. Present a Phase 0 gap remediation sprint (2–4 weeks, scoped to close the gaps) before full Sprint 1. This is a judgment call — use it when the gaps are structural (P3, P7) not just incremental (P6).</div>
+  </div>
+
+  <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);margin:20px 0 10px;">Sprint Kill Rule — applies during T2 Sprint 1</div>
+  <div class="card">
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px;">No qualified pilot conversation within Sprint 1 timeline → retire and redirect</div>
+    <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.8;">
+      If the customer cannot identify a qualified internal champion for the Sprint 1 pilot by week 3 of Sprint 1, raise the flag immediately. Agreed exit criteria: no named business owner + no agreed pilot scope = Sprint 1 cannot succeed.<br>
+      <strong>Action:</strong> Formally retire Sprint 1. Redirect the engagement to T1 (KAM/Sales Velocity track) — help the customer identify and engage the right internal champion before re-qualifying for Sprint 2. Document as a clean exit, not a failure.
+    </div>
+  </div>
+
+  <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);margin:20px 0 10px;">Foundation Sprint — what it includes</div>
+  <div class="card-grid">
+    <div class="card">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);margin-bottom:6px;">Duration &amp; cost</div>
+      6–8 weeks · $30–40K fixed price
+    </div>
+    <div class="card">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);margin-bottom:6px;">Deliverables</div>
+      Platform inventory, semantic scaffolding for 5–10 priority metrics, data owner assignment, basic quality monitoring setup, P8 cost controls and agent RBAC configuration
+    </div>
+    <div class="card">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);margin-bottom:6px;">Gate to Sprint 1</div>
+      P1 ≥ Level 2, P2 ≥ Level 2, P4 ≥ Level 2, P8 ≥ Level 2 (Level 3 if Class 4/5/6 target)
+    </div>
+  </div>
+</section>
+
+<!-- S11 · MARKET REFERENCE -->
+<section class="section" id="s11">
+  <div class="sh"><span class="snum">11</span><h2 class="stitle">Market Reference — Similar Assessment Plays</h2></div>
+  <p class="ssub">Know the landscape before walking into a CDO conversation. These are the frameworks a well-read customer may have already encountered. Organised by category — platform vendor tools, analyst models, SI-led assessments, and AI governance frameworks.</p>
+
+  <!-- Category 1: Platform Vendors -->
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg-muted);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Platform Vendor Assessments</div>
+  <div style="display:flex;flex-direction:column;gap:10px;">
+
+    <div class="card" style="border-left:3px solid #E87200;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">Databricks Data + AI Maturity Assessment</span>
+        <span class="badge" style="background:#FFF7ED;color:#C2410C;font-size:10px;">Platform-native</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">A self-serve maturity questionnaire embedded in the Databricks account console. Scores across five dimensions: Data Ingestion, Processing, Governance, ML/AI, and Collaboration. Outputs a radar chart and recommends Databricks product adoption paths. Tied entirely to Unity Catalog and Mosaic AI adoption — no cross-platform view, no agent class concept, no harness readiness dimension.</div>
+      <div style="font-size:11.5px;background:#FFF7ED;border-radius:5px;padding:7px 10px;color:#92400E;"><strong>If a CDO mentions it:</strong> "That tool tells you how mature your Databricks environment is. Our assessment tells you whether you're ready to deploy a specific class of AI agent — and what's blocking you across any platform you're running."</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #29B5E8;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">Snowflake Modern Data Experience Assessment</span>
+        <span class="badge" style="background:#EFF6FF;color:#1D4ED8;font-size:10px;">Platform-native</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">Partner-delivered readiness review scoped to Snowflake adoption — Data Cloud migration readiness, Cortex AI feature adoption, and Snowflake governance maturity. Strong on Cortex Analyst and Snowflake semantic views but blind to Databricks or Fabric environments. No minimum score floors by agent class.</div>
+      <div style="font-size:11.5px;background:#EFF6FF;border-radius:5px;padding:7px 10px;color:#1D4ED8;"><strong>If a CDO mentions it:</strong> "Snowflake's assessment is a platform adoption health check. It doesn't score your governance readiness or harness readiness for autonomous agents — that's what our framework adds."</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #0078D4;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">Microsoft Cloud Adoption Framework — AI Readiness</span>
+        <span class="badge" style="background:#EFF6FF;color:#0078D4;font-size:10px;">Platform-native</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">Microsoft's structured path for enterprise cloud and AI adoption, with an AI readiness pillar added in 2025 covering Azure OpenAI, Copilot Studio, and Fabric integration. Maturity levels 1–5 across strategy, skills, data, and governance. Broad in scope but light on specifics for agentic deployments — it addresses Copilot readiness more than Class 4–6 autonomous agent deployment. No class-specific floor plan.</div>
+      <div style="font-size:11.5px;background:#EFF6FF;border-radius:5px;padding:7px 10px;color:#0078D4;"><strong>If a CDO mentions it:</strong> "CAF AI readiness covers Copilot and Azure OpenAI adoption well. For customers targeting autonomous workflow or decision agents, our framework picks up where CAF stops — specifically on semantic layer depth and harness governance."</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #FF9900;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">AWS Analytics Lens — Well-Architected Framework</span>
+        <span class="badge" style="background:#FFF7ED;color:#C2410C;font-size:10px;">Platform-native</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">AWS Well-Architected Tool with the Analytics Lens applied — covers operational excellence, security, reliability, performance, and cost optimisation for data workloads. A strong infrastructure and architecture review, not a semantic layer or agentic readiness assessment. Increasingly used as a pre-sales tool by AWS account teams ahead of Bedrock and SageMaker engagements.</div>
+      <div style="font-size:11.5px;background:#FFF7ED;border-radius:5px;padding:7px 10px;color:#92400E;"><strong>If a CDO mentions it:</strong> "Well-Architected reviews are infrastructure assessments. They won't tell you whether your business questions are defined clearly enough for an agent to answer them, or whether you have a harness to govern agent behaviour safely."</div>
+    </div>
+  </div>
+
+  <!-- Category 2: Analyst Frameworks -->
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg-muted);margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Analyst &amp; Research Firm Frameworks</div>
+  <div style="display:flex;flex-direction:column;gap:10px;">
+
+    <div class="card" style="border-left:3px solid #6366F1;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">Gartner Data &amp; Analytics Maturity Model</span>
+        <span class="badge" style="background:var(--accent-dim);color:var(--accent);font-size:10px;">Analyst</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">Five-level maturity model (Unaware → Transformational) across data governance, analytics capability, and business value realisation. Widely referenced by CDOs as a common language framework. Gartner's 2025/26 iteration adds an AI-readiness dimension, but it remains a broad organisational maturity gauge — not a deployment-gate assessment. No minimum score per use-case class, no harness pillar.</div>
+      <div style="font-size:11.5px;background:var(--accent-dim);border-radius:5px;padding:7px 10px;color:var(--accent);"><strong>If a CDO mentions it:</strong> "Gartner's model is the right framework for where you are on the data maturity journey overall. Our assessment is narrower and more actionable — it tells you specifically which agent class you can deploy now and exactly what is blocking you."</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #8B5CF6;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">Forrester Insights-Driven Business Assessment</span>
+        <span class="badge" style="background:var(--accent-dim);color:var(--accent);font-size:10px;">Analyst</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">Forrester's IDB model scores organisations on data-driven culture, analytics tooling, and AI-enabled decision-making. Strong on business strategy alignment and executive leadership readiness. It starts from business questions, not platform features — closest analogue to KPI's question-first approach. However, it is strategy-framed, not deployment-gated: it identifies AI ambition, not AI blockers. No scoring floors, no harness dimension, no kill rules.</div>
+      <div style="font-size:11.5px;background:var(--accent-dim);border-radius:5px;padding:7px 10px;color:var(--accent);"><strong>If a CDO mentions it:</strong> "Forrester's IDB is excellent for executive alignment. Our framework complements it at the technical layer — turning the business ambition Forrester identifies into a deployment-ready gap register with specific platform actions."</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #0EA5E9;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">IDC DataSphere Maturity Model</span>
+        <span class="badge" style="background:var(--accent-dim);color:var(--accent);font-size:10px;">Analyst</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">IDC's model quantifies organisational data capability across five stages — Ad Hoc, Opportunistic, Repeatable, Managed, and Optimised. Used frequently in BFSI and insurance sector benchmarking. Covers data volume, velocity, and value realisation but does not address AI agent deployment readiness or semantic layer depth. Strong for board-level benchmarking; limited operational guidance for delivery teams.</div>
+      <div style="font-size:11.5px;background:var(--accent-dim);border-radius:5px;padding:7px 10px;color:var(--accent);"><strong>If a CDO mentions it:</strong> "IDC DataSphere is useful for peer benchmarking. Our deliverable goes further — a scored gap register with a 90-day roadmap your team can act on immediately."</div>
+    </div>
+  </div>
+
+  <!-- Category 3: SI-Led -->
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg-muted);margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);">SI-Led Assessment Tools</div>
+  <div style="display:flex;flex-direction:column;gap:10px;">
+
+    <div class="card" style="border-left:3px solid #1A2333;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">TCS Data Intelligence Quotient (DIQ)</span>
+        <span class="badge" style="background:#F1F5F9;color:#475569;font-size:10px;">SI-led</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">TCS's proprietary readiness tool used in enterprise pre-sales across BFSI and manufacturing. Covers data strategy, platform maturity, governance, and AI/ML ambition. Delivered as a 2–3 week scoping exercise, typically at no charge to anchor a larger transformation SOW. Output is a maturity score and a multi-year transformation roadmap. Does not decompose by agent class, does not score harness readiness, and has no fixed-price commitment — it is a sales motion, not a standalone advisory product.</div>
+      <div style="font-size:11.5px;background:#F1F5F9;border-radius:5px;padding:7px 10px;color:#475569;"><strong>If a CDO mentions it:</strong> "TCS DIQ is a good starting point for a transformation conversation. Our assessment is a fixed-price standalone product — the customer owns the deliverable regardless of what comes next."</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #1A2333;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">Accenture Applied Intelligence Maturity Assessment</span>
+        <span class="badge" style="background:#F1F5F9;color:#475569;font-size:10px;">SI-led</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">Accenture's enterprise AI readiness tool, part of their Applied Intelligence practice. Evaluates AI strategy, talent, data, technology, and responsible AI readiness across five dimensions. Strong breadth but light depth on technical semantic layer and platform-specific agentic deployment. Typically embedded within a broader Accenture engagement — not sold as a standalone diagnostic. No agent class concept, no class-specific floors.</div>
+      <div style="font-size:11.5px;background:#F1F5F9;border-radius:5px;padding:7px 10px;color:#475569;"><strong>If a CDO mentions it:</strong> "Accenture's assessment maps strategic AI readiness well. It won't give you the platform-level gap register you need to deploy an agent on Databricks or Snowflake in the next 90 days — that's our gap."</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #1A2333;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">Tredence / Tiger Analytics Data Maturity Assessments</span>
+        <span class="badge" style="background:#F1F5F9;color:#475569;font-size:10px;">SI-led</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">Mid-market SI tools — typically 2–4 week engagements covering data infrastructure, ML pipeline maturity, and BI consolidation readiness. Common in insurance, retail, and CPG sectors. Output is a slide deck with a maturity heat map and recommended workstreams. Neither firm has published a structured agentic AI readiness framework as of Nov 2026. Competitive risk is primarily on price and account relationships, not framework depth.</div>
+      <div style="font-size:11.5px;background:#F1F5F9;border-radius:5px;padding:7px 10px;color:#475569;"><strong>If a CDO mentions it:</strong> "Those assessments cover data platform health well. For agentic AI — specifically Class 3–5 agents in an insurance context — they don't yet have the class-specific scoring depth or the harness readiness dimension."</div>
+    </div>
+  </div>
+
+  <!-- Category 4: AI Governance -->
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg-muted);margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);">AI Governance &amp; Certification Frameworks</div>
+  <div style="display:flex;flex-direction:column;gap:10px;">
+
+    <div class="card" style="border-left:3px solid var(--red);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">NIST AI Risk Management Framework (AI RMF 1.0)</span>
+        <span class="badge" style="background:var(--red-dim);color:var(--red);font-size:10px;">Governance</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">NIST's voluntary framework for managing AI risk across four functions: Govern, Map, Measure, Manage. Released January 2023; widely adopted as a baseline across US federal contractors and regulated industries. Addresses AI risk governance holistically but is technology-agnostic and does not score deployment readiness. Relevant to P8 — CDOs building toward AIUC-1 conformance will reference NIST AI RMF as a foundational layer.</div>
+      <div style="font-size:11.5px;background:var(--red-dim);border-radius:5px;padding:7px 10px;color:var(--red);"><strong>Delivery note:</strong> Our P8 harness pillar is structurally aligned with NIST AI RMF's Measure and Manage functions. Reference this alignment when scoring P8 for customers with US regulatory exposure or those pursuing AIUC-1 certification.</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--red);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">CSA Agentic AI Governance Maturity Model (Draft, March 2026)</span>
+        <span class="badge" style="background:var(--red-dim);color:var(--red);font-size:10px;">Governance</span>
+        <span class="badge" style="background:#FEF3C7;color:#92400E;font-size:10px;">Draft</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">Cloud Security Alliance's draft maturity model specifically for agentic AI systems — closest published peer to KPI's P8 pillar. Covers agent identity, delegation chain accountability, cost envelope controls, and cascading hallucination risk. Five maturity levels. Still in draft as of Nov 2026; expect GA in H1 2027. CSA documented 10 agentic AI security incidents in the 7 weeks Jan–Mar 2026 — the market evidence that P8 is not optional for Class 4–6 deployments.</div>
+      <div style="font-size:11.5px;background:var(--red-dim);border-radius:5px;padding:7px 10px;color:var(--red);"><strong>Delivery note:</strong> When scoring P8, align rubric language to CSA's five levels — it gives the CDO a recognised external reference point. Monitor for GA release; update P8 rubric when it ships.</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--red);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">AIUC-1 — AI Agent Use Case Certification</span>
+        <span class="badge" style="background:var(--red-dim);color:var(--red);font-size:10px;">Governance</span>
+        <span class="badge" style="background:var(--accent-dim);color:var(--accent);font-size:10px;">Emerging standard</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">Emerging "SOC 2 for AI agents" — a third-party audit certification covering safety controls, eval harness design, human oversight gates, and explainability. UiPath was the first certified vendor (2026). BSI and a consortium of European insurers are driving adoption in regulated industries. Directly relevant to Class 5 (Autonomous Decision) agents in insurance — FCA and PRA are watching AIUC-1 closely as a potential compliance reference. A customer targeting Class 5 without an AIUC-1 roadmap faces significant regulatory risk.</div>
+      <div style="font-size:11.5px;background:var(--red-dim);border-radius:5px;padding:7px 10px;color:var(--red);"><strong>Delivery note:</strong> For Class 5 insurance customers, include an AIUC-1 readiness gap in the P8 section of the CE Maturity Score Report. Frame it as a 12-month compliance trajectory, not an immediate blocker — but document it explicitly.</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--red);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:700;">EU AI Act — Article 9 Risk Management System</span>
+        <span class="badge" style="background:var(--red-dim);color:var(--red);font-size:10px;">Regulatory</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">EU AI Act Article 9 mandates that high-risk AI systems — including Class 5 autonomous decision agents in insurance, credit, and employment — must have a documented risk management system with "prior defined metrics and probabilistic thresholds." This is functionally a legal requirement for an eval harness, making P8 Level 3+ a regulatory necessity for EU-regulated insurers deploying Class 5 agents. Full enforcement August 2026.</div>
+      <div style="font-size:11.5px;background:var(--red-dim);border-radius:5px;padding:7px 10px;color:var(--red);"><strong>Delivery note:</strong> For EU insurers with Class 5 target class, cite Article 9 explicitly when presenting the P8 gap. "This is not a KPI recommendation — EU AI Act requires you to have this in place before deploying autonomous decision agents." This reframes P8 as a compliance gate, not an advisory score.</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- S12 · SECURITY & COMPLIANCE STANDARDS -->
+<section class="section" id="s12">
+  <div class="sh"><span class="snum">12</span><h2 class="stitle">Security &amp; Compliance Industry Standards</h2></div>
+  <p class="ssub">Practitioner reference for delivery teams. Each standard is mapped to the pillars it affects most directly, with a scoring implication and a customer-facing check. Relevant when conducting Week 2 pillar interviews, writing the CE Maturity Score Report, and advising on the 90-day roadmap.</p>
+
+  <!-- Pillar mapping legend -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;padding:10px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;align-items:center;">
+    <span style="font-size:11px;font-weight:700;color:var(--fg-muted);margin-right:4px;">Pillar tags:</span>
+    <span class="badge ba">P1</span><span style="font-size:11px;color:var(--fg-muted);">Semantic</span>
+    <span class="badge" style="background:#FEE2E2;color:#991B1B;">P2</span><span style="font-size:11px;color:var(--fg-muted);">Governance</span>
+    <span class="badge" style="background:#D1FAE5;color:#065F46;">P3</span><span style="font-size:11px;color:var(--fg-muted);">Domain</span>
+    <span class="badge bb">P4</span><span style="font-size:11px;color:var(--fg-muted);">Agent Ready</span>
+    <span class="badge" style="background:#FEF3C7;color:#92400E;">P5</span><span style="font-size:11px;color:var(--fg-muted);">Biz Context</span>
+    <span class="badge" style="background:#F3F4F6;color:#374151;">P6</span><span style="font-size:11px;color:var(--fg-muted);">Demand</span>
+    <span class="badge" style="background:#F3F4F6;color:#374151;">P7</span><span style="font-size:11px;color:var(--fg-muted);">Operations</span>
+    <span class="badge" style="background:#FEE2E2;color:#991B1B;">P8</span><span style="font-size:11px;color:var(--fg-muted);">Harness</span>
+  </div>
+
+  <!-- Block 1: OWASP -->
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg-muted);margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);">OWASP — Open Web Application Security Project</div>
+  <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
+
+    <div class="card" style="border-left:3px solid #1A2333;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:13px;font-weight:700;">OWASP Top 10 for LLM Applications v2.0</span>
+        <span class="badge bg">Active · 2025</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P8</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P2</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:10px;">The foundational security checklist for any LLM-powered system. Ten risk categories, each with prevention controls. The most-cited framework in enterprise AI security procurement. v2.0 (2025) tightened definitions for Prompt Injection (LLM01) and added Vector and Embedding Weaknesses (LLM08) as a standalone risk.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:10px;">
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">LLM01 · Prompt Injection</div>
+          <div style="color:var(--fg-muted);">Malicious input overrides agent instructions. Direct (user input) and indirect (data the agent reads). Most exploited risk in production agents.</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">LLM06 · Excessive Agency</div>
+          <div style="color:var(--fg-muted);">Agent granted more permissions, tools, or autonomy than needed. Core P8 control: principle of least privilege for agent service accounts.</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">LLM09 · Misinformation</div>
+          <div style="color:var(--fg-muted);">Agent outputs that are plausible but factually wrong, used by downstream systems. Addressed by P1 semantic definitions and P8 hallucination detection.</div>
+        </div>
+      </div>
+      <div style="font-size:11.5px;background:var(--green-dim);border-radius:5px;padding:7px 10px;color:var(--green);"><strong>Scoring implication:</strong> During P8 Week 2 interview, ask whether the customer has assessed their agent deployment against OWASP LLM Top 10. A yes with documented controls moves P8 toward L4. A no — or "we use prompt guardrails only" — stays at L2/L3.</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #1A2333;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:13px;font-weight:700;">OWASP Agentic AI Security Project</span>
+        <span class="badge bm">Emerging · 2026</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P8</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P2</span>
+        <span class="badge bb">P4</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:10px;">The agent-specific extension to the LLM Top 10. Released mid-2026 to address risks that emerge only when LLMs are given tools, memory, and the ability to take actions autonomously. Critical reading for any team delivering Class 4–6 agents.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:10px;">
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">Tool Poisoning</div>
+          <div style="color:var(--fg-muted);">Malicious tools injected into the agent's available toolchain — e.g. a rogue MCP server that mimics a legitimate data tool and exfiltrates queries. P8 control: tool registry governance and tool provenance checks.</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">Agent Hijacking</div>
+          <div style="color:var(--fg-muted);">Indirect prompt injection via data the agent reads — a document, a database record, an email — that contains embedded instructions. Particularly relevant to Class 2 (Research) and Class 4 (Workflow) agents that consume unstructured content.</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">Memory Manipulation</div>
+          <div style="color:var(--fg-muted);">Poisoning the agent's persistent memory store — e.g. injecting false context into a vector store that the agent retrieves on future runs. P8 control: memory access RBAC and memory integrity checks.</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">Delegation Chain Gaps</div>
+          <div style="color:var(--fg-muted);">Class 6 orchestrators delegating to sub-agents with no accountability chain — audit trail breaks at the delegation boundary. P8 control: delegation chain logging and cost envelope at orchestrator level.</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">Uncontrolled Iteration</div>
+          <div style="color:var(--fg-muted);">Agent enters a reasoning or tool-call loop with no circuit breaker — 10,000 API calls, runaway cost, system overload. P8 control: iteration cap and cost circuit breaker mandatory.</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">Insecure Output Handling</div>
+          <div style="color:var(--fg-muted);">Agent output consumed by downstream systems without sanitisation — SQL injection via LLM-generated queries, script injection in generated content. P4 + P8 joint control.</div>
+        </div>
+      </div>
+      <div style="font-size:11.5px;background:var(--green-dim);border-radius:5px;padding:7px 10px;color:var(--green);"><strong>Scoring implication:</strong> For Class 4–6 target class engagements, run through these six risks explicitly in the P8 Week 2 interview. Each unmitigated risk keeps P8 at L2 or below. Document which risks are unaddressed — they become P8 gap items in the CE Maturity Score Report.</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #1A2333;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:13px;font-weight:700;">OWASP API Security Top 10</span>
+        <span class="badge bg">Active · 2023</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P8</span>
+        <span class="badge bb">P4</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">Relevant for Class 4–6 agents that call external APIs — claims systems, policy admin, underwriting platforms, reinsurance portals. Key risks: Broken Object Level Authorization (API1), Unrestricted Resource Consumption (API4), and Broken Function Level Authorization (API5). An agent calling a claims API with an over-permissioned service account violates API1 and LLM06 simultaneously.</div>
+      <div style="font-size:11.5px;background:var(--green-dim);border-radius:5px;padding:7px 10px;color:var(--green);"><strong>Scoring implication:</strong> When P4 service account RBAC is being scored, cross-check against OWASP API Top 10 API1/API5. Over-permissioned agent API credentials are a P8 gap regardless of how well the semantic layer is configured.</div>
+    </div>
+  </div>
+
+  <!-- Block 2: ISO Standards -->
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg-muted);margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);">ISO / IEC Standards</div>
+  <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
+
+    <div class="card" style="border-left:3px solid #047857;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:13px;font-weight:700;">ISO/IEC 42001:2023 — AI Management Systems</span>
+        <span class="badge bg">Active · Dec 2023</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P8</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P2</span>
+        <span class="badge" style="background:#F3F4F6;color:#374151;">P7</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:10px;">The first international standard for AI Management Systems — the ISO 27001 equivalent for AI governance. Specifies requirements for establishing, implementing, maintaining, and continually improving an AI management system. Covers AI risk assessment, impact assessment, documented controls, policy framework, and supplier AI governance. Increasingly required for enterprise AI procurement in the EU and for financial services regulators. Structured around the same Plan-Do-Check-Act model as ISO 27001 — familiar to any organisation with existing ISO certification.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-bottom:10px;">
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">Clause 6 — AI Risk Management</div>
+          <div style="color:var(--fg-muted);">Requires documented AI-specific risk assessment process — maps directly to P8 eval harness and P2 data quality controls.</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">Clause 8 — AI System Impact Assessment</div>
+          <div style="color:var(--fg-muted);">Mandatory impact assessment before deployment of high-risk AI — aligns with Class 5 deployment gate requirements in our framework.</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">Annex A — Controls Reference</div>
+          <div style="color:var(--fg-muted);">56 controls across data governance, transparency, human oversight, robustness, and accountability. Strongest overlap with P2, P7, and P8 pillars.</div>
+        </div>
+      </div>
+      <div style="font-size:11.5px;background:var(--green-dim);border-radius:5px;padding:7px 10px;color:var(--green);"><strong>Scoring implication:</strong> Ask whether the customer has ISO 42001 certification in scope or is aligned to it. ISO 42001 Annex A alignment moves P8 to L4 minimum and P2 to L3+ minimum. For Class 5 insurance customers, an ISO 42001 gap alongside an AIUC-1 gap should both appear in the CE Maturity Score Report.</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #047857;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:13px;font-weight:700;">ISO/IEC 27090 — AI Cybersecurity</span>
+        <span class="badge bm">In development · expected 2027</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P8</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">The forthcoming cybersecurity extension to ISO 42001, specifically addressing AI-specific attack vectors: adversarial inputs, model extraction, data poisoning, and supply chain compromise in AI pipelines. In balloting as of Nov 2026. Watch for final publication in H1 2027 — once published, it will become the procurement requirement for AI systems in ISO-certified enterprises, replacing ad-hoc security checklists.</div>
+      <div style="font-size:11.5px;background:#FEF3C7;border-radius:5px;padding:7px 10px;color:#92400E;"><strong>Delivery note:</strong> Not yet enforceable — do not include in current P8 scoring rubric. Flag to customers pursuing ISO 42001 that 27090 is coming and their AI security controls should be designed to accommodate it. Include it in the 90-day roadmap Phase 3 as a watch item.</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #047857;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:13px;font-weight:700;">ISO/IEC 5338 — AI Lifecycle Processes</span>
+        <span class="badge bg">Active · 2023</span>
+        <span class="badge" style="background:#F3F4F6;color:#374151;">P7</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P8</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">Provides processes for AI system development and maintenance across the full lifecycle — requirements, design, verification, deployment, operation, retirement. Complements ISO 42001's management system requirements with engineering-level process controls. Particularly relevant to P7 (Operational Readiness) — whether semantic layer changes follow a governed change management process that can be audited.</div>
+      <div style="font-size:11.5px;background:var(--green-dim);border-radius:5px;padding:7px 10px;color:var(--green);"><strong>Scoring implication:</strong> ISO 5338-aligned change management processes for semantic layer updates move P7 to L4. Ask: "Is there a documented process for reviewing and approving semantic definition changes?" If yes with audit trail, P7 ≥ L4.</div>
+    </div>
+  </div>
+
+  <!-- Block 3: NIST -->
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg-muted);margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);">NIST — National Institute of Standards and Technology</div>
+  <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
+
+    <div class="card" style="border-left:3px solid #1D4ED8;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:13px;font-weight:700;">NIST AI RMF 1.0 + Generative AI Profile (NIST AI 600-1)</span>
+        <span class="badge bg">Active · 2023 / 2024</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P8</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P2</span>
+        <span class="badge" style="background:#F3F4F6;color:#374151;">P7</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:10px;">AI RMF 1.0 provides four core functions — <strong style="color:var(--fg);">Govern, Map, Measure, Manage</strong> — for managing AI risk across any system. The companion Generative AI Profile (NIST AI 600-1, July 2024) maps those functions specifically to GenAI risks: hallucination, harmful bias, data provenance, and human oversight gaps. Both are voluntary but widely adopted as the US federal baseline and used by BFSI regulators as a reference point for AI governance expectations.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:10px;">
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">Govern → P2 + P7</div>
+          <div style="color:var(--fg-muted);">Policies, processes, roles, and responsibilities for AI risk — maps to data governance (P2) and operational process maturity (P7).</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">Map → P1 + P5</div>
+          <div style="color:var(--fg-muted);">Identifying AI risks in context — maps to semantic coverage completeness (P1) and business context capture (P5).</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">Measure → P8</div>
+          <div style="color:var(--fg-muted);">Quantifying AI risks with metrics and thresholds — directly maps to P8 eval harness, hallucination detection, and performance monitoring.</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">Manage → P8</div>
+          <div style="color:var(--fg-muted);">Responding to identified risks — maps to P8 circuit breakers, hard-stop controls, escalation protocols, and incident response.</div>
+        </div>
+      </div>
+      <div style="font-size:11.5px;background:var(--green-dim);border-radius:5px;padding:7px 10px;color:var(--green);"><strong>Scoring implication:</strong> NIST AI RMF alignment is the strongest single signal for P8 L4+. Ask: "Have you mapped your AI systems to NIST AI RMF?" If yes with documented Measure/Manage controls, P8 ≥ L4. Reference 600-1 specifically for GenAI hallucination controls.</div>
+    </div>
+  </div>
+
+  <!-- Block 4: Threat Intelligence -->
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg-muted);margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Threat Intelligence Frameworks</div>
+  <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
+
+    <div class="card" style="border-left:3px solid #6366F1;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:13px;font-weight:700;">MITRE ATLAS</span>
+        <span class="badge bg">Active · ongoing</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P8</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:10px;">Adversarial Threat Landscape for AI Systems — the ATT&CK framework for ML/AI. Documents real-world adversarial tactics, techniques, and procedures (TTPs) used against AI systems: model evasion, training data poisoning, model extraction, inference API abuse, and supply chain compromise. Used by red teams and security architects assessing AI deployment risk. Not prescriptive (no controls checklist) but essential context for P8 — understanding what attackers actually do to AI systems shapes what controls to require.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:10px;">
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">AML.T0051 · LLM Prompt Injection</div>
+          <div style="color:var(--fg-muted);">ATLAS technique for prompt injection against LLM-integrated systems. Documented case studies from production deployments — useful for illustrating agent hijacking risk to a sceptical CDO.</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">AML.T0018 · Backdoor ML Model</div>
+          <div style="color:var(--fg-muted);">Supply chain compromise via a backdoored model weight file. Relevant for Class 5/6 customers using open-weight models or fine-tuned models from third parties.</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:8px 10px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:3px;color:var(--fg);">AML.T0040 · ML Model Inference API</div>
+          <div style="color:var(--fg-muted);">Abuse of model inference endpoints — rate limits, cost exploitation, data extraction via carefully crafted queries. P8 cost circuit breakers partially mitigate this.</div>
+        </div>
+      </div>
+      <div style="font-size:11.5px;background:var(--green-dim);border-radius:5px;padding:7px 10px;color:var(--green);"><strong>Delivery note:</strong> MITRE ATLAS is background reading for the CE Architect — use it to stress-test P8 interview questions, not as a customer-facing checklist. Reference it when a customer asks "what specific threats are you protecting against?"</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #6366F1;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:13px;font-weight:700;">CSA AI Controls Matrix</span>
+        <span class="badge bg">Active · 2026</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P8</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B;">P2</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.7;margin-bottom:8px;">Cloud Security Alliance's companion to the Agentic AI Governance Maturity Model — a spreadsheet-format controls matrix mapping AI risks to specific technical and process controls across cloud environments. Covers identity and access management for agents, data residency, model provenance, audit logging, and incident response. Practical complement to NIST AI RMF — where RMF is principles-based, the CSA matrix is controls-based. Particularly useful for customers running agents on multi-cloud estates (Databricks + Snowflake, or Fabric + Databricks).</div>
+      <div style="font-size:11.5px;background:var(--green-dim);border-radius:5px;padding:7px 10px;color:var(--green);"><strong>Scoring implication:</strong> If a customer references the CSA AI Controls Matrix in their governance documentation, P8 is at minimum L3. Cross-check which control domains they have implemented — incomplete coverage (e.g. identity controls done, audit logging missing) keeps them at L3 rather than L4.</div>
+    </div>
+  </div>
+
+  <!-- Block 5: Summary mapping table -->
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg-muted);margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Quick Reference — Standard to Pillar Mapping</div>
+  <div style="overflow-x:auto;">
+    <table class="ct" style="min-width:560px;">
+      <thead>
+        <tr>
+          <th style="text-align:left;min-width:220px;">Standard</th>
+          <th style="text-align:center;">Status</th>
+          <th style="text-align:center;">Primary pillars</th>
+          <th style="text-align:left;">Class relevance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>OWASP LLM Top 10 v2.0</td><td style="text-align:center;"><span class="badge bg" style="font-size:10px;">Active</span></td><td style="text-align:center;"><span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P8</span> <span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P2</span></td><td>All classes</td></tr>
+        <tr><td>OWASP Agentic AI Security</td><td style="text-align:center;"><span class="badge bm" style="font-size:10px;">Emerging</span></td><td style="text-align:center;"><span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P8</span> <span class="badge bb" style="font-size:10px;">P4</span></td><td>Class 4–6 critical</td></tr>
+        <tr><td>OWASP API Security Top 10</td><td style="text-align:center;"><span class="badge bg" style="font-size:10px;">Active</span></td><td style="text-align:center;"><span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P8</span> <span class="badge bb" style="font-size:10px;">P4</span></td><td>Class 4–6 (API-calling agents)</td></tr>
+        <tr><td>ISO/IEC 42001:2023</td><td style="text-align:center;"><span class="badge bg" style="font-size:10px;">Active</span></td><td style="text-align:center;"><span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P8</span> <span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P2</span> <span class="badge" style="background:#F3F4F6;color:#374151;font-size:10px;">P7</span></td><td>Class 5–6 procurement gate</td></tr>
+        <tr><td>ISO/IEC 27090 (AI Cybersecurity)</td><td style="text-align:center;"><span class="badge bm" style="font-size:10px;">Draft</span></td><td style="text-align:center;"><span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P8</span></td><td>Watch item — H1 2027</td></tr>
+        <tr><td>ISO/IEC 5338 (AI Lifecycle)</td><td style="text-align:center;"><span class="badge bg" style="font-size:10px;">Active</span></td><td style="text-align:center;"><span class="badge" style="background:#F3F4F6;color:#374151;font-size:10px;">P7</span> <span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P8</span></td><td>All classes</td></tr>
+        <tr><td>NIST AI RMF 1.0 + AI 600-1</td><td style="text-align:center;"><span class="badge bg" style="font-size:10px;">Active</span></td><td style="text-align:center;"><span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P8</span> <span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P2</span> <span class="badge" style="background:#F3F4F6;color:#374151;font-size:10px;">P7</span></td><td>All classes — US / global</td></tr>
+        <tr><td>MITRE ATLAS</td><td style="text-align:center;"><span class="badge bg" style="font-size:10px;">Active</span></td><td style="text-align:center;"><span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P8</span></td><td>Architect reference — all classes</td></tr>
+        <tr><td>CSA AI Controls Matrix</td><td style="text-align:center;"><span class="badge bg" style="font-size:10px;">Active</span></td><td style="text-align:center;"><span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P8</span> <span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P2</span></td><td>Multi-cloud Class 4–6</td></tr>
+        <tr><td>AIUC-1 Certification</td><td style="text-align:center;"><span class="badge bg" style="font-size:10px;">Active</span></td><td style="text-align:center;"><span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P8</span></td><td>Class 5 insurance compliance path</td></tr>
+        <tr><td>EU AI Act Article 9</td><td style="text-align:center;"><span class="badge br" style="font-size:10px;">Enforced Aug 2026</span></td><td style="text-align:center;"><span class="badge" style="background:#FEE2E2;color:#991B1B;font-size:10px;">P8</span></td><td>Class 5 EU insurers — mandatory</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+</main>
+</div>
+
+<script>
+const FLOORS = [
+  [3,4,3,4,5,5], // P1
+  [2,3,4,4,5,4], // P2
+  [2,3,2,4,4,5], // P3
+  [3,4,3,4,5,5], // P4
+  [2,3,2,4,5,4], // P5
+  [2,3,2,3,4,4], // P6
+  [2,2,4,3,4,4], // P7
+  [2,3,3,4,5,4], // P8
+];
+const WEIGHTS = [0.20,0.17,0.13,0.18,0.13,0.05,0.04,0.10];
+const LV_SCORE = {1:15,2:35,3:55,4:75,5:95};
+const PNAMES = ['P1 Semantic Coverage','P2 Gov & Trust','P3 Domain Align','P4 Agent Ready','P5 Biz Context','P6 Demand','P7 Operations','P8 Harness'];
+const CLABELS = ['Class 1','Class 2','Class 3','Class 4','Class 5','Class 6'];
+const TIERNAMES = ['Not CE-Ready','Foundation','Emerging','CE-Ready','Advanced'];
+
+function buildMatrix() {
+  const tbody = document.getElementById('matrix-body');
+  tbody.innerHTML = '';
+  PNAMES.forEach((pname,p) => {
+    const tr = document.createElement('tr');
+    const td0 = document.createElement('td');
+    td0.textContent = pname;
+    tr.appendChild(td0);
+    for (let c=0;c<6;c++) {
+      const td = document.createElement('td');
+      td.dataset.p = p;
+      td.dataset.c = c;
+      td.textContent = FLOORS[p][c];
+      td.className = 'cell-n';
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  });
+}
+
+function getScores() {
+  return [1,2,3,4,5,6,7,8].map(i => {
+    const v = parseInt(document.getElementById('sc'+i).value);
+    return Math.max(1, Math.min(5, isNaN(v) ? 1 : v));
+  });
+}
+
+function updateMatrix() {
+  const scores = getScores();
+  // Composite
+  const comp = Math.round(scores.reduce((s,sc,i) => s + LV_SCORE[sc]*WEIGHTS[i], 0));
+  document.getElementById('composite-score').textContent = comp;
+  const tier = comp<30?0:comp<50?1:comp<70?2:comp<85?3:4;
+  document.getElementById('current-tier').textContent = 'Tier '+tier+' · '+TIERNAMES[tier];
+
+  // Matrix cells
+  for (let p=0;p<8;p++) {
+    for (let c=0;c<6;c++) {
+      const cell = document.querySelector('[data-p="'+p+'"][data-c="'+c+'"]');
+      if (!cell) continue;
+      const floor = FLOORS[p][c];
+      const sc = scores[p];
+      cell.className = sc < floor ? 'cell-gap' : sc === floor ? 'cell-warn' : 'cell-ok';
+      cell.title = sc < floor ? 'GAP: score '+sc+' < floor '+floor : sc===floor ? 'At floor: '+sc+'='+floor : 'OK: score '+sc+' ≥ floor '+floor;
+    }
+  }
+
+  // Gap counts
+  for (let c=0;c<6;c++) {
+    let gaps=0;
+    for (let p=0;p<8;p++) if(scores[p]<FLOORS[p][c]) gaps++;
+    document.getElementById('gap-c'+(c+1)).textContent = gaps;
+    document.getElementById('gap-c'+(c+1)).style.color = gaps>0?'var(--red)':'var(--green)';
+  }
+
+  // Gating alerts
+  const alerts = [];
+  if (scores[3]===1) alerts.push('P4 = Level 1 · Tier hard-capped at Foundation regardless of composite score.');
+  if (scores[7]<3) alerts.push('P8 < Level 3 · Class 4/5/6 target capped at Foundation tier.');
+  const el = document.getElementById('gating-alert');
+  el.textContent = alerts.join('  ·  ');
+  el.hidden = alerts.length===0;
+  el.className = 'gating-alert' + (alerts.length ? '' : '');
+  if (alerts.length) el.setAttribute('style','background:var(--red-dim);border:1px solid var(--red);border-radius:6px;padding:8px 12px;font-size:12.5px;color:var(--red);font-weight:600;margin-top:10px;');
+}
+
+function togglePillar(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// Sidebar active section on scroll
+function updateNav() {
+  const sections = document.querySelectorAll('.section');
+  const links = document.querySelectorAll('.sb-nav a');
+  let active = null;
+  sections.forEach(s => {
+    const rect = s.getBoundingClientRect();
+    if (rect.top <= 80) active = s.id;
+  });
+  links.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href')==='#'+active);
+  });
+}
+
+buildMatrix();
+updateMatrix();
+window.addEventListener('scroll', updateNav, {passive:true});
+updateNav();
+</script>
