@@ -1,4 +1,4 @@
-<title>KAM — KPI Asset Manager</title>
+<title>KAM — Knowledge Asset Manager</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
 
@@ -542,9 +542,9 @@ tbody tr:last-child td { border-bottom: none; }
   <div class="nav-inner wrap">
     <div class="nav-brand">
       <span class="nav-pill">KAM</span>
-      <span class="nav-name">KPI Asset Manager</span>
+      <span class="nav-name">Knowledge Asset Manager</span>
     </div>
-    <span class="nav-badge">Internal · KPI Partners</span>
+    <span class="nav-badge">Internal · the SI</span>
   </div>
 </nav>
 
@@ -553,7 +553,7 @@ tbody tr:last-child td { border-bottom: none; }
   <div class="wrap">
     <div class="eyebrow">What is KAM?</div>
     <h1>The firm's CE knowledge,<br>retrieved in seconds.</h1>
-    <p class="hero-body">KPI Asset Manager connects sellers to every proposal, case study, playbook, and battle card the firm has ever produced — through a natural language interface powered by Claude. Instead of navigating SharePoint folders manually, a seller types a question and gets the right asset back with a link. KAM lives on SharePoint; Claude is the retrieval layer on top of it.</p>
+    <p class="hero-body">Knowledge Asset Manager connects sellers to every proposal, case study, playbook, and battle card the firm has ever produced — through a natural language interface powered by Claude. Instead of navigating SharePoint folders manually, a seller types a question and gets the right asset back with a link. KAM lives on SharePoint; Claude is the retrieval layer on top of it.</p>
     <div class="stats">
       <div class="stat"><span class="stat-n">3</span><span class="stat-l">Folders</span></div>
       <div class="stat"><span class="stat-n">9</span><span class="stat-l">Asset Types</span></div>
@@ -851,7 +851,7 @@ tbody tr:last-child td { border-bottom: none; }
         <div class="route-num">Route 2</div>
         <div class="route-name">M365 Copilot Chat</div>
         <span class="effort-chip effort-zero">Zero dev · already there</span>
-        <p class="route-desc">If KPI has M365 Copilot licences, sellers already have this. Copilot Chat searches all M365 content the user can access — SharePoint, Teams, Outlook — and surfaces KAM assets alongside everything else.</p>
+        <p class="route-desc">If the SI has M365 Copilot licences, sellers already have this. Copilot Chat searches all M365 content the user can access — SharePoint, Teams, Outlook — and surfaces KAM assets alongside everything else.</p>
         <div class="route-limit">Too broad. Searches the entire tenant, not just KAM. Loses the precision of a library-scoped query.</div>
       </div>
       <div class="route-card">
@@ -965,8 +965,8 @@ const QS = [
     filter: "AssetType: Battle Card  ·  Status: Approved  ·  Summary keyword: Accenture",
     status: "1 Approved asset found",
     results: [
-      { title:"KPI vs Accenture FDE — CE Battle Card", type:"Battle Card", bCls:"b-bat", tags:["All Verticals"],
-        summ:"Head-to-head on CE delivery speed, FS reference depth, and MCP architecture expertise. Key KPI differentiator: no offshore handoff, SA stays on account, faster time-to-value." }
+      { title:"the SI vs Accenture FDE — CE Battle Card", type:"Battle Card", bCls:"b-bat", tags:["All Verticals"],
+        summ:"Head-to-head on CE delivery speed, FS reference depth, and MCP architecture expertise. Key SI differentiator: no offshore handoff, SA stays on account, faster time-to-value." }
     ]
   },
   {
@@ -1025,7 +1025,7 @@ const QS = [
       { title:"P&C Claims Context Layer — Estimation Template", type:"SOW", bCls:"b-sow", tags:["Insurance","Databricks"],
         summ:"Effort and cost model for a CE build on Databricks targeting P&C claims intelligence. Includes team structure (1 SA + 1 DE + 0.5 PM), 6-week delivery, and a £60–80K indicative range." },
       { title:"Insurance Vertical Playbook", type:"Playbook", bCls:"b-play", tags:["Insurance","Databricks","Snowflake"],
-        summ:"Full CE playbook for insurance. Sections: regulatory context (Solvency II, IFRS 17), platform patterns on Databricks and Snowflake, claims and underwriting use cases, KPI differentiators vs Accenture and Capgemini." }
+        summ:"Full CE playbook for insurance. Sections: regulatory context (Solvency II, IFRS 17), platform patterns on Databricks and Snowflake, claims and underwriting use cases, SI differentiators vs Accenture and Capgemini." }
     ]
   },
   {
@@ -1036,8 +1036,8 @@ const QS = [
     results: [
       { title:"Snowflake CE — Objection Handling Guide", type:"Battle Card", bCls:"b-bat", tags:["All Verticals","Snowflake"],
         summ:"12 objections commonly raised when selling CE on Snowflake, with tested responses. Covers: 'We already have Cortex AI', 'dbt handles our semantics', 'Snowflake partner can do this cheaper', and 'We're not ready for agents yet'. Each objection includes the underlying concern, a redirect, and a proof point." },
-      { title:"KPI vs Snowflake Native AI — Positioning Card", type:"Battle Card", bCls:"b-bat", tags:["All Verticals","Snowflake"],
-        summ:"When prospects ask why they need KPI if Snowflake has Cortex. Positions CE as the layer above the platform — Snowflake provides compute and storage; KPI builds the semantic and context layer that makes Cortex actually useful for domain questions." }
+      { title:"the SI vs Snowflake Native AI — Positioning Card", type:"Battle Card", bCls:"b-bat", tags:["All Verticals","Snowflake"],
+        summ:"When prospects ask why they need the SI if Snowflake has Cortex. Positions CE as the layer above the platform — Snowflake provides compute and storage; the SI builds the semantic and context layer that makes Cortex actually useful for domain questions." }
     ]
   },
   {
@@ -1049,7 +1049,7 @@ const QS = [
       { title:"Insurance Underwriting — Domain Vocabulary Card", type:"Knowledge Base", bCls:"b-know", tags:["Insurance"],
         summ:"35 terms an SA must know before an underwriting conversation: loss ratio, combined ratio, risk appetite, facultative vs treaty reinsurance, FNOL, bordereaux, cession rate, exposure management, cat modelling, UW authority. Each term has a one-line plain-English definition and a CE relevance note — e.g. 'Combined ratio: the core KPI underwriters track; a CE context layer that surfaces it in real time is the natural entry point.'" },
       { title:"WTW Account Context — Insurance Broker Model", type:"Knowledge Base", bCls:"b-know", tags:["Insurance"],
-        summ:"WTW-specific context for seller conversations: broker vs carrier distinction, WTW's Willis Towers Watson heritage, key P&C and specialty lines, their Technology business unit, and how their data estate (largely Guidewire + SQL Server) maps to KPI's CE capabilities. Includes 4 opener questions aligned to WTW priorities: data modernisation, underwriter productivity, and claims cycle time." }
+        summ:"WTW-specific context for seller conversations: broker vs carrier distinction, WTW's Willis Towers Watson heritage, key P&C and specialty lines, their Technology business unit, and how their data estate (largely Guidewire + SQL Server) maps to the SI's CE capabilities. Includes 4 opener questions aligned to WTW priorities: data modernisation, underwriter productivity, and claims cycle time." }
     ]
   }
 ];
