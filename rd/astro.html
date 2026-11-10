@@ -456,7 +456,7 @@
   </div>
 
   <!-- QUARTERLY SCORE TABLE -->
-  <div class="section-title">Quarterly Score Reference</div>
+  <div class="section-title">Quarterly Score Reference <span style="font-size:11px;font-weight:400;color:var(--text-muted);margin-left:8px;">◀ shaded = historical · unshaded = forecast</span></div>
   <div class="score-table-wrap">
     <table class="score-table">
       <thead>
@@ -684,7 +684,14 @@
 
 <script>
 // ── DATA ────────────────────────────────────────────────────────────────────
+// Index 0–10 = historical (Nov 2025–Sep 2026), Index 11 onwards = Oct 2026 onwards
+const HISTORY_COUNT = 11; // months of historical data prepended
+const TODAY_INDEX   = 12; // Nov 2026 = current month
 const months = [
+  // ── HISTORICAL ──────────────────────────────────────────────────
+  'Nov 25','Dec 25',
+  'Jan 26','Feb 26','Mar 26','Apr 26','May 26','Jun 26','Jul 26','Aug 26','Sep 26',
+  // ── FORECAST (from Oct 2026) ──────────────────────────────────
   'Oct 26','Nov 26','Dec 26',
   'Jan 27','Feb 27','Mar 27','Apr 27','May 27','Jun 27','Jul 27','Aug 27','Sep 27','Oct 27','Nov 27','Dec 27',
   'Jan 28','Feb 28','Mar 28','Apr 28','May 28','Jun 28','Jul 28','Aug 28','Sep 28','Oct 28','Nov 28','Dec 28',
@@ -692,6 +699,10 @@ const months = [
 ];
 
 const careerScores = [
+  // ── HISTORICAL Nov 2025–Sep 2026 (Ketu in 10th + Saturn prat throughout) ──
+  3, 3,          // Nov–Dec 2025: Venus-Rahu AD starts, heavy
+  3, 4, 4, 4, 5, 5, 5, 4, 3,  // Jan–Sep 2026: Jup in 9th, career blocked; Sep = lowest (user confirmed unease)
+  // ── FORECAST from Oct 2026 ───────────────────────────────────────────────
   5, 6, 7,
   7, 3, 6, 7, 7, 8, 9, 7, 7, 8, 8, 7,
   7, 7, 7, 7, 7, 6, 6, 5, 5, 7, 8, 8,
@@ -699,6 +710,10 @@ const careerScores = [
 ];
 
 const finScores = [
+  // ── HISTORICAL Nov 2025–Sep 2026 (Jup in 9th = fortune, Venus MD = stability) ──
+  5, 5,          // Nov–Dec 2025
+  5, 5, 6, 6, 6, 6, 6, 5, 4,  // Jan–Sep 2026: decent except Sep dip
+  // ── FORECAST from Oct 2026 ───────────────────────────────────────────────
   4, 5, 6,
   6, 4, 6, 6, 7, 7, 8, 8, 8, 8, 8, 8,
   8, 8, 7, 7, 7, 8, 8, 7, 7, 8, 9, 9,
@@ -706,6 +721,10 @@ const finScores = [
 ];
 
 const pratyantaras = [
+  // ── HISTORICAL ──
+  'V–Ra–Saturn','V–Ra–Saturn',
+  'V–Ra–Saturn','V–Ra–Saturn','V–Ra–Saturn','V–Ra–Saturn','V–Ra–Saturn','V–Ra–Saturn','V–Ra–Saturn','V–Ra–Saturn','V–Ra–Saturn',
+  // ── FORECAST ──
   'V–Ra–Saturn','V–Ra–Saturn','V–Ra–Saturn',
   'V–Ra–Saturn','V–Ra–Saturn','V–Ra–Mercury','V–Ra–Mercury','V–Ra–Mercury','V–Ra–Mercury','V–Ra–Mercury','V–Ra–Ketu','V–Ra–Ketu',
   'V–Ra–Venus','V–Ra–Venus','V–Ra–Venus',
@@ -717,6 +736,10 @@ const pratyantaras = [
 // Job-switch suitability (1–10): specifically about leaving current role and joining a new company
 // Considers: dasha prat, Jupiter position, Ketu in 10th, avoid trough windows
 const jobChangeScores = [
+  // ── HISTORICAL Nov 2025–Sep 2026 (all avoid) ──
+  1, 1,  // Nov–Dec 2025
+  1, 1, 1, 1, 1, 1, 1, 1, 1,  // Jan–Sep 2026
+  // ── FORECAST Oct 2026 onwards ──
   // Oct–Dec 2026
   3,  // Oct: Ketu in 10th, Saturn prat — avoid
   4,  // Nov: Jupiter enters 10th but Ketu still there — wait
@@ -758,6 +781,19 @@ const jobChangeScores = [
 ];
 
 const jobChangeLabels = [
+  // ── HISTORICAL ──
+  'HISTORICAL: Ketu 10th + Saturn prat — no promotion window',
+  'HISTORICAL: Ketu 10th + Saturn prat — no promotion window',
+  'HISTORICAL: Ketu 10th + Saturn prat — career stagnant',
+  'HISTORICAL: Ketu 10th + Saturn prat — career stagnant',
+  'HISTORICAL: Ketu 10th + Jup in 9th — fortune but no promotion',
+  'HISTORICAL: Ketu 10th + Jup in 9th — fortune but no promotion',
+  'HISTORICAL: Ketu 10th + Jup in 9th — some movement possible',
+  'HISTORICAL: Ketu 10th + Jup in 9th — some movement possible',
+  'HISTORICAL: Ketu 10th + Jup in 9th — some movement possible',
+  'HISTORICAL: Ketu 10th — heavy, Sep unease peak',
+  'HISTORICAL: Ketu 10th — Sep 2026 lowest point',
+  // ── FORECAST ──
   'AVOID: Ketu 10th + Saturn prat',
   'WAIT: Jupiter enters but Ketu present',
   'DEC 10/11/14 ★ Muhurat dates — first green window',
@@ -789,6 +825,10 @@ const jobChangeLabels = [
 ];
 
 const transits = [
+  // ── HISTORICAL ──
+  'Jup Cancer 9th','Jup Cancer 9th',
+  'Jup Cancer 9th','Jup Cancer 9th','Jup Cancer 9th','Jup Cancer 9th','Jup Cancer 9th','Jup Cancer 9th','Jup Cancer 9th','Jup Cancer 9th','Jup Cancer 9th',
+  // ── FORECAST ──
   'Ketu 10th','Jup enters 10th','Ketu exits 10th',
   'Jup+Mars in 10th','Jup leaves 10th','Jup Cancer 9th','Mars 10th','Active','Jup re-enters 10th','PEAK: Jup 10th+Merc','Jup 10th, Ketu prat','Jup 10th, Venus prat',
   'Jup 10th, Venus prat','Jup → 11th Nov 27','Jup 11th',
@@ -855,35 +895,43 @@ function buildHeatmapGrid() {
     return r;
   }
 
-  // ── Year blocks ───────────────────────────────────────────────
-  const yearData = [{y:'2026',f:3},{y:'2027',f:12},{y:'2028',f:12},{y:'2029',f:12}];
+  // ── Year blocks (2025=2m, 2026=12m, 2027=12m, 2028=12m, 2029=12m) ──
+  const yearData = [{y:'2025',f:2},{y:'2026',f:12},{y:'2027',f:12},{y:'2028',f:12},{y:'2029',f:12}];
   const yearCells = yearData.map(({y,f}) => {
+    const isPast = y === '2025' || y === '2026';
     const d = document.createElement('div');
-    d.style.cssText = `flex:${f};background:var(--surface-alt);border:1px solid var(--border);border-radius:4px;text-align:center;font-size:10px;font-weight:700;color:var(--text-primary);padding:3px 2px;letter-spacing:0.06em;`;
-    d.textContent = y;
+    d.style.cssText = `flex:${f};background:${isPast?'rgba(100,100,120,0.18)':'var(--surface-alt)'};border:1px solid var(--border);border-radius:4px;text-align:center;font-size:10px;font-weight:700;color:var(--text-primary);padding:3px 2px;letter-spacing:0.06em;opacity:${isPast?'0.7':'1'};`;
+    d.textContent = isPast ? y+' ◀' : y;
     return d;
   });
 
   // ── Quarter blocks ────────────────────────────────────────────
   const QCOL = {Q1:'#3b82f6',Q2:'#10b981',Q3:'#f59e0b',Q4:'#8b5cf6'};
+  // 11 historical + 39 forecast = 50 total months
+  // 2025: Q4(2m), 2026: Q4(1m past)+Q1+Q2+Q3+Q4(3m), 2027-2029: Q1-Q4
   const qData = [
-    {q:'Q4',f:3}, {q:'Q1',f:3},{q:'Q2',f:3},{q:'Q3',f:3},{q:'Q4',f:3},
-    {q:'Q1',f:3},{q:'Q2',f:3},{q:'Q3',f:3},{q:'Q4',f:3},
-    {q:'Q1',f:3},{q:'Q2',f:3},{q:'Q3',f:3},{q:'Q4',f:3},
+    {q:'Q4',f:2,past:true},                                    // Q4 2025 (Nov-Dec)
+    {q:'Q1',f:3,past:true},{q:'Q2',f:3,past:true},{q:'Q3',f:3,past:true},{q:'Q4',f:3,past:false}, // 2026
+    {q:'Q1',f:3},{q:'Q2',f:3},{q:'Q3',f:3},{q:'Q4',f:3},      // 2027
+    {q:'Q1',f:3},{q:'Q2',f:3},{q:'Q3',f:3},{q:'Q4',f:3},      // 2028
+    {q:'Q1',f:3},{q:'Q2',f:3},{q:'Q3',f:3},{q:'Q4',f:3},      // 2029 (3+1=4 months Oct-Dec)
   ];
-  const qtrCells = qData.map(({q,f}) => {
+  const qtrCells = qData.map(({q,f,past}) => {
     const d = document.createElement('div');
     const c = QCOL[q];
-    d.style.cssText = `flex:${f};border-top:3px solid ${c};text-align:center;font-size:9px;font-weight:600;color:${c};padding:3px 1px 1px;`;
+    d.style.cssText = `flex:${f};border-top:3px solid ${past?'rgba(150,150,170,0.5)':c};text-align:center;font-size:9px;font-weight:600;color:${past?'rgba(150,150,170,0.6)':c};padding:3px 1px 1px;`;
     d.textContent = q;
     return d;
   });
 
   // ── Month letters ─────────────────────────────────────────────
-  const monthCells = months.map(m => {
+  const monthCells = months.map((m, i) => {
     const d = document.createElement('div');
-    d.style.cssText = `flex:1;text-align:center;font-size:9px;color:var(--month-tick);padding:2px 0;`;
-    d.textContent = m[0];
+    const isTodayMo = (i === TODAY_INDEX);
+    const isPastMo  = (i < TODAY_INDEX);
+    d.style.cssText = `flex:1;text-align:center;font-size:9px;color:${isTodayMo?'#f59e0b':isPastMo?'rgba(120,120,140,0.6)':'var(--month-tick)'};padding:2px 0;font-weight:${isTodayMo?'bold':'normal'};`;
+    d.textContent = isTodayMo ? '▶' : m[0];
+    d.title = isTodayMo ? `▶ TODAY — ${m}` : m;
     return d;
   });
 
@@ -891,8 +939,10 @@ function buildHeatmapGrid() {
   function hmapCells(scores, tips) {
     return scores.map((s, i) => {
       const d = document.createElement('div');
-      d.style.cssText = `flex:1;height:${CELL_H};border-radius:3px;background:${cellColor(s)};cursor:default;`;
-      d.title = `${months[i]}\n${tips[i]}\nScore: ${s}/10`;
+      const isPastCell = (i < TODAY_INDEX);
+      const isTodayCell = (i === TODAY_INDEX);
+      d.style.cssText = `flex:1;height:${CELL_H};border-radius:3px;background:${cellColor(s)};cursor:default;opacity:${isPastCell?'0.55':'1'};${isTodayCell?'outline:2px solid #f59e0b;outline-offset:1px;':''}`;
+      d.title = `${months[i]}${i < TODAY_INDEX ? ' [HISTORICAL]' : ''}\n${tips[i]}\nScore: ${s}/10`;
       return d;
     });
   }
@@ -901,7 +951,8 @@ function buildHeatmapGrid() {
   const dashaCells = pratyantaras.map((p, i) => {
     const d = document.createElement('div');
     const isJup = p.includes('Jupiter AD');
-    d.style.cssText = `flex:1;height:${CELL_H};border-radius:3px;background:${isJup?'rgba(109,40,217,0.8)':'rgba(14,116,144,0.35)'};cursor:default;`;
+    const isPastCell = (i < TODAY_INDEX);
+    d.style.cssText = `flex:1;height:${CELL_H};border-radius:3px;background:${isJup?'rgba(109,40,217,0.8)':'rgba(14,116,144,0.35)'};cursor:default;opacity:${isPastCell?'0.55':'1'};`;
     d.title = `${months[i]}: ${p}`;
     return d;
   });
@@ -927,11 +978,23 @@ const peakPlugin = {
     if (!chartArea) return;
     const meta = chart.getDatasetMeta(0);
     if (!meta || !meta.data || meta.data.length === 0) return;
+
+    // ── Historical shading (indices 0–10) ─────────────────────────
+    const histEnd = Math.min(HISTORY_COUNT - 1, meta.data.length - 1);
+    if (meta.data[0] && meta.data[histEnd]) {
+      ctx.save();
+      ctx.fillStyle = 'rgba(100,100,120,0.13)';
+      ctx.fillRect(chartArea.left, chartArea.top,
+                   meta.data[histEnd].x - chartArea.left + 10, chartArea.height);
+      ctx.restore();
+    }
+
+    // ── Peak/Good bands (indices shifted +11 from original) ───────
     const windows = [
-      { start: 2,  end: 3,  color: 'rgba(4,120,87,0.09)' },
-      { start: 8,  end: 9,  color: 'rgba(76,29,149,0.16)' },
-      { start: 12, end: 14, color: 'rgba(4,120,87,0.09)' },
-      { start: 24, end: 38, color: 'rgba(76,29,149,0.09)' },
+      { start: 13, end: 14, color: 'rgba(4,120,87,0.09)' },   // Dec 2026 window
+      { start: 19, end: 20, color: 'rgba(76,29,149,0.16)' },  // Jul 2027 PEAK
+      { start: 23, end: 25, color: 'rgba(4,120,87,0.09)' },   // Oct–Dec 2027
+      { start: 35, end: 49, color: 'rgba(76,29,149,0.09)' },  // Venus–Jupiter AD
     ];
     ctx.save();
     windows.forEach(w => {
@@ -943,6 +1006,30 @@ const peakPlugin = {
       ctx.fillStyle = w.color;
       ctx.fillRect(x1, chartArea.top, x2 - x1, chartArea.height);
     });
+
+    // ── TODAY vertical line ───────────────────────────────────────
+    const todayIdx = Math.min(TODAY_INDEX, meta.data.length - 1);
+    if (meta.data[todayIdx]) {
+      const tx = meta.data[todayIdx].x;
+      ctx.save();
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.moveTo(tx, chartArea.top);
+      ctx.lineTo(tx, chartArea.bottom);
+      ctx.stroke();
+      // "TODAY" label
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = 'bold 10px sans-serif';
+      ctx.fillText('▶ NOW', tx + 4, chartArea.top + 14);
+      // "← PAST" label
+      ctx.fillStyle = 'rgba(160,160,180,0.7)';
+      ctx.font = '10px sans-serif';
+      ctx.fillText('← PAST', chartArea.left + 4, chartArea.top + 14);
+      ctx.restore();
+    }
+
     ctx.restore();
   }
 };
@@ -1040,22 +1127,38 @@ let mainChart = new Chart(ctx, {
 
 // ── QUARTERLY SCORE TABLE ─────────────────────────────────────────────────────
 const quarters = [
-  ['Q4 2026', 0, 2],
-  ['Q1 2027', 3, 5],
-  ['Q2 2027', 6, 8],
-  ['Q3 2027', 9, 11],
-  ['Q4 2027', 12, 14],
-  ['Q1 2028', 15, 17],
-  ['Q2 2028', 18, 20],
-  ['Q3 2028', 21, 23],
-  ['Q4 2028', 24, 26],
-  ['Q1 2029', 27, 29],
-  ['Q2 2029', 30, 32],
-  ['Q3 2029', 33, 35],
-  ['Q4 2029', 36, 38],
+  // ── HISTORICAL quarters ──────────────────────────────────────────────
+  ['Q4 2025 ◀', 0,  1],
+  ['Q1 2026 ◀', 2,  4],
+  ['Q2 2026 ◀', 5,  7],
+  ['Q3 2026 ◀', 8, 10],
+  // ── FORECAST quarters (indices shifted +11) ──────────────────────────
+  ['Q4 2026', 11, 13],
+  ['Q1 2027', 14, 16],
+  ['Q2 2027', 17, 19],
+  ['Q3 2027', 20, 22],
+  ['Q4 2027', 23, 25],
+  ['Q1 2028', 26, 28],
+  ['Q2 2028', 29, 31],
+  ['Q3 2028', 32, 34],
+  ['Q4 2028', 35, 37],
+  ['Q1 2029', 38, 40],
+  ['Q2 2029', 41, 43],
+  ['Q3 2029', 44, 46],
+  ['Q4 2029', 47, 49],
 ];
 
 const quarterGuide = [
+  // ── HISTORICAL ───────────────────────────────────────────────────────────
+  // Q4 2025
+  'Venus–Rahu Antardasha just began (Oct 2025). Saturn pratyantara active. Ketu sitting in 10th house. Career blockage at maximum — no promotion, low visibility. Other areas (travel, finances, relationships) relatively stable. This period demanded patience, not action.',
+  // Q1 2026
+  'Saturn pratyantara continues. Ketu in 10th suppresses career recognition. Jupiter moves into Cancer (9th house) — brings fortune, long-distance opportunities, and foreign connections, which is why things outside of promotion felt okay. Career advancement: blocked. Everything else: passable.',
+  // Q2 2026
+  'Jupiter fully in Cancer (9th house = luck, dharma, long journeys). This is the period that may have brought the UK opportunity or foreign work expansion — 9th house Jupiter favours travel and fortune. But Ketu in 10th + Saturn prat means no formal promotion or title change despite increased activity.',
+  // Q3 2026
+  'The heaviest quarter of this 18-month stretch. No Jupiter in career house, Ketu still blocking, Saturn pratyantara grinding. September 2026 was the lowest point — the user confirmed feeling uneasy. This is the final difficult quarter before the chart turns. The door was about to open.',
+  // ── FORECAST ─────────────────────────────────────────────────────────────
   // Q4 2026
   'Ketu exits 10th Dec 6 — first clean window. Use Dec 10–14 muhurat dates for any career conversations or offer discussions. Avoid signing before Dec 6. Be patient with Saturn pratyantara delays.',
   // Q1 2027
@@ -1102,7 +1205,9 @@ quarters.forEach(([label, from, to], qi) => {
     return '#6d28d9';               // Breakthrough (purple)
   }
 
+  const isHistRow = label.includes('◀');
   const tr = document.createElement('tr');
+  if (isHistRow) tr.style.cssText = 'opacity:0.65;background:rgba(100,100,120,0.08);';
   tr.innerHTML = `
     <td class="qtr">${label}</td>
     <td>
