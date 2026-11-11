@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CE Field Brief</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f7f7f5;
+      --surface: #ffffff;
+      --border: #e4e4e0;
+      --text: #1a1a18;
+      --text-2: #5a5a56;
+      --text-3: #98988e;
+      --a-bg: #E1F5EE; --a-text: #085041; --a-acc: #1D9E75;
+      --b-bg: #EEEDFE; --b-text: #3C3489; --b-acc: #7F77DD;
+      --c-bg: #FAEEDA; --c-text: #633806; --c-acc: #BA7517;
+    }
+
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Sticky top bar (header + nav combined) ── */
+    .page-top {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .page-header {
+      padding: 1.1rem 1rem 0.65rem;
+    }
+
+    .page-header h1 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .page-header p {
+      font-size: 11px;
+      color: var(--text-3);
+    }
+
+    .cat-nav {
+      display: flex;
+      gap: 7px;
+      padding: 0 1rem 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .cat-nav::-webkit-scrollbar { display: none; }
+
+    .cat-nav a {
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 11px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      text-decoration: none;
+      white-space: nowrap;
+      background: var(--surface);
+    }
+    .cat-nav a:hover { color: var(--text); border-color: var(--text-2); }
+
+    /* ── Main content ── */
+    main { padding: 1rem 1rem 2.5rem; max-width: 640px; margin: 0 auto; }
+
+    /* ── Category section ── */
+    .cat {
+      margin-bottom: 1.25rem;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .cat-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+    }
+    .cat-a .cat-head { background: var(--a-bg); }
+    .cat-b .cat-head { background: var(--b-bg); }
+    .cat-c .cat-head { background: var(--c-bg); }
+
+    .cat-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .cat-a .cat-badge { color: var(--a-text); }
+    .cat-b .cat-badge { color: var(--b-text); }
+    .cat-c .cat-badge { color: var(--c-text); }
+
+    .cat-label { font-size: 14px; font-weight: 600; }
+    .cat-a .cat-label { color: var(--a-text); }
+    .cat-b .cat-label { color: var(--b-text); }
+    .cat-c .cat-label { color: var(--c-text); }
+
+    .cat-sub { font-size: 11px; margin-top: 1px; opacity: .8; }
+    .cat-a .cat-sub { color: var(--a-text); }
+    .cat-b .cat-sub { color: var(--b-text); }
+    .cat-c .cat-sub { color: var(--c-text); }
+
+    /* ── Topic card ── */
+    .topic {
+      border-top: 1px solid var(--border);
+      padding: 12px 14px 13px;
+    }
+
+    .topic-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .topic-id {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+    .cat-a .topic-id { background: var(--a-bg); color: var(--a-acc); }
+    .cat-b .topic-id { background: var(--b-bg); color: var(--b-acc); }
+    .cat-c .topic-id { background: var(--c-bg); color: var(--c-acc); }
+
+    .topic-name { font-size: 14px; font-weight: 600; color: var(--text); }
+
+    /* ── Say block ── */
+    .say {
+      background: var(--bg);
+      border-radius: 7px;
+      padding: 8px 11px;
+      margin-bottom: 8px;
+    }
+
+    .zone-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--text-3);
+      margin-bottom: 4px;
+    }
+
+    .say-text { font-size: 13px; color: var(--text); line-height: 1.6; }
+
+    /* ── Ask block ── */
+    .ask { margin-bottom: 8px; }
+
+    .q {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.5;
+      padding: 6px 10px;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 5px;
+      background: var(--bg);
+    }
+    .q:last-child { margin-bottom: 0; }
+    .cat-a .q { border-left: 2px solid var(--a-acc); }
+    .cat-b .q { border-left: 2px solid var(--b-acc); }
+    .cat-c .q { border-left: 2px solid var(--c-acc); }
+
+    /* ── Technical view toggle ── */
+    details.tech { margin-top: 8px; }
+
+    details.tech summary {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-3);
+      cursor: pointer;
+      list-style: none;
+      padding: 4px 0;
+      user-select: none;
+      width: fit-content;
+    }
+    details.tech summary::-webkit-details-marker { display: none; }
+
+    details.tech summary::before {
+      content: '▶';
+      font-size: 8px;
+      display: inline-block;
+      transition: transform .18s ease;
+    }
+    details.tech[open] summary::before { transform: rotate(90deg); }
+
+    .tech-body {
+      margin-top: 7px;
+      border-radius: 7px;
+      padding: 10px 12px;
+      background: var(--bg);
+    }
+    .cat-a .tech-body { border-left: 2px solid var(--a-acc); }
+    .cat-b .tech-body { border-left: 2px solid var(--b-acc); }
+    .cat-c .tech-body { border-left: 2px solid var(--c-acc); }
+
+    .tech-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--text-3);
+      margin-bottom: 5px;
+    }
+
+    .tech-text { font-size: 12px; color: var(--text-2); line-height: 1.65; }
+
+    /* ── Listen for strip ── */
+    .lf {
+      border-radius: 7px;
+      padding: 7px 11px;
+      margin-bottom: 8px;
+    }
+    .cat-a .lf { background: #f0faf6; border: 0.5px solid #9FE1CB; }
+    .cat-b .lf { background: #f2f1fe; border: 0.5px solid #c5c3f9; }
+    .cat-c .lf { background: #fdf5e6; border: 0.5px solid #e8c880; }
+
+    .lf-label {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 4px;
+    }
+    .cat-a .lf-label { color: var(--a-acc); }
+    .cat-b .lf-label { color: var(--b-acc); }
+    .cat-c .lf-label { color: var(--c-acc); }
+
+    .lf-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+
+    .pill {
+      font-size: 12px;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .cat-a .pill { color: var(--a-text); background: #C8EDDF; }
+    .cat-b .pill { color: var(--b-text); background: #d8d7fc; }
+    .cat-c .pill { color: var(--c-text); background: #f8e4a8; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-3);
+      padding: 1.5rem 1rem 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Print: open all technical views ── */
+    @media print {
+      .page-top { position: static; }
+      details.tech, details.tech .tech-body { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-top">
+  <div class="page-header">
+    <h1>CE Field Brief</h1>
+    <p>15 topics · 3 categories · tap any card for the technical view</p>
+  </div>
+  <nav class="cat-nav" aria-label="Jump to category">
+    <a href="#cat-a">A — Context Quality</a>
+    <a href="#cat-b">B — Agent Capability</a>
+    <a href="#cat-c">C — Accountability</a>
+  </nav>
+</div>
+
+<main>
+
+  <!-- ══════════ CATEGORY A ══════════ -->
+  <section class="cat cat-a" id="cat-a">
+    <div class="cat-head">
+      <div class="cat-badge">A</div>
+      <div>
+        <div class="cat-label">Context Quality</div>
+        <div class="cat-sub">How good information gets to the AI · T01–T05</div>
+      </div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T01</span>
+        <span class="topic-name">Give AI the right information</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">keeps giving wrong answers</span><span class="pill">can't trust the results</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">AI gets things wrong when it gets the wrong information. We control exactly what it sees before it answers.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">How do your engineers look up quality issues today — search, a system, a spreadsheet?</div>
+        <div class="q">When an AI answer is wrong, who catches it — and how fast?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">Operational records in a Lakehouse Delta table. The agent reads only relevant rows — ~800 tokens for a lookup, ~8,000 for root cause. Sizing that read window correctly is context engineering. Wrong size = wrong answer or wasted cost.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T02</span>
+        <span class="topic-name">Connect to your data without moving it</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">data is spread across systems</span><span class="pill">we'd have to build a connector first</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">The AI reads from wherever your data already lives — the same quality system your engineers use today. No copy needed, no migration project first.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">Where does your operational data sit today — a database, a data lake, something else?</div>
+        <div class="q">Has anyone tried to build on top of that data before — what got in the way?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">Fabric Lakehouse + OneLake shortcuts eliminate ETL. Existing Delta tables are queried directly by the agent at call time. No data duplication, no migration project before you can start.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T03</span>
+        <span class="topic-name">Keep AI answers current</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">AI doesn't know about last week</span><span class="pill">working on old data</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">An AI working from a snapshot of your data doesn't see this week's new incidents. We make sure it reads live records, not a copy from last month.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">How often does your quality data change — real-time, daily, weekly batches?</div>
+        <div class="q">Has anyone in your team complained that an AI gave outdated information?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">Retrieval-augmented generation (RAG) over live Delta tables. No model retraining when data changes. Fabric pipelines update the retrieval index on a schedule or on-write trigger. The model stays fixed; the context changes.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T04</span>
+        <span class="topic-name">Structure your data before AI touches it</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">our data is inconsistent</span><span class="pill">different systems, different formats</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">If your quality data has inconsistent formats or different naming across systems, the AI will be inconsistent too. We start by making the data AI-ready.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">Do your operational records follow a consistent format, or does it vary by team, tool, or era?</div>
+        <div class="q">Has anyone mapped where the same data exists in more than one system with different values?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">Data profiling in Fabric using Spark notebooks. Schema validation before Lakehouse Delta ingestion. Standardising record IDs, entity codes, and severity levels is a prerequisite to reliable retrieval — not a phase two task.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T05</span>
+        <span class="topic-name">Find by meaning, not just keywords</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">search doesn't find it</span><span class="pill">different teams call it different things</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">Traditional search finds exact words. AI search finds meaning — two records about the same event come back together even when each team gave it a different name.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">When an engineer searches your quality system, do they use keywords, filters, or free text?</div>
+        <div class="q">Have you ever missed a failure pattern because different teams described it differently?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">Vector embeddings of operational records stored in Fabric Lakehouse. Cosine similarity search finds semantically related records regardless of terminology. Embedding model runs on Azure AI Foundry — no data leaves the tenant.</div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ══════════ CATEGORY B ══════════ -->
+  <section class="cat cat-b" id="cat-b">
+    <div class="cat-head">
+      <div class="cat-badge">B</div>
+      <div>
+        <div class="cat-label">Agent Capability</div>
+        <div class="cat-sub">What AI can do with that information · T06–T10</div>
+      </div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T06</span>
+        <span class="topic-name">Build agents that work across steps</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">someone still has to stitch it together</span><span class="pill">can't automate the whole flow</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">The AI can look things up, run checks, compare results, and hand off to the right person — all in one workflow, without a human stitching it together.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">What does your best analyst do in the first 10 minutes of investigating an issue cluster?</div>
+        <div class="q">Which of those steps could an AI realistically do first?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">Semantic Kernel tool calling. Multi-hop = 2–3 sequential tool invocations (lookup → correlate → recommend). Class 3/4 decision routing. Agent state managed across steps inside Fabric Data Science.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T07</span>
+        <span class="topic-name">Match the question to the right tool</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">AI is getting expensive</span><span class="pill">hard to justify the spend</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">A simple lookup shouldn't cost the same as a full investigation. We route each question to the right tool and track exactly what it costs.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">Does your team know what an AI answer costs today — or is it just part of the cloud bill?</div>
+        <div class="q">Who's responsible for proving AI saves more than it costs?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">Decision class routing 1–4. Class 1 (simple lookup) → phi-4, ~$0.000003 Azure equivalent. Class 4 (root cause) → gpt-4o, ~$0.000080. That's a ~27× cost swing. DET tracks this per call in OneLake Delta.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T08</span>
+        <span class="topic-name">Agents that act, not just answer</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">it tells us what to do but we still have to do it</span><span class="pill">AI can't write back to our system</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">The AI can update a record, open a ticket, or flag for escalation — without a human in the loop for routine decisions.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">Which actions in your quality process are routine enough that a human mostly just clicks confirm?</div>
+        <div class="q">What would it take for your team to trust an AI to do that?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">Semantic Kernel + Fabric Activator for event-triggered agent actions. Write-back via Logic Apps. A confirmed outcome flag links the AI action to the closed business result — this is what makes ROI measurable.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T09</span>
+        <span class="topic-name">Agents that remember what worked</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">knowledge walks out when people leave</span><span class="pill">we keep making the same mistake</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">Past decisions that led to a confirmed good outcome get used as examples the next time a similar question comes in. The model stays the same — the context gets smarter.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">Do your best domain experts have pattern recognition that isn't in any procedure or runbook?</div>
+        <div class="q">Have you ever caught a failure pattern months faster the second time — because someone had seen something similar before?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">Confirmed outcome flags in DecisionRecord feed back as few-shot examples for similar future queries. High-confidence past decisions are promoted into the context window. No model fine-tuning — context engineering handles the learning.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T10</span>
+        <span class="topic-name">Multiple agents, each good at one thing</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">one AI can't handle everything</span><span class="pill">need different expertise for different areas</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">Instead of one AI trying to do everything, you can have specialist agents — one for clustering issues, one for root-cause patterns, one for recommending next steps — that hand off to each other.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">Are there different types of expertise in a full investigation — process, data quality, domain analysis?</div>
+        <div class="q">Would you route those to the same person, or to different specialists?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">Semantic Kernel ProcessFramework for multi-agent orchestration. Each agent has its own context window, model selection, and tools. Agent handoffs are typed — the issue classifier passes a structured payload to the action recommender. Full audit trail across the chain.</div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ══════════ CATEGORY C ══════════ -->
+  <section class="cat cat-c" id="cat-c">
+    <div class="cat-head">
+      <div class="cat-badge">C</div>
+      <div>
+        <div class="cat-label">Accountability</div>
+        <div class="cat-sub">Measuring and governing what AI does · T11–T15</div>
+      </div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T11</span>
+        <span class="topic-name">Know what it costs per outcome</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">shows up in the cloud bill but not the ROI</span><span class="pill">can't tie AI cost to a business result</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">We measure what it costs to close one issue cluster, complete one investigation, resolve one escalation — not just the monthly cloud bill.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">How do you measure ROI from your quality systems today?</div>
+        <div class="q">If AI helped close 10 issue clusters this quarter, what would that be worth?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">DecisionRecord.azure_equivalent_usd summed per confirmed outcome. Cost per outcome = Σ(token cost × step count) ÷ confirmed outcomes. Showback report from OneLake Delta — queryable by Finance or Quality without touching agent code.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T12</span>
+        <span class="topic-name">Every AI decision can be explained</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">how do we know why it made that call</span><span class="pill">who's accountable when it's wrong</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">Every time the AI makes a recommendation, we keep a full record — what it was asked, which model answered, what it cost, and whether it passed quality checks. Your quality team can query it at any point.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">If the AI flags a case for escalation, who approves that — and what do they see?</div>
+        <div class="q">Is there someone at your organisation who owns AI accountability or compliance?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">DecisionRecord written to OneLake Delta per call: decision class, model used, tokens, cost, quality flag, checks failed. Fully queryable in Fabric — no separate logging infrastructure needed.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T13</span>
+        <span class="topic-name">Set the rules before the AI runs</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">who sets the rules for what it can do</span><span class="pill">need guardrails before we go live</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">You decide the guardrails upfront — maximum spend per decision, which answers need human review, which actions need approval. The AI works within those rules automatically.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">Who at your organisation would set the rules for when an AI recommendation needs a human sign-off?</div>
+        <div class="q">Is there a policy today for how much automation is allowed in a quality decision?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">DET budget mode: calibrate → enforce. per_decision_usd cap in agent config — calls over budget are blocked before the model is called. AGT (Azure Governance Toolkit) layers policy-as-code audit alongside Semantic Kernel for compliance reporting.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T14</span>
+        <span class="topic-name">Measure whether answers are actually right</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">how do we know the answer is right</span><span class="pill">what if it makes something up</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">We check that every answer contains what it should. Every response is tested against a standard before it reaches anyone.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">Right now, how would you know if an AI recommendation was based on the wrong data?</div>
+        <div class="q">Is there a standard today for what a good investigation report must contain?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">Two-tier quality probe: structural check (always, free) confirms record IDs, action references, and owner titles are present. Sampled LLM yes/no probe (10% of calls) checks factual accuracy. quality_flag and checks_failed fields written per record to OneLake Delta.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="topic">
+      <div class="topic-head">
+        <span class="topic-id">T15</span>
+        <span class="topic-name">Keep humans in charge of hard decisions</span>
+      </div>
+      <div class="lf"><div class="lf-label">Listen for</div><div class="lf-pills"><span class="pill">that decision always needs a human</span><span class="pill">some decisions always need a sign-off</span></div></div>
+      <div class="say"><div class="zone-label">Say</div>
+        <div class="say-text">The AI handles the routine. Hard decisions — a critical escalation, a final approval — still go to a person. That line is drawn in the system, not just in a process document.</div>
+      </div>
+      <div class="ask"><div class="zone-label">Ask</div>
+        <div class="q">Which decisions would you never want automated, no matter how good the AI gets?</div>
+        <div class="q">When something goes wrong with an automated decision today, how is it escalated?</div>
+      </div>
+      <details class="tech"><summary>Technical view</summary>
+        <div class="tech-body"><div class="tech-label">On Fabric</div>
+          <div class="tech-text">Decisions above cost threshold or below quality score are blocked and routed to a human review queue. Fabric Activator triggers an approval workflow for Class 4 decisions. The approval itself is logged in the DecisionRecord — full chain of custody.</div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  CE Field Brief &nbsp;·&nbsp; Context Engineering on Azure Fabric &nbsp;·&nbsp; Impetus Technologies
+</footer>
+
+</body>
+</html>
