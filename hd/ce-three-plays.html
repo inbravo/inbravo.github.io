@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CE Three-Play Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500&display=swap">
+<style>
+:root {
+  --bg:       #F8F7F4;
+  --surface:  #FFFFFF;
+  --surface2: #F2F0EC;
+  --border:   #E5E2DA;
+  --border2:  #D4D0C8;
+  --text:     #1A1917;
+  --muted:    #6B6760;
+  --dim:      #A09D96;
+
+  /* play accents — all muted */
+  --p1:       #2A7A68;   /* muted emerald — Assessment */
+  --p1-bg:    #EEF6F4;
+  --p2a:      #3B6EA8;   /* muted steel blue — Ontology */
+  --p2a-bg:   #EDF2FA;
+  --p2b:      #6B5090;   /* muted purple — AgentOS */
+  --p2b-bg:   #F3EFF8;
+
+  /* platform chips */
+  --dbx:      #B85934;   /* Databricks muted orange */
+  --dbx-bg:   #FAF0EB;
+  --sfk:      #2D6DAA;   /* Snowflake muted blue */
+  --sfk-bg:   #EBF2FA;
+
+  --hdr:      #1A1917;
+  --shadow:   0 1px 3px rgba(0,0,0,.06), 0 4px 12px rgba(0,0,0,.04);
+  --shadow-hover: 0 4px 16px rgba(0,0,0,.1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 13px; scroll-behavior: smooth; }
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+h1,h2,h3,h4 { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; line-height: 1.25; }
+a { color: inherit; }
+
+/* ── HEADER ── */
+.hdr { background: var(--hdr); color: #F1EFE9; padding: .65rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.hdr-brand { display: flex; align-items: center; gap: .65rem; }
+.hdr-badge { background: var(--p1); color: #fff; font-size: .62rem; font-weight: 700; padding: .15rem .45rem; border-radius: .2rem; letter-spacing: .05em; font-family: 'Plus Jakarta Sans', sans-serif; }
+.hdr-title { font-size: .9rem; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; }
+.hdr-meta { font-size: .7rem; color: #9C9890; }
+
+/* ── HERO ── */
+.hero { max-width: 720px; margin: 0 auto; padding: 2.5rem 1.5rem 1.5rem; }
+.hero-eyebrow { font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--p1); font-family: 'Plus Jakarta Sans', sans-serif; margin-bottom: .5rem; }
+.hero-title { font-size: 1.75rem; font-weight: 800; color: var(--text); margin-bottom: .75rem; }
+.hero-sub { font-size: .88rem; color: var(--muted); line-height: 1.7; max-width: 580px; }
+
+/* ── OVERVIEW FLOW ── */
+.overview { max-width: 720px; margin: 0 auto; padding: 1.25rem 1.5rem 2rem; }
+.flow-box { border: 1px solid var(--border); border-radius: .5rem; background: var(--surface); padding: 1rem 1.25rem; }
+.flow-label { font-size: .58rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); font-family: 'Plus Jakarta Sans', sans-serif; margin-bottom: .3rem; }
+.flow-name { font-size: .95rem; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; }
+.flow-desc { font-size: .75rem; color: var(--muted); margin-top: .2rem; }
+.flow-p1 { border-left: 3px solid var(--p1); }
+.flow-p2a { border-left: 3px solid var(--p2a); }
+.flow-p2b { border-left: 3px solid var(--p2b); }
+.flow-arrow { text-align: center; padding: .4rem 0; color: var(--dim); font-size: .8rem; }
+.flow-arrow-label { font-size: .68rem; color: var(--muted); display: block; margin-top: .15rem; }
+.flow-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+
+/* ── SECTION WRAPPER ── */
+.section { max-width: 760px; margin: 0 auto; padding: 0 1.5rem 2.5rem; }
+.section-eyebrow { font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-family: 'Plus Jakarta Sans', sans-serif; margin-bottom: .4rem; }
+.section-title { font-size: 1.25rem; font-weight: 800; color: var(--text); margin-bottom: .5rem; }
+.section-sub { font-size: .82rem; color: var(--muted); line-height: 1.65; margin-bottom: 1.25rem; max-width: 600px; }
+.section-divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+/* ── PLAY HEADER STRIP ── */
+.play-header { display: flex; align-items: center; gap: .65rem; margin-bottom: 1.25rem; }
+.play-badge { font-size: .62rem; font-weight: 700; letter-spacing: .06em; padding: .25rem .6rem; border-radius: 2rem; font-family: 'Plus Jakarta Sans', sans-serif; }
+.play-badge-p1  { background: var(--p1-bg);  color: var(--p1); }
+.play-badge-p2a { background: var(--p2a-bg); color: var(--p2a); }
+.play-badge-p2b { background: var(--p2b-bg); color: var(--p2b); }
+.play-title { font-size: 1.1rem; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+/* ── 4-WEEK TIMELINE ── */
+.weeks { display: grid; grid-template-columns: repeat(4, 1fr); gap: .625rem; margin-bottom: 1.5rem; }
+.week { background: var(--surface); border: 1px solid var(--border); border-radius: .4rem; padding: .75rem .875rem; position: relative; }
+.week.highlight { border-color: var(--p1); background: var(--p1-bg); }
+.week-num { font-size: .58rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); font-family: 'Plus Jakarta Sans', sans-serif; margin-bottom: .25rem; }
+.week.highlight .week-num { color: var(--p1); }
+.week-title { font-size: .8rem; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text); margin-bottom: .3rem; }
+.week-items { list-style: none; }
+.week-items li { font-size: .7rem; color: var(--muted); padding: .1rem 0; }
+.week-items li::before { content: '·'; margin-right: .35rem; color: var(--dim); }
+.week.highlight .week-items li { color: #2A6356; }
+.highlight-tag { display: inline-flex; align-items: center; gap: .3rem; margin-top: .4rem; font-size: .6rem; font-weight: 700; color: var(--p1); background: rgba(42,122,104,.1); padding: .15rem .45rem; border-radius: .2rem; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+/* ── PLATFORM UTILITIES ── */
+.platforms { display: grid; grid-template-columns: 1fr 1fr; gap: .875rem; margin-bottom: 1.25rem; }
+.platform-card { border: 1px solid var(--border); border-radius: .5rem; background: var(--surface); padding: 1rem 1.125rem; }
+.platform-chip { display: inline-flex; align-items: center; gap: .35rem; font-size: .62rem; font-weight: 700; letter-spacing: .04em; padding: .2rem .55rem; border-radius: 2rem; font-family: 'Plus Jakarta Sans', sans-serif; margin-bottom: .6rem; }
+.chip-dbx { background: var(--dbx-bg); color: var(--dbx); }
+.chip-sfk { background: var(--sfk-bg); color: var(--sfk); }
+.platform-name { font-size: .88rem; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text); margin-bottom: .25rem; }
+.platform-invoke { font-size: .7rem; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: .25rem; padding: .15rem .45rem; display: inline-block; margin-bottom: .5rem; font-family: 'Courier New', monospace; }
+.platform-items { list-style: none; }
+.platform-items li { font-size: .72rem; color: var(--muted); padding: .15rem 0; display: flex; gap: .4rem; }
+.platform-items li::before { content: '—'; color: var(--dim); flex-shrink: 0; }
+
+/* ── PROOF POINTS ── */
+.proof-row { display: grid; grid-template-columns: 1fr 1fr; gap: .875rem; margin-bottom: 1.5rem; }
+.proof-card { background: var(--surface); border: 1px solid var(--border); border-radius: .5rem; padding: .875rem 1.125rem; display: flex; gap: .875rem; align-items: flex-start; }
+.proof-num { font-size: 1.5rem; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1; flex-shrink: 0; }
+.proof-num-dbx { color: var(--dbx); }
+.proof-num-sfk { color: var(--sfk); }
+.proof-text { font-size: .72rem; color: var(--muted); line-height: 1.5; }
+.proof-text strong { display: block; font-size: .78rem; color: var(--text); margin-bottom: .2rem; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+/* ── OUTPUT ROW ── */
+.output-row { display: flex; gap: .625rem; flex-wrap: wrap; }
+.output-pill { background: var(--surface2); border: 1px solid var(--border2); border-radius: .3rem; font-size: .68rem; font-weight: 600; color: var(--muted); padding: .3rem .7rem; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+/* ── PLAYBOOK LINK ── */
+.playbook-link { display: inline-flex; align-items: center; gap: .4rem; margin-top: 1rem; font-size: .75rem; font-weight: 700; color: var(--p1); text-decoration: none; font-family: 'Plus Jakarta Sans', sans-serif; border-bottom: 1px solid transparent; transition: border-color .15s; }
+.playbook-link:hover { border-color: var(--p1); }
+.playbook-link svg { width: 12px; height: 12px; }
+
+/* ── CONNECTING BAND ── */
+.connect-band { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1.25rem 1.5rem; margin: 0 0 2.5rem; }
+.connect-inner { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: auto 1fr; gap: 1.25rem; align-items: center; }
+.connect-arrow { font-size: 1.5rem; color: var(--dim); }
+.connect-title { font-size: .78rem; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text); margin-bottom: .3rem; }
+.connect-desc { font-size: .75rem; color: var(--muted); line-height: 1.6; }
+.connect-tags { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .6rem; }
+.connect-tag { font-size: .65rem; font-weight: 600; padding: .2rem .55rem; border-radius: .25rem; font-family: 'Plus Jakarta Sans', sans-serif; }
+.tag-p2a { background: var(--p2a-bg); color: var(--p2a); }
+.tag-p2b { background: var(--p2b-bg); color: var(--p2b); }
+
+/* ── PHASE 2 COLUMNS ── */
+.phase2 { max-width: 760px; margin: 0 auto; padding: 0 1.5rem 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items: start; }
+.play2-card { background: var(--surface); border: 1px solid var(--border); border-radius: .5rem; overflow: hidden; }
+.play2-top { padding: .875rem 1.125rem; border-bottom: 1px solid var(--border); }
+.play2-body { padding: 1rem 1.125rem; }
+.play2-row { margin-bottom: .875rem; }
+.play2-row-label { font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); font-family: 'Plus Jakarta Sans', sans-serif; margin-bottom: .3rem; }
+.play2-row-items { list-style: none; }
+.play2-row-items li { font-size: .72rem; color: var(--muted); padding: .12rem 0; display: flex; gap: .4rem; }
+.play2-row-items li::before { content: '·'; color: var(--dim); flex-shrink: 0; }
+.play2-proof { padding: .625rem .875rem; border-radius: .375rem; margin: .875rem 0; }
+.play2-proof-p2a { background: var(--p2a-bg); }
+.play2-proof-p2b { background: var(--p2b-bg); }
+.play2-proof-num { font-size: 1.1rem; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; }
+.play2-proof-num-p2a { color: var(--p2a); }
+.play2-proof-num-p2b { color: var(--p2b); }
+.play2-proof-text { font-size: .68rem; color: var(--muted); margin-top: .15rem; line-height: 1.5; }
+.play2-link { display: inline-flex; align-items: center; gap: .35rem; font-size: .72rem; font-weight: 700; text-decoration: none; font-family: 'Plus Jakarta Sans', sans-serif; border-bottom: 1px solid transparent; transition: border-color .15s; padding-top: .25rem; }
+.link-p2a { color: var(--p2a); }
+.link-p2a:hover { border-color: var(--p2a); }
+.link-p2b { color: var(--p2b); }
+.link-p2b:hover { border-color: var(--p2b); }
+.play2-link svg { width: 11px; height: 11px; }
+
+/* ── FOOTER ── */
+.page-footer { text-align: center; padding: 1.5rem 1rem; font-size: .62rem; color: var(--dim); border-top: 1px solid var(--border); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .weeks { grid-template-columns: 1fr 1fr; }
+  .platforms { grid-template-columns: 1fr; }
+  .proof-row { grid-template-columns: 1fr; }
+  .flow-two-col { grid-template-columns: 1fr; }
+  .phase2 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-brand">
+    <span class="hdr-badge">SI</span>
+    <span class="hdr-title">CE Practice · Three-Play Motion</span>
+  </div>
+  <div class="hdr-meta">Internal · Nov 2026</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Customer Engagement Practice</div>
+  <h1 class="hero-title">Three plays. One motion.</h1>
+  <p class="hero-sub">The SI has a defined CE Assessment. Assessment creates the account relationship and produces the gap map that drives two parallel Phase 2 tracks — Ontology Accelerators and AgentOS / Harness. All three are execution priorities for 2027.</p>
+</section>
+
+<!-- OVERVIEW FLOW -->
+<div class="overview">
+  <div class="flow-box flow-p1" style="margin-bottom:.6rem;">
+    <div class="flow-label">Phase 1 · Entry</div>
+    <div class="flow-name" style="color:var(--p1)">CE Assessment</div>
+    <div class="flow-desc">4-week fixed-price diagnostic · 8-pillar scoring · 6 agent classes · CDO findings delivery</div>
+  </div>
+  <div class="flow-arrow">
+    ↓
+    <span class="flow-arrow-label">CE Maturity Score · Context Gap Map · 90-day Roadmap → Account entry</span>
+  </div>
+  <div class="flow-two-col">
+    <div class="flow-box flow-p2a">
+      <div class="flow-label">Phase 2A · Parallel</div>
+      <div class="flow-name" style="color:var(--p2a)">Ontology Accelerators</div>
+      <div class="flow-desc">Domain context packages · metric views · semantic views · insurance &amp; BFSI</div>
+    </div>
+    <div class="flow-box flow-p2b">
+      <div class="flow-label">Phase 2B · Parallel</div>
+      <div class="flow-name" style="color:var(--p2b)">AgentOS · Harness</div>
+      <div class="flow-desc">Multi-agent control plane · decision economics · governance at runtime</div>
+    </div>
+  </div>
+</div>
+
+<!-- PLAY 1: CE ASSESSMENT -->
+<section class="section">
+  <div class="play-header">
+    <span class="play-badge play-badge-p1">Play 1 · Entry</span>
+    <span class="play-title" style="color:var(--p1)">CE Assessment</span>
+  </div>
+
+  <p class="section-sub">A 4-week fixed-price engagement that tells a CDO exactly which AI agent classes they can deploy today and what is blocking the rest. Week 2 is where the platform scan runs — using platform-native utilities from Databricks and Snowflake, depending on the customer's stack.</p>
+
+  <!-- 4-week timeline -->
+  <div class="weeks">
+    <div class="week">
+      <div class="week-num">Week 1</div>
+      <div class="week-title">Discovery</div>
+      <ul class="week-items">
+        <li>Target Class elicitation</li>
+        <li>Business intent alignment</li>
+        <li>Top-20 priority questions</li>
+        <li>Platform inventory</li>
+      </ul>
+    </div>
+    <div class="week highlight">
+      <div class="week-num">Week 2</div>
+      <div class="week-title">8-Pillar Platform Scan</div>
+      <ul class="week-items">
+        <li>Data interviews (3–4 sessions)</li>
+        <li>Platform scan per pillar</li>
+        <li>Evidence collection</li>
+        <li>P8 governance deep-dive</li>
+      </ul>
+      <span class="highlight-tag">↓ Platform utilities run here</span>
+    </div>
+    <div class="week">
+      <div class="week-num">Week 3</div>
+      <div class="week-title">Floor Plan Analysis</div>
+      <ul class="week-items">
+        <li>Score all 8 pillars</li>
+        <li>Target Class Matrix</li>
+        <li>Class-gating gaps</li>
+        <li>Quick Win Spec draft</li>
+      </ul>
+    </div>
+    <div class="week">
+      <div class="week-num">Week 4</div>
+      <div class="week-title">Findings Delivery</div>
+      <ul class="week-items">
+        <li>CDO findings presentation</li>
+        <li>CE Maturity Score Report</li>
+        <li>Floor Plan one-pager</li>
+        <li>90-day CE Roadmap</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Platform utilities -->
+  <p style="font-size:.72rem;font-weight:700;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:.625rem;letter-spacing:.04em;">WEEK 2 · PLATFORM UTILITIES — run whichever matches the customer's stack</p>
+
+  <div class="platforms">
+    <div class="platform-card">
+      <span class="platform-chip chip-dbx">Databricks</span>
+      <div class="platform-name">Genie Ontology Readiness App</div>
+      <code class="platform-invoke">databricks-solutions/genie-ontology-readiness</code>
+      <ul class="platform-items">
+        <li>Deploys into customer's workspace — read-only, no data access</li>
+        <li>7-pillar scorecard: UC maturity, metadata, relationships, metric views, Genie Agents, domains, adoption</li>
+        <li>Outputs 0–100 score + maturity stage + prioritised action plan</li>
+        <li>Also runs as a Genie Code skill — no App deployment needed</li>
+        <li>Field-engineering open source, used by Databricks SE team</li>
+      </ul>
+    </div>
+    <div class="platform-card">
+      <span class="platform-chip chip-sfk">Snowflake</span>
+      <div class="platform-name">AI Readiness Score</div>
+      <code class="platform-invoke">/ai-readiness-score (CoCo skill · Snowsight)</code>
+      <ul class="platform-items">
+        <li>Runs entirely on customer's Snowflake account — read-only</li>
+        <li>3 dimensions: Demand Coverage · Semantic View Coverage · SV Quality</li>
+        <li>Scores consumption-ready tables against 4 behavioural signals</li>
+        <li>Outputs 0–100 score + self-contained HTML report per schema</li>
+        <li>Results are cached — subsequent runs complete quickly</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Proof points -->
+  <div class="proof-row">
+    <div class="proof-card">
+      <div class="proof-num proof-num-dbx">10.6%<br><span style="font-size:.85rem">→ 52.1%</span></div>
+      <div class="proof-text">
+        <strong>Same model · same data · context alone</strong>
+        Databricks insurance walkthrough: answer accuracy moves from 10.6% to 52.1% by climbing 9 rungs of ontology context — no model change, no data change.
+      </div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-num proof-num-sfk">39<br><span style="font-size:.85rem">→ 82</span></div>
+      <div class="proof-text">
+        <strong>One schema · six semantic views</strong>
+        Snowflake internal test: schema with strong query demand but zero semantic views scored 39. After building SVs over 6 tables, score moved to 82.
+      </div>
+    </div>
+  </div>
+
+  <!-- Output row -->
+  <p style="font-size:.68rem;font-weight:700;color:var(--dim);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:.4rem;letter-spacing:.06em;text-transform:uppercase;">Assessment outputs</p>
+  <div class="output-row">
+    <span class="output-pill">CE Maturity Score (0–100)</span>
+    <span class="output-pill">Context Gap Map</span>
+    <span class="output-pill">6 Agent Class readiness</span>
+    <span class="output-pill">Class-Gating Gap Register</span>
+    <span class="output-pill">OSI Quick Win Spec</span>
+    <span class="output-pill">90-day CE Roadmap</span>
+  </div>
+
+  <a href="ce-assessment-playbook.html" class="playbook-link">
+    Full CE Assessment Playbook — 8 pillars, 6 agent classes, floor matrix
+    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+  </a>
+</section>
+
+<!-- CONNECTING BAND -->
+<div class="connect-band">
+  <div class="connect-inner">
+    <div class="connect-arrow">↓</div>
+    <div>
+      <div class="connect-title">The assessment output shapes both Phase 2 tracks</div>
+      <div class="connect-desc">The gap register tells you which domains need ontology work first — metric views, semantic views, the 5-layer context stack. The agent class and harness gap tells you what governance infrastructure to build. Both tracks start from the same 90-day roadmap and run in parallel.</div>
+      <div class="connect-tags">
+        <span class="connect-tag tag-p2a">Context gaps → Ontology Accelerators</span>
+        <span class="connect-tag tag-p2b">Harness &amp; governance gaps → AgentOS</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PLAY 2: TWO COLUMNS -->
+<div class="phase2">
+
+  <!-- Play 2A: Ontology Accelerators -->
+  <div class="play2-card">
+    <div class="play2-top">
+      <div class="play-header" style="margin-bottom:.4rem;">
+        <span class="play-badge play-badge-p2a">Play 2A · Parallel</span>
+      </div>
+      <div class="play-title" style="color:var(--p2a)">Ontology Accelerators</div>
+      <p style="font-size:.73rem;color:var(--muted);margin-top:.3rem;line-height:1.55;">Domain context packages that make AI agents answer correctly — built in the platform's own format, reusable across engagements.</p>
+    </div>
+    <div class="play2-body">
+
+      <div class="play2-row">
+        <div class="play2-row-label">What gets built</div>
+        <ul class="play2-row-items">
+          <li>Databricks metric view YAML packages (Genie ontology layers)</li>
+          <li>Snowflake semantic view YAML with verified example queries</li>
+          <li>Apache Iceberg as the cross-platform bridge — write-once, reason-anywhere</li>
+          <li>Domain-specific vocabulary: SKOS, OWL 2, SHACL constraints</li>
+        </ul>
+      </div>
+
+      <div class="play2-row">
+        <div class="play2-row-label">Starting domains</div>
+        <ul class="play2-row-items">
+          <li>Insurance — loss ratio variants, IFRS 17 metrics, underwriting rules</li>
+          <li>BFSI — risk metrics, regulatory reporting dimensions</li>
+          <li>Reusable per domain, not rebuilt per customer</li>
+        </ul>
+      </div>
+
+      <div class="play2-proof play2-proof-p2a">
+        <div class="play2-proof-num play2-proof-num-p2a">10.6% → 52.1%</div>
+        <div class="play2-proof-text">Same model, same data. Accuracy improvement is from context engineering alone — no retraining, no model swap. This is the SI's leverage point.</div>
+      </div>
+
+      <div class="play2-row">
+        <div class="play2-row-label">The 5-layer context stack</div>
+        <ul class="play2-row-items">
+          <li>L1 Taxonomy — labels, synonyms, preferred terms (SKOS)</li>
+          <li>L2 Semantic Layer — business questions mapped to queries</li>
+          <li>L3 Ontology — class hierarchy, inference rules, constraints (OWL 2)</li>
+          <li>L4 Knowledge Graph — persisted facts and relationships (RDF)</li>
+          <li>L5 Context Graph — live runtime state (event streams)</li>
+        </ul>
+      </div>
+
+      <a href="ontology.html" target="_blank" class="play2-link link-p2a">
+        Ontology reference — stack, platforms, insurance examples
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Play 2B: AgentOS / Harness -->
+  <div class="play2-card">
+    <div class="play2-top">
+      <div class="play-header" style="margin-bottom:.4rem;">
+        <span class="play-badge play-badge-p2b">Play 2B · Parallel</span>
+      </div>
+      <div class="play-title" style="color:var(--p2b)">AgentOS · Harness</div>
+      <p style="font-size:.73rem;color:var(--muted);margin-top:.3rem;line-height:1.55;">Multi-agent control plane that decides which agent acts, at what quality, latency, and cost — governance is built in, not bolted on.</p>
+    </div>
+    <div class="play2-body">
+
+      <div class="play2-row">
+        <div class="play2-row-label">What gets built</div>
+        <ul class="play2-row-items">
+          <li>Agent harness: per-agent governance wrapper — RBAC, audit trail, circuit breakers</li>
+          <li>Orchestration layer: LangGraph / AG2 for multi-agent delegation chains</li>
+          <li>Tool registry and agent identity — who called what and why</li>
+          <li>Eval pipeline: hallucination detection, output validation, regression</li>
+        </ul>
+      </div>
+
+      <div class="play2-row">
+        <div class="play2-row-label">Decision economics</div>
+        <ul class="play2-row-items">
+          <li>Not just "does the agent run" — which path meets quality and policy thresholds at lowest cost</li>
+          <li>Budget enforcement at orchestrator level (cost per business outcome)</li>
+          <li>Model routing: pick the most economical model that clears the quality floor</li>
+          <li>Latency and risk trade-offs surfaced as runtime decisions, not config</li>
+        </ul>
+      </div>
+
+      <div class="play2-proof play2-proof-p2b">
+        <div class="play2-proof-num play2-proof-num-p2b">4-layer AgentOS taxonomy</div>
+        <div class="play2-proof-text">L1 Framework · L2 Orchestration · L3 Agent Harness (per-agent governance) · L4 Agent Management Platform. The SI builds L2 and L3; L4 is Microsoft / IBM / ServiceNow territory.</div>
+      </div>
+
+      <div class="play2-row">
+        <div class="play2-row-label">Governance requirements addressed</div>
+        <ul class="play2-row-items">
+          <li>OWASP Agentic AI Top 10 — prompt injection, tool poisoning, uncontrolled iteration</li>
+          <li>EU AI Act Art. 9 risk management (Class 5 autonomous agents)</li>
+          <li>NIST AI RMF — Govern / Measure / Manage functions</li>
+          <li>AIUC-1 AI Usage Controls certification alignment</li>
+        </ul>
+      </div>
+
+      <a href="accountable-ai-by-design.html" target="_blank" class="play2-link link-p2b">
+        Accountable AI by Design — taxonomy, SI play, platform comparison
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<!-- HOW THEY FEED EACH OTHER -->
+<section class="section" style="padding-top:0">
+  <hr class="section-divider" style="margin-top:0">
+  <p style="font-size:.68rem;font-weight:700;color:var(--dim);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:.5rem;letter-spacing:.06em;text-transform:uppercase;">How 2A and 2B reinforce each other</p>
+  <p style="font-size:.8rem;color:var(--muted);line-height:1.7;max-width:620px;">The ontology accelerators produce the context packages that agents reason over. The AgentOS harness governs which agent accesses that context, at what cost, within what policy. Play 2A raises answer quality; Play 2B controls the runtime conditions under which that quality is reliably delivered. Neither is complete without the other — which is why both should start from the same gap register, in parallel.</p>
+</section>
+
+<footer class="page-footer">the SI · CE Practice · Internal · Not for distribution · Nov 2026</footer>
+
+</body>
+</html>
