@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="/images/inbravo.png">
+  <link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+  <script src="../js/jquery-1.11.3.min.js"></script>
+  <script src="../js/csi.min.js"></script>
+  <script src="../js/inbravo.js"></script>
+  <title>Context Engineering</title>
+  <style>
+    /* ── Layout ───────────────────────────────────────────────── */
+    .ce-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    /* ── Tabs ─────────────────────────────────────────────────── */
+    .ce-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 18px 20px 0;
+      max-width: 960px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+      flex-wrap: wrap;
+    }
+    .ce-tab {
+      padding: 8px 18px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 6px 6px 0 0;
+      color: var(--text-secondary, #475569);
+      border: 1px solid transparent;
+      border-bottom: none;
+      transition: color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .ce-tab:hover { color: var(--accent-cyan, #0891b2); }
+    .ce-tab.active {
+      color: var(--accent-cyan, #0891b2);
+      background: var(--bg-secondary, #f8fafc);
+      border-color: var(--border-color, #e2e8f0);
+      border-bottom-color: var(--bg-secondary, #f8fafc);
+      margin-bottom: -1px;
+    }
+    .ce-panel { display: none; padding-top: 28px; }
+    .ce-panel.active { display: block; }
+
+    /* ── Typography ───────────────────────────────────────────── */
+    .ce-h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent-cyan, #0891b2);
+      margin: 28px 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+      letter-spacing: 0.02em;
+    }
+    .ce-h3 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-primary, #1e293b);
+      margin: 18px 0 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .ce-p {
+      font-size: 0.82rem;
+      color: var(--text-primary, #334155);
+      line-height: 1.72;
+      margin: 0 0 12px;
+    }
+
+    /* ── Platform badge ───────────────────────────────────────── */
+    .plat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 4px;
+      margin: 0 0 14px;
+    }
+    .badge-databricks { background: rgba(255,60,0,.09); color: #c03000; border: 1px solid rgba(255,60,0,.22); }
+    .badge-snowflake  { background: rgba(41,182,246,.10); color: #0277a8; border: 1px solid rgba(41,182,246,.28); }
+    .badge-fabric     { background: rgba(0,120,212,.09); color: #005ba1; border: 1px solid rgba(0,120,212,.22); }
+
+    /* ── Concept cards ────────────────────────────────────────── */
+    .ce-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin: 0 0 24px;
+    }
+    .ce-card {
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 8px;
+      background: var(--bg-secondary, #f8fafc);
+      padding: 14px 16px;
+    }
+    .ce-card-title {
+      font-size: 0.80rem;
+      font-weight: 700;
+      color: var(--text-primary, #1e293b);
+      margin: 0 0 6px;
+    }
+    .ce-card-body {
+      font-size: 0.75rem;
+      color: var(--text-primary, #334155);
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    /* ── Layer stack ──────────────────────────────────────────── */
+    .layer-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 0 0 20px;
+      font-size: 0.76rem;
+    }
+    .layer-row {
+      display: grid;
+      grid-template-columns: 32px 130px 1fr 80px;
+      align-items: stretch;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+    .layer-row:last-child { border-bottom: none; }
+    .layer-num {
+      background: var(--bg-secondary, #f1f5f9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.72rem;
+      color: var(--accent-cyan, #0891b2);
+      border-right: 1px solid var(--border-color, #e2e8f0);
+    }
+    .layer-name {
+      font-weight: 700;
+      color: var(--text-primary, #1e293b);
+      padding: 9px 12px;
+      border-right: 1px solid var(--border-color, #e2e8f0);
+    }
+    .layer-desc {
+      color: var(--text-primary, #334155);
+      padding: 9px 12px;
+      line-height: 1.55;
+    }
+    .layer-std {
+      font-family: monospace;
+      font-size: 0.68rem;
+      color: var(--text-secondary, #475569);
+      padding: 9px 10px;
+      border-left: 1px solid var(--border-color, #e2e8f0);
+      display: flex;
+      align-items: center;
+    }
+    .layer-active .layer-name { color: var(--accent-cyan, #0891b2); }
+    .layer-active .layer-num  { background: rgba(8,145,178,.12); }
+
+    /* ── Feature table ────────────────────────────────────────── */
+    .feat-table-wrap { overflow-x: auto; margin: 0 0 22px; }
+    .feat-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.74rem;
+      min-width: 500px;
+    }
+    .feat-table th {
+      background: var(--bg-secondary, #f1f5f9);
+      color: var(--text-secondary, #475569);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.68rem;
+      padding: 8px 12px;
+      text-align: left;
+      border: 1px solid var(--border-color, #e2e8f0);
+    }
+    .feat-table td {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color, #e2e8f0);
+      color: var(--text-primary, #1e293b);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    .feat-table tr:nth-child(even) td { background: rgba(0,0,0,.013); }
+    .feat-name { font-weight: 700; color: var(--accent-cyan, #0891b2); }
+
+    /* ── Code block ───────────────────────────────────────────── */
+    .ce-code-wrap {
+      background: var(--bg-secondary, #f1f5f9);
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 7px;
+      overflow-x: auto;
+      margin: 0 0 20px;
+    }
+    .ce-code-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary, #475569);
+      padding: 7px 14px 4px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+    .ce-code-wrap pre {
+      margin: 0;
+      padding: 12px 14px;
+      font-size: 0.72rem;
+      line-height: 1.65;
+      color: var(--text-primary, #1e293b);
+      white-space: pre;
+    }
+    .ce-comment { color: var(--text-secondary, #64748b); }
+    .ce-key    { color: var(--accent-cyan, #0891b2); }
+    .ce-str    { color: var(--accent-green, #059669); }
+    .ce-num    { color: #92650a; }
+
+    /* ── Accuracy banner ──────────────────────────────────────── */
+    .acc-banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(5,150,105,.07);
+      border: 1px solid rgba(5,150,105,.25);
+      border-radius: 7px;
+      padding: 12px 16px;
+      margin: 0 0 18px;
+    }
+    .acc-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent-green, #059669);
+      white-space: nowrap;
+      line-height: 1;
+    }
+    .acc-label {
+      font-size: 0.75rem;
+      color: var(--text-primary, #334155);
+      line-height: 1.6;
+    }
+    .acc-label strong { color: var(--text-primary, #1e293b); }
+
+    /* ── Warning / gap ────────────────────────────────────────── */
+    .ce-warn {
+      background: rgba(180,130,0,.07);
+      border: 1px solid rgba(180,130,0,.25);
+      border-left: 3px solid #b87d00;
+      border-radius: 5px;
+      padding: 10px 14px;
+      margin: 0 0 16px;
+      font-size: 0.78rem;
+      color: var(--text-primary, #1e293b);
+      line-height: 1.65;
+    }
+    .ce-warn strong { color: #92650a; }
+
+    /* ── Verdict ──────────────────────────────────────────────── */
+    .ce-verdict {
+      background: rgba(8,145,178,.07);
+      border: 1px solid rgba(8,145,178,.25);
+      border-left: 3px solid var(--accent-cyan, #0891b2);
+      border-radius: 5px;
+      padding: 10px 14px;
+      margin: 18px 0;
+      font-size: 0.78rem;
+      color: var(--text-primary, #1e293b);
+      line-height: 1.65;
+    }
+    .ce-verdict strong { color: var(--accent-cyan, #0891b2); }
+
+    /* ── Comparison grid ──────────────────────────────────────── */
+    .cmp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 0 0 24px;
+    }
+    .cmp-col { display: flex; flex-direction: column; gap: 8px; }
+    .cmp-head {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 6px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .cmp-db   { background: rgba(255,60,0,.09);   color: #c03000; border: 1px solid rgba(255,60,0,.22); }
+    .cmp-sf   { background: rgba(41,182,246,.10); color: #0277a8; border: 1px solid rgba(41,182,246,.28); }
+    .cmp-fab  { background: rgba(0,120,212,.09);  color: #005ba1; border: 1px solid rgba(0,120,212,.22); }
+    .cmp-row {
+      font-size: 0.72rem;
+      color: var(--text-primary, #334155);
+      padding: 6px 9px;
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 5px;
+      background: var(--bg-secondary, #f8fafc);
+      line-height: 1.5;
+    }
+    .cmp-row strong { color: var(--text-primary, #1e293b); }
+
+    /* ── Status pill ──────────────────────────────────────────── */
+    .pill-ga   { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 7px; border-radius:10px; background:rgba(5,150,105,.12); color:var(--accent-green,#059669); border:1px solid rgba(5,150,105,.25); }
+    .pill-prev { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 7px; border-radius:10px; background:rgba(180,130,0,.10); color:#92650a; border:1px solid rgba(180,130,0,.28); }
+    .pill-gap  { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 7px; border-radius:10px; background:rgba(185,28,28,.08); color:#b91c1c; border:1px solid rgba(185,28,28,.22); }
+
+    /* ── Ref links ────────────────────────────────────────────── */
+    .ref-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+    .ref-link {
+      font-size:0.72rem;
+      color:var(--accent-cyan,#0891b2);
+      border:1px solid rgba(8,145,178,.25);
+      padding:2px 9px;
+      border-radius:4px;
+      text-decoration:none;
+      transition:background 0.12s;
+    }
+    .ref-link:hover { background:rgba(8,145,178,.10); }
+
+    .ce-divider { border:none; border-top:1px solid var(--border-color,#e2e8f0); margin:28px 0; }
+
+    @media (max-width:620px) {
+      .cmp-grid { grid-template-columns: 1fr; }
+      .layer-row { grid-template-columns: 28px 1fr; }
+      .layer-std { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div align="center">
+    <div data-include="header.html"></div>
+  </div>
+
+  <div align="center">
+    <p style="font-size:0.75rem;color:var(--text-secondary,#475569);margin:18px 0 0;">Context Engineering — Databricks · Snowflake · Microsoft Fabric · Nov 2026</p>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="ce-tabs">
+    <div class="ce-tab active"  onclick="showTab('concepts')">Concepts</div>
+    <div class="ce-tab" onclick="showTab('databricks')">Databricks</div>
+    <div class="ce-tab" onclick="showTab('snowflake')">Snowflake</div>
+    <div class="ce-tab" onclick="showTab('fabric')">Microsoft Fabric</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TAB 1 — CONCEPTS
+  ══════════════════════════════════════════════════════════ -->
+  <div class="ce-panel active ce-wrap" id="tab-concepts">
+
+    <div class="ce-h2">Context Engineering vs Prompt Engineering</div>
+    <p class="ce-p"><strong>Prompt engineering</strong> optimises the question. <strong>Context engineering</strong> optimises the world the model sees when it answers — the governed definitions, metric rules, entity relationships, and domain constraints that sit between raw data and the LLM. The same model, the same question, the same data can produce a 10.6% accuracy rate or a 52.1% accuracy rate depending entirely on the context layer.</p>
+    <p class="ce-p">Context engineering is systematic and durable. A well-engineered context layer survives a model upgrade, a schema change, and a new analyst who has never read the data dictionary. Prompt engineering is fragile — it lives in a string and breaks silently when assumptions change.</p>
+
+    <div class="ce-grid">
+      <div class="ce-card">
+        <div class="ce-card-title">Prompt Engineering</div>
+        <div class="ce-card-body">Optimise the question. Craft the system prompt, few-shot examples, chain-of-thought instructions. Lives in the LLM call. Breaks when the model, the schema, or the business rules change. Impact ceiling: ~30% accuracy lift on ambiguous questions.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Context Engineering</div>
+        <div class="ce-card-body">Optimise the world. Encode metric definitions, entity relationships, governance rules, and business constraints into the layer between data and model. Survives model upgrades. Impact ceiling: 40–50% accuracy lift observed (Databricks Genie: 10.6% → 52.1%; Snowflake Cortex: +86.3% task success).</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">RAG (Retrieval Context)</div>
+        <div class="ce-card-body">Retrieve relevant chunks at query time and inject into the context window. Dynamic but unstructured. Best for unstructured documents (PDFs, notes). Complements but does not replace a governed semantic layer — retrieved text has no guaranteed business rule enforcement.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Semantic Layer Context</div>
+        <div class="ce-card-body">Pre-define measures, dimensions, relationships, and business rules in a machine-readable layer. The agent reads definitions, not raw SQL. Forces correct metric variant selection before the query is even written. All three platforms implement this differently.</div>
+      </div>
+    </div>
+
+    <div class="ce-h2">The 5-Layer Context Stack</div>
+    <p class="ce-p">Context engineering operates across five layers. Each layer adds structure that narrows the solution space for the model — reducing the chance of a plausible-but-wrong answer.</p>
+
+    <div class="layer-stack">
+      <div class="layer-row">
+        <div class="layer-num">0</div>
+        <div class="layer-name">Raw Storage</div>
+        <div class="layer-desc">Tables, columns, raw values. No business meaning. The model guesses based on column names. Accuracy floor.</div>
+        <div class="layer-std">Parquet / Delta</div>
+      </div>
+      <div class="layer-row">
+        <div class="layer-num">1</div>
+        <div class="layer-name">Taxonomy</div>
+        <div class="layer-desc">Named classes and synonyms. "LR" = "Loss Ratio" = "loss_ratio_pct". Reduces naming mismatch errors. SKOS vocabulary.</div>
+        <div class="layer-std">SKOS</div>
+      </div>
+      <div class="layer-row layer-active">
+        <div class="layer-num">2</div>
+        <div class="layer-name">Semantic Layer</div>
+        <div class="layer-desc">Named measures with SQL expressions, dimensions, relationships, certified sources. The agent reads definitions instead of guessing SQL. YAML or LookML.</div>
+        <div class="layer-std">YAML / LookML</div>
+      </div>
+      <div class="layer-row layer-active">
+        <div class="layer-num">3</div>
+        <div class="layer-name">Ontology</div>
+        <div class="layer-desc">Class hierarchy, properties, inference rules. OWL 2: "Ultimate LR applies when line_of_business IN (WC, GL, Med Mal)". Enables rule-based reasoning, not just retrieval.</div>
+        <div class="layer-std">OWL 2 / SHACL</div>
+      </div>
+      <div class="layer-row layer-active">
+        <div class="layer-num">4</div>
+        <div class="layer-name">Context Graph</div>
+        <div class="layer-desc">Live, queryable knowledge graph with current state. Agent instructions, governed defaults, Genie Pages, Cortex verified queries. The highest-leverage layer per token of context window.</div>
+        <div class="layer-std">RDF / KG</div>
+      </div>
+    </div>
+
+    <div class="ce-h2">Why Context Beats More Model</div>
+    <div class="ce-grid">
+      <div class="ce-card">
+        <div class="ce-card-title">The 10.6% → 52.1% proof</div>
+        <div class="ce-card-body">Databricks Genie on insurance data. Same LLM. Same data. Adding Genie Pages (Rung 5: governed default "long-tail lines → use ultimate_lr") moved accuracy from 10.6% to 52.1%. No model fine-tuning. No new data. Context alone.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Snowflake +86.3%</div>
+        <div class="ce-card-body">Cortex Analyst with a semantic model YAML vs without. The semantic model encodes which columns are measures vs dimensions, their business names, relationships, and verified example queries. The model stops guessing joins and aggregations.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Model upgrades are free</div>
+        <div class="ce-card-body">A well-engineered context layer is model-agnostic. When GPT-4o → o3 or Sonnet → Opus, the semantic definitions stay correct. Teams that invested in prompt engineering have to re-tune. Teams that invested in context engineering get the upgrade for free.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Latency budget</div>
+        <div class="ce-card-body">Context engineering reduces context window size. A compact, governed semantic model (500 tokens of YAML definitions) outperforms a 10,000-token few-shot prompt that describes the same schema in prose. Smaller context = faster, cheaper inference.</div>
+      </div>
+    </div>
+
+    <div class="ce-h2">Platform Comparison — Semantic Context Layer</div>
+    <div class="cmp-grid">
+      <div class="cmp-col">
+        <div class="cmp-head cmp-db">Databricks Genie</div>
+        <div class="cmp-row"><strong>Format:</strong> YAML metric views in Unity Catalog</div>
+        <div class="cmp-row"><strong>Governed defaults:</strong> Genie Pages — set rules like "long-tail → ultimate_lr"</div>
+        <div class="cmp-row"><strong>Agent instructions:</strong> NEVER use paid_lr for profitability</div>
+        <div class="cmp-row"><strong>Benchmark suite:</strong> 30 trap questions (Rung 8)</div>
+        <div class="cmp-row"><strong>Accuracy:</strong> 10.6% → 52.1% (insurance)</div>
+        <div class="cmp-row"><strong>Status:</strong> <span class="pill-prev">Public Preview Sep 2026</span></div>
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-head cmp-sf">Snowflake Cortex</div>
+        <div class="cmp-row"><strong>Format:</strong> YAML semantic model (tables, measures, dimensions, verified_queries)</div>
+        <div class="cmp-row"><strong>Governed defaults:</strong> verified_queries block — curated Q&amp;A pairs</div>
+        <div class="cmp-row"><strong>Agent instructions:</strong> filter_relationships and expr fields enforce business rules</div>
+        <div class="cmp-row"><strong>Benchmark suite:</strong> Cortex Analyst evaluation suite</div>
+        <div class="cmp-row"><strong>Accuracy:</strong> +86.3% task success with semantic model</div>
+        <div class="cmp-row"><strong>Status:</strong> <span class="pill-ga">GA</span></div>
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-head cmp-fab">Microsoft Fabric</div>
+        <div class="cmp-row"><strong>Format:</strong> Power BI semantic model (measures, relationships, RLS)</div>
+        <div class="cmp-row"><strong>Governed defaults:</strong> Default measure labels and descriptions in semantic model</div>
+        <div class="cmp-row"><strong>Agent instructions:</strong> Q&amp;A synonyms, Copilot annotations</div>
+        <div class="cmp-row"><strong>Benchmark suite:</strong> No published standard benchmark</div>
+        <div class="cmp-row"><strong>Accuracy:</strong> No published lift figure</div>
+        <div class="cmp-row"><strong>Status:</strong> <span class="pill-ga">GA</span> (Copilot) · <span class="pill-prev">Preview</span> (IQ Ontology)</div>
+      </div>
+    </div>
+
+    <div class="ce-verdict"><strong>The practitioner rule:</strong> invest in the semantic layer before investing in the model. A governed metric definition in YAML costs minutes to write and delivers accuracy gains that fine-tuning costs weeks to match — and the YAML definition survives the next model generation.</div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TAB 2 — DATABRICKS
+  ══════════════════════════════════════════════════════════ -->
+  <div class="ce-panel ce-wrap" id="tab-databricks">
+
+    <div class="plat-badge badge-databricks">&#9679; Databricks Genie Ontology</div>
+    <div class="acc-banner">
+      <div class="acc-number">52.1%</div>
+      <div class="acc-label"><strong>Accuracy with Genie Pages (Rung 5)</strong><br>Up from 10.6% on the same model and data. Same LLM · same Delta tables · governed context added. Source: Viral M Desai insurance implementation.</div>
+    </div>
+
+    <div class="ce-h2">Unity Catalog as the Context Store</div>
+    <p class="ce-p">Unity Catalog is Databricks' governed metadata layer — not just a table registry but the context store that feeds Genie agents. Every object has a certified owner, a lineage graph, and machine-readable definitions. The 9-rung ladder lives entirely inside Unity Catalog: each rung adds a new type of governed context without touching the underlying Delta tables.</p>
+
+    <div class="feat-table-wrap">
+      <table class="feat-table">
+        <thead>
+          <tr><th>Rung</th><th>Context type added</th><th>Accuracy</th><th>UC object</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>None — raw table</td><td style="color:#b91c1c;font-weight:700;">10.6%</td><td>Delta table</td></tr>
+          <tr><td>1</td><td>Column comments + PK/FK joins</td><td>10.8%</td><td>Column metadata</td></tr>
+          <tr><td>2</td><td>Metric views: paid / incurred / ultimate LR</td><td>28.5%</td><td>Metric View</td></tr>
+          <tr><td>3</td><td>Synonyms &amp; display names</td><td>28.5%</td><td>Display names</td></tr>
+          <tr><td>4</td><td>Domains &amp; subdomains</td><td>28.5%</td><td>UC Domain</td></tr>
+          <tr><td style="color:var(--accent-cyan,#0891b2);font-weight:700;">5</td><td><strong>Genie Pages — governed default: long-tail → ultimate LR</strong></td><td style="color:var(--accent-green,#059669);font-weight:700;">52.1% ▲</td><td><strong>Genie Page</strong></td></tr>
+          <tr><td>6</td><td>Certify source + deprecate legacy table</td><td>52.1% repeatable</td><td>Certification tag</td></tr>
+          <tr><td>7</td><td>Agent instructions: NEVER use paid_lr for profitability</td><td>Follow-ups correct</td><td>Agent instruction</td></tr>
+          <tr><td>8</td><td>Benchmark suite (30 trap questions)</td><td>52.1% provable</td><td>Genie Benchmark</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ce-h2">Metric View YAML — The Semantic Layer Definition</div>
+    <p class="ce-p">A metric view is a YAML file checked into version control and registered in Unity Catalog. It is the canonical definition of every named measure the agent can use. No bare column access — agents reference measures by name.</p>
+
+    <div class="ce-code-wrap">
+      <div class="ce-code-label">Unity Catalog · Metric View YAML · v1.1</div>
+      <pre><span class="ce-key">version</span>: 1.1
+<span class="ce-key">source</span>: <span class="ce-str">catalog.schema.gld_fact_underwriting_result_monthly</span>
+
+<span class="ce-key">measures</span>:
+  - <span class="ce-key">name</span>: <span class="ce-str">paid_lr</span>
+    <span class="ce-key">expr</span>: <span class="ce-str">SUM(source.ay_paid_loss) / NULLIF(SUM(source.earned_premium), 0)</span>
+    <span class="ce-key">display_name</span>: <span class="ce-str">'Paid Loss Ratio'</span>
+  - <span class="ce-key">name</span>: <span class="ce-str">incurred_lr</span>
+    <span class="ce-key">expr</span>: <span class="ce-str">SUM(source.ay_case_incurred) / NULLIF(SUM(source.earned_premium), 0)</span>
+    <span class="ce-key">display_name</span>: <span class="ce-str">'Case-Incurred Loss Ratio'</span>
+  - <span class="ce-key">name</span>: <span class="ce-str">ultimate_lr</span>
+    <span class="ce-key">expr</span>: <span class="ce-str">SUM(source.ay_ultimate_loss) / NULLIF(SUM(source.earned_premium), 0)</span>
+    <span class="ce-key">display_name</span>: <span class="ce-str">'Ultimate Loss Ratio'</span>
+
+<span class="ce-comment"># Deliberately NO bare 'loss_ratio' — forces variant selection
+# Genie Page (Rung 5) sets: long-tail lines → MEASURE(ultimate_lr)</span></pre>
+    </div>
+
+    <div class="ce-h2">Genie Pages — Governed Defaults</div>
+    <p class="ce-p">A Genie Page is the highest-leverage context object in Databricks. It encodes a <em>governed default</em>: a rule that resolves ambiguity before the LLM sees the question. The page does not change the model — it changes what the model is allowed to assume.</p>
+
+    <div class="ce-grid">
+      <div class="ce-card">
+        <div class="ce-card-title">Default measure rules</div>
+        <div class="ce-card-body">Set which measure variant to use for a given context. "When line_of_business IN ('WC','GL','Med Mal') → use ultimate_lr". The LLM never chooses — the page has already decided.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Agent instructions</div>
+        <div class="ce-card-body">Free-text rules that constrain reasoning: "NEVER use paid_lr as a proxy for profitability — it understates loss for long-tail lines." Applied before every query. Effectively a system prompt grounded in the data model.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Certification + deprecation</div>
+        <div class="ce-card-body">Certify the gold-layer source and mark the legacy table as deprecated. The agent's search space shrinks — it cannot accidentally query the wrong source even if the column names match.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Benchmark suite (Rung 8)</div>
+        <div class="ce-card-body">30 trap questions specific to the domain. Run as a regression harness: an ontology YAML change triggers re-run. 52.1% is not a ceiling — it is a floor that must hold after every future change.</div>
+      </div>
+    </div>
+
+    <div class="ce-h2">MCP &amp; Agentic Context Injection</div>
+    <p class="ce-p">Databricks exposes Unity Catalog context via MCP (Model Context Protocol). An external agent — Claude, GPT, a custom LangGraph workflow — can call the Databricks MCP server to retrieve certified metric definitions, table schemas, and Genie Page rules at query time. This means context engineering done in Unity Catalog is available to agents outside the Genie UI.</p>
+
+    <div class="ce-verdict"><strong>Databricks context engineering summary:</strong> Unity Catalog is the context store. Metric Views define the semantic layer. Genie Pages encode governed defaults. Agent instructions constrain reasoning. The 9-rung ladder is a repeatable implementation recipe — apply it in any domain, not just insurance.</div>
+
+    <div class="ref-list">
+      <a class="ref-link" href="https://viralmdesai.github.io/genie-ontology-insurance/" target="_blank">Viral M Desai — Genie Insurance Walkthrough ↗</a>
+      <a class="ref-link" href="https://docs.databricks.com/en/genie/index.html" target="_blank">Databricks Genie docs ↗</a>
+      <a class="ref-link" href="https://docs.databricks.com/en/ai-bi/metric-views.html" target="_blank">Metric Views ↗</a>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TAB 3 — SNOWFLAKE
+  ══════════════════════════════════════════════════════════ -->
+  <div class="ce-panel ce-wrap" id="tab-snowflake">
+
+    <div class="plat-badge badge-snowflake">&#9679; Snowflake Cortex · Business Ontology</div>
+    <div class="acc-banner">
+      <div class="acc-number">24% → 86%</div>
+      <div class="acc-label"><strong>Cortex Sense accuracy lift — vendor internal benchmark</strong><br>Vanilla frontier coding agent: 24.1% task success. Same agent grounded with Cortex Sense: 86.3%. Average query cost: $1.76 → $0.59. Source: Snowflake internal evaluation (private preview, Jul 2026). Not independently validated.</div>
+    </div>
+
+    <div class="ce-h2">Three Strengths. One Informed Agent.</div>
+    <p class="ce-p">Snowflake's context engineering model positions three complementary capabilities — not sequential steps — that together ground the Cortex Agent. Each can be used independently; the accuracy gains compound when used together.</p>
+
+    <!-- Inline SVG recreation of the Snowflake "Three Strengths" diagram -->
+    <div style="overflow-x:auto;margin:0 0 20px;">
+    <svg viewBox="0 0 760 480" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;font-family:inherit;display:block;margin:0 auto;">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#0277a8"/></marker>
+        <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#8b5cf6"/></marker>
+      </defs>
+
+      <!-- Background -->
+      <rect width="760" height="480" rx="10" fill="var(--bg-secondary,#f0f7ff)" stroke="var(--border-color,#e2e8f0)" stroke-width="1"/>
+
+      <!-- Cortex Sense ellipse (top-left) -->
+      <ellipse cx="210" cy="185" rx="168" ry="120" fill="rgba(41,182,246,0.10)" stroke="rgba(41,182,246,0.45)" stroke-width="1.5"/>
+      <text x="210" y="262" text-anchor="middle" font-size="13" font-weight="700" fill="#0277a8">Cortex Sense</text>
+      <text x="210" y="277" text-anchor="middle" font-size="10" fill="#475569">Infers context across the estate.</text>
+
+      <!-- Input items left -->
+      <rect x="38" y="102" width="80" height="22" rx="4" fill="rgba(41,182,246,0.12)" stroke="rgba(41,182,246,0.3)" stroke-width="1"/>
+      <text x="78" y="117" text-anchor="middle" font-size="10" fill="#0277a8">Schemas</text>
+      <line x1="118" y1="113" x2="142" y2="148" stroke="#29b6f6" stroke-width="1.2" marker-end="url(#arr)"/>
+
+      <rect x="38" y="142" width="80" height="22" rx="4" fill="rgba(41,182,246,0.12)" stroke="rgba(41,182,246,0.3)" stroke-width="1"/>
+      <text x="78" y="157" text-anchor="middle" font-size="10" fill="#0277a8">Queries</text>
+      <line x1="118" y1="153" x2="142" y2="163" stroke="#29b6f6" stroke-width="1.2" marker-end="url(#arr)"/>
+
+      <rect x="38" y="182" width="80" height="22" rx="4" fill="rgba(41,182,246,0.12)" stroke="rgba(41,182,246,0.3)" stroke-width="1"/>
+      <text x="78" y="197" text-anchor="middle" font-size="10" fill="#0277a8">Dashboards</text>
+      <line x1="118" y1="193" x2="142" y2="183" stroke="#29b6f6" stroke-width="1.2" marker-end="url(#arr)"/>
+
+      <rect x="38" y="222" width="80" height="22" rx="4" fill="rgba(41,182,246,0.12)" stroke="rgba(41,182,246,0.3)" stroke-width="1"/>
+      <text x="78" y="237" text-anchor="middle" font-size="10" fill="#0277a8">Transformations</text>
+      <line x1="118" y1="233" x2="142" y2="208" stroke="#29b6f6" stroke-width="1.2" marker-end="url(#arr)"/>
+
+      <!-- Business Ontology ellipse (top-right) -->
+      <ellipse cx="560" cy="185" rx="168" ry="120" fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.35)" stroke-width="1.5"/>
+      <text x="560" y="260" text-anchor="middle" font-size="13" font-weight="700" fill="#6d28d9">Business Ontology</text>
+      <text x="560" y="275" text-anchor="middle" font-size="10" fill="#475569">Approves and owns business meaning.</text>
+
+      <!-- Ontology nodes -->
+      <circle cx="560" cy="175" r="26" fill="rgba(139,92,246,0.18)" stroke="rgba(139,92,246,0.4)" stroke-width="1.5"/>
+      <text x="560" y="179" text-anchor="middle" font-size="10" font-weight="700" fill="#6d28d9">Customer</text>
+      <circle cx="490" cy="148" r="20" fill="rgba(41,182,246,0.15)" stroke="rgba(41,182,246,0.35)" stroke-width="1"/>
+      <text x="490" y="152" text-anchor="middle" font-size="9" fill="#0277a8">Revenue</text>
+      <circle cx="630" cy="148" r="20" fill="rgba(41,182,246,0.15)" stroke="rgba(41,182,246,0.35)" stroke-width="1"/>
+      <text x="630" y="152" text-anchor="middle" font-size="9" fill="#0277a8">Region</text>
+      <circle cx="510" cy="210" r="20" fill="rgba(41,182,246,0.15)" stroke="rgba(41,182,246,0.35)" stroke-width="1"/>
+      <text x="510" y="214" text-anchor="middle" font-size="9" fill="#0277a8">Time</text>
+      <circle cx="615" cy="115" r="18" fill="rgba(41,182,246,0.15)" stroke="rgba(41,182,246,0.35)" stroke-width="1"/>
+      <text x="615" y="119" text-anchor="middle" font-size="9" fill="#0277a8">Product</text>
+      <!-- approved badge -->
+      <rect x="650" y="98" width="58" height="20" rx="10" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.35)" stroke-width="1"/>
+      <text x="679" y="112" text-anchor="middle" font-size="9" fill="#6d28d9">✓ Approved</text>
+
+      <!-- Lines between nodes -->
+      <line x1="535" y1="162" x2="510" y2="155" stroke="rgba(139,92,246,0.4)" stroke-width="1"/>
+      <line x1="585" y1="162" x2="610" y2="155" stroke="rgba(139,92,246,0.4)" stroke-width="1"/>
+      <line x1="548" y1="198" x2="528" y2="206" stroke="rgba(139,92,246,0.4)" stroke-width="1"/>
+      <line x1="580" y1="152" x2="600" y2="122" stroke="rgba(139,92,246,0.4)" stroke-width="1"/>
+
+      <!-- Semantic Views ellipse (bottom-center) -->
+      <ellipse cx="380" cy="390" rx="168" ry="68" fill="rgba(41,182,246,0.10)" stroke="rgba(41,182,246,0.40)" stroke-width="1.5"/>
+      <text x="380" y="420" text-anchor="middle" font-size="13" font-weight="700" fill="#0277a8">Semantic Views</text>
+      <text x="380" y="435" text-anchor="middle" font-size="10" fill="#475569">Execute governed calculations.</text>
+      <!-- data icons -->
+      <rect x="290" y="368" width="22" height="28" rx="3" fill="rgba(41,182,246,0.25)" stroke="rgba(41,182,246,0.45)" stroke-width="1"/>
+      <rect x="318" y="362" width="22" height="34" rx="3" fill="rgba(41,182,246,0.20)" stroke="rgba(41,182,246,0.40)" stroke-width="1"/>
+      <text x="348" y="383" font-size="14" fill="#0277a8">⟶</text>
+      <rect x="362" y="362" width="22" height="34" rx="3" fill="rgba(41,182,246,0.20)" stroke="rgba(41,182,246,0.40)" stroke-width="1"/>
+      <rect x="390" y="368" width="22" height="28" rx="3" fill="rgba(41,182,246,0.15)" stroke="rgba(41,182,246,0.35)" stroke-width="1"/>
+      <text x="420" y="376" font-size="11" fill="#0277a8">Σ</text>
+      <text x="420" y="393" font-size="11" fill="#0277a8">📈</text>
+
+      <!-- Cortex Agent centre circle -->
+      <circle cx="380" cy="240" r="42" fill="#0277a8"/>
+      <circle cx="380" cy="240" r="38" fill="#0ea5e9"/>
+      <text x="380" y="236" text-anchor="middle" font-size="20" fill="white">❄</text>
+      <text x="380" y="253" text-anchor="middle" font-size="10" font-weight="700" fill="white">Cortex</text>
+      <text x="380" y="265" text-anchor="middle" font-size="10" font-weight="700" fill="white">Agent</text>
+
+      <!-- Arrow: Cortex Sense → Agent (Inferred context) -->
+      <path d="M318,220 Q350,230 338,240" stroke="#0277a8" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+      <text x="286" y="224" font-size="9" fill="#0277a8">Inferred</text>
+      <text x="286" y="235" font-size="9" fill="#0277a8">context</text>
+
+      <!-- Arrow: Business Ontology → Agent (Approved definitions) -->
+      <path d="M442,220 Q420,230 422,240" stroke="#0277a8" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+      <text x="435" y="222" font-size="9" fill="#0277a8">Approved</text>
+      <text x="435" y="233" font-size="9" fill="#0277a8">definitions</text>
+
+      <!-- Arrow: Semantic Views → Agent (Computed metrics) -->
+      <line x1="380" y1="322" x2="380" y2="284" stroke="#0277a8" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="386" y="310" font-size="9" fill="#0277a8">Computed</text>
+      <text x="386" y="321" font-size="9" fill="#0277a8">metrics</text>
+
+      <!-- Arrow: Cortex Sense → Business Ontology (Promote selected concepts) -->
+      <path d="M355,100 Q380,70 405,100" stroke="#8b5cf6" stroke-width="1.2" stroke-dasharray="5,3" fill="none" marker-end="url(#arr2)"/>
+      <text x="380" y="68" text-anchor="middle" font-size="9" fill="#6d28d9">Promote selected concepts</text>
+
+      <!-- Arrow: Business Ontology → Semantic Views (Representations) -->
+      <path d="M560,305 Q500,370 460,370" stroke="#8b5cf6" stroke-width="1.2" stroke-dasharray="5,3" fill="none" marker-end="url(#arr2)"/>
+      <text x="530" y="360" font-size="9" fill="#6d28d9">Representations</text>
+
+      <!-- Caption -->
+      <line x1="30" y1="462" x2="730" y2="462" stroke="var(--border-color,#e2e8f0)" stroke-width="1"/>
+      <text x="30" y="475" font-size="9" fill="#64748b">Complementary capabilities, not required setup steps. · Source: Snowflake Engineering Blog — Business Ontology &amp; Context</text>
+    </svg>
+    </div>
+
+    <div class="ce-h2">Cortex Analyst — Semantic Model as Context</div>
+    <p class="ce-p">Cortex Analyst is Snowflake's natural-language-to-SQL agent. Its accuracy is determined almost entirely by the quality of the semantic model passed at query time. Two formats are supported: a <strong>YAML file</strong> staged on Snowflake (original format) and a <strong>Semantic View</strong> — a first-class catalog object created with <code>CREATE SEMANTIC VIEW</code> that supports grants and lineage tracking. New work should use Semantic Views.</p>
+
+    <div class="feat-table-wrap">
+      <table class="feat-table">
+        <thead>
+          <tr><th>Model section</th><th>What it defines</th><th>Context engineering role</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="feat-name">tables / base_table</span></td><td>Logical table mapped to a physical base table</td><td>Tells the model which tables are authoritative sources</td></tr>
+          <tr><td><span class="feat-name">dimensions</span></td><td>Categorical/time columns: name, synonyms, expr, description</td><td>Resolves naming ambiguity; "LR" → loss_ratio_pct; forces correct GROUP BY</td></tr>
+          <tr><td><span class="feat-name">measures</span></td><td>Named aggregation expressions + default_aggregation</td><td>Agent uses measure names; never writes raw SQL aggregation</td></tr>
+          <tr><td><span class="feat-name">relationships</span></td><td>JOIN conditions (many_to_one, join keys)</td><td>Prevents incorrect or missing joins</td></tr>
+          <tr><td><span class="feat-name">verified_queries</span></td><td>Curated question → validated SQL pairs; verified_at, verified_by</td><td>Highest-confidence path — exact match bypasses LLM SQL generation entirely. Also used as the evaluation set for Cortex Analyst Evaluations.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ce-warn"><strong>verified_queries gotcha:</strong> SQL in a verified query must reference <em>logical</em> table and column names from the semantic model — not the physical dataset names. A verified query that uses the physical column name silently degrades accuracy; Cortex Analyst will not use it as a match even when the question is identical.</div>
+
+    <div class="ce-h2">Semantic View — Example Structure</div>
+    <div class="ce-code-wrap">
+      <div class="ce-code-label">Snowflake · Semantic View (new format) · CREATE SEMANTIC VIEW</div>
+      <pre><span class="ce-key">name</span>: <span class="ce-str">underwriting_performance</span>
+<span class="ce-key">description</span>: <span class="ce-str">Underwriting result metrics by accident year and line of business</span>
+
+<span class="ce-key">tables</span>:
+  - <span class="ce-key">name</span>: <span class="ce-str">gld_fact_underwriting_result</span>
+    <span class="ce-key">description</span>: <span class="ce-str">Gold-layer monthly underwriting result — certified source</span>
+    <span class="ce-key">base_table</span>: { <span class="ce-key">database</span>: <span class="ce-str">ANALYTICS</span>, <span class="ce-key">schema</span>: <span class="ce-str">FINANCE</span>, <span class="ce-key">table</span>: <span class="ce-str">GLD_FACT_UW_RESULT</span> }
+    <span class="ce-key">measures</span>:
+      - <span class="ce-key">name</span>: <span class="ce-str">paid_loss_ratio</span>
+        <span class="ce-key">synonyms</span>: [<span class="ce-str">paid LR</span>, <span class="ce-str">cash loss ratio</span>]
+        <span class="ce-key">description</span>: <span class="ce-str">Paid losses / earned premium. Use for cash settlement analysis only.</span>
+        <span class="ce-key">expr</span>: <span class="ce-str">SUM(AY_PAID_LOSS) / NULLIF(SUM(EARNED_PREMIUM), 0)</span>
+        <span class="ce-key">data_type</span>: <span class="ce-str">NUMBER</span>
+      - <span class="ce-key">name</span>: <span class="ce-str">ultimate_loss_ratio</span>
+        <span class="ce-key">synonyms</span>: [<span class="ce-str">ultimate LR</span>, <span class="ce-str">developed LR</span>]
+        <span class="ce-key">description</span>: <span class="ce-str">Ultimate developed losses / earned premium. Use for profitability and long-tail lines.</span>
+        <span class="ce-key">expr</span>: <span class="ce-str">SUM(AY_ULTIMATE_LOSS) / NULLIF(SUM(EARNED_PREMIUM), 0)</span>
+        <span class="ce-key">data_type</span>: <span class="ce-str">NUMBER</span>
+
+<span class="ce-key">verified_queries</span>:
+  - <span class="ce-key">name</span>: <span class="ce-str">wc_loss_ratio_prior_year</span>
+    <span class="ce-key">question</span>: <span class="ce-str">What is the loss ratio for Workers Compensation?</span>
+    <span class="ce-key">verified_at</span>: <span class="ce-str">'2026-10-01'</span>
+    <span class="ce-key">verified_by</span>: <span class="ce-str">Finance Analytics Team</span>
+    <span class="ce-key">use_as_onboarding_question</span>: <span class="ce-str">true</span>
+    <span class="ce-key">sql</span>: |
+      <span class="ce-comment">-- Use LOGICAL names (gld_fact_underwriting_result.ultimate_loss_ratio)
+      -- NOT physical column names — required for Cortex Analyst matching</span>
+      SELECT ultimate_loss_ratio FROM gld_fact_underwriting_result
+      WHERE line_of_business = 'WC'
+      AND accident_year = YEAR(CURRENT_DATE) - 1</pre>
+    </div>
+
+    <div class="ce-h2">Cortex Sense — Runtime Context Inference</div>
+    <p class="ce-p">Cortex Sense is distinct from the semantic model. Where the semantic model defines <em>what things mean</em>, Cortex Sense <em>infers context</em> at runtime — scanning schemas, queries, dashboards, and transformations across the data estate to build a contextual understanding that is passed to the agent. It is the left ellipse in the Three Strengths diagram: broad context inferred from usage patterns, not curated by humans.</p>
+
+    <div class="ce-grid">
+      <div class="ce-card">
+        <div class="ce-card-title">What Cortex Sense infers</div>
+        <div class="ce-card-body">Which tables are actually queried together (not just joined by FK). Which columns appear in dashboard filters. Which transformations produce which derived columns. Usage patterns that reveal implicit business meaning the semantic model hasn't yet encoded.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Promote → Business Ontology</div>
+        <div class="ce-card-body">Inferred concepts can be promoted (by a human approver) into the Business Ontology — the right ellipse. This creates a governed feedback loop: usage patterns become approved definitions. The two-step approval prevents noise from becoming governing truth.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Status</div>
+        <div class="ce-card-body">Private Preview as of Jul 2026. The 24.1% → 86.3% accuracy stat and $1.76 → $0.59 cost reduction are from Snowflake's internal evaluation — not independently validated. Treat as directional, not benchmarkable against Databricks or Fabric figures.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Context Engineering as practice</div>
+        <div class="ce-card-body">Snowflake formally defines context engineering as "how applications determine how instructions, data, memory, tools and prior state are selected, organized and maintained for a model or agent." dbt Labs has an OSS <code>dbt_context_engineering</code> package using Snowflake AI functions as building blocks.</div>
+      </div>
+    </div>
+
+    <div class="ce-h2">Cortex Search — Hybrid Retrieval</div>
+    <p class="ce-p">Cortex Search handles unstructured context — documents, notes, PDFs. It uses Arctic Embed M for vector retrieval combined with lexical search and a reranker. Internal NDCG@10 benchmark: Lexical 0.22 → Vector 0.49 → Hybrid 0.53 → Hybrid + reranker 0.59. Cortex Agents automatically route structured questions to Cortex Analyst and unstructured questions to Cortex Search.</p>
+
+    <div class="ce-verdict"><strong>Snowflake context engineering summary:</strong> Three complementary layers — Cortex Sense (inferred context), Business Ontology (approved definitions), Semantic Views (computed metrics) — converge on the Cortex Agent. The Semantic View's <code>verified_queries</code> block is the highest-confidence path; exact question matches bypass LLM SQL generation entirely. Accuracy tracks semantic model quality more than the underlying model — documented cases show 0% → 100% on a benchmark after adding domain rules and global filters.</div>
+
+    <div class="ref-list">
+      <a class="ref-link" href="https://www.snowflake.com/en/blog/engineering/business-ontology-context/" target="_blank">Snowflake — Business Ontology &amp; Context ↗</a>
+      <a class="ref-link" href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst" target="_blank">Cortex Analyst docs ↗</a>
+      <a class="ref-link" href="https://docs.snowflake.com/en/user-guide/views-semantic/semantic-view-yaml-spec" target="_blank">Semantic View spec ↗</a>
+      <a class="ref-link" href="https://www.snowflake.com/en/artificial-intelligence/ai-engineering/context-engineering/" target="_blank">Snowflake — Context Engineering ↗</a>
+      <a class="ref-link" href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-search/cortex-search-overview" target="_blank">Cortex Search ↗</a>
+      <a class="ref-link" href="https://www.snowflake.com/engineering-blog/cortex-analyst-cortex-search-integration/" target="_blank">Analyst + Search integration ↗</a>
+      <a class="ref-link" href="https://www.getdbt.com/blog/context-engineering-data-warehouse" target="_blank">dbt context engineering ↗</a>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TAB 4 — FABRIC
+  ══════════════════════════════════════════════════════════ -->
+  <div class="ce-panel ce-wrap" id="tab-fabric">
+
+    <div class="plat-badge badge-fabric">&#9679; Microsoft Fabric · Power BI Semantic Model</div>
+
+    <div class="ce-warn"><strong>Known gap — IQ Ontology Decimal bug:</strong> The Microsoft Fabric IQ Ontology feature (Preview) has a known issue with Decimal data types used in financial calculations. Ratio and percentage measures stored as DECIMAL(18,4) return incorrect values when surfaced through the ontology layer. This blocks use in regulated financial reporting contexts until patched. Track: Microsoft Fabric Ideas forum and release notes.</div>
+
+    <div class="ce-h2">The Power BI Semantic Model as Context Layer</div>
+    <p class="ce-p">Microsoft Fabric's context engineering story is built on the Power BI semantic model — a mature, widely-deployed layer that predates the AI-native platforms by over a decade. Every measure definition, table relationship, row-level security rule, and display name in the semantic model becomes context that Copilot agents can consume. The strength is breadth of enterprise adoption. The gap is that the model was designed for human dashboards, not agent reasoning chains.</p>
+
+    <div class="feat-table-wrap">
+      <table class="feat-table">
+        <thead>
+          <tr><th>Semantic model element</th><th>Context engineering role</th><th>Copilot / agent support</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="feat-name">Measures (DAX)</span></td><td>Named business calculations with business descriptions</td><td><span class="pill-ga">GA</span> — Copilot reads measure names and descriptions</td></tr>
+          <tr><td><span class="feat-name">Table relationships</span></td><td>JOIN topology — prevents incorrect cross-table aggregations</td><td><span class="pill-ga">GA</span> — respected in AI-generated queries</td></tr>
+          <tr><td><span class="feat-name">Column descriptions</span></td><td>Business meaning of each column, disambiguates synonyms</td><td><span class="pill-ga">GA</span></td></tr>
+          <tr><td><span class="feat-name">Q&amp;A synonyms</span></td><td>Alias mapping: "LR" → "Loss Ratio Measure"</td><td><span class="pill-ga">GA</span> — used by both Q&amp;A and Copilot</td></tr>
+          <tr><td><span class="feat-name">Row-level security (RLS)</span></td><td>Restricts what data the agent can see per user identity</td><td><span class="pill-ga">GA</span> — Copilot respects RLS rules</td></tr>
+          <tr><td><span class="feat-name">Copilot annotations</span></td><td>Free-text instructions for Copilot in the semantic model</td><td><span class="pill-ga">GA</span></td></tr>
+          <tr><td><span class="feat-name">IQ Ontology</span></td><td>Formal ontology layer over the semantic model for agent reasoning</td><td><span class="pill-prev">Preview</span> — Decimal bug blocks financial use cases</td></tr>
+          <tr><td><span class="feat-name">DirectLake mode</span></td><td>Semantic model reads directly from OneLake Delta tables — no import</td><td><span class="pill-ga">GA</span> — reduces data staleness in context</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ce-h2">DirectLake — Live Context Without Import</div>
+    <p class="ce-p">Traditional Power BI import mode copies data into an in-memory engine on a schedule. DirectLake reads Delta Parquet files from OneLake directly — no copy, no schedule, no staleness lag. For context engineering this matters because an agent that reads last night's import and answers a question about "current reserve adequacy" is producing contextually stale output. DirectLake makes the semantic model a live context source.</p>
+
+    <div class="ce-h2">Copilot Context Engineering</div>
+    <p class="ce-p">Fabric Copilot in Power BI uses the semantic model as its primary context. The quality of Copilot answers is directly proportional to the quality of the semantic model. Teams that have invested in measure descriptions, Q&amp;A synonyms, and Copilot annotations get measurably better Copilot output — the same mechanism as Databricks Genie Pages and Snowflake verified_queries, expressed in Power BI tooling.</p>
+
+    <div class="ce-grid">
+      <div class="ce-card">
+        <div class="ce-card-title">Measure descriptions as context</div>
+        <div class="ce-card-body">Every DAX measure should have a business description that tells Copilot when to use it. "Use this measure for underwriting profitability analysis. For cash settlement analysis use Paid Loss Ratio instead." This is the Fabric equivalent of Genie Agent Instructions.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Q&amp;A synonyms</div>
+        <div class="ce-card-body">Map business vocabulary to semantic model objects. "loss ratio", "LR", "combined ratio less expense" → [Loss Ratio Measure]. Prevents the agent from guessing column names from raw table schema. Same role as the synonyms field in Snowflake's YAML.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Real-Time Intelligence</div>
+        <div class="ce-card-body">Eventstream + KQL querysets provide live event context — catastrophe alerts, claims FNOL events, premium payment events. Agents in Fabric can subscribe to these streams and add time-sensitive context to their answers. No equivalent in Databricks or Snowflake today.</div>
+      </div>
+      <div class="ce-card">
+        <div class="ce-card-title">Microsoft Purview integration</div>
+        <div class="ce-card-body">Purview data classification (PII, sensitive, regulated) surfaces in Fabric as a context signal — agents know which columns carry regulatory risk. Certified and endorsed data assets are promoted automatically. The governance metadata layer is deeper than Snowflake Horizon for Microsoft-stack organisations.</div>
+      </div>
+    </div>
+
+    <div class="ce-h2">IQ Ontology — What It Is and Where It Stands</div>
+    <p class="ce-p">IQ Ontology is Microsoft's attempt to add a formal ontology layer over the Power BI semantic model — enabling OWL-style class reasoning on top of DAX measures. It is in Public Preview and not production-ready for financial services.</p>
+
+    <div class="feat-table-wrap">
+      <table class="feat-table">
+        <thead>
+          <tr><th>Dimension</th><th>Current state (Nov 2026)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="feat-name">Goal</span></td><td>Formal ontology layer enabling agent reasoning rules over semantic model objects — not just retrieval, but inference</td></tr>
+          <tr><td><span class="feat-name">Status</span></td><td><span class="pill-prev">Public Preview</span> — not GA</td></tr>
+          <tr><td><span class="feat-name">Decimal bug</span></td><td>DECIMAL(18,4) financial measures return incorrect values through the ontology layer. Affects ratio calculations (loss ratio, expense ratio, combined ratio). Blocks insurance and financial reporting use cases.</td></tr>
+          <tr><td><span class="feat-name">Workaround</span></td><td>Cast DECIMAL measures to FLOAT before exposing through IQ Ontology. Introduces rounding — not acceptable for regulatory reporting. Wait for GA fix.</td></tr>
+          <tr><td><span class="feat-name">Recommended path</span></td><td>Use the Power BI semantic model (Q&amp;A synonyms + Copilot annotations + measure descriptions) as the context layer today. Revisit IQ Ontology at GA.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ce-verdict"><strong>Fabric context engineering summary:</strong> The Power BI semantic model is a mature, widely-deployed context layer — invest in measure descriptions, Q&amp;A synonyms, and Copilot annotations now. DirectLake makes it live. Purview adds governance depth. IQ Ontology is the future formal ontology layer but is not production-ready for financial calculations. Real-Time Intelligence is a unique capability — live event context — with no current equivalent on Databricks or Snowflake.</div>
+
+    <div class="ref-list">
+      <a class="ref-link" href="https://learn.microsoft.com/en-us/fabric/get-started/copilot-fabric-overview" target="_blank">Copilot in Fabric ↗</a>
+      <a class="ref-link" href="https://learn.microsoft.com/en-us/power-bi/enterprise/directlake-overview" target="_blank">DirectLake overview ↗</a>
+      <a class="ref-link" href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/overview" target="_blank">Real-Time Intelligence ↗</a>
+      <a class="ref-link" href="https://learn.microsoft.com/en-us/power-bi/natural-language/q-and-a-tooling-intro" target="_blank">Q&amp;A tooling (synonyms) ↗</a>
+    </div>
+
+  </div>
+
+  <script>
+    const ids = ['concepts','databricks','snowflake','fabric'];
+    function showTab(id) {
+      ids.forEach(t => {
+        document.getElementById('tab-' + t).classList.toggle('active', t === id);
+      });
+      document.querySelectorAll('.ce-tab').forEach((el, i) => {
+        el.classList.toggle('active', ids[i] === id);
+      });
+    }
+  </script>
+</body>
+</html>
