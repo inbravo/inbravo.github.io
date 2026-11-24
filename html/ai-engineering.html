@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI Engineering — the three disciplines: Context Engineering, Harness Engineering, and Agent Testing">
+  <link rel="icon" type="image/png" href="/images/inbravo.png">
+  <link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+  <script src="../js/jquery-1.11.3.min.js"></script>
+  <script src="../js/csi.min.js"></script>
+  <script src="../js/inbravo.js"></script>
+  <title>AI Engineering</title>
+  <style>
+    .aie-hero {
+      max-width: 960px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+      text-align: center;
+    }
+    .aie-hero-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text-primary, #1e293b);
+      margin: 0 0 10px;
+      line-height: 1.2;
+    }
+    .aie-hero-title span { color: var(--accent-cyan, #0891b2); }
+    .aie-hero-sub {
+      font-size: 0.84rem;
+      color: var(--text-secondary, #475569);
+      margin: 0 0 32px;
+      line-height: 1.65;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── Triangle diagram ─────────────────────────────────────── */
+    .aie-triangle-wrap {
+      max-width: 760px;
+      margin: 0 auto 36px;
+      overflow-x: auto;
+    }
+
+    /* ── Three discipline cards ───────────────────────────────── */
+    .aie-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+      max-width: 960px;
+      margin: 0 auto 48px;
+      padding: 0 20px;
+    }
+    .aie-card {
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 10px;
+      background: var(--bg-secondary, #f8fafc);
+      padding: 22px 20px 18px;
+      position: relative;
+      transition: box-shadow 0.15s;
+    }
+    .aie-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+    .aie-card-num {
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary, #94a3b8);
+      margin: 0 0 8px;
+    }
+    .aie-card-title {
+      font-size: 1.0rem;
+      font-weight: 800;
+      color: var(--text-primary, #1e293b);
+      margin: 0 0 4px;
+    }
+    .aie-card-strap {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent-cyan, #0891b2);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin: 0 0 12px;
+    }
+    .aie-card-body {
+      font-size: 0.78rem;
+      color: var(--text-primary, #334155);
+      line-height: 1.68;
+      margin: 0 0 14px;
+    }
+    .aie-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin: 0 0 16px;
+    }
+    .aie-tag {
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 3px;
+      border: 1px solid var(--border-color, #e2e8f0);
+      color: var(--text-secondary, #475569);
+      background: var(--bg-secondary, #f1f5f9);
+    }
+    .aie-card-link {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-cyan, #0891b2);
+      text-decoration: none;
+      border: 1px solid rgba(8,145,178,.30);
+      padding: 5px 14px;
+      border-radius: 5px;
+      transition: background 0.12s;
+    }
+    .aie-card-link:hover { background: rgba(8,145,178,.08); }
+
+    /* ── Related pages ────────────────────────────────────────── */
+    .aie-related {
+      max-width: 960px;
+      margin: 0 auto 60px;
+      padding: 0 20px;
+    }
+    .aie-related-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary, #475569);
+      margin: 0 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+    .aie-related-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .aie-related-link {
+      font-size: 0.75rem;
+      color: var(--accent-cyan, #0891b2);
+      border: 1px solid rgba(8,145,178,.25);
+      padding: 4px 12px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+    .aie-related-link:hover { background: rgba(8,145,178,.08); }
+  </style>
+</head>
+<body>
+  <div align="center">
+    <div data-include="header.html"></div>
+  </div>
+
+  <div class="aie-hero">
+    <div class="aie-hero-title">AI Engineering — <span>Three Disciplines</span></div>
+    <p class="aie-hero-sub">Building production AI agents requires three distinct engineering practices. Each answers a different question. Each fails independently if neglected.</p>
+  </div>
+
+  <!-- Triangle diagram -->
+  <div class="aie-triangle-wrap">
+    <svg viewBox="0 0 760 310" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block;margin:0 auto;font-family:inherit;">
+      <defs>
+        <marker id="ta" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="var(--accent-cyan,#0891b2)"/></marker>
+      </defs>
+
+      <!-- Context Engineering box — left -->
+      <rect x="20" y="80" width="200" height="130" rx="8" fill="rgba(8,145,178,.07)" stroke="rgba(8,145,178,.35)" stroke-width="1.5"/>
+      <text x="120" y="108" text-anchor="middle" font-size="12" font-weight="800" fill="var(--accent-cyan,#0891b2)">Context Engineering</text>
+      <text x="120" y="124" text-anchor="middle" font-size="10" fill="var(--text-secondary,#475569)">"What the agent knows"</text>
+      <text x="120" y="145" text-anchor="middle" font-size="9" fill="var(--text-primary,#334155)">Semantic layers · Ontologies</text>
+      <text x="120" y="159" text-anchor="middle" font-size="9" fill="var(--text-primary,#334155)">Databricks · Snowflake · Fabric</text>
+      <text x="120" y="173" text-anchor="middle" font-size="9" fill="var(--text-primary,#334155)">Governed defaults · MVOs</text>
+      <text x="120" y="195" text-anchor="middle" font-size="9" font-weight="700" fill="rgba(8,145,178,.8)">10.6% → 52.1% accuracy</text>
+
+      <!-- Harness Engineering box — right -->
+      <rect x="540" y="80" width="200" height="130" rx="8" fill="rgba(139,92,246,.07)" stroke="rgba(139,92,246,.35)" stroke-width="1.5"/>
+      <text x="640" y="108" text-anchor="middle" font-size="12" font-weight="800" fill="#6d28d9">Harness Engineering</text>
+      <text x="640" y="124" text-anchor="middle" font-size="10" fill="var(--text-secondary,#475569)">"How the agent runs"</text>
+      <text x="640" y="145" text-anchor="middle" font-size="9" fill="var(--text-primary,#334155)">MCP servers · Tool definitions</text>
+      <text x="640" y="159" text-anchor="middle" font-size="9" fill="var(--text-primary,#334155)">Memory systems · Orchestration</text>
+      <text x="640" y="173" text-anchor="middle" font-size="9" fill="var(--text-primary,#334155)">ReAct · LangGraph · CrewAI</text>
+      <text x="640" y="195" text-anchor="middle" font-size="9" font-weight="700" fill="rgba(109,40,217,.7)">The scaffold around the LLM</text>
+
+      <!-- Agent Testing box — bottom-centre -->
+      <rect x="280" y="195" width="200" height="100" rx="8" fill="rgba(5,150,105,.07)" stroke="rgba(5,150,105,.35)" stroke-width="1.5"/>
+      <text x="380" y="219" text-anchor="middle" font-size="12" font-weight="800" fill="var(--accent-green,#059669)">Agent Testing</text>
+      <text x="380" y="235" text-anchor="middle" font-size="10" fill="var(--text-secondary,#475569)">"How you prove it works"</text>
+      <text x="380" y="254" text-anchor="middle" font-size="9" fill="var(--text-primary,#334155)">Trajectory scoring · Eval frameworks</text>
+      <text x="380" y="268" text-anchor="middle" font-size="9" fill="var(--text-primary,#334155)">CI/CD harness · NIST · ISO 42001</text>
+      <text x="380" y="285" text-anchor="middle" font-size="9" font-weight="700" fill="rgba(5,150,105,.8)">Level 5: continuous regression</text>
+
+      <!-- Arrows between boxes -->
+      <line x1="220" y1="145" x2="535" y2="145" stroke="rgba(8,145,178,.4)" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ta)"/>
+      <text x="377" y="138" text-anchor="middle" font-size="9" fill="var(--text-secondary,#64748b)">feeds context into</text>
+
+      <line x1="220" y1="175" x2="275" y2="230" stroke="rgba(5,150,105,.4)" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ta)"/>
+      <text x="225" y="218" font-size="9" fill="var(--text-secondary,#64748b)">validates</text>
+
+      <line x1="540" y1="175" x2="485" y2="230" stroke="rgba(5,150,105,.4)" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ta)"/>
+      <text x="498" y="218" font-size="9" fill="var(--text-secondary,#64748b)">validates</text>
+    </svg>
+  </div>
+
+  <!-- Three cards -->
+  <div class="aie-grid">
+
+    <div class="aie-card">
+      <div class="aie-card-num">Discipline 01</div>
+      <div class="aie-card-title">Context Engineering</div>
+      <div class="aie-card-strap">What the agent knows</div>
+      <div class="aie-card-body">Engineering the governed layer between raw data and the LLM. Semantic models, ontologies, metric views, and governed defaults that resolve ambiguity before the model sees the question. The same model on different context layers produces radically different accuracy.</div>
+      <div class="aie-card-tags">
+        <span class="aie-tag">Databricks Genie</span>
+        <span class="aie-tag">Snowflake Cortex</span>
+        <span class="aie-tag">Fabric Copilot</span>
+        <span class="aie-tag">OWL / SHACL</span>
+        <span class="aie-tag">MVO</span>
+      </div>
+      <a class="aie-card-link" href="context-engineering.html">Open →</a>
+    </div>
+
+    <div class="aie-card">
+      <div class="aie-card-num">Discipline 02</div>
+      <div class="aie-card-title">Harness Engineering</div>
+      <div class="aie-card-strap">How the agent runs</div>
+      <div class="aie-card-body">Engineering the scaffold that turns an LLM into an agent. MCP server design, tool definitions, memory architecture (in-context · episodic · semantic · procedural), and orchestration patterns that govern how the agent reasons and acts.</div>
+      <div class="aie-card-tags">
+        <span class="aie-tag">MCP</span>
+        <span class="aie-tag">Tool definitions</span>
+        <span class="aie-tag">Memory systems</span>
+        <span class="aie-tag">ReAct</span>
+        <span class="aie-tag">LangGraph</span>
+        <span class="aie-tag">CrewAI</span>
+      </div>
+      <a class="aie-card-link" href="harness-engineering.html">Open →</a>
+    </div>
+
+    <div class="aie-card">
+      <div class="aie-card-num">Discipline 03</div>
+      <div class="aie-card-title">Agent Testing</div>
+      <div class="aie-card-strap">How you prove it works</div>
+      <div class="aie-card-body">Engineering the evaluation harness that proves an agent is correct, durable, and compliant. Output scoring, trajectory scoring, ontology-derived evals, and CI/CD regression gates. Covers all major eval frameworks and AI lab approaches.</div>
+      <div class="aie-card-tags">
+        <span class="aie-tag">DeepEval</span>
+        <span class="aie-tag">LangSmith</span>
+        <span class="aie-tag">W&amp;B Weave</span>
+        <span class="aie-tag">NIST RMF</span>
+        <span class="aie-tag">ISO 42001</span>
+        <span class="aie-tag">METR</span>
+      </div>
+      <a class="aie-card-link" href="agent-testing.html">Open →</a>
+    </div>
+
+  </div>
+
+  <!-- Related pages -->
+  <div class="aie-related">
+    <div class="aie-related-title">Related — Knowledge Foundation</div>
+    <div class="aie-related-grid">
+      <a class="aie-related-link" href="ontology.html">Ontology — knowledge structure for AI agents ↗</a>
+      <a class="aie-related-link" href="llm.html">LLM — model internals and capabilities ↗</a>
+      <a class="aie-related-link" href="semantic.html">Semantic layer — meaning over data ↗</a>
+    </div>
+  </div>
+
+</body>
+</html>

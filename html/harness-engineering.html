@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Harness Engineering — MCP servers, tool definitions, memory systems, and orchestration patterns for production AI agents">
+  <link rel="icon" type="image/png" href="/images/inbravo.png">
+  <link rel="stylesheet" type="text/css" href="../css/inbravo.css">
+  <script src="../js/jquery-1.11.3.min.js"></script>
+  <script src="../js/csi.min.js"></script>
+  <script src="../js/inbravo.js"></script>
+  <title>Harness Engineering</title>
+  <style>
+    /* ── Page scaffold ───────────────────────────────────────── */
+    .he-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+    .he-hero {
+      text-align: center;
+      padding: 32px 0 24px;
+    }
+    .he-hero-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary, #1e293b);
+      margin: 0 0 8px;
+    }
+    .he-hero-title span { color: #6d28d9; }
+    .he-hero-sub {
+      font-size: 0.84rem;
+      color: var(--text-secondary, #475569);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+
+    /* ── Tab bar ─────────────────────────────────────────────── */
+    .he-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border-color, #e2e8f0);
+      gap: 2px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .he-tab {
+      padding: 8px 18px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      color: var(--text-secondary, #64748b);
+      transition: color 0.12s;
+      white-space: nowrap;
+    }
+    .he-tab.active {
+      color: #6d28d9;
+      border-bottom-color: #6d28d9;
+    }
+    .he-panel { display: none; }
+    .he-panel.active { display: block; }
+
+    /* ── Shared components ───────────────────────────────────── */
+    .he-section-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary, #475569);
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+      padding-bottom: 8px;
+      margin: 28px 0 14px;
+    }
+    .he-section-title:first-child { margin-top: 0; }
+
+    /* Accent box */
+    .he-acc {
+      background: rgba(109,40,217,.07);
+      border-left: 3px solid #6d28d9;
+      border-radius: 0 6px 6px 0;
+      padding: 12px 16px;
+      margin: 0 0 20px;
+      font-size: 0.8rem;
+      color: var(--text-primary, #1e293b);
+      line-height: 1.65;
+    }
+    .he-acc strong { color: #6d28d9; }
+
+    /* Info box */
+    .he-info {
+      background: rgba(8,145,178,.07);
+      border-left: 3px solid var(--accent-cyan, #0891b2);
+      border-radius: 0 6px 6px 0;
+      padding: 12px 16px;
+      margin: 0 0 20px;
+      font-size: 0.8rem;
+      color: var(--text-primary, #1e293b);
+      line-height: 1.65;
+    }
+
+    /* Warning box */
+    .he-warn {
+      background: rgba(234,179,8,.07);
+      border-left: 3px solid #ca8a04;
+      border-radius: 0 6px 6px 0;
+      padding: 10px 16px;
+      margin: 0 0 18px;
+      font-size: 0.78rem;
+      color: var(--text-primary, #1e293b);
+      line-height: 1.65;
+    }
+
+    /* Generic 2-col grid */
+    .he-grid2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .he-card {
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 8px;
+      background: var(--bg-secondary, #f8fafc);
+      padding: 14px 16px;
+    }
+    .he-card-title {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--text-primary, #1e293b);
+      margin: 0 0 6px;
+    }
+    .he-card-body {
+      font-size: 0.75rem;
+      color: var(--text-secondary, #475569);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Tables */
+    .he-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      margin-bottom: 24px;
+    }
+    .he-table th {
+      text-align: left;
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary, #64748b);
+      border-bottom: 2px solid var(--border-color, #e2e8f0);
+      padding: 6px 10px;
+    }
+    .he-table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--border-color, #f1f5f9);
+      color: var(--text-primary, #334155);
+      vertical-align: top;
+    }
+    .he-table tr:last-child td { border-bottom: none; }
+
+    /* Pill badges */
+    .pill {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .pill-ga  { background: rgba(5,150,105,.1); color: #047857; border: 1px solid rgba(5,150,105,.2); }
+    .pill-new { background: rgba(109,40,217,.1); color: #6d28d9; border: 1px solid rgba(109,40,217,.2); }
+    .pill-exp { background: rgba(234,179,8,.12); color: #92400e; border: 1px solid rgba(234,179,8,.25); }
+    .pill-dep { background: rgba(100,116,139,.12); color: #475569; border: 1px solid rgba(100,116,139,.2); }
+
+    /* Code block */
+    .he-code {
+      background: var(--bg-code, #0f172a);
+      border: 1px solid var(--border-code, #1e293b);
+      border-radius: 6px;
+      padding: 14px 16px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.72rem;
+      color: #e2e8f0;
+      overflow-x: auto;
+      margin: 0 0 20px;
+      line-height: 1.6;
+    }
+    .he-code .c { color: #64748b; }
+    .he-code .k { color: #93c5fd; }
+    .he-code .s { color: #86efac; }
+    .he-code .p { color: #fca5a5; }
+    .he-code .n { color: #fde68a; }
+
+    /* Layer diagram */
+    .he-layers {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin: 0 0 24px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .he-layer {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 16px;
+    }
+    .he-layer-num {
+      font-size: 0.65rem;
+      font-weight: 800;
+      width: 22px;
+      text-align: center;
+      color: rgba(255,255,255,.7);
+      flex-shrink: 0;
+    }
+    .he-layer-name {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+      min-width: 160px;
+    }
+    .he-layer-desc {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,.75);
+      line-height: 1.5;
+    }
+
+    /* Memory type cards */
+    .he-mem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .he-mem-card {
+      border-radius: 8px;
+      border: 1px solid var(--border-color, #e2e8f0);
+      padding: 14px 16px;
+      background: var(--bg-secondary, #f8fafc);
+    }
+    .he-mem-card-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .he-mem-card-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--text-primary, #1e293b);
+    }
+    .he-mem-card-where {
+      font-size: 0.65rem;
+      color: var(--text-secondary, #94a3b8);
+    }
+    .he-mem-card-desc {
+      font-size: 0.74rem;
+      color: var(--text-secondary, #475569);
+      line-height: 1.6;
+      margin: 0 0 8px;
+    }
+    .he-mem-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .he-mem-tag {
+      font-size: 0.62rem;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 3px;
+      border: 1px solid var(--border-color, #e2e8f0);
+      color: var(--text-secondary, #475569);
+      background: var(--bg-secondary, #f1f5f9);
+    }
+
+    /* Orchestration pattern cards */
+    .he-orch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .he-orch-card {
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 8px;
+      background: var(--bg-secondary, #f8fafc);
+      padding: 16px;
+    }
+    .he-orch-card-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-primary, #1e293b);
+      margin: 0 0 4px;
+    }
+    .he-orch-card-strap {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #6d28d9;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 0 0 10px;
+    }
+    .he-orch-card-body {
+      font-size: 0.76rem;
+      color: var(--text-primary, #334155);
+      line-height: 1.65;
+      margin: 0 0 10px;
+    }
+    .he-orch-card-when {
+      font-size: 0.72rem;
+      color: var(--text-secondary, #64748b);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div align="center">
+    <div data-include="header.html"></div>
+  </div>
+
+  <div class="he-wrap">
+
+    <div class="he-hero">
+      <div class="he-hero-title"><span>Harness Engineering</span> — How the Agent Runs</div>
+      <p class="he-hero-sub">Engineering the scaffold that turns a language model into an agent. MCP servers, tool definitions, memory architecture, and orchestration patterns.</p>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="he-tabs">
+      <div class="he-tab active" onclick="showTab('concepts')">Concepts</div>
+      <div class="he-tab" onclick="showTab('mcp')">MCP &amp; Tools</div>
+      <div class="he-tab" onclick="showTab('memory')">Memory Systems</div>
+      <div class="he-tab" onclick="showTab('orchestration')">Orchestration</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         TAB 1: CONCEPTS
+    ══════════════════════════════════════════════════════ -->
+    <div id="tab-concepts" class="he-panel active">
+
+      <div class="he-acc">
+        <strong>Discipline 02 of 3:</strong> Harness Engineering is the layer between the LLM and the world. Context Engineering determines what the agent knows; Harness Engineering determines what it can <em>do</em> and how it reasons about doing it. Agent Testing then proves the combination works.
+      </div>
+
+      <div class="he-section-title">What a Harness Is</div>
+      <div class="he-grid2">
+        <div class="he-card">
+          <div class="he-card-title">The core idea</div>
+          <div class="he-card-body">An LLM alone is a text function. A harness wraps it with tool access, memory, state, and an execution loop — turning a text function into an agent that can observe, reason, and act over multiple steps.</div>
+        </div>
+        <div class="he-card">
+          <div class="he-card-title">What it is NOT</div>
+          <div class="he-card-body">The harness is not the prompt. It is not the data. It is not the model. It is the runtime: the code and infrastructure that orchestrates calls, manages tool results, routes between agents, and persists state.</div>
+        </div>
+        <div class="he-card">
+          <div class="he-card-title">Why it fails independently</div>
+          <div class="he-card-body">A perfect context layer with a broken harness still fails. A well-tested harness with no context governance still hallucinates. The disciplines are coupled but separable — each has its own engineering surface and its own class of bugs.</div>
+        </div>
+        <div class="he-card">
+          <div class="he-card-title">The production gap</div>
+          <div class="he-card-body">Most demos skip harness engineering entirely — one prompt, one tool call, one reply. Production agents have retry logic, fallback routing, budget enforcement, latency budgets, and audit trails. This gap is where most agentic projects fail.</div>
+        </div>
+      </div>
+
+      <div class="he-section-title">The Agent Stack — Four Layers</div>
+
+      <div class="he-layers">
+        <div class="he-layer" style="background:#1e1b4b;">
+          <div class="he-layer-num">4</div>
+          <div class="he-layer-name">Orchestration Layer</div>
+          <div class="he-layer-desc">Multi-step reasoning loop. Plans, calls tools, observes results, decides next action. Implements ReAct, Plan-and-Execute, or multi-agent routing.</div>
+        </div>
+        <div class="he-layer" style="background:#312e81;">
+          <div class="he-layer-num">3</div>
+          <div class="he-layer-name">Tool / MCP Layer</div>
+          <div class="he-layer-desc">Function schemas exposed to the model. MCP servers, API wrappers, database connectors. Defines what actions are available and how results are returned.</div>
+        </div>
+        <div class="he-layer" style="background:#4338ca;">
+          <div class="he-layer-num">2</div>
+          <div class="he-layer-name">Memory Layer</div>
+          <div class="he-layer-desc">In-context window, episodic (conversation history), semantic (vector retrieval), procedural (fine-tuned behaviours). Governs what the agent remembers across calls and sessions.</div>
+        </div>
+        <div class="he-layer" style="background:#4f46e5;">
+          <div class="he-layer-num">1</div>
+          <div class="he-layer-name">Context Layer (Discipline 01)</div>
+          <div class="he-layer-desc">Semantic models, ontologies, governed metrics. Provided by Context Engineering — the harness consumes this layer but does not own it.</div>
+        </div>
+      </div>
+
+      <div class="he-section-title">Anatomy of an Agent Turn</div>
+      <div class="he-code"><span class="c"># Simplified ReAct loop — one agent turn</span>
+<span class="k">def</span> <span class="n">agent_turn</span>(user_input, context, memory, tools):
+    <span class="c">## 1. Compose context window</span>
+    messages = memory.load_episodic()       <span class="c"># past turns</span>
+    messages += context.retrieve(user_input) <span class="c"># semantic retrieval</span>
+    messages.append({<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: user_input})
+
+    <span class="c">## 2. LLM call with tool definitions</span>
+    response = llm.call(messages, tools=tools.schemas())
+
+    <span class="c">## 3. Tool execution loop</span>
+    <span class="k">while</span> response.has_tool_calls():
+        for call in response.tool_calls:
+            result = tools.execute(call.name, call.args)   <span class="c"># harness executes</span>
+            messages.append(tool_result(call.id, result))
+        response = llm.call(messages, tools=tools.schemas())
+
+    <span class="c">## 4. Memory update</span>
+    memory.save_episodic(user_input, response.text)
+
+    <span class="k">return</span> response.text</div>
+
+      <div class="he-section-title">Key Engineering Concerns</div>
+      <table class="he-table">
+        <thead><tr><th>Concern</th><th>What it means in practice</th><th>Common failure</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Tool budget</strong></td><td>Max tool calls per turn; per-session cost ceiling</td><td>Infinite loop; runaway spend</td></tr>
+          <tr><td><strong>Latency budget</strong></td><td>Timeout per tool; overall turn deadline</td><td>Hanging agent; user-facing timeout</td></tr>
+          <tr><td><strong>Retry & fallback</strong></td><td>Transient tool failure → retry with backoff; then fallback tool or graceful degradation</td><td>Single point of failure; silent data loss</td></tr>
+          <tr><td><strong>State isolation</strong></td><td>Separate context per user session; no cross-contamination</td><td>User A sees User B's data</td></tr>
+          <tr><td><strong>Audit trail</strong></td><td>Log every tool call, arguments, result, latency, model version</td><td>Undiagnosable failures in production</td></tr>
+          <tr><td><strong>Tool schema drift</strong></td><td>Tool API changes without schema update → model confusion</td><td>Hallucinated arguments; silent wrong calls</td></tr>
+          <tr><td><strong>Context window overflow</strong></td><td>Multi-turn accumulation exceeds model max tokens</td><td>Truncation mid-reasoning; lost tool results</td></tr>
+        </tbody>
+      </table>
+
+    </div><!-- /tab-concepts -->
+
+    <!-- ══════════════════════════════════════════════════════
+         TAB 2: MCP & TOOLS
+    ══════════════════════════════════════════════════════ -->
+    <div id="tab-mcp" class="he-panel">
+
+      <div class="he-acc">
+        <strong>Model Context Protocol (MCP)</strong> — Anthropic's open standard for connecting LLMs to tools and data sources. MCP defines a client/server architecture where MCP clients (Claude Desktop, IDEs, agents) connect to MCP servers that expose Tools, Resources, and Prompts.
+      </div>
+
+      <div class="he-section-title">MCP Architecture</div>
+      <div class="he-grid2">
+        <div class="he-card">
+          <div class="he-card-title">MCP Host</div>
+          <div class="he-card-body">The application running the LLM — Claude Desktop, Cursor, your agent framework. Manages one or more MCP client connections. Owns the conversation loop.</div>
+        </div>
+        <div class="he-card">
+          <div class="he-card-title">MCP Client</div>
+          <div class="he-card-body">Lives inside the host. Maintains a 1:1 connection with an MCP server. Routes tool calls and resource reads to the right server. Handles connection lifecycle.</div>
+        </div>
+        <div class="he-card">
+          <div class="he-card-title">MCP Server</div>
+          <div class="he-card-body">A lightweight process exposing capabilities via the MCP protocol. Can expose Tools (actions), Resources (data), and Prompts (reusable templates). Stateless or stateful.</div>
+        </div>
+        <div class="he-card">
+          <div class="he-card-title">Transport</div>
+          <div class="he-card-body">stdio (local process, used by Claude Desktop), HTTP+SSE (remote servers, web agents), WebSocket (bidirectional streaming). MCP 2025-03-26 added Streamable HTTP transport.</div>
+        </div>
+      </div>
+
+      <div class="he-section-title">MCP Server Capabilities</div>
+      <table class="he-table">
+        <thead><tr><th>Capability</th><th>What it exposes</th><th>Model interaction</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Tools</strong></td>
+            <td>Executable actions with typed input/output schemas</td>
+            <td>Model calls tool by name; server executes; result returned to model</td>
+            <td>run_query(), create_file(), send_email()</td>
+          </tr>
+          <tr>
+            <td><strong>Resources</strong></td>
+            <td>Data sources accessible via URI (text or binary)</td>
+            <td>Model or host reads resource via URI; content injected into context</td>
+            <td>file:///repo/README.md, postgres://db/schema</td>
+          </tr>
+          <tr>
+            <td><strong>Prompts</strong></td>
+            <td>Reusable parameterized message templates</td>
+            <td>Host fetches prompt template, injects parameters, adds to messages</td>
+            <td>code-review template, SQL generation template</td>
+          </tr>
+          <tr>
+            <td><strong>Sampling</strong> <span class="pill pill-new">2025+</span></td>
+            <td>Server-initiated LLM calls via the host</td>
+            <td>Server requests model completion; host routes through its LLM</td>
+            <td>Agentic servers that themselves need to reason</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="he-section-title">Tool Definition — Best Practices</div>
+      <div class="he-code"><span class="c"># Well-structured MCP tool definition (Python SDK 1.x)</span>
+<span class="k">from</span> mcp.server <span class="k">import</span> FastMCP
+
+mcp = FastMCP(<span class="s">"financial-tools"</span>)
+
+@mcp.tool()
+<span class="k">async def</span> <span class="n">get_account_balance</span>(
+    account_id: str,
+    as_of_date: str | <span class="k">None</span> = <span class="k">None</span>,
+    currency: str = <span class="s">"USD"</span>
+) -> dict:
+    <span class="s">"""
+    Return the balance for a single account.
+
+    Args:
+        account_id: Unique account identifier (format: ACC-XXXXXX)
+        as_of_date: ISO 8601 date for historical balance (default: today)
+        currency: ISO 4217 currency code for conversion (default: USD)
+
+    Returns:
+        balance: Current balance as float
+        currency: Currency of the returned balance
+        last_updated: ISO 8601 timestamp of the last transaction
+    """</span>
+    <span class="c"># Implementation ...</span></div>
+
+      <div class="he-warn">
+        <strong>Tool description quality = model accuracy.</strong> The description is the model's only guide to when and how to call the tool. Vague descriptions cause wrong-tool selection. Missing argument constraints cause hallucinated values. Always document: when to use, what each argument means, valid ranges, and what the return value contains.
+      </div>
+
+      <div class="he-section-title">Tool Design Patterns</div>
+      <table class="he-table">
+        <thead><tr><th>Pattern</th><th>When to use</th><th>Anti-pattern</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Narrow tools</strong></td>
+            <td>One tool = one semantic action. get_balance() ≠ get_account_summary()</td>
+            <td>Swiss-army-knife tools with 15 optional params — model rarely calls them correctly</td>
+          </tr>
+          <tr>
+            <td><strong>Explicit error codes</strong></td>
+            <td>Return structured errors the model can reason over: {"error": "account_not_found"}</td>
+            <td>Raising exceptions that propagate as raw stack traces — model cannot act on them</td>
+          </tr>
+          <tr>
+            <td><strong>Idempotent reads vs. writes</strong></td>
+            <td>Mark read-only tools clearly; require explicit confirmation args on destructive writes</td>
+            <td>Silent side-effects on tools the model thinks are reads</td>
+          </tr>
+          <tr>
+            <td><strong>Bounded output</strong></td>
+            <td>Cap returned rows/bytes; include a next_cursor for pagination</td>
+            <td>Returning 50,000 rows into the context window</td>
+          </tr>
+          <tr>
+            <td><strong>Human-in-the-loop gate</strong></td>
+            <td>Inject a confirm_action() tool before irreversible operations</td>
+            <td>Direct execution of delete/send/pay without approval step</td>
+          </tr>
+          <tr>
+            <td><strong>Tool versioning</strong></td>
+            <td>Name versions explicitly (v1_get_balance vs get_balance) during migrations</td>
+            <td>Silent schema changes that break cached reasoning in long-running agents</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="he-section-title">Anthropic vs OpenAI Tool Use — Comparison</div>
+      <table class="he-table">
+        <thead><tr><th>Aspect</th><th>Anthropic (Claude)</th><th>OpenAI (GPT-4o / o3)</th></tr></thead>
+        <tbody>
+          <tr><td>Schema format</td><td>JSON Schema (name, description, input_schema)</td><td>JSON Schema (name, description, parameters)</td></tr>
+          <tr><td>Parallel tool calls</td><td>Yes — multiple tool_use blocks in one response</td><td>Yes — parallel_tool_calls flag (default on)</td></tr>
+          <tr><td>Tool choice</td><td>auto | any | {type:"tool", name:...}</td><td>auto | none | required | {type:"function",...}</td></tr>
+          <tr><td>Computer use</td><td>Beta API (bash, text_editor, computer tools)</td><td>Via CUA model (computer-use-preview)</td></tr>
+          <tr><td>MCP support</td><td>Native: Claude Desktop, Claude API MCP connector</td><td>MCP via OpenAI Agents SDK (not native API)</td></tr>
+          <tr><td>Token counting</td><td>count_tokens() with tools[] parameter</td><td>Not directly exposed; estimate from schema size</td></tr>
+        </tbody>
+      </table>
+
+      <div class="he-section-title">MCP Registry &amp; Ecosystem (2025)</div>
+      <div class="he-grid2">
+        <div class="he-card">
+          <div class="he-card-title">Anthropic MCP Servers</div>
+          <div class="he-card-body">Official servers: filesystem, fetch, git, GitHub, Google Drive, PostgreSQL, Slack, Brave Search, SQLite, Puppeteer. All open-source on github.com/modelcontextprotocol/servers.</div>
+        </div>
+        <div class="he-card">
+          <div class="he-card-title">MCP Registry</div>
+          <div class="he-card-body">registry.mcp.so — community registry of 3,000+ servers (Jun 2025). Includes commercial servers from Cloudflare, Atlassian, AWS, Stripe, Notion.</div>
+        </div>
+        <div class="he-card">
+          <div class="he-card-title">Auth: OAuth 2.1 (2025-03-26)</div>
+          <div class="he-card-body">MCP spec added OAuth 2.1 for remote server authentication. Servers can now require user consent before granting tool access — critical for SaaS tool integrations.</div>
+        </div>
+        <div class="he-card">
+          <div class="he-card-title">MCP Inspector</div>
+          <div class="he-card-body">Official debugging tool (npx @modelcontextprotocol/inspector). Inspect, test, and monitor MCP server connections locally before deploying to agents.</div>
+        </div>
+      </div>
+
+    </div><!-- /tab-mcp -->
+
+    <!-- ══════════════════════════════════════════════════════
+         TAB 3: MEMORY SYSTEMS
+    ══════════════════════════════════════════════════════ -->
+    <div id="tab-memory" class="he-panel">
+
+      <div class="he-info">
+        Memory is what an agent can access beyond the current prompt. The five memory types operate at different timescales and have different engineering costs. Most production failures come from conflating them or choosing the wrong type for a use case.
+      </div>
+
+      <div class="he-section-title">The Five Memory Types</div>
+      <div class="he-mem-grid">
+
+        <div class="he-mem-card">
+          <div class="he-mem-card-header">
+            <div class="he-mem-card-title">In-Context (Working)</div>
+            <div class="he-mem-card-where">Context window</div>
+          </div>
+          <div class="he-mem-card-desc">Everything in the current context window: system prompt, conversation history, tool results, retrieved documents. Instantaneous — no retrieval cost. Lost at session end. Bounded by model max tokens (200K for Claude 3.7).</div>
+          <div class="he-mem-tags">
+            <span class="he-mem-tag">Unlimited reads</span>
+            <span class="he-mem-tag">Token budget</span>
+            <span class="he-mem-tag">No persistence</span>
+          </div>
+        </div>
+
+        <div class="he-mem-card">
+          <div class="he-mem-card-header">
+            <div class="he-mem-card-title">Episodic</div>
+            <div class="he-mem-card-where">External store</div>
+          </div>
+          <div class="he-mem-card-desc">Conversation history and past interactions, stored externally and selectively loaded into context. Enables continuity across sessions. Key engineering decision: what to summarise vs. what to store verbatim.</div>
+          <div class="he-mem-tags">
+            <span class="he-mem-tag">Postgres / SQLite</span>
+            <span class="he-mem-tag">Summarisation</span>
+            <span class="he-mem-tag">Recency bias</span>
+          </div>
+        </div>
+
+        <div class="he-mem-card">
+          <div class="he-mem-card-header">
+            <div class="he-mem-card-title">Semantic</div>
+            <div class="he-mem-card-where">Vector store</div>
+          </div>
+          <div class="he-mem-card-desc">Facts, documents, and knowledge embedded as vectors. Retrieved by similarity to the current query. Powers RAG pipelines. Accuracy depends heavily on chunking strategy, embedding model, and hybrid search configuration.</div>
+          <div class="he-mem-tags">
+            <span class="he-mem-tag">Pinecone</span>
+            <span class="he-mem-tag">Weaviate</span>
+            <span class="he-mem-tag">pgvector</span>
+            <span class="he-mem-tag">Chroma</span>
+          </div>
+        </div>
+
+        <div class="he-mem-card">
+          <div class="he-mem-card-header">
+            <div class="he-mem-card-title">Procedural</div>
+            <div class="he-mem-card-where">Model weights / tools</div>
+          </div>
+          <div class="he-mem-card-desc">How-to knowledge baked into the model via fine-tuning or exposed as tool recipes. Expensive to update — changing procedural memory means retraining or deploying a new tool version. Use sparingly; prefer semantic memory for content that changes.</div>
+          <div class="he-mem-tags">
+            <span class="he-mem-tag">Fine-tuning</span>
+            <span class="he-mem-tag">System prompt rules</span>
+            <span class="he-mem-tag">Tool definitions</span>
+          </div>
+        </div>
+
+        <div class="he-mem-card">
+          <div class="he-mem-card-header">
+            <div class="he-mem-card-title">External (Explicit)</div>
+            <div class="he-mem-card-where">Databases / files</div>
+          </div>
+          <div class="he-mem-card-desc">Structured data the agent reads and writes via tools. Not embedded or summarised — raw, queryable, authoritative. The agent manages explicit external state: task lists, user preferences, running totals, intermediate artefacts.</div>
+          <div class="he-mem-tags">
+            <span class="he-mem-tag">Key-value stores</span>
+            <span class="he-mem-tag">Graph DBs</span>
+            <span class="he-mem-tag">File system</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="he-section-title">Choosing Memory Types by Use Case</div>
+      <table class="he-table">
+        <thead><tr><th>Use case</th><th>Primary memory type</th><th>Secondary</th><th>Avoid</th></tr></thead>
+        <tbody>
+          <tr><td>Customer support agent (single session)</td><td>In-context</td><td>Episodic (prior tickets)</td><td>Fine-tuning for per-ticket facts</td></tr>
+          <tr><td>Research assistant (multi-day project)</td><td>Episodic + Semantic</td><td>External (notes store)</td><td>Trying to fit everything in-context</td></tr>
+          <tr><td>Financial analytics agent</td><td>External (live DB)</td><td>Semantic (policy docs)</td><td>Embedding live metrics — they go stale</td></tr>
+          <tr><td>Coding assistant</td><td>In-context (repo files)</td><td>Semantic (docs)</td><td>Episodic for code — summarisation corrupts intent</td></tr>
+          <tr><td>Multi-agent pipeline</td><td>External (shared state)</td><td>Episodic per sub-agent</td><td>Shared in-context — no isolation</td></tr>
+          <tr><td>Domain-specialised assistant</td><td>Procedural (fine-tuned)</td><td>Semantic (KB)</td><td>Fine-tuning for volatile facts</td></tr>
+        </tbody>
+      </table>
+
+      <div class="he-section-title">Memory Systems &amp; Libraries (2025)</div>
+      <div class="he-grid2">
+        <div class="he-card">
+          <div class="he-card-title">Mem0 <span class="pill pill-ga">GA</span></div>
+          <div class="he-card-body">Managed long-term memory layer. Automatic extraction of facts from conversations; vector+graph hybrid storage; SDK for Python/Node. Integrates with LangChain and direct API calls.</div>
+        </div>
+        <div class="he-card">
+          <div class="he-card-title">Zep <span class="pill pill-ga">GA</span></div>
+          <div class="he-card-body">Graph-based memory for agents. Stores facts as a knowledge graph, not just vectors. Supports temporal reasoning ("what did the user say last week"). Postgres + pgvector backend.</div>
+        </div>
+        <div class="he-card">
+          <div class="he-card-title">LangGraph Persistence <span class="pill pill-ga">GA</span></div>
+          <div class="he-card-body">Graph state checkpoints persisted to Postgres or Redis. Enables pause-and-resume, human-in-the-loop interrupts, time-travel debugging. Part of LangGraph Platform.</div>
+        </div>
+        <div class="he-card">
+          <div class="he-card-title">Claude Projects Memory <span class="pill pill-new">2025</span></div>
+          <div class="he-card-body">Claude.ai managed memory — extracts and stores facts automatically across Project conversations. Exposed via the API as a system-prompt injection. Claude Code uses a file-based variant (MEMORY.md).</div>
+        </div>
+      </div>
+
+      <div class="he-section-title">Semantic Memory — RAG Engineering Notes</div>
+      <div class="he-warn">
+        RAG accuracy depends more on the chunking and retrieval strategy than on the embedding model. Naive sentence-window chunking routinely outperforms expensive models with poor chunking. Hybrid search (dense + BM25 + reranker) consistently outperforms pure-vector search by 10–25% on enterprise corpora.
+      </div>
+      <table class="he-table">
+        <thead><tr><th>Decision</th><th>Options</th><th>Default recommendation</th></tr></thead>
+        <tbody>
+          <tr><td>Chunk strategy</td><td>Fixed-size · Sentence-window · Semantic · Hierarchical</td><td>Semantic (spaCy / NLTK) for dense docs; hierarchical for structured content</td></tr>
+          <tr><td>Chunk size</td><td>128–2048 tokens</td><td>512 tokens with 10% overlap — balance precision vs. recall</td></tr>
+          <tr><td>Embedding model</td><td>text-embedding-3-small · Snowflake Arctic-embed-M · nomic-embed-text</td><td>Arctic-embed-M for domain-specific; text-embedding-3-large for general</td></tr>
+          <tr><td>Search mode</td><td>Dense vector · BM25 sparse · Hybrid · Hybrid + reranker</td><td>Hybrid + reranker (Cohere Rerank or cross-encoder) for production</td></tr>
+          <tr><td>Retrieval count</td><td>top-k (3–20)</td><td>top-5 for tight context; top-10 with reranker</td></tr>
+          <tr><td>Freshness</td><td>Full re-index · Delta index · Streaming incremental</td><td>Delta index nightly + streaming for high-velocity sources</td></tr>
+        </tbody>
+      </table>
+
+    </div><!-- /tab-memory -->
+
+    <!-- ══════════════════════════════════════════════════════
+         TAB 4: ORCHESTRATION
+    ══════════════════════════════════════════════════════ -->
+    <div id="tab-orchestration" class="he-panel">
+
+      <div class="he-info">
+        Orchestration is the control flow that determines how the agent sequences thoughts, tool calls, and responses. The choice of pattern has the largest single impact on latency, cost, and correctness in multi-step tasks.
+      </div>
+
+      <div class="he-section-title">Core Reasoning Patterns</div>
+      <div class="he-orch-grid">
+
+        <div class="he-orch-card">
+          <div class="he-orch-card-title">ReAct</div>
+          <div class="he-orch-card-strap">Reason → Act → Observe</div>
+          <div class="he-orch-card-body">Interleaves Thought / Action / Observation steps in a single prompt. The model reasons about what to do, calls a tool, observes the result, and continues. Minimal external state; works in a single thread.</div>
+          <div class="he-orch-card-when">Use for: single-agent, sequential tool calls, tasks that fit in one context window.</div>
+        </div>
+
+        <div class="he-orch-card">
+          <div class="he-orch-card-title">Plan-and-Execute</div>
+          <div class="he-orch-card-strap">Plan first · Execute separately</div>
+          <div class="he-orch-card-body">A planner LLM generates a task list upfront. An executor LLM runs each task. Separating planning from execution reduces hallucinated mid-plan pivots and allows parallel execution of independent steps.</div>
+          <div class="he-orch-card-when">Use for: complex multi-step tasks with parallelisable subtasks; when plan quality is more important than latency.</div>
+        </div>
+
+        <div class="he-orch-card">
+          <div class="he-orch-card-title">Reflexion</div>
+          <div class="he-orch-card-strap">Act → Reflect → Retry</div>
+          <div class="he-orch-card-body">After each attempt, a reflection model critiques the output and generates corrective instructions. The main agent retries with the critique. Significantly improves accuracy on coding and reasoning tasks at the cost of 2–3× token usage.</div>
+          <div class="he-orch-card-when">Use for: code generation, math, tasks with clear correctness signals where retry is cheap.</div>
+        </div>
+
+        <div class="he-orch-card">
+          <div class="he-orch-card-title">CRAG (Corrective RAG)</div>
+          <div class="he-orch-card-strap">Retrieve → Evaluate → Correct</div>
+          <div class="he-orch-card-body">Adds a retrieval evaluator that scores retrieved documents as Correct / Incorrect / Ambiguous. On incorrect, re-queries with a rewritten question or falls back to web search. Prevents the model from reasoning over irrelevant context.</div>
+          <div class="he-orch-card-when">Use for: knowledge-intensive agents where RAG quality is variable and hallucination risk is high.</div>
+        </div>
+
+        <div class="he-orch-card">
+          <div class="he-orch-card-title">Multi-agent (Supervisor)</div>
+          <div class="he-orch-card-strap">Router → Specialist agents</div>
+          <div class="he-orch-card-body">A supervisor agent routes tasks to specialist sub-agents (researcher, coder, analyst). Each sub-agent has its own tool set and context. Results aggregate back to the supervisor for synthesis.</div>
+          <div class="he-orch-card-when">Use for: diverse task types that exceed a single agent's tool/context capacity; parallel work streams.</div>
+        </div>
+
+        <div class="he-orch-card">
+          <div class="he-orch-card-title">Swarm (Handoff)</div>
+          <div class="he-orch-card-strap">Agent → transfers_to → Agent</div>
+          <div class="he-orch-card-body">Agents transfer control to each other directly — no central supervisor. Each agent decides when it has completed its part and which agent to hand off to. Flexible but harder to audit and debug.</div>
+          <div class="he-orch-card-when">Use for: conversational routing (triage → specialist → escalation); OpenAI Agents SDK swarm pattern.</div>
+        </div>
+
+      </div>
+
+      <div class="he-section-title">Orchestration Frameworks — Comparison (2025)</div>
+      <table class="he-table">
+        <thead><tr><th>Framework</th><th>Model</th><th>Strengths</th><th>Limitations</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>LangGraph</strong></td>
+            <td>Stateful graph (nodes + edges)</td>
+            <td>Human-in-the-loop, time-travel debugging, persistence, streaming, wide tool ecosystem</td>
+            <td>Steep learning curve; verbose for simple flows</td>
+            <td><span class="pill pill-ga">GA</span></td>
+          </tr>
+          <tr>
+            <td><strong>CrewAI</strong></td>
+            <td>Role-based multi-agent crews</td>
+            <td>Readable role/goal definition; enterprise features (memory, delegation); quick multi-agent setup</td>
+            <td>Less control over low-level flow; can be "magic"</td>
+            <td><span class="pill pill-ga">GA</span></td>
+          </tr>
+          <tr>
+            <td><strong>AutoGen v0.4</strong></td>
+            <td>Actor model (async agents)</td>
+            <td>Async-first; compositional; strong multi-agent conversation management</td>
+            <td>Breaking changes from v0.2; smaller community</td>
+            <td><span class="pill pill-ga">GA</span></td>
+          </tr>
+          <tr>
+            <td><strong>OpenAI Agents SDK</strong></td>
+            <td>Agents + handoffs + guardrails</td>
+            <td>Native to OpenAI ecosystem; built-in tracing; swarm handoff pattern</td>
+            <td>Tightly coupled to OpenAI models; limited cross-provider</td>
+            <td><span class="pill pill-ga">GA</span></td>
+          </tr>
+          <tr>
+            <td><strong>Databricks Agent Framework</strong></td>
+            <td>MLflow-traced LangGraph agents</td>
+            <td>Native Unity Catalog tools, MLflow eval integration, Genie MCP, production deployment via AI Gateway</td>
+            <td>Databricks-only; overkill for non-Databricks stacks</td>
+            <td><span class="pill pill-ga">GA</span></td>
+          </tr>
+          <tr>
+            <td><strong>Anthropic Claude Agent SDK</strong></td>
+            <td>Tool loop + MCP client</td>
+            <td>Native Claude integration; MCP client built-in; simple API surface</td>
+            <td>Claude-only; less orchestration abstraction than LangGraph</td>
+            <td><span class="pill pill-ga">GA</span></td>
+          </tr>
+          <tr>
+            <td><strong>Semantic Kernel</strong></td>
+            <td>Plugin-based (Microsoft)</td>
+            <td>Strong Azure/Office integration; C# first class; enterprise auth</td>
+            <td>Python support secondary; heavy for lightweight use cases</td>
+            <td><span class="pill pill-ga">GA</span></td>
+          </tr>
+          <tr>
+            <td><strong>LlamaIndex Workflows</strong></td>
+            <td>Event-driven steps</td>
+            <td>Tight RAG integration; async step execution; LlamaParse for doc ingestion</td>
+            <td>Less suited for multi-agent; smaller orchestration ecosystem</td>
+            <td><span class="pill pill-ga">GA</span></td>
+          </tr>
+          <tr>
+            <td><strong>LangChain AgentExecutor</strong></td>
+            <td>ReAct loop wrapper</td>
+            <td>Large ecosystem; extensive docs; many integrations</td>
+            <td>Being superseded by LangGraph for production; verbose config</td>
+            <td><span class="pill pill-dep">Legacy</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="he-section-title">Framework Selection Guide</div>
+      <table class="he-table">
+        <thead><tr><th>Starting point</th><th>Recommended framework</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td>Databricks stack</td><td>Databricks Agent Framework (LangGraph + MLflow)</td><td>Native Unity Catalog tools, Genie MCP, one-click deployment to AI Gateway</td></tr>
+          <tr><td>Need human-in-the-loop interrupts</td><td>LangGraph</td><td>Checkpoint persistence + interrupt() node support</td></tr>
+          <tr><td>Multi-agent, quick prototype</td><td>CrewAI</td><td>Readable role/goal YAML; built-in delegation; fast to get running</td></tr>
+          <tr><td>OpenAI-only stack</td><td>OpenAI Agents SDK</td><td>Native handoffs, guardrails, and tracing; no translation layer</td></tr>
+          <tr><td>Azure / Microsoft stack</td><td>Semantic Kernel</td><td>Native Azure OpenAI, Entra auth, Teams/Office plugins</td></tr>
+          <tr><td>Minimal dependency budget</td><td>Direct API (Anthropic or OpenAI) + custom ReAct loop</td><td>Framework overhead often > 50% of token cost for simple agents</td></tr>
+          <tr><td>Need async + multi-model</td><td>AutoGen v0.4</td><td>Actor model handles async well; supports multiple LLM backends</td></tr>
+        </tbody>
+      </table>
+
+      <div class="he-section-title">Observability — OTel for Agent Harnesses</div>
+      <div class="he-acc">
+        <strong>OpenTelemetry Semantic Conventions for Generative AI</strong> (OTel GenAI, v1.29+) standardise span names and attributes for LLM calls, embedding calls, and agent runs. Use these rather than custom attributes to keep observability compatible with any vendor (Langfuse, Datadog, Honeycomb, Arize Phoenix).
+      </div>
+      <table class="he-table">
+        <thead><tr><th>OTel Span</th><th>Key attributes</th><th>What to measure</th></tr></thead>
+        <tbody>
+          <tr><td>gen_ai.client.operation</td><td>gen_ai.system, gen_ai.request.model, gen_ai.usage.input_tokens, gen_ai.usage.output_tokens</td><td>Per-call latency, token spend, model version</td></tr>
+          <tr><td>gen_ai.tool.call</td><td>gen_ai.tool.name, gen_ai.tool.call.id</td><td>Tool selection, execution time, error rate</td></tr>
+          <tr><td>gen_ai.agent.run</td><td>gen_ai.agent.name, gen_ai.agent.run.id</td><td>End-to-end agent latency, turn count, success rate</td></tr>
+          <tr><td>gen_ai.retrieval.query</td><td>gen_ai.retrieval.source, gen_ai.retrieval.score_top1</td><td>RAG relevance, retrieval latency</td></tr>
+        </tbody>
+      </table>
+
+    </div><!-- /tab-orchestration -->
+
+  </div><!-- /he-wrap -->
+
+  <script>
+    function showTab(name) {
+      document.querySelectorAll('.he-tab').forEach(function(t) { t.classList.remove('active'); });
+      document.querySelectorAll('.he-panel').forEach(function(p) { p.classList.remove('active'); });
+      document.getElementById('tab-' + name).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>
