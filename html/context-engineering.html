@@ -488,138 +488,156 @@
       <div class="acc-label"><strong>Accuracy with Genie Pages (Rung 5)</strong><br>Up from 10.6% on the same model and data. Same LLM · same Delta tables · governed context added. Source: Viral M Desai insurance implementation.</div>
     </div>
 
-    <!-- Databricks "Three Strengths" conceptual diagram -->
+    <!-- Databricks Genie Ontology pyramid diagram -->
     <div style="max-width:760px;margin:8px auto 28px;overflow-x:auto;">
-      <svg viewBox="0 0 760 520" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;font-family:inherit;display:block;margin:0 auto;">
+      <svg viewBox="0 0 760 490" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;font-family:inherit;display:block;margin:0 auto;">
         <defs>
-          <radialGradient id="db-liq-fill" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="rgba(8,145,178,.13)"/>
-            <stop offset="100%" stop-color="rgba(8,145,178,.05)"/>
-          </radialGradient>
-          <radialGradient id="db-gp-fill" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="rgba(109,40,217,.13)"/>
-            <stop offset="100%" stop-color="rgba(109,40,217,.05)"/>
-          </radialGradient>
-          <radialGradient id="db-mv-fill" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="rgba(14,116,144,.15)"/>
-            <stop offset="100%" stop-color="rgba(14,116,144,.05)"/>
-          </radialGradient>
-          <marker id="db-arrowB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L8,3 z" fill="#0e7490"/>
-          </marker>
-          <marker id="db-arrowP" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L8,3 z" fill="#6d28d9"/>
-          </marker>
-          <marker id="db-arrowC" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L8,3 z" fill="#0891b2"/>
+          <marker id="db-up" markerWidth="8" markerHeight="8" refX="4" refY="6" orient="auto">
+            <path d="M0,8 L4,0 L8,8 z" fill="#0e7490"/>
           </marker>
         </defs>
 
-        <!-- ── Genie Ontology (Learned Knowledge) ellipse (left) — equivalent of Cortex Sense ── -->
-        <ellipse cx="225" cy="215" rx="208" ry="155" fill="url(#db-liq-fill)" stroke="#0891b2" stroke-width="1.5"/>
+        <!-- ═══════════════════════════════════════════════
+             GENIE ONTOLOGY speech-bubble label (top-right)
+        ═══════════════════════════════════════════════ -->
+        <ellipse cx="650" cy="58" rx="92" ry="42" fill="rgba(255,140,100,.12)" stroke="rgba(200,90,60,.35)" stroke-width="1.5"/>
+        <!-- tail of bubble pointing down-left toward pyramid top -->
+        <polygon points="600,88 582,108 620,92" fill="rgba(255,140,100,.12)" stroke="rgba(200,90,60,.35)" stroke-width="1"/>
+        <text x="650" y="50" text-anchor="middle" font-size="13" font-weight="800" fill="#c03000">Genie</text>
+        <text x="650" y="68" text-anchor="middle" font-size="13" font-weight="800" fill="#c03000">Ontology</text>
 
-        <!-- Learned Knowledge item boxes -->
-        <rect x="34" y="104" width="122" height="26" rx="5" fill="rgba(8,145,178,.14)" stroke="#0891b2" stroke-width="1"/>
-        <text x="95" y="122" text-anchor="middle" font-size="11" fill="#0e7490" font-weight="600">Query History</text>
+        <!-- ═══════════════════════════════════════════════
+             TIER 1 (top) — Enterprise Context trapezoid
+             Points: 235,110  525,110  595,185  165,185
+        ═══════════════════════════════════════════════ -->
+        <polygon points="235,110 525,110 595,185 165,185"
+                 fill="rgba(255,138,101,.16)" stroke="rgba(200,90,60,.45)" stroke-width="1.5"/>
 
-        <rect x="34" y="140" width="122" height="26" rx="5" fill="rgba(8,145,178,.14)" stroke="#0891b2" stroke-width="1"/>
-        <text x="95" y="158" text-anchor="middle" font-size="11" fill="#0e7490" font-weight="600">SQL Snippets</text>
+        <!-- brain-like icon: simple circle cluster -->
+        <circle cx="310" cy="148" r="14" fill="rgba(200,90,60,.20)" stroke="rgba(200,90,60,.5)" stroke-width="1"/>
+        <circle cx="326" cy="143" r="10" fill="rgba(200,90,60,.15)" stroke="rgba(200,90,60,.4)" stroke-width="1"/>
+        <circle cx="338" cy="152" r="8"  fill="rgba(200,90,60,.12)" stroke="rgba(200,90,60,.35)" stroke-width="1"/>
 
-        <rect x="34" y="176" width="122" height="26" rx="5" fill="rgba(8,145,178,.14)" stroke="#0891b2" stroke-width="1"/>
-        <text x="95" y="194" text-anchor="middle" font-size="11" fill="#0e7490" font-weight="600">Dashboards / dbt</text>
+        <text x="440" y="142" text-anchor="middle" font-size="13" font-weight="800" fill="#9a3412">Enterprise Context</text>
+        <text x="440" y="158" text-anchor="middle" font-size="10" fill="#7c2d12">Business Meaning · Relationships · Rules</text>
+        <text x="440" y="174" text-anchor="middle" font-size="9.5" fill="#9a3412" font-style="italic">= Genie Ontology in action</text>
 
-        <rect x="34" y="212" width="122" height="26" rx="5" fill="rgba(8,145,178,.14)" stroke="#0891b2" stroke-width="1"/>
-        <text x="95" y="230" text-anchor="middle" font-size="11" fill="#0e7490" font-weight="600">Authority Scores</text>
+        <!-- ═══════════════════════════════════════════════
+             TIER 2 — left half: Modeled Knowledge
+             Points: 165,190  375,190  375,278  92,278
+        ═══════════════════════════════════════════════ -->
+        <polygon points="165,190 375,190 375,278 92,278"
+                 fill="#1a3a50" stroke="#0e7490" stroke-width="1.5"/>
 
-        <!-- Learned Knowledge arrows → centre -->
-        <line x1="156" y1="117" x2="334" y2="216" stroke="#0891b2" stroke-width="1.3" marker-end="url(#db-arrowC)"/>
-        <line x1="156" y1="153" x2="334" y2="221" stroke="#0891b2" stroke-width="1.3" marker-end="url(#db-arrowC)"/>
-        <line x1="156" y1="189" x2="334" y2="226" stroke="#0891b2" stroke-width="1.3" marker-end="url(#db-arrowC)"/>
-        <line x1="156" y1="225" x2="334" y2="231" stroke="#0891b2" stroke-width="1.3" marker-end="url(#db-arrowC)"/>
+        <!-- DB cylinder icon (modeled) -->
+        <ellipse cx="140" cy="224" rx="16" ry="6" fill="rgba(14,116,144,.4)" stroke="#38bdf8" stroke-width="1"/>
+        <rect x="124" y="224" width="32" height="20" fill="rgba(14,116,144,.4)" stroke="#38bdf8" stroke-width="1"/>
+        <ellipse cx="140" cy="244" rx="16" ry="6" fill="rgba(14,116,144,.5)" stroke="#38bdf8" stroke-width="1"/>
 
-        <!-- Learned Knowledge label -->
-        <text x="225" y="316" text-anchor="middle" font-size="13" font-weight="800" fill="#0891b2">Genie Ontology</text>
-        <text x="225" y="330" text-anchor="middle" font-size="11" font-weight="700" fill="#0891b2">(Learned Knowledge)</text>
-        <text x="225" y="346" text-anchor="middle" font-size="10.5" fill="#475569">Auto-infers context from the estate.</text>
+        <text x="255" y="226" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">Modeled Knowledge</text>
+        <text x="255" y="242" text-anchor="middle" font-size="10" fill="#93c5fd">Governed &amp; Authoritative</text>
+        <text x="255" y="256" text-anchor="middle" font-size="9" fill="#7dd3fc">Metric Views · Genie Pages</text>
+        <text x="255" y="269" text-anchor="middle" font-size="9" fill="#7dd3fc">Domains · Certifications</text>
 
-        <!-- ── Genie Pages ellipse (right) — equivalent of Business Ontology ── -->
-        <ellipse cx="543" cy="215" rx="205" ry="155" fill="url(#db-gp-fill)" stroke="#6d28d9" stroke-width="1.5"/>
+        <!-- ═══════════════════════════════════════════════
+             TIER 2 — right half: Learned Knowledge
+             Points: 379,190  595,190  668,278  379,278
+        ═══════════════════════════════════════════════ -->
+        <polygon points="379,190 595,190 668,278 379,278"
+                 fill="#1e5a68" stroke="#0e7490" stroke-width="1.5"/>
 
-        <!-- Genie Pages concept nodes -->
-        <circle cx="488" cy="158" r="27" fill="rgba(139,92,246,.18)" stroke="#8b5cf6" stroke-width="1.2"/>
-        <text x="488" y="162" text-anchor="middle" font-size="9.5" fill="#6d28d9" font-weight="700">Revenue</text>
+        <!-- magnifying glass icon (learned) -->
+        <circle cx="634" cy="224" r="12" fill="none" stroke="#38bdf8" stroke-width="1.8"/>
+        <line x1="643" y1="233" x2="652" y2="242" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
 
-        <circle cx="560" cy="133" r="27" fill="rgba(139,92,246,.18)" stroke="#8b5cf6" stroke-width="1.2"/>
-        <text x="560" y="137" text-anchor="middle" font-size="9.5" fill="#6d28d9" font-weight="700">Product</text>
+        <text x="503" y="226" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">Learned Knowledge</text>
+        <text x="503" y="242" text-anchor="middle" font-size="10" fill="#93c5fd">From Existing Assets</text>
+        <text x="503" y="256" text-anchor="middle" font-size="9" fill="#7dd3fc">Query History · SQL Snippets</text>
+        <text x="503" y="269" text-anchor="middle" font-size="9" fill="#7dd3fc">Dashboards · dbt · Authority Scores</text>
 
-        <circle cx="624" cy="172" r="27" fill="rgba(139,92,246,.18)" stroke="#8b5cf6" stroke-width="1.2"/>
-        <text x="624" y="176" text-anchor="middle" font-size="9.5" fill="#6d28d9" font-weight="700">Region</text>
+        <!-- Divider between the two halves -->
+        <line x1="377" y1="190" x2="377" y2="278" stroke="#0e7490" stroke-width="1.5" stroke-dasharray="4,3"/>
 
-        <!-- Central concept node -->
-        <circle cx="560" cy="218" r="34" fill="rgba(109,40,217,.22)" stroke="#6d28d9" stroke-width="1.5"/>
-        <text x="560" y="213" text-anchor="middle" font-size="10" fill="#4c1d95" font-weight="800">Default</text>
-        <text x="560" y="227" text-anchor="middle" font-size="10" fill="#4c1d95" font-weight="800">Rules</text>
+        <!-- ═══════════════════════════════════════════════
+             TIER 3 — Unity Catalog (wide trapezoid)
+             Points: 88,282  668,282  736,358  20,358
+        ═══════════════════════════════════════════════ -->
+        <polygon points="88,282 668,282 736,358 20,358"
+                 fill="#0e7490" stroke="#0891b2" stroke-width="1.5"/>
 
-        <circle cx="492" cy="254" r="26" fill="rgba(139,92,246,.18)" stroke="#8b5cf6" stroke-width="1.2"/>
-        <text x="492" y="258" text-anchor="middle" font-size="9.5" fill="#6d28d9" font-weight="700">Time</text>
+        <!-- stacked layers icon -->
+        <rect x="50" y="305" width="38" height="8" rx="2" fill="rgba(255,255,255,.25)"/>
+        <rect x="50" y="317" width="38" height="8" rx="2" fill="rgba(255,255,255,.18)"/>
+        <rect x="50" y="329" width="38" height="8" rx="2" fill="rgba(255,255,255,.12)"/>
 
-        <circle cx="622" cy="258" r="26" fill="rgba(139,92,246,.18)" stroke="#8b5cf6" stroke-width="1.2"/>
-        <text x="622" y="262" text-anchor="middle" font-size="9.5" fill="#6d28d9" font-weight="700">Lines</text>
+        <text x="400" y="310" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">Unity Catalog</text>
+        <text x="400" y="327" text-anchor="middle" font-size="10.5" fill="#bae6fd">Semantics · Governance · Access</text>
+        <text x="400" y="344" text-anchor="middle" font-size="9" fill="#93c5fd">The governed foundation — owned by Data Engineering / Governance teams</text>
 
-        <!-- Approved badge -->
-        <rect x="668" y="104" width="66" height="20" rx="4" fill="rgba(5,150,105,.12)" stroke="rgba(5,150,105,.35)" stroke-width="1"/>
-        <text x="701" y="118" text-anchor="middle" font-size="9" fill="#047857" font-weight="700">✓ Approved</text>
+        <!-- ═══════════════════════════════════════════════
+             DATA SOURCES row — 5 boxes at base
+        ═══════════════════════════════════════════════ -->
+        <!-- Upward arrows: 5 of them, spaced to match boxes -->
+        <!-- Box centres: ~90, 212, 334, 456, 578, 700  — wait let me recalculate -->
+        <!-- 5 boxes, 118px wide, 8px gap, total=5*118+4*8=622, start=(760-622)/2=69 -->
+        <!-- Centres: 69+59=128, 69+118+8+59=254, 69+2*(118+8)+59=380, 69+3*(118+8)+59=506, 69+4*(118+8)+59=632 -->
 
-        <!-- Genie Pages label -->
-        <text x="543" y="324" text-anchor="middle" font-size="14" font-weight="800" fill="#6d28d9">Genie Pages</text>
-        <text x="543" y="342" text-anchor="middle" font-size="10.5" fill="#475569">Approves and owns business defaults.</text>
+        <!-- arrows y: from 362 (above box top at 365) up to 358 (bottom of UC) -->
+        <line x1="128" y1="363" x2="128" y2="358" stroke="#0e7490" stroke-width="1.4" marker-end="url(#db-up)"/>
+        <line x1="254" y1="363" x2="254" y2="358" stroke="#0e7490" stroke-width="1.4" marker-end="url(#db-up)"/>
+        <line x1="380" y1="363" x2="380" y2="358" stroke="#0e7490" stroke-width="1.4" marker-end="url(#db-up)"/>
+        <line x1="506" y1="363" x2="506" y2="358" stroke="#0e7490" stroke-width="1.4" marker-end="url(#db-up)"/>
+        <line x1="632" y1="363" x2="632" y2="358" stroke="#0e7490" stroke-width="1.4" marker-end="url(#db-up)"/>
 
-        <!-- ── Genie central circle ── -->
-        <circle cx="383" cy="228" r="52" fill="#1e3a5f" stroke="#0891b2" stroke-width="2.5"/>
-        <text x="383" y="217" text-anchor="middle" font-size="20" fill="#fff">⚡</text>
-        <text x="383" y="237" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">Databricks</text>
-        <text x="383" y="253" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">Genie</text>
+        <!-- Box 1: Dashboards -->
+        <rect x="69" y="366" width="118" height="52" rx="5"
+              fill="rgba(14,116,144,.10)" stroke="#0e7490" stroke-width="1.2"/>
+        <!-- bar-chart icon -->
+        <rect x="93" y="386" width="6" height="16" fill="#0e7490" rx="1"/>
+        <rect x="102" y="379" width="6" height="23" fill="#0e7490" rx="1"/>
+        <rect x="111" y="384" width="6" height="18" fill="#0e7490" rx="1"/>
+        <text x="128" y="409" text-anchor="middle" font-size="10" font-weight="700" fill="#0e7490">Dashboards</text>
 
-        <!-- Label: "Inferred context" (Lakehouse IQ → Genie) -->
-        <text x="270" y="210" text-anchor="middle" font-size="9.5" fill="#0e7490" font-weight="600">Inferred</text>
-        <text x="270" y="222" text-anchor="middle" font-size="9.5" fill="#0e7490" font-weight="600">context</text>
+        <!-- Box 2: SQL Queries -->
+        <rect x="195" y="366" width="118" height="52" rx="5"
+              fill="rgba(14,116,144,.10)" stroke="#0e7490" stroke-width="1.2"/>
+        <text x="225" y="386" font-size="11" font-weight="800" fill="#0e7490">&lt;/&gt;</text>
+        <text x="254" y="409" text-anchor="middle" font-size="10" font-weight="700" fill="#0e7490">SQL Queries</text>
 
-        <!-- Label: "Approved defaults" (Genie Pages → Genie) -->
-        <text x="493" y="212" text-anchor="middle" font-size="9.5" fill="#6d28d9" font-weight="600">Approved</text>
-        <text x="493" y="224" text-anchor="middle" font-size="9.5" fill="#6d28d9" font-weight="600">defaults</text>
+        <!-- Box 3: Notebooks -->
+        <rect x="321" y="366" width="118" height="52" rx="5"
+              fill="rgba(14,116,144,.10)" stroke="#0e7490" stroke-width="1.2"/>
+        <!-- notebook icon -->
+        <rect x="355" y="376" width="22" height="28" rx="2" fill="none" stroke="#0e7490" stroke-width="1.5"/>
+        <line x1="360" y1="383" x2="372" y2="383" stroke="#0e7490" stroke-width="1"/>
+        <line x1="360" y1="389" x2="372" y2="389" stroke="#0e7490" stroke-width="1"/>
+        <line x1="360" y1="395" x2="372" y2="395" stroke="#0e7490" stroke-width="1"/>
+        <text x="380" y="409" text-anchor="middle" font-size="10" font-weight="700" fill="#0e7490">Notebooks</text>
 
-        <!-- ── Promote dashed arrow (top): Lakehouse IQ → Genie Pages ── -->
-        <path d="M 288 76 Q 383 46 478 76" fill="none" stroke="#6d28d9" stroke-width="1.4" stroke-dasharray="6,4" marker-end="url(#db-arrowP)"/>
-        <text x="383" y="42" text-anchor="middle" font-size="10" fill="#6d28d9">Promote selected concepts</text>
+        <!-- Box 4: Genie Agents -->
+        <rect x="447" y="366" width="118" height="52" rx="5"
+              fill="rgba(14,116,144,.10)" stroke="#0e7490" stroke-width="1.2"/>
+        <!-- spark icon -->
+        <text x="478" y="390" font-size="16" fill="#0e7490">⚡</text>
+        <text x="506" y="409" text-anchor="middle" font-size="10" font-weight="700" fill="#0e7490">Genie Agents</text>
 
-        <!-- ── Metric Views ellipse (bottom) — equivalent of Semantic Views ── -->
-        <ellipse cx="383" cy="430" rx="200" ry="62" fill="url(#db-mv-fill)" stroke="#0e7490" stroke-width="1.5"/>
+        <!-- Box 5: Other Assets -->
+        <rect x="573" y="366" width="118" height="52" rx="5"
+              fill="rgba(14,116,144,.10)" stroke="#0e7490" stroke-width="1.2"/>
+        <!-- document icon -->
+        <rect x="606" y="376" width="18" height="22" rx="2" fill="none" stroke="#0e7490" stroke-width="1.5"/>
+        <line x1="609" y1="382" x2="621" y2="382" stroke="#0e7490" stroke-width="1"/>
+        <line x1="609" y1="387" x2="621" y2="387" stroke="#0e7490" stroke-width="1"/>
+        <text x="632" y="409" text-anchor="middle" font-size="10" font-weight="700" fill="#0e7490">Other Assets</text>
 
-        <!-- Metric View YAML icons -->
-        <rect x="260" y="408" width="30" height="36" rx="3" fill="rgba(14,116,144,.25)" stroke="#0e7490" stroke-width="1.2"/>
-        <rect x="300" y="408" width="30" height="36" rx="3" fill="rgba(14,116,144,.25)" stroke="#0e7490" stroke-width="1.2"/>
-        <text x="343" y="424" text-anchor="middle" font-size="13" fill="#0e7490">→</text>
-        <rect x="355" y="408" width="30" height="36" rx="3" fill="rgba(14,116,144,.35)" stroke="#0e7490" stroke-width="1.5"/>
-        <rect x="395" y="408" width="30" height="36" rx="3" fill="rgba(14,116,144,.35)" stroke="#0e7490" stroke-width="1.5"/>
-        <text x="440" y="420" text-anchor="start" font-size="14" fill="#0e7490" font-weight="700">Σ</text>
-        <text x="440" y="436" text-anchor="start" font-size="9" fill="#0e7490">YAML</text>
+        <!-- ═══════════════════════════════════════════════
+             Why It Matters sidebar (right side, outside pyramid)
+        ═══════════════════════════════════════════════ -->
 
-        <!-- Metric Views label -->
-        <text x="383" y="476" text-anchor="middle" font-size="14" font-weight="800" fill="#0e7490">Metric Views</text>
-        <text x="383" y="494" text-anchor="middle" font-size="10.5" fill="#475569">Execute governed calculations.</text>
-
-        <!-- Arrow: Metric Views → Genie (upward) -->
-        <line x1="383" y1="368" x2="383" y2="283" stroke="#0e7490" stroke-width="1.5" marker-end="url(#db-arrowB)"/>
-        <text x="398" y="336" font-size="9.5" fill="#0e7490" font-weight="600">Computed</text>
-        <text x="398" y="349" font-size="9.5" fill="#0e7490" font-weight="600">metrics</text>
-
-        <!-- Representations dashed arrow: Genie Pages → Metric Views -->
-        <path d="M 582 370 Q 582 410 502 415" fill="none" stroke="#6d28d9" stroke-width="1.3" stroke-dasharray="5,4" marker-end="url(#db-arrowP)"/>
-        <text x="606" y="400" text-anchor="middle" font-size="9.5" fill="#6d28d9">Representations</text>
-
-        <!-- Footer -->
-        <line x1="30" y1="510" x2="730" y2="510" stroke="rgba(100,116,139,.2)" stroke-width="1"/>
-        <text x="383" y="518" text-anchor="middle" font-size="9" fill="#94a3b8">Complementary capabilities, not sequential steps. · Source: Databricks Genie Ontology + Unity Catalog architecture</text>
+        <!-- Footer line -->
+        <line x1="20" y1="425" x2="740" y2="425" stroke="rgba(100,116,139,.2)" stroke-width="1"/>
+        <text x="380" y="440" text-anchor="middle" font-size="9.5" fill="#6d28d9" font-weight="700">Modeled = governed by humans · Learned = auto-inferred from usage · Together = Genie Ontology</text>
+        <text x="380" y="456" text-anchor="middle" font-size="9" fill="#94a3b8">Source: Databricks Genie Ontology — Practical Guide (Vipul Choudhary · linkedin.com/pulse)</text>
       </svg>
     </div>
 
