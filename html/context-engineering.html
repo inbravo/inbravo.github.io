@@ -363,31 +363,6 @@
   ══════════════════════════════════════════════════════════ -->
   <div class="ce-panel active ce-wrap" id="tab-concepts">
 
-    <div class="ce-h2">Context Engineering vs Prompt Engineering</div>
-    <p class="ce-p"><strong>Prompt engineering</strong> optimises the question. <strong>Context engineering</strong> optimises the world the model sees when it answers — the governed definitions, metric rules, entity relationships, and domain constraints that sit between raw data and the LLM. The same model, the same question, the same data can produce a 10.6% accuracy rate or a 52.1% accuracy rate depending entirely on the context layer.</p>
-    <p class="ce-p">Context engineering is systematic and durable. A well-engineered context layer survives a model upgrade, a schema change, and a new analyst who has never read the data dictionary. Prompt engineering is fragile — it lives in a string and breaks silently when assumptions change.</p>
-
-    <div class="ce-grid">
-      <div class="ce-card">
-        <div class="ce-card-title">Prompt Engineering</div>
-        <div class="ce-card-body">Optimise the question. Craft the system prompt, few-shot examples, chain-of-thought instructions. Lives in the LLM call. Breaks when the model, the schema, or the business rules change. Impact ceiling: ~30% accuracy lift on ambiguous questions.</div>
-      </div>
-      <div class="ce-card">
-        <div class="ce-card-title">Context Engineering</div>
-        <div class="ce-card-body">Optimise the world. Encode metric definitions, entity relationships, governance rules, and business constraints into the layer between data and model. Survives model upgrades. Impact ceiling: 40–50% accuracy lift observed (Databricks Genie: 10.6% → 52.1%; Snowflake Cortex: +86.3% task success).</div>
-      </div>
-      <div class="ce-card">
-        <div class="ce-card-title">RAG (Retrieval Context)</div>
-        <div class="ce-card-body">Retrieve relevant chunks at query time and inject into the context window. Dynamic but unstructured. Best for unstructured documents (PDFs, notes). Complements but does not replace a governed semantic layer — retrieved text has no guaranteed business rule enforcement.</div>
-      </div>
-      <div class="ce-card">
-        <div class="ce-card-title">Semantic Layer Context</div>
-        <div class="ce-card-body">Pre-define measures, dimensions, relationships, and business rules in a machine-readable layer. The agent reads definitions, not raw SQL. Forces correct metric variant selection before the query is even written. All three platforms implement this differently.</div>
-      </div>
-    </div>
-
-    <hr class="ce-divider">
-
     <!-- ── Semantic Layer vs Context Layer ───────────────────── -->
     <div class="ce-h2">Semantic Layer vs Context Layer — A Critical Distinction</div>
     <p class="ce-p">An emerging and increasingly well-grounded distinction: the <strong>semantic layer</strong> and the <strong>context layer</strong> are not the same thing. Both derive from a shared ontology, but they serve different consumers and encode different kinds of knowledge. The context layer is the <em>superset</em> — it wraps and enriches the semantic layer with operational intelligence that only AI agents need.</p>
